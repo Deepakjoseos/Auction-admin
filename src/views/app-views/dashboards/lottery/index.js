@@ -3,6 +3,8 @@ import { Route, Switch, Redirect } from 'react-router-dom'
 import LotteryList from './lottery-list'
 import AddLottery from './add-lottery'
 import EditLottery from './edit-lottery'
+import LotteryGroupList from '../lottery-group/lottery-group-list'
+
 // import Orders from './orders'
 
 // In here we will define all our routes

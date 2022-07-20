@@ -229,6 +229,14 @@ const dashBoardNavTree = [
         breadcrumb: false,
         submenu: [],
       },
+      {
+        key: 'dashboards-lottery-group',
+        path: `${APP_PREFIX_PATH}/dashboards/lottery-group`,
+        title: 'LotteryGroup',
+        icon: AppstoreOutlined,
+        breadcrumb: false,
+        submenu: [],
+      },
     ],
   },
 ]
