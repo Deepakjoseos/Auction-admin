@@ -31,6 +31,10 @@ const Dashboards = ({ match }) => {
           path={`${match.url}/lottery`}
           component={lazy(() => import(`./lottery`))}
         />
+        <Route
+          path={`${match.url}/lottery-group`}
+          component={lazy(() => import(`./lottery-group`))}
+        />
 
         <Redirect from={`${match.url}`} to={`${match.url}/default`} />
       </Switch>
