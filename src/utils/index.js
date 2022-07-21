@@ -1,4 +1,4 @@
-import { message, notification } from 'antd'
+import { message, notification } from "antd";
 
 class Utils {
   /**
@@ -7,8 +7,8 @@ class Utils {
    * @return {String} 2 characters string
    */
   static getNameInitial(name) {
-    let initials = name.match(/\b\w/g) || []
-    return ((initials.shift() || '') + (initials.pop() || '')).toUpperCase()
+    let initials = name.match(/\b\w/g) || [];
+    return ((initials.shift() || "") + (initials.pop() || "")).toUpperCase();
   }
 
   /**
@@ -19,18 +19,18 @@ class Utils {
    */
   static getRouteInfo(navTree, path) {
     if (navTree.path === path) {
-      return navTree
+      return navTree;
     }
-    let route
+    let route;
     for (let p in navTree) {
-      if (navTree.hasOwnProperty(p) && typeof navTree[p] === 'object') {
-        route = this.getRouteInfo(navTree[p], path)
+      if (navTree.hasOwnProperty(p) && typeof navTree[p] === "object") {
+        route = this.getRouteInfo(navTree[p], path);
         if (route) {
-          return route
+          return route;
         }
       }
     }
-    return route
+    return route;
   }
 
   /**
@@ -40,29 +40,29 @@ class Utils {
    */
   static getColorContrast(hex) {
     if (!hex) {
-      return 'dark'
+      return "dark";
     }
-    const threshold = 130
-    const hRed = hexToR(hex)
-    const hGreen = hexToG(hex)
-    const hBlue = hexToB(hex)
+    const threshold = 130;
+    const hRed = hexToR(hex);
+    const hGreen = hexToG(hex);
+    const hBlue = hexToB(hex);
     function hexToR(h) {
-      return parseInt(cutHex(h).substring(0, 2), 16)
+      return parseInt(cutHex(h).substring(0, 2), 16);
     }
     function hexToG(h) {
-      return parseInt(cutHex(h).substring(2, 4), 16)
+      return parseInt(cutHex(h).substring(2, 4), 16);
     }
     function hexToB(h) {
-      return parseInt(cutHex(h).substring(4, 6), 16)
+      return parseInt(cutHex(h).substring(4, 6), 16);
     }
     function cutHex(h) {
-      return h.charAt(0) === '#' ? h.substring(1, 7) : h
+      return h.charAt(0) === "#" ? h.substring(1, 7) : h;
     }
-    const cBrightness = (hRed * 299 + hGreen * 587 + hBlue * 114) / 1000
+    const cBrightness = (hRed * 299 + hGreen * 587 + hBlue * 114) / 1000;
     if (cBrightness > threshold) {
-      return 'dark'
+      return "dark";
     } else {
-      return 'light'
+      return "light";
     }
   }
 
@@ -73,22 +73,22 @@ class Utils {
    * @return {String} Darken or lighten color
    */
   static shadeColor(color, percent) {
-    let R = parseInt(color.substring(1, 3), 16)
-    let G = parseInt(color.substring(3, 5), 16)
-    let B = parseInt(color.substring(5, 7), 16)
-    R = parseInt((R * (100 + percent)) / 100)
-    G = parseInt((G * (100 + percent)) / 100)
-    B = parseInt((B * (100 + percent)) / 100)
-    R = R < 255 ? R : 255
-    G = G < 255 ? G : 255
-    B = B < 255 ? B : 255
+    let R = parseInt(color.substring(1, 3), 16);
+    let G = parseInt(color.substring(3, 5), 16);
+    let B = parseInt(color.substring(5, 7), 16);
+    R = parseInt((R * (100 + percent)) / 100);
+    G = parseInt((G * (100 + percent)) / 100);
+    B = parseInt((B * (100 + percent)) / 100);
+    R = R < 255 ? R : 255;
+    G = G < 255 ? G : 255;
+    B = B < 255 ? B : 255;
     const RR =
-      R.toString(16).length === 1 ? `0${R.toString(16)}` : R.toString(16)
+      R.toString(16).length === 1 ? `0${R.toString(16)}` : R.toString(16);
     const GG =
-      G.toString(16).length === 1 ? `0${G.toString(16)}` : G.toString(16)
+      G.toString(16).length === 1 ? `0${G.toString(16)}` : G.toString(16);
     const BB =
-      B.toString(16).length === 1 ? `0${B.toString(16)}` : B.toString(16)
-    return `#${RR}${GG}${BB}`
+      B.toString(16).length === 1 ? `0${B.toString(16)}` : B.toString(16);
+    return `#${RR}${GG}${BB}`;
   }
 
   /**
@@ -97,14 +97,14 @@ class Utils {
    * @return {String} HEX color
    */
   static rgbaToHex(rgba) {
-    const trim = (str) => str.replace(/^\s+|\s+$/gm, '')
-    const inParts = rgba.substring(rgba.indexOf('(')).split(','),
+    const trim = (str) => str.replace(/^\s+|\s+$/gm, "");
+    const inParts = rgba.substring(rgba.indexOf("(")).split(","),
       r = parseInt(trim(inParts[0].substring(1)), 10),
       g = parseInt(trim(inParts[1]), 10),
       b = parseInt(trim(inParts[2]), 10),
       a = parseFloat(
         trim(inParts[3].substring(0, inParts[3].length - 1))
-      ).toFixed(2)
+      ).toFixed(2);
     const outParts = [
       r.toString(16),
       g.toString(16),
@@ -112,14 +112,14 @@ class Utils {
       Math.round(a * 255)
         .toString(16)
         .substring(0, 2),
-    ]
+    ];
 
     outParts.forEach(function (part, i) {
       if (part.length === 1) {
-        outParts[i] = '0' + part
+        outParts[i] = "0" + part;
       }
-    })
-    return `#${outParts.join('')}`
+    });
+    return `#${outParts.join("")}`;
   }
 
   /**
@@ -131,12 +131,12 @@ class Utils {
    */
   static getSignNum(number, positive, negative) {
     if (number > 0) {
-      return positive
+      return positive;
     }
     if (number < 0) {
-      return negative
+      return negative;
     }
-    return null
+    return null;
   }
 
   /**
@@ -147,16 +147,16 @@ class Utils {
    * @return {any} a value minus b value
    */
   static antdTableSorter(a, b, key) {
-    if (typeof a[key] === 'number' && typeof b[key] === 'number') {
-      return a[key] - b[key]
+    if (typeof a[key] === "number" && typeof b[key] === "number") {
+      return a[key] - b[key];
     }
 
-    if (typeof a[key] === 'string' && typeof b[key] === 'string') {
-      a = a[key].toLowerCase()
-      b = b[key].toLowerCase()
-      return a > b ? -1 : b > a ? 1 : 0
+    if (typeof a[key] === "string" && typeof b[key] === "string") {
+      a = a[key].toLowerCase();
+      b = b[key].toLowerCase();
+      return a > b ? -1 : b > a ? 1 : 0;
     }
-    return
+    return;
   }
 
   /**
@@ -167,11 +167,11 @@ class Utils {
    * @return {Array} a value minus b value
    */
   static filterArray(list, key, value) {
-    let data = list
+    let data = list;
     if (list) {
-      data = list.filter((item) => item[key] === value)
+      data = list.filter((item) => item[key] === value);
     }
-    return data
+    return data;
   }
 
   /**
@@ -182,11 +182,11 @@ class Utils {
    * @return {Array} Array that removed target object
    */
   static deleteArrayRow(list, key, value) {
-    let data = list
+    let data = list;
     if (list) {
-      data = list.filter((item) => item[key] !== value)
+      data = list.filter((item) => item[key] !== value);
     }
-    return data
+    return data;
   }
 
   /**
@@ -199,7 +199,7 @@ class Utils {
     const searchText = (item) => {
       for (let key in item) {
         if (item[key] == null) {
-          continue
+          continue;
         }
         if (
           item[key]
@@ -207,12 +207,12 @@ class Utils {
             .toUpperCase()
             .indexOf(input.toString().toUpperCase()) !== -1
         ) {
-          return true
+          return true;
         }
       }
-    }
-    list = list.filter((value) => searchText(value))
-    return list
+    };
+    list = list.filter((value) => searchText(value));
+    return list;
   }
 
   /**
@@ -221,16 +221,16 @@ class Utils {
    * @return {Array} array of breakpoint size
    */
   static getBreakPoint(screens) {
-    let breakpoints = []
+    let breakpoints = [];
     for (const key in screens) {
       if (screens.hasOwnProperty(key)) {
-        const element = screens[key]
+        const element = screens[key];
         if (element) {
-          breakpoints.push(key)
+          breakpoints.push(key);
         }
       }
     }
-    return breakpoints
+    return breakpoints;
   }
 
   /**
@@ -240,22 +240,22 @@ class Utils {
   static getBaseName(path) {
     // console.log(path)
     if (path) {
-      const parsed = path.split('/')
-      return parsed[parsed.length - 1]
+      const parsed = path.split("/");
+      return parsed[parsed.length - 1];
     }
-    return ''
+    return "";
   }
 
   /**
    * Create Categories based on the list of items including children
    */
   static createCategoryList(categories, parentId = null) {
-    const categoryList = []
-    let category
+    const categoryList = [];
+    let category;
     if (parentId == null) {
-      category = categories.filter((cat) => !cat?.parentId)
+      category = categories.filter((cat) => !cat?.parentId);
     } else {
-      category = categories.filter((cat) => cat?.parentId === parentId)
+      category = categories.filter((cat) => cat?.parentId === parentId);
     }
     // eslint-disable-next-line prefer-const
     for (let cate of category) {
@@ -265,14 +265,14 @@ class Utils {
         value: cate.id,
         key: cate.id,
         children: this.createCategoryList(categories, cate.id),
-      })
+      });
     }
 
-    return categoryList
+    return categoryList;
   }
 
   static errorValidator(res) {
-    console.log('my-res', res)
+    console.log("my-res", res);
     if (res) {
       if (Array.isArray(res?.message)) {
         // for (const [key, value] of Object.entries(res?.errors)) {
@@ -283,21 +283,21 @@ class Utils {
         //     })
         //   })
         // }
-        message?.forEach((cur) => {
+        res.message?.forEach((message) => {
           notification.error({
-            message: cur,
-          })
-        })
+            message,
+          });
+        });
       } else if (!Array.isArray(res?.message)) {
         notification.error({
           message: res?.message,
-        })
+        });
       } else {
         // toast.error(res.title)
         notification.error({
           // description: res.title,
           message: res.error,
-        })
+        });
       }
     }
     //  else {
@@ -309,4 +309,4 @@ class Utils {
   }
 }
 
-export default Utils
+export default Utils;
