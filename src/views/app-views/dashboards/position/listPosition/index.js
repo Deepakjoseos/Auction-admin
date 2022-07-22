@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Card, Table, Select, Input, Button, Menu, Tag } from "antd";
+import { Card, Table, Select, Input, Button, Menu } from "antd";
 // import BrandListData from 'assets/data/product-list.data.json'
 import {
   EyeOutlined,
-  DeleteOutlined,
   SearchOutlined,
   PlusCircleOutlined,
 } from "@ant-design/icons";
@@ -11,56 +10,47 @@ import EllipsisDropdown from "components/shared-components/EllipsisDropdown";
 import Flex from "components/shared-components/Flex";
 import { useHistory } from "react-router-dom";
 import utils from "utils";
-import lotteryGroupService from "services/lottery-group";
-import lotteryTypeService from "services/lotteryType";
+import positionService from "services/position";
 import lotteryService from "services/lottery";
+import lotteryTypeService from "services/lotteryType";
 
 const { Option } = Select;
 
-const getStatus = (status) => {
-  if (status === "Active") {
-    return (
-      <>
-        <Tag color="green">Active</Tag>
-      </>
-    );
-  }
-  if (status === "Hold") {
-    return (
-      <>
-        <Tag color="red">Hold</Tag>
-      </>
-    );
-  }
-
-  if (status === "Deleted") {
-    return (
-      <>
-        <Tag color="red">Deleted</Tag>
-      </>
-    );
-  }
-
-  return null;
-};
-const LotteryTypeList = () => {
+const PositionList = () => {
   let history = useHistory();
 
   const [list, setList] = useState([]);
   const [searchBackupList, setSearchBackupList] = useState([]);
-  const [selectedRows, setSelectedRows] = useState([]);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [lotteries, setLotteries] = useState([]);
+  const [lotteryTypes, setLotteryTypes] = useState([]);
+  const [selectedLottery, setselectedLottery] = useState(null);
+  const [selectedLotteryType, setselectedLotteryType] = useState(null);
 
   useEffect(() => {
     // Getting Lotteries List to display in the table
-    const getLottoryTypes = async () => {
-      const data = await lotteryTypeService.getLotteryTypes();
+    const getPositions = async () => {
+      const data = await positionService.getPositions();
       if (data) {
         setList(data);
         setSearchBackupList(data);
       }
     };
-    getLottoryTypes();
+    const getLotteries = async () => {
+      const data = await lotteryService.getLotteries();
+      if (data) {
+        setLotteries(data);
+      }
+    };
+    const getLotteryTypes = async () => {
+      const data = await lotteryTypeService.getLotteryTypes();
+      if (data) {
+        setLotteryTypes(data);
+      }
+    };
+    getPositions();
+    getLotteries();
+    getLotteryTypes();
   }, []);
 
   // Dropdown menu for each row
@@ -72,52 +62,23 @@ const LotteryTypeList = () => {
           <span className="ml-2">View Details</span>
         </Flex>
       </Menu.Item>
-      <Menu.Item onClick={() => deleteRow(row)}>
-        <Flex alignItems="center">
-          <DeleteOutlined />
-          <span className="ml-2">
-            {selectedRows.length > 0
-              ? `Delete (${selectedRows.length})`
-              : "Delete"}
-          </span>
-        </Flex>
-      </Menu.Item>
     </Menu>
   );
 
   const addLotteryType = () => {
-    history.push(`/app/dashboards/lottery-type/add`);
-  };
-
-  // For deleting a row
-  const deleteRow = async (row) => {
-    const resp = await lotteryTypeService.deleteLotteryType(row.id);
-    if (resp) {
-      const objKey = "id";
-      let data = list;
-      if (selectedRows.length > 1) {
-        selectedRows.forEach((elm) => {
-          data = utils.deleteArrayRow(data, objKey, elm.id);
-          setList(data);
-          setSelectedRows([]);
-        });
-      } else {
-        data = utils.deleteArrayRow(data, objKey, row.id);
-        setList(data);
-      }
-    }
+    history.push(`/app/dashboards/position/add`);
   };
 
   const viewDetails = (row) => {
-    history.push(`/app/dashboards/lottery-type/edit/${row.id}`);
+    history.push(`/app/dashboards/position/edit/${row.id}`);
   };
 
   // Antd Table Columns
   const tableColumns = [
     {
-      title: "Type",
-      dataIndex: "name",
-      sorter: (a, b) => utils.antdTableSorter(a, b, "name"),
+      title: "Rank",
+      dataIndex: "rank",
+      sorter: (a, b) => utils.antdTableSorter(a, b, "rank"),
     },
     {
       title: "Lottery",
@@ -126,25 +87,28 @@ const LotteryTypeList = () => {
       sorter: (a, b) => a.lottery.name.localeCompare(b.lottery.name),
     },
     {
-      title: "Group",
-      dataIndex: "lotteryGroup",
-      render: (lotteryGroup) => (
-        <Flex alignItems="center">{lotteryGroup?.group}</Flex>
+      title: "Type",
+      dataIndex: "lotteryType",
+      render: (lotteryType) => (
+        <Flex alignItems="center">{lotteryType?.name}</Flex>
       ),
-      sorter: (a, b) => a.lotteryGroup?.group - b.lotteryGroup?.group,
+      sorter: (a, b) => a.lotteryType.name.localeCompare(b.lotteryType.name),
     },
     {
-      title: "Price",
-      dataIndex: "price",
-      sorter: (a, b) => utils.antdTableSorter(a, b, "price"),
+      title: "Prize",
+      dataIndex: "amount",
+      sorter: (a, b) => utils.antdTableSorter(a, b, "amount"),
     },
     {
-      title: "Status",
-      dataIndex: "status",
-      render: (status) => <Flex alignItems="center">{getStatus(status)}</Flex>,
-      sorter: (a, b) => utils.antdTableSorter(a, b, "status"),
+      title: "Agent Reward",
+      dataIndex: "agentCommission",
+      sorter: (a, b) => utils.antdTableSorter(a, b, "agentCommission"),
     },
-
+    {
+      title: "Count",
+      dataIndex: "count",
+      sorter: (a, b) => utils.antdTableSorter(a, b, "count"),
+    },
     {
       title: "",
       dataIndex: "actions",
@@ -161,7 +125,6 @@ const LotteryTypeList = () => {
     const value = e.currentTarget.value;
     const searchArray = e.currentTarget.value ? list : searchBackupList;
     const data = utils.wildCardSearch(searchArray, value);
-    console.log(data);
     setList(data);
     setSelectedRowKeys([]);
   };
@@ -171,10 +134,20 @@ const LotteryTypeList = () => {
     if (value !== "All") {
       const key = "status";
       const data = utils.filterArray(searchBackupList, key, value);
-      console.log(data);
       setList(data);
     } else {
       setList(searchBackupList);
+    }
+  };
+
+  const handleQuery = async () => {
+    const query = {};
+    if (selectedLottery) query.lotteryId = selectedLottery;
+    if (selectedLotteryType) query.lotteryTypeId = selectedLottery;
+    const data = await positionService.getPositions(query);
+    if (data) {
+      setList(data);
+      setSearchBackupList(data);
     }
   };
 
@@ -189,19 +162,36 @@ const LotteryTypeList = () => {
         />
       </div>
 
-      <div className="mb-3">
+      {/* <div className="mr-md-3 mb-3">
         <Select
-          defaultValue="All"
           className="w-100"
           style={{ minWidth: 180 }}
-          onChange={handleShowStatus}
-          placeholder="Status"
+          onChange={(value) => setselectedLottery(value)}
+          onSelect={handleQuery}
+          placeholder="Lottery"
         >
-          <Option value="All">All</Option>
-          <Option value="Active">Active</Option>
-          <Option value="Hold">Hold</Option>
+          {lotteries.map((lottery) => (
+            <Option key={lottery.id} value={lottery.id}>
+              {lottery.name}
+            </Option>
+          ))}
         </Select>
       </div>
+      <div className="mr-md-3 mb-3">
+        <Select
+          className="w-100"
+          style={{ minWidth: 180 }}
+          onChange={(value) => setselectedLotteryType(value)}
+          onSelect={handleQuery}
+          placeholder="Type"
+        >
+          {lotteryTypes.map((type) => (
+            <Option key={type.id} value={type.id}>
+              {type.name}
+            </Option>
+          ))}
+        </Select>
+      </div> */}
     </Flex>
   );
 
@@ -216,7 +206,7 @@ const LotteryTypeList = () => {
             icon={<PlusCircleOutlined />}
             block
           >
-            Add Lottery Group
+            Add Position
           </Button>
         </div>
       </Flex>
@@ -227,4 +217,4 @@ const LotteryTypeList = () => {
   );
 };
 
-export default LotteryTypeList;
+export default PositionList;

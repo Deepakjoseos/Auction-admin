@@ -4,8 +4,6 @@ import AddLotteryType from "./add-lottery-type";
 import EditLotteryType from "./edit-lottery-type";
 import LotteryTypeList from "./list-lottery-type";
 
-// import Orders from './orders'
-
 // In here we will define all our routes
 const LotteryGroup = (props) => {
   const { match } = props;

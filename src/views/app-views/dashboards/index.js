@@ -41,6 +41,26 @@ const Dashboards = ({ match }) => {
           component={lazy(() => import(`./lottery-type`))}
         />
 
+        <Route
+          path={`${match.url}/position`}
+          component={lazy(() => import(`./position`))}
+        />
+
+        <Route
+          path={`${match.url}/booking`}
+          component={lazy(() => import(`./booking`))}
+        />
+
+        <Route
+          path={`${match.url}/blocked-lottery`}
+          component={lazy(() => import(`./blocked-lottery`))}
+        />
+
+        <Route
+          path={`${match.url}/transaction`}
+          component={lazy(() => import(`./transaction`))}
+        />
+
         <Redirect from={`${match.url}`} to={`${match.url}/default`} />
       </Switch>
     </Suspense>
