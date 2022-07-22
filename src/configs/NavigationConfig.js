@@ -246,6 +246,14 @@ const dashBoardNavTree = [
         breadcrumb: false,
         submenu: [],
       },
+      {
+        key: "dashboards-admin-agent",
+        path: `${APP_PREFIX_PATH}/dashboards/agent`,
+        title: "Agents",
+        icon: AppstoreOutlined,
+        breadcrumb: false,
+        submenu: [],
+      },
     ],
   },
 ];
