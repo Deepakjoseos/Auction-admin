@@ -39,11 +39,11 @@ const rules = {
     ],
 }
 
-const GeneralField = (props) => (
+const GeneralField = ({mode,groups,currentGroup}) => (
     <Row gutter={16}>
         <Col xs={24} sm={24} md={24}>
-
-            <Card title="Basic Info">
+             {mode==='EDIT' ? <h3>LotteryGroup : {currentGroup}</h3> :""}  
+            <Card title="Edit">
             <Form.Item name="number" label="Number" rules={rules.number}>
           <InputNumber
             placeholder="Number"
@@ -53,8 +53,21 @@ const GeneralField = (props) => (
           />
         </Form.Item>
 
-                {props.mode === 'ADD' ? <Form.Item name="group" label="Group" rules={rules.group}>
-                    <Input placeholder="Group" />
+                {mode === 'ADD' ? 
+                <Form.Item name="group" label="Group" rules={rules.group}>
+                    <Form.Item
+              name="group"
+              
+              rules={rules.group}
+            >
+              <Select>
+                {groups.map((group) => (
+                  <Option key={group.id} value={group.id}>
+                    {group.group}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
                 </Form.Item> :
                     <Form.Item name="status" label="Status" rules={rules.status}>
                         <Select placeholder="Status">

@@ -60,7 +60,10 @@ const Dashboards = ({ match }) => {
           path={`${match.url}/transaction`}
           component={lazy(() => import(`./transaction`))}
         />
-
+        <Route
+          path={`${match.url}/banner`}
+          component={lazy(() => import(`./banner`))}
+        />
         <Redirect from={`${match.url}`} to={`${match.url}/default`} />
       </Switch>
     </Suspense>

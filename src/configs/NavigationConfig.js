@@ -278,6 +278,14 @@ const dashBoardNavTree = [
         breadcrumb: false,
         submenu: [],
       },
+      {
+        key: "dashboards-banner",
+        path: `${APP_PREFIX_PATH}/dashboards/banner`,
+        title: "Banner",
+        icon: AppstoreOutlined,
+        breadcrumb: false,
+        submenu: [],
+      },
     ],
   },
 ];

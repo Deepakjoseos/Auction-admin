@@ -18,12 +18,15 @@ const LotteryGroupForm = (props) => {
   const [form] = Form.useForm();
 
   const [submitLoading, setSubmitLoading] = useState(false);
+  const [lotteryGroups, setLotteryGroups] = useState([]);
+  const [currentGroup,setCurrentGroup] = useState(null)
 
   useEffect(() => {
     if (mode === EDIT) {
       const fetchGroupById = async () => {
         const { id } = param;
         const data = await lotteryGroupService.getLotteryGroupById(id);
+       setCurrentGroup(data.group)
         if (data) {
           // For setting form values when Load if it is in EDIT mode
           form.setFieldsValue({
@@ -34,11 +37,18 @@ const LotteryGroupForm = (props) => {
           history.replace("/app/dashboards/catalog/lottery/lottery-group-list");
         }
       };
+      const fetchGroups = async () => {
+        const data = await lotteryGroupService.getLotteryGroups();
+        if (data) {
+          setLotteryGroups(data);
+        }
+      };
 
       fetchGroupById();
+      fetchGroups();
     }
   }, [form, mode, param, props]);
-
+ 
   // Trigger When Submit Button pressed
   const onFinish = async () => {
     setSubmitLoading(true);
@@ -130,7 +140,7 @@ const LotteryGroupForm = (props) => {
         <div className="container">
           <Tabs defaultActiveKey="1" style={{ marginTop: 30 }}>
             <TabPane tab="General" key="1">
-              <GeneralField mode={mode} />
+              <GeneralField mode={mode} groups={lotteryGroups} currentGroup={currentGroup} />
             </TabPane>
           </Tabs>
         </div>
