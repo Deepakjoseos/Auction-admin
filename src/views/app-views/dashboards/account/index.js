@@ -1,15 +1,15 @@
 import { Route, Switch, Redirect } from "react-router-dom";
-import TransactionList from "./list-transaction";
+import AccountList from "./list-account";
 
 // In here we will define all our routes
-const Transaction = (props) => {
+const Account = (props) => {
   const { match } = props;
   return (
     <Switch>
       <Redirect exact from={`${match.url}`} to={`${match.url}/list`} />
-      <Route path={`${match.url}/list`} component={TransactionList} />
+      <Route path={`${match.url}/list`} component={AccountList} />
     </Switch>
   );
 };
 
-export default Transaction;
+export default Account;

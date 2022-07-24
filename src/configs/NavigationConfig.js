@@ -271,6 +271,22 @@ const dashBoardNavTree = [
         submenu: [],
       },
       {
+        key: "dashboards-outcome",
+        path: `${APP_PREFIX_PATH}/dashboards/outcome`,
+        title: "Outcome",
+        icon: AppstoreOutlined,
+        breadcrumb: false,
+        submenu: [],
+      },
+      {
+        key: "dashboards-winner",
+        path: `${APP_PREFIX_PATH}/dashboards/winner`,
+        title: "Winner",
+        icon: AppstoreOutlined,
+        breadcrumb: false,
+        submenu: [],
+      },
+      {
         key: "dashboards-transaction",
         path: `${APP_PREFIX_PATH}/dashboards/transaction`,
         title: "Transaction",
@@ -279,6 +295,14 @@ const dashBoardNavTree = [
         submenu: [],
       },
       {
+        key: "dashboards-account",
+        path: `${APP_PREFIX_PATH}/dashboards/account`,
+        title: "Account",
+        icon: AppstoreOutlined,
+        breadcrumb: false,
+        submenu: [],
+      },
+{
         key: "dashboards-banner",
         path: `${APP_PREFIX_PATH}/dashboards/banner`,
         title: "Banner",
