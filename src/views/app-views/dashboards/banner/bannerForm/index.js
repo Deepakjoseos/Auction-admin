@@ -20,7 +20,6 @@ const BannerForm = (props) => {
 
   const [form] = Form.useForm()
   const [uploadedImg, setImage] = useState(null)
-  const [uploadedMobileImg, setMobileImg] = useState(null)
   const [submitLoading, setSubmitLoading] = useState(false)
 
   // Normal Image
@@ -30,15 +29,6 @@ const BannerForm = (props) => {
     onChange: onChangeImages,
     onRemove: onRemoveImages,
     setFileList: setFileListImages,
-  } = useUpload(1)
-
-  // Mobile Image
-  const {
-    fileList: fileListMobileImages,
-    beforeUpload: beforeUploadMobileImages,
-    onChange: onChangeMobileImages,
-    onRemove: onRemoveMobileImages,
-    setFileList: setFileListMobileImages,
   } = useUpload(1)
 
   useEffect(() => {
@@ -62,25 +52,11 @@ const BannerForm = (props) => {
             setFileListImages(himg)
           }
 
-          if (data.image) {
-            himg = [
-              {
-                uid: Math.random() * 1000,
-                title: Utils.getBaseName(data.image),
-                url: data.image,
-                image: data.image,
-              },
-            ]
-
-            setMobileImg(himg)
-            setFileListMobileImages(himg)
-          }
-
           form.setFieldsValue({
             title: data.title,
             status: data.status,
             priority: data.priority,
-           url: data.url,
+            url: data.url,
           })
         } else {
           history.replace('/app/dashboards/catalog/banner/banner-list')
@@ -99,22 +75,10 @@ const BannerForm = (props) => {
     fileList: fileListImages,
   }
 
-  const propsMobileImages = {
-    multiple: false,
-    beforeUpload: beforeUploadMobileImages,
-    onRemove: onRemoveMobileImages,
-    onChange: onChangeMobileImages,
-    fileList: fileListMobileImages,
-  }
-
   useEffect(() => {
     console.log(fileListImages, 'hey-me')
     setImage(fileListImages)
   }, [fileListImages])
-
-  useEffect(() => {
-    setMobileImg(fileListMobileImages)
-  }, [fileListMobileImages])
 
   const onFinish = async () => {
     setSubmitLoading(true)
@@ -123,12 +87,7 @@ const BannerForm = (props) => {
       .then(async (values) => {
         if (mode === ADD) {
           // Checking if image exists
-          if (
-            uploadedImg.length !== 0 &&
-            uploadedImg !== null &&
-            uploadedMobileImg.length !== 0 &&
-            uploadedMobileImg !== null
-          ) {
+          if (uploadedImg.length !== 0 && uploadedImg !== null) {
             console.log('uploadedImg', uploadedImg)
             const imgValue = await singleImageUploader(
               uploadedImg[0].originFileObj,
@@ -136,15 +95,10 @@ const BannerForm = (props) => {
               uploadedImg[0].url,
               'banner'
             )
-            // const mobileImgValue = await singleImageUploader(
-            //   uploadedMobileImg[0].originFileObj,
-            //   uploadedMobileImg,
-            //   uploadedMobileImg[0].url,
-            //   'banner'
-            // )
 
-            values.image = imgValue
-            // values.mobileImage = mobileImgValue
+            console.log('imgValue', imgValue)
+
+            values.imageURL = imgValue
 
             const created = await BannerService.createBanner(values)
             if (created) {
@@ -157,12 +111,7 @@ const BannerForm = (props) => {
         }
         if (mode === EDIT) {
           // Checking if image exists
-          if (
-            uploadedImg.length !== 0 &&
-            uploadedImg !== null &&
-            uploadedMobileImg.length !== 0 &&
-            uploadedMobileImg !== null
-          ) {
+          if (uploadedImg.length !== 0 && uploadedImg !== null) {
             console.log('uploadedImg', uploadedImg)
             const imgValue = await singleImageUploader(
               uploadedImg[0].originFileObj,
@@ -170,14 +119,8 @@ const BannerForm = (props) => {
               uploadedImg[0].url,
               'banner'
             )
-            // const mobileImgValue = await singleImageUploader(
-            //   uploadedMobileImg[0].originFileObj,
-            //   uploadedMobileImg,
-            //   uploadedMobileImg[0].url,
-            //   'banner'
-            // )
 
-            values.image = imgValue
+            values.imageURL = imgValue
             // values.mobileImage = mobileImgValue
 
             const edited = await BannerService.editBanner(param.id, values)
@@ -190,6 +133,7 @@ const BannerForm = (props) => {
             message.error('Please upload image')
           }
         }
+        setSubmitLoading(false)
       })
       .catch((info) => {
         setSubmitLoading(false)
@@ -248,7 +192,7 @@ const BannerForm = (props) => {
                 uploadedImg={uploadedImg}
                 // uploadLoading={uploadLoading}
                 // handleUploadChange={handleUploadChange}
-                // propsImages={propsImages}
+                propsImages={propsImages}
                 // propsMobileImages={propsMobileImages}
               />
             </TabPane>
