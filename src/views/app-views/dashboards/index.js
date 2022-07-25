@@ -1,6 +1,6 @@
-import React, { lazy, Suspense } from "react";
-import { Redirect, Route, Switch } from "react-router-dom";
-import Loading from "components/shared-components/Loading";
+import React, { lazy, Suspense } from 'react'
+import { Redirect, Route, Switch } from 'react-router-dom'
+import Loading from 'components/shared-components/Loading'
 
 const Dashboards = ({ match }) => {
   return (
@@ -62,6 +62,11 @@ const Dashboards = ({ match }) => {
         />
 
         <Route
+          path={`${match.url}/agent`}
+          component={lazy(() => import(`./agent`))}
+        />
+
+        <Route
           path={`${match.url}/winner`}
           component={lazy(() => import(`./winner`))}
         />
@@ -83,7 +88,7 @@ const Dashboards = ({ match }) => {
         <Redirect from={`${match.url}`} to={`${match.url}/default`} />
       </Switch>
     </Suspense>
-  );
-};
+  )
+}
 
-export default Dashboards;
+export default Dashboards
