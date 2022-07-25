@@ -1,8 +1,7 @@
 import React from 'react'
 import BannerForm from '../bannerForm'
 
-
-const AddBanner= () => {
+const AddBanner = () => {
   return <BannerForm mode="ADD" />
 }
 
