@@ -53,7 +53,7 @@ service.interceptors.response.use(
     }
 
     // Remove token and redirect
-    if (error.response.status === 401 || error.response.status === 403) {
+    if (error.response.status === 401) {
       notificationParam.message = 'Authentication Fail'
       notificationParam.description = 'Please login again'
       localStorage.removeItem(AUTH_TOKEN)
