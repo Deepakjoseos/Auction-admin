@@ -44,6 +44,7 @@ const multipleImageUpload = async (images, folder) => {
 }
 
 const singleImageUploader = async (file, imgValue, defaultValueUrl, folder) => {
+  console.log('filesss', file)
   if (file) {
     const config = {
       bucketName: process.env.REACT_APP_S3_BUCKET_NAME,
@@ -69,7 +70,7 @@ const singleImageUploader = async (file, imgValue, defaultValueUrl, folder) => {
         message: 'Cannot upload Newly added Images',
       })
 
-      console.log(err.message, 'pls')
+      console.log(err, 'pls')
     }
   } else {
     imgValue = defaultValueUrl
