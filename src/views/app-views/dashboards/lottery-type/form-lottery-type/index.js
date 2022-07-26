@@ -21,6 +21,7 @@ const LotteryTypeForm = (props) => {
   const [submitLoading, setSubmitLoading] = useState(false);
   const [lotteryGroups, setLotteryGroups] = useState([]);
   const [lotteries, setLotteries] = useState([]);
+  const [currentType,setCurrentType]=useState([])
 
   useEffect(() => {
     if (mode === ADD) {
@@ -49,12 +50,15 @@ const LotteryTypeForm = (props) => {
             price: data.price,
             status: data.status,
           });
+            setCurrentType(data);
         } else {
           history.replace("/app/dashboards/lottery-type/list");
         }
       };
+    
 
       fetchTypeById();
+
     }
   }, [form, mode, param, props, history]);
 
@@ -127,14 +131,14 @@ const LotteryTypeForm = (props) => {
             >
               <h2 className="mb-3">
                 {mode === "ADD"
-                  ? "Add New Lottery Group"
-                  : `Edit Lottery Group`}{" "}
+                  ? "Add New Lottery Type"
+                  : `Edit Lottery Type`}{" "}
               </h2>
               <div className="mb-3">
                 <Button
                   className="mr-2"
                   onClick={() =>
-                    history.push("/app/dashboards/lottery-group/list")
+                    history.push("/app/dashboards/lottery-type/list")
                   }
                 >
                   Discard
@@ -157,7 +161,7 @@ const LotteryTypeForm = (props) => {
               <GeneralField
                 mode={mode}
                 lotteries={lotteries}
-                groups={lotteryGroups}
+                groups={lotteryGroups} currentType={currentType}
               />
             </TabPane>
           </Tabs>

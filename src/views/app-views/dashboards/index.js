@@ -22,10 +22,10 @@ const Dashboards = ({ match }) => {
           path={`${match.url}/sales`}
           component={lazy(() => import(`./sales`))}
         /> */}
-        <Route
+        {/* <Route
           path={`${match.url}/catalog`}
           component={lazy(() => import(`./catalog`))}
-        />
+        /> */}
 
         <Route
           path={`${match.url}/lottery`}

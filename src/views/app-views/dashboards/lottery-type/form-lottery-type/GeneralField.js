@@ -39,10 +39,11 @@ const rules = {
   ],
 };
 
-const GeneralField = ({ mode, lotteries, groups }) => (
+const GeneralField = ({ mode, lotteries, groups,currentType }) => (
   <Row gutter={16}>
     <Col xs={24} sm={24} md={24}>
       <Card title="Lottery Type Info">
+        {mode==="EDIT" ? <h3>LotteryType : {currentType.name}</h3> :""} 
         {mode === "ADD" ? (
           <>
             <Form.Item name="name" label="Name" rules={rules.name}>
@@ -82,6 +83,7 @@ const GeneralField = ({ mode, lotteries, groups }) => (
             </Form.Item>
           </>
         ) : (
+   
           <Form.Item name="status" label="Status" rules={rules.status}>
             <Select placeholder="Status">
               <Option value="Active">Active</Option>
