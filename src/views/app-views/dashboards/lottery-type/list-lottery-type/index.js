@@ -50,21 +50,20 @@ const LotteryTypeList = () => {
   const [searchBackupList, setSearchBackupList] = useState([]);
   const [selectedRows, setSelectedRows] = useState([]);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-  const [lotteryGroups, setLotteryGroups] = useState([]);
-  const[lotteries,setLotteries]=useState([])
-   // Getting Lotteries List to display in the table
+  const [lotteries, setLotteries] = useState([]);
+  const [lotteryId, setLotteryId] = useState([]);
+  const [lotteryGroups, setLotteryGroups] = useState(null);
+  const [lotteryGroupId, setLotteryGroupId] = useState(null);
+  // Getting Lotteries List to display in the table
   const getLottoryTypes = async (query) => {
-
     const data = await lotteryTypeService.getLotteryTypes(query);
-    
+
     if (data) {
       setList(data);
       setSearchBackupList(data);
     }
   };
   useEffect(() => {
-   
-   
     const fetchGroups = async () => {
       const data = await lotteryGroupService.getLotteryGroups();
       if (data) {
@@ -76,7 +75,6 @@ const LotteryTypeList = () => {
       if (data) {
         setLotteries(data);
         setSearchBackupList(data);
-        console.log(data, "show-data");
       }
     };
     getLottories();
@@ -143,16 +141,15 @@ const LotteryTypeList = () => {
     {
       title: "Lottery",
       dataIndex: "lottery",
-      render: (lottery,row) =>{
-       console.log('lottery',lottery,row)
-        return <Flex alignItems="center">{lottery?.name}</Flex>
-      } ,
+      render: (lottery, row) => {
+        return <Flex alignItems="center">{lottery?.name}</Flex>;
+      },
       sorter: (a, b) => a.lottery.name.localeCompare(b.lottery.name),
     },
     {
       title: "Group",
       dataIndex: "lotteryGroup",
-      key:"lotteryGroup",
+      key: "lotteryGroup",
       render: (lotteryGroup) => (
         <Flex alignItems="center">{lotteryGroup?.group}</Flex>
       ),
@@ -186,7 +183,6 @@ const LotteryTypeList = () => {
     const value = e.currentTarget.value;
     const searchArray = e.currentTarget.value ? list : searchBackupList;
     const data = utils.wildCardSearch(searchArray, value);
-    console.log(data);
     setList(data);
     setSelectedRowKeys([]);
   };
@@ -196,23 +192,33 @@ const LotteryTypeList = () => {
     if (value !== "All") {
       const key = "status";
       const data = utils.filterArray(searchBackupList, key, value);
-      console.log(data);
       setList(data);
     } else {
       setList(searchBackupList);
     }
   };
-  const handleLotteryGroup = async (e) => {
-  
-    if (e !== "All"){
-      const lotteryGroup= await getLottoryTypes({lotteryGroupNumber:e})
-      
+  const handleLotteryChange = async (value) => {
+    if (value !== "All") {
+      const lotteryGroup = await getLottoryTypes({ lotteryGroupNumber: value });
+
       setList(lotteryGroup);
     } else {
-      const lotteryGroup= await getLottoryTypes()
+      const lotteryGroup = await getLottoryTypes();
       setList(lotteryGroup);
     }
-  }
+  };
+
+  const handleLotteryGroupChange = async (e) => {
+    if (e !== "All") {
+      const lotteryGroup = await getLottoryTypes({ lotteryGroupNumber: e });
+
+      setList(lotteryGroup);
+    } else {
+      const lotteryGroup = await getLottoryTypes();
+      setList(lotteryGroup);
+    }
+  };
+
   // Table Filters JSX Elements
   const filters = () => (
     <Flex className="mb-1" mobileFlex={false}>
@@ -224,31 +230,52 @@ const LotteryTypeList = () => {
         />
       </div>
 
-      <div className="mb-3">
+      <div className="mr-md-3 mb-3">
         <Select
           defaultValue="All"
           className="w-100"
           style={{ minWidth: 180 }}
           onChange={handleShowStatus}
           placeholder="Status"
+          onSelect={(value) => setLotteryId(value)}
         >
           <Option value="All">All</Option>
           <Option value="Active">Active</Option>
           <Option value="Hold">Hold</Option>
         </Select>
       </div>
-      <div className="mb-3">
-
-        <Select onChange={ handleLotteryGroup } placeholder="LotteryGroup" style={{ minWidth: 180 }} >
-          <Option key="" value="All">All</Option>
+      <div className="mr-md-3 mb-3">
+        <Select
+          onChange={handleLotteryChange}
+          onSelect={(value) => setLotteryGroupId(value)}
+          placeholder="Lottery"
+          style={{ minWidth: 180 }}
+        >
+          <Option key="all" value="All">
+            All
+          </Option>
+          {lotteries.map((lottery) => (
+            <Option key={lottery.id} value={lottery.id}>
+              {lottery.name}
+            </Option>
+          ))}
+        </Select>
+      </div>
+      <div className="mr-md-3 mb-3">
+        <Select
+          onChange={handleLotteryGroupChange}
+          placeholder="Lottery Group"
+          style={{ minWidth: 180 }}
+        >
+          <Option key="all" value="All">
+            All
+          </Option>
           {lotteryGroups.map((group) => (
-            <Option key={group.id} value={group.id} >
+            <Option key={group.id} value={group.id}>
               {group.group}
             </Option>
           ))}
         </Select>
-
-
       </div>
     </Flex>
   );
