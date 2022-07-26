@@ -125,13 +125,13 @@ const ProductForm = (props) => {
               alignItems="center"
             >
               <h2 className="mb-3">
-                {mode === 'ADD' ? 'Add New Brand' : `Edit Brand`}{' '}
+                {mode === 'ADD' ? 'Add New Lottery' : `Edit Lottery`}{' '}
               </h2>
               <div className="mb-3">
                 <Button
                   className="mr-2"
                   onClick={() =>
-                    history.push('/app/dashboards/catalog/brand/brands-list')
+                    history.push('/app/dashboards/lottery/lottery-list')
                   }
                 >
                   Discard

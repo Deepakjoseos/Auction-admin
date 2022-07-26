@@ -59,7 +59,7 @@ const BannerForm = (props) => {
             url: data.url,
           })
         } else {
-          history.replace('/app/dashboards/catalog/banner/banner-list')
+          history.replace('/app/dashboards/banner/banner-list')
         }
       }
 

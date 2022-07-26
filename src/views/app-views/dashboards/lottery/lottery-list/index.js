@@ -133,6 +133,7 @@ const BrandList = () => {
       title: "Draw Time",
       dataIndex: "drawTime",
       render: (drawTime) => {
+        console.log('drawTime',drawTime)
         return (
           <>
             {drawTime.hour}: {drawTime.minute}

@@ -21,7 +21,7 @@ export class Invoice extends Component {
         <Card>
           <div className="d-md-flex justify-content-md-between">
             <div>
-              <img src="/img/logo.png" alt="" />
+              {/* <img src="/img/logo.png" alt="" /> */}
               <address>
                 <p>
                   <span className="font-weight-semibold text-dark font-size-md">

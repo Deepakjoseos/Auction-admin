@@ -66,11 +66,7 @@ const BookingList = () => {
       dataIndex: "totalAmount",
       sorter: (a, b) => utils.antdTableSorter(a, b, "totalAmount"),
     },
-    {
-      title: "Paid Amount",
-      dataIndex: "paidAmount",
-      sorter: (a, b) => utils.antdTableSorter(a, b, "paidAmount"),
-    },
+   
     {
       title: "Date",
       dataIndex: "drawDate",

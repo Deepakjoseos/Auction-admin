@@ -50,20 +50,41 @@ const LotteryTypeList = () => {
   const [searchBackupList, setSearchBackupList] = useState([]);
   const [selectedRows, setSelectedRows] = useState([]);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [lotteryGroups, setLotteryGroups] = useState([]);
+  const[lotteries,setLotteries]=useState([])
+   // Getting Lotteries List to display in the table
+  const getLottoryTypes = async (query) => {
 
+    const data = await lotteryTypeService.getLotteryTypes(query);
+    
+    if (data) {
+      setList(data);
+      setSearchBackupList(data);
+    }
+  };
   useEffect(() => {
-    // Getting Lotteries List to display in the table
-    const getLottoryTypes = async () => {
-      const data = await lotteryTypeService.getLotteryTypes();
+   
+   
+    const fetchGroups = async () => {
+      const data = await lotteryGroupService.getLotteryGroups();
       if (data) {
-        setList(data);
-        setSearchBackupList(data);
+        setLotteryGroups(data);
       }
     };
+    const getLottories = async () => {
+      const data = await lotteryService.getLotteries();
+      if (data) {
+        setLotteries(data);
+        setSearchBackupList(data);
+        console.log(data, "show-data");
+      }
+    };
+    getLottories();
     getLottoryTypes();
+    fetchGroups();
   }, []);
 
-  // Dropdown menu for each row
+  //Dropdown menu for each row
   const dropdownMenu = (row) => (
     <Menu>
       <Menu.Item onClick={() => viewDetails(row)}>
@@ -122,12 +143,16 @@ const LotteryTypeList = () => {
     {
       title: "Lottery",
       dataIndex: "lottery",
-      render: (lottery) => <Flex alignItems="center">{lottery?.name}</Flex>,
+      render: (lottery,row) =>{
+       console.log('lottery',lottery,row)
+        return <Flex alignItems="center">{lottery?.name}</Flex>
+      } ,
       sorter: (a, b) => a.lottery.name.localeCompare(b.lottery.name),
     },
     {
       title: "Group",
       dataIndex: "lotteryGroup",
+      key:"lotteryGroup",
       render: (lotteryGroup) => (
         <Flex alignItems="center">{lotteryGroup?.group}</Flex>
       ),
@@ -177,7 +202,17 @@ const LotteryTypeList = () => {
       setList(searchBackupList);
     }
   };
-
+  const handleLotteryGroup = async (e) => {
+  
+    if (e !== "All"){
+      const lotteryGroup= await getLottoryTypes({lotteryGroupNumber:e})
+      
+      setList(lotteryGroup);
+    } else {
+      const lotteryGroup= await getLottoryTypes()
+      setList(lotteryGroup);
+    }
+  }
   // Table Filters JSX Elements
   const filters = () => (
     <Flex className="mb-1" mobileFlex={false}>
@@ -202,6 +237,19 @@ const LotteryTypeList = () => {
           <Option value="Hold">Hold</Option>
         </Select>
       </div>
+      <div className="mb-3">
+
+        <Select onChange={ handleLotteryGroup } placeholder="LotteryGroup" style={{ minWidth: 180 }} >
+          <Option key="" value="All">All</Option>
+          {lotteryGroups.map((group) => (
+            <Option key={group.id} value={group.id} >
+              {group.group}
+            </Option>
+          ))}
+        </Select>
+
+
+      </div>
     </Flex>
   );
 
@@ -216,7 +264,7 @@ const LotteryTypeList = () => {
             icon={<PlusCircleOutlined />}
             block
           >
-            Add Lottery Group
+            Add Lottery Type
           </Button>
         </div>
       </Flex>
