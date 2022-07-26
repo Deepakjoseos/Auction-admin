@@ -263,14 +263,6 @@ const dashBoardNavTree = [
         submenu: [],
       },
       {
-        key: "dashboards-booked-lottery",
-        path: `${APP_PREFIX_PATH}/dashboards/booked-lottery`,
-        title: "Booked Lottery",
-        icon: AppstoreOutlined,
-        breadcrumb: false,
-        submenu: [],
-      },
-      {
         key: "dashboards-blocked-lottery",
         path: `${APP_PREFIX_PATH}/dashboards/blocked-lottery`,
         title: "BlockedLottery",
