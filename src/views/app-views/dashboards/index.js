@@ -52,6 +52,11 @@ const Dashboards = ({ match }) => {
         />
 
         <Route
+          path={`${match.url}/booked-lottery`}
+          component={lazy(() => import(`./booked-lottery`))}
+        />
+
+        <Route
           path={`${match.url}/blocked-lottery`}
           component={lazy(() => import(`./blocked-lottery`))}
         />

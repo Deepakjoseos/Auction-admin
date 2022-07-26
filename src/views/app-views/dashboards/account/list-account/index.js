@@ -36,28 +36,35 @@ const AccountList = () => {
     },
     {
       title: "Date",
-      dataIndex: "date",
-      sorter: (a, b) => utils.antdTableSorter(a, b, "date"),
+      dataIndex: "agentSummaries",
+      render: (agentSummaries) => (
+        <Flex alignItems="center">{agentSummaries?.date}</Flex>
+      ),
+      sorter: (a, b) => a.agent.date.localeCompare(b.agent.date),
     },
     {
       title: "Sales",
       dataIndex: "sales",
-      sorter: (a, b) => a.sales - b.sales,
+      render: (agentSummaries) => (
+        <Flex alignItems="center">{agentSummaries?.sales}</Flex>
+      ),
+      sorter: (a, b) => a.agentSummaries.sales - b.agentSummaries.sales,
     },
     {
       title: "Winnings",
       dataIndex: "winnings",
-      sorter: (a, b) => a.winnings - b.winnings,
-    },
-    {
-      title: "Sub-Agent Commissions",
-      dataIndex: "subAgentsCommissions",
-      sorter: (a, b) => a.subAgentsCommissions - b.subAgentsCommissions,
+      render: (agentSummaries) => (
+        <Flex alignItems="center">{agentSummaries?.winnings}</Flex>
+      ),
+      sorter: (a, b) => a.agentSummaries.winnings - b.agentSummaries.winnings,
     },
     {
       title: "Balance",
       dataIndex: "balance",
-      sorter: (a, b) => a.balance - b.balance,
+      render: (agentSummaries) => (
+        <Flex alignItems="center">{agentSummaries?.balance}</Flex>
+      ),
+      sorter: (a, b) => a.agentSummaries.balance - b.agentSummaries.balance,
     },
   ];
 
