@@ -52,7 +52,8 @@ const LotteryTypeList = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [lotteryGroups, setLotteryGroups] = useState([]);
   const[lotteries,setLotteries]=useState([])
-  const[lotteryGroupId,setLotteryGroupId] = useState(null)
+  const[selectedlotteryGroupId,setSelectedLotteryGroupId] = useState(null)
+  const [selectedlotteryId,setSelectedLotteryId]=useState(null)
    // Getting Lotteries List to display in the table
   const getLottoryTypes = async (query) => {
 
@@ -203,11 +204,13 @@ const LotteryTypeList = () => {
       setList(searchBackupList);
     }
   };
-  const handleLotteryGroup = async () => {
+ 
+  const handleQuery = async () => {
     
     const query = {};
-    if (lotteryGroupId && lotteryGroupId !== "All")
-     query.lotteryGroupName = lotteryGroupId;
+    if ((selectedlotteryId || selectedlotteryGroupId)  !== "All")
+     query.lottteryId = selectedlotteryId;
+     query.lotteryGroupId= selectedlotteryGroupId
      console.log('query',query)
     const data = await lotteryTypeService.getLotteryTypes(query);
     if (data) {
@@ -239,34 +242,39 @@ const LotteryTypeList = () => {
           <Option value="Hold">Hold</Option>
         </Select>
       </div>
-      <div className="mb-3">
-      <Select
-            className="w-100"
-            style={{ minWidth: 180 }}
-            onChange={(value) => setLotteryGroupId(value)}
-            placeholder="Select LotteryGroup"
-           
-          >
-            <Option value="All">All</Option>
-            {lotteryGroups &&
-              lotteryGroups?.length > 0 &&
-              lotteryGroups.map((lotteryGroup) => (
-                <Option key={lotteryGroup.id} value={lotteryGroup.id}>
-                  {lotteryGroup.group}
-                </Option>
-              ))}
-          </Select>
-
+      <div className="mr-md-3 mb-3">
+        <Select
+          className="w-100"
+          style={{ minWidth: 180 }}
+          onChange={(value) => setSelectedLotteryId(value)}
+          onSelect={handleQuery}
+          placeholder="Lottery"
+        >
+        <Option value="All" >All</Option>
+          {lotteries.map((lottery) => (
+            <Option key={lottery.id} value={lottery.id}>
+              {lottery.name}
+            </Option>
+          ))}
+        </Select>
       </div>
       <div className="mr-md-3 mb-3">
-        <Button
-          onClick={handleLotteryGroup}
-          type="primary"
-          
+        <Select
+          className="w-100"
+          style={{ minWidth: 180 }}
+          onChange={(value) => setSelectedLotteryGroupId(value)}
+          onSelect={handleQuery}
+          placeholder="LotteryGroup"
         >
-          Get
-        </Button>
+         <Option value="All">All</Option>
+          {lotteryGroups.map((group) => (
+            <Option key={group.id} value={group.id}>
+              {group.group}
+            </Option>
+          ))}
+        </Select>
       </div>
+
     </Flex>
   );
 
