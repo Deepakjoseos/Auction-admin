@@ -18,12 +18,20 @@ const WinnerList = () => {
   const [lotteryTypeId, setLotteryTypeId] = useState(null);
 
   useEffect(() => {
+    const getAllWinners = async () => {
+      const data = await winnerService.getWinners();
+      if (data) {
+        setList(data);
+        setSearchBackupList(data);
+      }
+    };
     const getLotteries = async () => {
       const data = await lotteryService.getLotteries();
       if (data) {
         setLotteries(data);
       }
     };
+    getAllWinners();
     getLotteries();
   }, []);
 
@@ -78,7 +86,7 @@ const WinnerList = () => {
   const findByLottery = async (value) => {
     setLotteryId(value);
     const query = { lotteryId: value };
-    const data = await winnerService.getWinnersByLottery(query);
+    const data = await winnerService.getWinners(query);
     if (data) {
       setList(data);
       setSearchBackupList(data);
@@ -94,7 +102,7 @@ const WinnerList = () => {
   const findByLotteryType = async (value) => {
     setLotteryTypeId(value);
     const query = { lotteryId, lotteryTypeId: value };
-    const data = await winnerService.getWinnersByLottery(query);
+    const data = await winnerService.getWinners(query);
     if (data) {
       setList(data);
       setSearchBackupList(data);

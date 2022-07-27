@@ -270,7 +270,7 @@ const LotteryTypeList = () => {
           <Option key="all" value="All">
             All
           </Option>
-          {lotteryGroups.map((group) => (
+          {lotteryGroups?.map((group) => (
             <Option key={group.id} value={group.id}>
               {group.group}
             </Option>
