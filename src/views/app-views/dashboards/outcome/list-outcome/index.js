@@ -19,12 +19,20 @@ const OutcomeList = () => {
   const [pastDate, setPastDate] = useState(null);
 
   useEffect(() => {
+    const getOutcomes = async () => {
+      const data = await outcomeService.getOutcomes();
+      if (data) {
+        setList(data);
+        setSearchBackupList(data);
+      }
+    };
     const getLotteries = async () => {
       const data = await lotteryService.getLotteries();
       if (data) {
         setLotteries(data);
       }
     };
+    getOutcomes();
     getLotteries();
   }, []);
 
@@ -138,8 +146,9 @@ const OutcomeList = () => {
             style={{ minWidth: 180 }}
             onChange={(value) => setTiming(value)}
             placeholder="Time"
-            defaultValue="Today"
+            defaultValue="All"
           >
+            <Option value="Today">All</Option>
             <Option value="Today">Today</Option>
             <Option value="Past">Past</Option>
           </Select>

@@ -1,28 +1,13 @@
 import fetch from "auth/FetchInterceptor";
 const outcomeService = {};
 const api = "/outcome";
-// GET
-// /v1/outcome/{lotteryId}
-outcomeService.getOutcomes = async function (lotteryId) {
+
+outcomeService.getOutcomes = async function () {
   try {
-    let url = `${api}/${lotteryId}`;
+    let url = `${api}/all`;
     const res = await fetch({
       url,
       method: "get",
-    });
-    return res.data;
-  } catch (err) {
-    console.log(err, "show-err");
-  }
-};
-
-outcomeService.getPastOutcomes = async function (lotteryId, data) {
-  try {
-    let url = `${api}/past/${lotteryId}`;
-    const res = await fetch({
-      url,
-      method: "post",
-      data,
     });
     return res.data;
   } catch (err) {
