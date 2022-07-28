@@ -4,19 +4,19 @@ const api = "/lottery_type";
 lotteryTypeService.getLotteryTypes = async function (query) {
   try {
     let url = `${api}/get/all/admin`;
-    const lotteryGroupId = query?.lotteryGroupId;
-    const lottteryId = query?.lottteryId;
+    const lotteryGroupNumber = query?.lotteryGroupNumber;
+    const lottteryName = query?.lottteryName;
     const status = query?.status;
 
-    if (lotteryGroupId)
-      url = `${url}?lotteryGroupId=${lotteryGroupId}`;
-    if (lottteryId)
-      url = lotteryGroupId
-        ? `${url}&lottteryId=${lottteryId}`
-        : `${url}?lottteryId=${lottteryId}`;
+    if (lotteryGroupNumber)
+      url = `${url}?lotteryGroupNumber=${lotteryGroupNumber}`;
+    if (lottteryName)
+      url = lotteryGroupNumber
+        ? `${url}&lottteryName=${lottteryName}`
+        : `${url}?lottteryName=${lottteryName}`;
     if (status)
       url =
-        lotteryGroupId || lottteryId
+        lotteryGroupNumber || lottteryName
           ? `${url}&status=${status}`
           : `${url}?status=${status}`;
 
