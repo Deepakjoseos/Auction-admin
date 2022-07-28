@@ -1,5 +1,6 @@
 export const timestampToDate = (timestamp) => {
-  const date = new Date(timestamp);
+  const stamp = Math.round(parseFloat(`${timestamp}`) * 100) / 100;
+  const date = new Date(stamp);
   const day = date.getDate();
   const month = date.getMonth() + 1;
   const year = date.getFullYear();
@@ -9,8 +10,8 @@ export const timestampToDate = (timestamp) => {
 };
 
 export const timestampToTime = (timestamp) => {
-  const date = new Date(timestamp);
-
+  const stamp = Math.round(parseFloat(`${timestamp}`) * 100) / 100;
+  const date = new Date(stamp);
   const hour = date.getHours();
   const minute = date.getMinutes();
   const hourFomratted = hour > 12 ? hour - 12 : hour === 0 ? 12 : hour;
