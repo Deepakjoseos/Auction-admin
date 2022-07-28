@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Card, Table, Input, Menu } from "antd";
+import { Card, Table, Input, Menu,Modal } from "antd";
 // import BrandListData from 'assets/data/product-list.data.json'
 import { EyeOutlined, SearchOutlined } from "@ant-design/icons";
 import EllipsisDropdown from "components/shared-components/EllipsisDropdown";
@@ -13,17 +13,19 @@ const BookingList = () => {
 
   const [list, setList] = useState([]);
   const [searchBackupList, setSearchBackupList] = useState([]);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [bookingNumber,setBookingNumber] = useState(null)
 
   useEffect(() => {
     // Getting Lotteries List to display in the table
-    const getLottoryTypes = async () => {
+    const getBookings = async () => {
       const data = await bookingService.getBookings();
       if (data) {
         setList(data);
         setSearchBackupList(data);
       }
     };
-    getLottoryTypes();
+    getBookings();
   }, []);
 
   // Dropdown menu for each row
@@ -35,13 +37,21 @@ const BookingList = () => {
           <span className="ml-2">View Booking Commissions</span>
         </Flex>
       </Menu.Item>
+      <Menu.Item onClick={() => viewBookingDetails(row)}>
+        <Flex alignItems="center">
+          <EyeOutlined />
+          <span className="ml-2">View Booking Details</span>
+        </Flex>
+      </Menu.Item>
     </Menu>
   );
 
   const viewDetails = (row) => {
     history.push(`/app/dashboards/booking/${row.id}`);
   };
-
+const viewBookingDetails = (row) =>{
+  history.push(`/app/dashboards/booking/booked-lotteries/${row.bookingNumber}`);
+}
   // Antd Table Columns
   const tableColumns = [
     {
@@ -105,6 +115,7 @@ const BookingList = () => {
   );
 
   return (
+    <>
     <Card>
       <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
         {filters()}
@@ -113,6 +124,8 @@ const BookingList = () => {
         <Table columns={tableColumns} dataSource={list} rowKey="id" />
       </div>
     </Card>
+    
+    </>
   );
 };
 
