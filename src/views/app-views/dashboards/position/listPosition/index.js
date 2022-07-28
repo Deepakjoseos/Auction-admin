@@ -142,9 +142,8 @@ const PositionList = () => {
 
   const handleQuery = async () => {
     const query = {};
-
     if (selectedLottery) query.lotteryId = selectedLottery;
-    if (selectedLotteryType) query.lotteryTypeId = selectedLotteryType;
+    if (selectedLotteryType) query.lotteryTypeId = selectedLottery;
     const data = await positionService.getPositions(query);
     if (data) {
       setList(data);
@@ -163,7 +162,7 @@ const PositionList = () => {
         />
       </div>
 
-      <div className="mr-md-3 mb-3">
+      {/* <div className="mr-md-3 mb-3">
         <Select
           className="w-100"
           style={{ minWidth: 180 }}
@@ -171,7 +170,6 @@ const PositionList = () => {
           onSelect={handleQuery}
           placeholder="Lottery"
         >
-   
           {lotteries.map((lottery) => (
             <Option key={lottery.id} value={lottery.id}>
               {lottery.name}
@@ -187,14 +185,13 @@ const PositionList = () => {
           onSelect={handleQuery}
           placeholder="Type"
         >
-     
           {lotteryTypes.map((type) => (
             <Option key={type.id} value={type.id}>
               {type.name}
             </Option>
           ))}
         </Select>
-      </div>
+      </div> */}
     </Flex>
   );
 
