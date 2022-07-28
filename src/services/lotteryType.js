@@ -1,80 +1,79 @@
-import fetch from "auth/FetchInterceptor";
-const lotteryTypeService = {};
-const api = "/lottery_type";
+import fetch from 'auth/FetchInterceptor'
+const lotteryTypeService = {}
+const api = '/lottery_type'
 lotteryTypeService.getLotteryTypes = async function (query) {
   try {
-    let url = `${api}/get/all/admin`;
-    const lotteryGroupNumber = query?.lotteryGroupNumber;
-    const lottteryName = query?.lottteryName;
-    const status = query?.status;
+    let url = `${api}/get/all/admin`
+    const lotteryGroupId = query?.lotteryGroupId
+    const lottteryId = query?.lottteryId
+    const status = query?.status
 
-    if (lotteryGroupNumber)
-      url = `${url}?lotteryGroupNumber=${lotteryGroupNumber}`;
-    if (lottteryName)
-      url = lotteryGroupNumber
-        ? `${url}&lottteryName=${lottteryName}`
-        : `${url}?lottteryName=${lottteryName}`;
+    if (lotteryGroupId) url = `${url}?lotteryGroupId=${lotteryGroupId}`
+    if (lottteryId)
+      url = lotteryGroupId
+        ? `${url}&lottteryId=${lottteryId}`
+        : `${url}?lottteryId=${lottteryId}`
     if (status)
       url =
-        lotteryGroupNumber || lottteryName
+        lotteryGroupId || lottteryId
           ? `${url}&status=${status}`
-          : `${url}?status=${status}`;
+          : `${url}?status=${status}`
 
     const res = await fetch({
       url,
-      method: "get",
-    });
-    return res.data;
+      method: 'get',
+    })
+    return res.data
   } catch (err) {
-    console.log(err, "show-err");
+    console.log(err, 'show-err')
   }
-};
+}
 lotteryTypeService.getLotteryTypeById = async function (id) {
   try {
     const res = await fetch({
       url: `${api}/${id}/admin`,
-      method: "get",
-    });
-    return res.data;
+      method: 'get',
+    })
+    return res.data
   } catch (err) {
-    console.log(err, "show-err");
+    console.log(err, 'show-err')
   }
-};
+}
 lotteryTypeService.createLotteryType = async function (data) {
   try {
     const res = await fetch({
       url: `${api}/create`,
-      method: "post",
+      method: 'post',
       data: data,
-    });
-    return res;
+    })
+    return res
   } catch (err) {
-    console.log(err, "show-err");
+    console.log(err, 'show-err')
   }
-};
+}
 lotteryTypeService.editLotteryType = async function (id, data) {
   try {
     const res = await fetch({
       url: `${api}/${id}`,
-      method: "put",
+      method: 'put',
       data: data,
-    });
-    return res;
+    })
+    return res
   } catch (err) {
-    console.log(err, "show-err");
+    console.log(err, 'show-err')
   }
-};
+}
 
 lotteryTypeService.deleteLotteryType = async function (id) {
   try {
     const res = await fetch({
       url: `${api}/${id}`,
-      method: "delete",
-    });
-    return res;
+      method: 'delete',
+    })
+    return res
   } catch (err) {
-    console.log(err, "show-err");
+    console.log(err, 'show-err')
   }
-};
+}
 
-export default lotteryTypeService;
+export default lotteryTypeService
