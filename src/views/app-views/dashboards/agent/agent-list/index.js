@@ -58,6 +58,7 @@ const AgentList = () => {
                 console.log(data, 'show-data')
             }
         }
+        
         getAgents()
     }, [])
     const showModal = (row) => {
@@ -69,7 +70,9 @@ const AgentList = () => {
         setAgentIdForPassword(null)
         setAgentPassword(null)
     };
-  
+//   const findAgentName= (rowId)=>{
+//       list.find
+//   }
 
     // Dropdown menu for each row
     const dropdownMenu = (row) => (
@@ -112,6 +115,21 @@ const AgentList = () => {
             dataIndex: 'email',
             sorter: (a, b) => utils.antdTableSorter(a, b, 'email'),
         },
+        {
+            title: 'Commission',
+            dataIndex: 'commission',
+            sorter: (a, b) => utils.antdTableSorter(a, b, 'commission'),
+        },
+        
+      
+        {
+            title: "Parent",
+            dataIndex: "parentId",
+            render: <p>
+                {/* {findAgentName()} */}
+            </p>
+           
+          },
         {
             title: 'CreateAgents',
             dataIndex: 'createAgents',

@@ -253,17 +253,18 @@ const PositionList = () => {
     <Card>
       <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
         {filters()}
-        <div>
+       
+      </Flex>
+      <div>
           <Button
             onClick={addLotteryType}
             type="primary"
             icon={<PlusCircleOutlined />}
-            block
+            
           >
             Add Position
           </Button>
         </div>
-      </Flex>
       <div className="table-responsive">
         <Table columns={tableColumns} dataSource={list} rowKey="id" />
       </div>
