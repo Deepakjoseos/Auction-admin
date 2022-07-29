@@ -151,6 +151,17 @@ const PositionList = () => {
     }
   }
 
+  const handleClearFilter = async () => {
+    setselectedLottery(null)
+    setselectedLotteryType(null)
+
+    const data = await positionService.getPositions({})
+    if (data) {
+      setList(data)
+      setSearchBackupList(data)
+    }
+  }
+
   // Table Filters JSX Elements
   const filters = () => (
     <Flex className="mb-1" mobileFlex={false}>
@@ -167,8 +178,9 @@ const PositionList = () => {
           className="w-100"
           style={{ minWidth: 180 }}
           onChange={(value) => setselectedLottery(value)}
-          onSelect={handleQuery}
+          // onSelect={handleQuery}
           placeholder="Lottery"
+          value={selectedLottery}
         >
           {lotteries.map((lottery) => (
             <Option key={lottery.id} value={lottery.id}>
@@ -182,7 +194,8 @@ const PositionList = () => {
           className="w-100"
           style={{ minWidth: 180 }}
           onChange={(value) => setselectedLotteryType(value)}
-          onSelect={handleQuery}
+          value={selectedLotteryType}
+          // onSelect={handleQuery}
           placeholder="Type"
         >
           {lotteryTypes.map((type) => (
@@ -191,6 +204,16 @@ const PositionList = () => {
             </Option>
           ))}
         </Select>
+      </div>
+      <div>
+        <Button type="primary" className="mr-2" onClick={handleQuery}>
+          Filter
+        </Button>
+      </div>
+      <div>
+        <Button type="primary" onClick={handleClearFilter}>
+          Clear
+        </Button>
       </div>
 
       {/* <div className="mr-md-3 mb-3">

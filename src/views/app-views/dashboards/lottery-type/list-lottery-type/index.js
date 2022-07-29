@@ -52,8 +52,12 @@ const LotteryTypeList = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
   const [lotteries, setLotteries] = useState([])
   const [lotteryId, setLotteryId] = useState([])
-  const [lotteryGroups, setLotteryGroups] = useState(null)
+  const [lotteryGroups, setLotteryGroups] = useState([])
   const [lotteryGroupId, setLotteryGroupId] = useState(null)
+
+  const [selectedlotteryGroupId, setSelectedLotteryGroupId] = useState(null)
+  const [selectedlotteryId, setSelectedLotteryId] = useState(null)
+
   // Getting Lotteries List to display in the table
   const getLottoryTypes = async (query) => {
     const data = await lotteryTypeService.getLotteryTypes(query)
@@ -197,25 +201,49 @@ const LotteryTypeList = () => {
       setList(searchBackupList)
     }
   }
-  const handleLotteryChange = async (value) => {
-    if (value !== 'All') {
-      const lotteryGroup = await getLottoryTypes({ lotteryGroupNumber: value })
+  // const handleLotteryChange = async (value) => {
+  //   if (value !== 'All') {
+  //     const lotteryGroup = await getLottoryTypes({ lotteryGroupNumber: value })
 
-      setList(lotteryGroup)
-    } else {
-      const lotteryGroup = await getLottoryTypes()
-      setList(lotteryGroup)
+  //     setList(lotteryGroup)
+  //   } else {
+  //     const lotteryGroup = await getLottoryTypes()
+  //     setList(lotteryGroup)
+  //   }
+  // }
+
+  // const handleLotteryGroupChange = async (e) => {
+  //   if (e !== 'All') {
+  //     const lotteryGroup = await getLottoryTypes({ lotteryGroupNumber: e })
+
+  //     setList(lotteryGroup)
+  //   } else {
+  //     const lotteryGroup = await getLottoryTypes()
+  //     setList(lotteryGroup)
+  //   }
+  // }
+
+  const handleQuery = async () => {
+    const query = {}
+    if ((selectedlotteryId || selectedlotteryGroupId) !== 'All')
+      query.lottteryId = selectedlotteryId
+    query.lotteryGroupId = selectedlotteryGroupId
+    console.log('query', query)
+    const data = await lotteryTypeService.getLotteryTypes(query)
+    if (data) {
+      setList(data)
+      setSearchBackupList(data)
     }
   }
 
-  const handleLotteryGroupChange = async (e) => {
-    if (e !== 'All') {
-      const lotteryGroup = await getLottoryTypes({ lotteryGroupNumber: e })
+  const handleClearFilter = async () => {
+    setSelectedLotteryId(null)
+    setSelectedLotteryGroupId(null)
 
-      setList(lotteryGroup)
-    } else {
-      const lotteryGroup = await getLottoryTypes()
-      setList(lotteryGroup)
+    const data = await lotteryTypeService.getLotteryTypes({})
+    if (data) {
+      setList(data)
+      setSearchBackupList(data)
     }
   }
 
@@ -244,7 +272,8 @@ const LotteryTypeList = () => {
           <Option value="Hold">Hold</Option>
         </Select>
       </div>
-      <div className="mr-md-3 mb-3">
+
+      {/* <div className="mr-md-3 mb-3">
         <Select
           onChange={handleLotteryChange}
           onSelect={(value) => setLotteryGroupId(value)}
@@ -276,6 +305,52 @@ const LotteryTypeList = () => {
             </Option>
           ))}
         </Select>
+      </div> */}
+
+      <div className="mr-md-3 mb-3">
+        <Select
+          className="w-100"
+          style={{ minWidth: 180 }}
+          onChange={(value) => setSelectedLotteryId(value)}
+          // onSelect={handleQuery}
+          placeholder="Lottery"
+          value={selectedlotteryId}
+        >
+          <Option value="">All</Option>
+          {lotteries.map((lottery) => (
+            <Option key={lottery.id} value={lottery.id}>
+              {lottery.name}
+            </Option>
+          ))}
+        </Select>
+      </div>
+
+      <div className="mr-md-3 mb-3">
+        <Select
+          className="w-100"
+          style={{ minWidth: 180 }}
+          onChange={(value) => setSelectedLotteryGroupId(value)}
+          // onSelect={handleQuery}
+          value={selectedlotteryGroupId}
+          placeholder="LotteryGroup"
+        >
+          <Option value="">All</Option>
+          {lotteryGroups.map((group) => (
+            <Option key={group.id} value={group.id}>
+              {group.group}
+            </Option>
+          ))}
+        </Select>
+      </div>
+      <div>
+        <Button type="primary" className="mr-2" onClick={handleQuery}>
+          Filter
+        </Button>
+      </div>
+      <div>
+        <Button type="primary" onClick={handleClearFilter}>
+          Clear
+        </Button>
       </div>
     </Flex>
   )

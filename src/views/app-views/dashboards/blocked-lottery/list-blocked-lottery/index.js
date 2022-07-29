@@ -87,11 +87,23 @@ const BlockeLotteryList = () => {
   }
 
   const handleQuery = async () => {
+    console.log('handleQuery', selectedLotteryId)
     const query = {}
     //  if(selectedLotteryNumber) query.lotteryNumber=selectedLotteryNumber;
     if (selectedLotteryId) query.lotteryId = selectedLotteryId
     if (selectedLotteryType) query.lotteryTypeId = selectedLotteryType
     const data = await blockedLotteryService.getBlockedLotteries(query)
+    if (data) {
+      setList(data)
+      setSearchBackupList(data)
+    }
+  }
+
+  const handleClearFilter = async () => {
+    setselectedLotteryId(null)
+    setselectedLotteryType(null)
+
+    const data = await blockedLotteryService.getBlockedLotteries({})
     if (data) {
       setList(data)
       setSearchBackupList(data)
@@ -129,7 +141,8 @@ const BlockeLotteryList = () => {
           className="w-100"
           style={{ minWidth: 180 }}
           onChange={(value) => setselectedLotteryId(value)}
-          onSelect={handleQuery}
+          value={selectedLotteryId}
+          // onSelect={handleQuery}
           placeholder="Lottery Name"
         >
           {lotteries.map((lottery) => (
@@ -144,7 +157,8 @@ const BlockeLotteryList = () => {
           className="w-100"
           style={{ minWidth: 180 }}
           onChange={(value) => setselectedLotteryType(value)}
-          onSelect={handleQuery}
+          value={selectedLotteryType}
+          // onSelect={handleQuery}
           placeholder="Lottery Type"
         >
           {lotteryTypes.map((type) => (
@@ -153,6 +167,16 @@ const BlockeLotteryList = () => {
             </Option>
           ))}
         </Select>
+      </div>
+      <div>
+        <Button type="primary" className="mr-2" onClick={handleQuery}>
+          Filter
+        </Button>
+      </div>
+      <div>
+        <Button type="primary" onClick={handleClearFilter}>
+          Clear
+        </Button>
       </div>
     </Flex>
   )
