@@ -55,6 +55,18 @@ const LotteryTypeList = () => {
   const [lotteryGroups, setLotteryGroups] = useState(null);
   const [lotteryGroupId, setLotteryGroupId] = useState(null);
 
+  const [list, setList] = useState([])
+  const [searchBackupList, setSearchBackupList] = useState([])
+  const [selectedRows, setSelectedRows] = useState([])
+  const [selectedRowKeys, setSelectedRowKeys] = useState([])
+  const [lotteries, setLotteries] = useState([])
+  const [lotteryId, setLotteryId] = useState([])
+  const [lotteryGroups, setLotteryGroups] = useState([])
+  const [lotteryGroupId, setLotteryGroupId] = useState(null)
+
+  const [selectedlotteryGroupId, setSelectedLotteryGroupId] = useState(null)
+  const [selectedlotteryId, setSelectedLotteryId] = useState(null)
+
   // Getting Lotteries List to display in the table
   const getLottoryTypes = async (query) => {
     const data = await lotteryTypeService.getLotteryTypes(query);
@@ -212,6 +224,31 @@ const LotteryTypeList = () => {
     await getLottoryTypes(query);
   };
 
+
+  const handleQuery = async () => {
+    const query = {}
+    if ((selectedlotteryId || selectedlotteryGroupId) !== 'All')
+      query.lottteryId = selectedlotteryId
+    query.lotteryGroupId = selectedlotteryGroupId
+    console.log('query', query)
+    const data = await lotteryTypeService.getLotteryTypes(query)
+    if (data) {
+      setList(data)
+      setSearchBackupList(data)
+    }
+  }
+
+  const handleClearFilter = async () => {
+    setSelectedLotteryId(null)
+    setSelectedLotteryGroupId(null)
+
+    const data = await lotteryTypeService.getLotteryTypes({})
+    if (data) {
+      setList(data)
+      setSearchBackupList(data)
+    }
+  }
+
   // Table Filters JSX Elements
   const filters = () => (
     <Flex className="mb-1" mobileFlex={false}>
@@ -236,7 +273,8 @@ const LotteryTypeList = () => {
           <Option value="Hold">Hold</Option>
         </Select>
       </div>
-      <div className="mr-md-3 mb-3">
+
+      {/* <div className="mr-md-3 mb-3">
         <Select
           onChange={handleLotteryChange}
           onSelect={(value) => setLotteryId(value)}
@@ -269,6 +307,52 @@ const LotteryTypeList = () => {
             </Option>
           ))}
         </Select>
+      </div> */}
+
+      <div className="mr-md-3 mb-3">
+        <Select
+          className="w-100"
+          style={{ minWidth: 180 }}
+          onChange={(value) => setSelectedLotteryId(value)}
+          // onSelect={handleQuery}
+          placeholder="Lottery"
+          value={selectedlotteryId}
+        >
+          <Option value="">All</Option>
+          {lotteries.map((lottery) => (
+            <Option key={lottery.id} value={lottery.id}>
+              {lottery.name}
+            </Option>
+          ))}
+        </Select>
+      </div>
+
+      <div className="mr-md-3 mb-3">
+        <Select
+          className="w-100"
+          style={{ minWidth: 180 }}
+          onChange={(value) => setSelectedLotteryGroupId(value)}
+          // onSelect={handleQuery}
+          value={selectedlotteryGroupId}
+          placeholder="LotteryGroup"
+        >
+          <Option value="">All</Option>
+          {lotteryGroups.map((group) => (
+            <Option key={group.id} value={group.id}>
+              {group.group}
+            </Option>
+          ))}
+        </Select>
+      </div>
+      <div>
+        <Button type="primary" className="mr-2" onClick={handleQuery}>
+          Filter
+        </Button>
+      </div>
+      <div>
+        <Button type="primary" onClick={handleClearFilter}>
+          Clear
+        </Button>
       </div>
     </Flex>
   );
