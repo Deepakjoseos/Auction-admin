@@ -187,14 +187,14 @@ const dashBoardNavTree = [
     icon: DashboardOutlined,
     breadcrumb: false,
     submenu: [
-      {
-        key: "dashboards-default",
-        path: `${APP_PREFIX_PATH}/dashboards/default`,
-        title: "Dashboard",
-        icon: DashboardOutlined,
-        breadcrumb: false,
-        submenu: [],
-      },
+      // {
+      //   key: "dashboards-default",
+      //   path: `${APP_PREFIX_PATH}/dashboards/default`,
+      //   title: "Dashboard",
+      //   icon: DashboardOutlined,
+      //   breadcrumb: false,
+      //   submenu: [],
+      // },
       // {
       //   key: 'dashboards-analytic',
       //   path: `${APP_PREFIX_PATH}/dashboards/analytic`,

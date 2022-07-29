@@ -6,18 +6,18 @@ const Dashboards = ({ match }) => {
   return (
     <Suspense fallback={<Loading cover="content" />}>
       <Switch>
-        <Route
+        {/* <Route
           path={`${match.url}/profile`}
           component={lazy(() => import(`./profile`))}
-        />
-        <Route
+        /> */}
+        {/* <Route
           path={`${match.url}/default`}
           component={lazy(() => import(`./default`))}
-        />
-        <Route
+        /> */}
+        {/* <Route
           path={`${match.url}/analytic`}
           component={lazy(() => import(`./analytic`))}
-        />
+        /> */}
         {/* <Route
           path={`${match.url}/sales`}
           component={lazy(() => import(`./sales`))}
@@ -90,7 +90,7 @@ const Dashboards = ({ match }) => {
           path={`${match.url}/banner`}
           component={lazy(() => import(`./banner`))}
         />
-        <Redirect from={`${match.url}`} to={`${match.url}/default`} />
+        <Redirect from={`${match.url}`} to={`${match.url}/lottery`} />
       </Switch>
     </Suspense>
   );

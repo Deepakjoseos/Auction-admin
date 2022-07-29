@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { Card, Table, Input, Select } from "antd";
+import { Card, Table, Input, Select, DatePicker } from "antd";
 // import BrandListData from 'assets/data/product-list.data.json'
 import { SearchOutlined } from "@ant-design/icons";
 import Flex from "components/shared-components/Flex";
 import utils from "utils";
-import lotteryService from "services/lottery";
 import winnerService from "services/winner";
 import lotteryTypeService from "services/lotteryType";
+import LotteryFilter from "components/filter-components/lottery-filter";
+import LotteryTypeFilter from "components/filter-components/lottery-type-filter";
+import { timestampToDate } from "helpers/dateFunctions";
 
-const { Option } = Select;
 const WinnerList = () => {
   const [list, setList] = useState([]);
   const [searchBackupList, setSearchBackupList] = useState([]);
@@ -16,23 +17,17 @@ const WinnerList = () => {
   const [lotteryTypes, setLotteryTypes] = useState([]);
   const [lotteryId, setLotteryId] = useState(null);
   const [lotteryTypeId, setLotteryTypeId] = useState(null);
+  const [date, setDate] = useState(null);
 
+  const getWinners = async (query) => {
+    const data = await winnerService.getWinners(query);
+    if (data) {
+      setList(data);
+      setSearchBackupList(data);
+    }
+  };
   useEffect(() => {
-    const getAllWinners = async () => {
-      const data = await winnerService.getWinners();
-      if (data) {
-        setList(data);
-        setSearchBackupList(data);
-      }
-    };
-    const getLotteries = async () => {
-      const data = await lotteryService.getLotteries();
-      if (data) {
-        setLotteries(data);
-      }
-    };
-    getAllWinners();
-    getLotteries();
+    getWinners();
   }, []);
 
   // Antd Table Columns
@@ -83,30 +78,33 @@ const WinnerList = () => {
     setList(data);
   };
 
-  const findByLottery = async (value) => {
-    setLotteryId(value);
-    const query = { lotteryId: value };
+  const handleLotteryTypeChange = async (value) => {
+    setLotteryTypeId(value);
+    const query = { lotteryId, lotteryTypeId: value, date };
     const data = await winnerService.getWinners(query);
     if (data) {
       setList(data);
       setSearchBackupList(data);
     }
-
-    const allLotteryTypes = await lotteryTypeService.getLotteryTypes();
-    const getLotteryTypes = allLotteryTypes.filter(
-      (type) => type.lottery.id === value
-    );
-    if (getLotteryTypes) setLotteryTypes(getLotteryTypes);
   };
 
-  const findByLotteryType = async (value) => {
-    setLotteryTypeId(value);
-    const query = { lotteryId, lotteryTypeId: value };
-    const data = await winnerService.getWinners(query);
-    if (data) {
-      setList(data);
-      setSearchBackupList(data);
-    }
+  const handleLotteryChange = async (value) => {
+    setLotteryId(value);
+    const query = { lotteryId: value, lotteryTypeId, date };
+    await getWinners(query);
+
+    const lotteryTypes = await lotteryTypeService.getLotteryTypes({
+      lotteryId: value,
+    });
+    setLotteryTypes(lotteryTypes);
+  };
+
+  const handleDateChange = async (value) => {
+    if (value) {
+      const dateString = timestampToDate(new Date(value?.utc()?._d).getTime());
+      setDate(dateString);
+      await getWinners({ date: dateString });
+    } else setDate(null);
   };
 
   // Table Filters JSX Elements
@@ -120,40 +118,30 @@ const WinnerList = () => {
         />
       </div>
       <div className="mr-md-3 mb-3">
+        <DatePicker
+          format={"YYYY-MM-DD"}
+          placeholder="Date"
+          onChange={handleDateChange}
+        />
+      </div>
+      <div className="mr-md-3 mb-3">
         <div className="mb-3">
-          <Select
-            className="w-100"
-            style={{ minWidth: 180 }}
-            onChange={findByLottery}
-            placeholder="Lottery"
-          >
-            {lotteries &&
-              lotteries?.length > 0 &&
-              lotteries.map((lottery) => (
-                <Option key={lottery.id} value={lottery.id}>
-                  {lottery.name}
-                </Option>
-              ))}
-          </Select>
+          <LotteryFilter
+            handleLotteryChange={handleLotteryChange}
+            lotteries={lotteries}
+            setLotteries={setLotteries}
+            setLotteryId={setLotteryId}
+          />
         </div>
       </div>
       <div className="mr-md-3 mb-3">
         <div className="mb-3">
-          <Select
-            className="w-100"
-            style={{ minWidth: 180 }}
-            onChange={findByLotteryType}
-            placeholder="Lottery Type"
-            disabled={!lotteryId}
-          >
-            {lotteryTypes &&
-              lotteryTypes?.length > 0 &&
-              lotteryTypes.map((type) => (
-                <Option key={type.id} value={type.id}>
-                  {type.name}
-                </Option>
-              ))}
-          </Select>
+          <LotteryTypeFilter
+            setLotteryTypeId={setLotteryTypeId}
+            setLotteryTypes={setLotteryTypes}
+            lotteryTypes={lotteryTypes}
+            handleLotteryTypeChange={handleLotteryTypeChange}
+          />
         </div>
       </div>
     </Flex>

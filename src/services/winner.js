@@ -1,13 +1,17 @@
 import fetch from "auth/FetchInterceptor";
 const winnerService = {};
 const api = "/winner";
-winnerService.getWinners = async function (params) {
+winnerService.getWinners = async function (query) {
   try {
-    const lotteryId = params?.lotteryId;
-    const lotteryTypeId = params?.lotteryTypeId;
-    let url = `${api}/all/admin`;
-    if (lotteryId) url = `${url}/${lotteryId}`;
-    if (lotteryTypeId && lotteryId) url = `${url}/${lotteryTypeId}`;
+    const lotteryId = query?.lotteryId;
+    const lotteryTypeId = query?.lotteryTypeId;
+    const date = query?.date;
+
+    let url = `${api}/all/admin?api=winner`;
+    if (lotteryId) url = `${url}&lotteryId=${lotteryId}`;
+    if (lotteryTypeId) url = `${url}&lotteryTypeId=${lotteryTypeId}`;
+    if (date) url = `${url}&date=${date}`;
+
     const res = await fetch({
       url,
       method: "get",
