@@ -252,6 +252,7 @@ const LotteryTypeList = () => {
   // Table Filters JSX Elements
   const filters = () => (
     <Flex className="mb-1" mobileFlex={false}>
+
       <div className="mr-md-3 mb-3">
         <Input
           placeholder="Search"
@@ -260,7 +261,7 @@ const LotteryTypeList = () => {
         />
       </div>
 
-      <div className="mr-md-3 mb-3">
+      <div className="mr-md-3 mb-3 ">
         <Select
           defaultValue="All"
           className="w-100"
@@ -344,35 +345,39 @@ const LotteryTypeList = () => {
           ))}
         </Select>
       </div>
-      <div>
-        <Button type="primary" className="mr-2" onClick={handleQuery}>
+      <div >
+        <Button type="primary" className="mr-2 " onClick={handleQuery}>
           Filter
         </Button>
       </div>
       <div>
-        <Button type="primary" onClick={handleClearFilter}>
+        <Button type="primary" className="mr-2" onClick={handleClearFilter}>
           Clear
         </Button>
       </div>
+      <div>
+   
+          </div>
     </Flex>
   );
 
   return (
-    <Card>
+    <Card >
       <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
         {filters()}
-        <div>
-          <Button
+    
+      </Flex>
+      <div>
+      <Button  
             onClick={addLotteryType}
             type="primary"
             icon={<PlusCircleOutlined />}
-            block
+           
           >
-            Add Lottery Type
+            Add LotteryType
           </Button>
-        </div>
-      </Flex>
-      <div className="table-responsive">
+          </div>
+      <div className="table-responsive ">
         <Table columns={tableColumns} dataSource={list} rowKey="id" />
       </div>
     </Card>
