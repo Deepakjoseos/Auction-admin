@@ -1,103 +1,102 @@
-import React, { useEffect, useState } from 'react'
-import { Card, Table, Select, Input, Button, Menu, Option } from 'antd'
+import React, { useEffect, useState } from "react";
+import { Card, Table, Select, Input, Button, Menu, Option } from "antd";
 // import BrandListData from 'assets/data/product-list.data.json'
-import { SearchOutlined } from '@ant-design/icons'
-import Flex from 'components/shared-components/Flex'
-import utils from 'utils'
-import blockedLotteryService from 'services/blockedLottery'
-import lotteryService from 'services/lottery'
+import { SearchOutlined } from "@ant-design/icons";
+import Flex from "components/shared-components/Flex";
+import utils from "utils";
+import blockedLotteryService from "services/blockedLottery";
+import lotteryService from "services/lottery";
 
-import lotteryTypeService from 'services/lotteryType'
+import lotteryTypeService from "services/lotteryType";
 
 const BlockeLotteryList = () => {
-  const [list, setList] = useState([])
-  const [searchBackupList, setSearchBackupList] = useState([])
+  const [list, setList] = useState([]);
+  const [searchBackupList, setSearchBackupList] = useState([]);
 
-  const [lotteries, setLotteries] = useState([])
-  const [lotteryTypes, setLotteryTypes] = useState([])
-  const [selectedLotteryId, setselectedLotteryId] = useState(null)
+  const [lotteries, setLotteries] = useState([]);
+  const [lotteryTypes, setLotteryTypes] = useState([]);
+  const [selectedLotteryId, setselectedLotteryId] = useState(null);
   // const [selectedLotteryNumber, setselectedLotteryNumber] = useState(null);
 
-  const [selectedLotteryType, setselectedLotteryType] = useState(null)
-  const { Option } = Select
+  const [selectedLotteryType, setselectedLotteryType] = useState(null);
+  const { Option } = Select;
 
   useEffect(() => {
     // Getting Lotteries List to display in the table
     const getLottoryTypes = async () => {
-      const data = await blockedLotteryService.getBlockedLotteries()
+      const data = await blockedLotteryService.getBlockedLotteries();
       if (data) {
-        setList(data)
-        setSearchBackupList(data)
+        setList(data);
+        setSearchBackupList(data);
       }
-    }
+    };
 
     const getLotteries = async () => {
-      const data = await lotteryService.getLotteries()
+      const data = await lotteryService.getLotteries();
       if (data) {
-        setLotteries(data)
+        setLotteries(data);
       }
-    }
+    };
     const getLotteryTypes = async () => {
-      const data = await lotteryTypeService.getLotteryTypes()
+      const data = await lotteryTypeService.getLotteryTypes();
       if (data) {
-        setLotteryTypes(data)
+        setLotteryTypes(data);
       }
-    }
+    };
 
-    getLotteries()
-    getLotteryTypes()
+    getLotteries();
+    getLotteryTypes();
 
-    getLottoryTypes()
-  }, [])
+    getLottoryTypes();
+  }, []);
 
   // Antd Table Columns
   const tableColumns = [
     {
-      title: 'Lottery Number',
-      dataIndex: 'number',
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'number'),
+      title: "Lottery Number",
+      dataIndex: "number",
+      sorter: (a, b) => utils.antdTableSorter(a, b, "number"),
     },
     {
-      title: 'Date',
-      dataIndex: 'date',
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'date'),
+      title: "Date",
+      dataIndex: "date",
+      sorter: (a, b) => utils.antdTableSorter(a, b, "date"),
     },
     {
-      title: 'Lottery',
-      dataIndex: 'lottery',
+      title: "Lottery",
+      dataIndex: "lottery",
       render: (lottery) => <Flex alignItems="center">{lottery?.name}</Flex>,
       sorter: (a, b) => a.lottery.name.localeCompare(b.lottery.name),
     },
     {
-      title: 'Type',
-      dataIndex: 'lotteryType',
+      title: "Type",
+      dataIndex: "lotteryType",
       render: (lotteryType) => (
         <Flex alignItems="center">{lotteryType?.name}</Flex>
       ),
       sorter: (a, b) => a.lotteryType.name.localeCompare(b.lotteryType.name),
     },
-  ]
+  ];
 
   // When Search is used
   const onSearch = (e) => {
-    const value = e.currentTarget.value
-    const searchArray = e.currentTarget.value ? list : searchBackupList
-    const data = utils.wildCardSearch(searchArray, value)
-    setList(data)
-  }
+    const value = e.currentTarget.value;
+    const searchArray = e.currentTarget.value ? list : searchBackupList;
+    const data = utils.wildCardSearch(searchArray, value);
+    setList(data);
+  };
 
   const handleQuery = async () => {
-    console.log('handleQuery', selectedLotteryId)
-    const query = {}
+    const query = {};
     //  if(selectedLotteryNumber) query.lotteryNumber=selectedLotteryNumber;
-    if (selectedLotteryId) query.lotteryId = selectedLotteryId
-    if (selectedLotteryType) query.lotteryTypeId = selectedLotteryType
-    const data = await blockedLotteryService.getBlockedLotteries(query)
+    if (selectedLotteryId) query.lotteryId = selectedLotteryId;
+    if (selectedLotteryType) query.lotteryTypeId = selectedLotteryType;
+    const data = await blockedLotteryService.getBlockedLotteries(query);
     if (data) {
-      setList(data)
-      setSearchBackupList(data)
+      setList(data);
+      setSearchBackupList(data);
     }
-  }
+  };
 
   const handleClearFilter = async () => {
     setselectedLotteryId(null)
@@ -179,7 +178,7 @@ const BlockeLotteryList = () => {
         </Button>
       </div>
     </Flex>
-  )
+  );
 
   return (
     <Card>
@@ -190,7 +189,7 @@ const BlockeLotteryList = () => {
         <Table columns={tableColumns} dataSource={list} rowKey="id" />
       </div>
     </Card>
-  )
-}
+  );
+};
 
-export default BlockeLotteryList
+export default BlockeLotteryList;

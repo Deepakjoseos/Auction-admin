@@ -12,7 +12,6 @@ positionService.getPositions = async function (query) {
       url = lotteryId
         ? `${url}&lotteryTypeId=${lotteryTypeId}`
         : `${url}?lotteryTypeId=${lotteryTypeId}`;
-
     const res = await fetch({
       url,
       method: "get",
