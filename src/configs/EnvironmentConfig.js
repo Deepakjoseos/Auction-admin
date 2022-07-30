@@ -1,14 +1,14 @@
 const dev = {
   //   API_ENDPOINT_URL: 'https://jsonplaceholder.typicode.com'
-  API_ENDPOINT_URL: 'https://lottery-backend-nestjs.herokuapp.com/v1',
+  API_ENDPOINT_URL: 'https://lotterybackend.riolabz.com/v1/',
 }
 
 const prod = {
-  API_ENDPOINT_URL: 'https://lottery-backend-nestjs.herokuapp.com/v1',
+  API_ENDPOINT_URL: 'https://lotterybackend.riolabz.com/v1/',
 }
 
 const test = {
-  API_ENDPOINT_URL: 'https://lottery-backend-nestjs.herokuapp.com/v1',
+  API_ENDPOINT_URL: 'https://lotterybackend.riolabz.com/v1/',
 }
 
 const getEnv = () => {
