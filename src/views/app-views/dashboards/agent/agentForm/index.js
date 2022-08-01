@@ -18,6 +18,7 @@ const EDIT = 'EDIT'
 const AgentForm = (props) => {
 
   const { mode = ADD, param } = props
+
   const history = useHistory()
 
   const [form] = Form.useForm()
@@ -25,6 +26,7 @@ const AgentForm = (props) => {
   const [submitLoading, setSubmitLoading] = useState(false)
 
   useEffect(() => {
+   
     if (mode === EDIT) {
       const fetchBrandById = async () => {
         const { id } = param

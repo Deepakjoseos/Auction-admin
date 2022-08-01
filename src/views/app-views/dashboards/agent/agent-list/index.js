@@ -15,6 +15,7 @@ import utils from 'utils'
 import brandService from 'services/brand'
 import agentService from 'services/agent'
 import Password from 'antd/lib/input/Password'
+import { forEach } from 'lodash'
 
 const { Option } = Select
 
@@ -70,9 +71,13 @@ const AgentList = () => {
         setAgentIdForPassword(null)
         setAgentPassword(null)
     };
-//   const findAgentName= (rowId)=>{
-//       list.find
-//   }
+   const findAgentName= (rowId)=>{
+    console.log('rowId',rowId)
+    const n= list.find(e => e.id  === rowId);
+    console.log('n',n)
+    return n?.name ? n.name :"-" 
+    
+   }
 
     // Dropdown menu for each row
     const dropdownMenu = (row) => (
@@ -125,9 +130,10 @@ const AgentList = () => {
         {
             title: "Parent",
             dataIndex: "parentId",
-            render: <p>
-                {/* {findAgentName()} */}
-            </p>
+            key:"parentId",
+            // render: (row) => {console},
+            render : (_,row)=>findAgentName(row.parentId)
+            
            
           },
         {
