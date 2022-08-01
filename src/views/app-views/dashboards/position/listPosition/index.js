@@ -152,16 +152,16 @@ const PositionList = () => {
     await getPositions(query);
   };
 
-  const handleClearFilter = async () => {
-    setselectedLottery(null)
-    setselectedLotteryType(null)
+  // const handleClearFilter = async () => {
+  //   setselectedLottery(null)
+  //   setselectedLotteryType(null)
 
-    const data = await positionService.getPositions({})
-    if (data) {
-      setList(data)
-      setSearchBackupList(data)
-    }
-  }
+  //   const data = await positionService.getPositions({})
+  //   if (data) {
+  //     setList(data)
+  //     setSearchBackupList(data)
+  //   }
+  // }
 
   // Table Filters JSX Elements
   const filters = () => (

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { Card, Table, Input, Menu, Modal } from 'antd'
-import bookedLotteryService from 'services/BookedLottery'
+import bookedLotteryService from 'services/bookedLottery'
 import utils from 'utils'
 import Flex from 'components/shared-components/Flex'
 import bookingService from 'services/booking'
