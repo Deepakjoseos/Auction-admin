@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { Card, Table, Input, Tag, Select } from "antd";
+import { Card, Table, Input, Tag, Select,Button } from "antd";
 // import BrandListData from 'assets/data/product-list.data.json'
 import { SearchOutlined } from "@ant-design/icons";
 import Flex from "components/shared-components/Flex";
 import utils from "utils";
 import transactionService from "services/transaction";
 import { Option } from "rc-select";
-
+import {
+  PlusCircleOutlined,
+} from "@ant-design/icons";
+import { useHistory } from "react-router-dom";
 const getStatus = (type) => {
   if (type === "Credit") {
     return (
@@ -27,6 +30,8 @@ const getStatus = (type) => {
 };
 
 const TransactionList = () => {
+  let history = useHistory()
+
   const [list, setList] = useState([]);
   const [searchBackupList, setSearchBackupList] = useState([]);
 
@@ -51,7 +56,7 @@ const TransactionList = () => {
       setList(searchBackupList);
     }
   };
-
+ 
   // Antd Table Columns
   const tableColumns = [
     {
@@ -82,7 +87,11 @@ const TransactionList = () => {
       render: (type) => <Flex alignItems="center">{getStatus(type)}</Flex>,
       sorter: (a, b) => utils.antdTableSorter(a, b, "type"),
     },
+   
   ];
+  const addTransaction = () => {
+    history.push(`/app/dashboards/transaction/add-transaction`);
+  };
 
   // When Search is used
   const onSearch = (e) => {
@@ -115,6 +124,14 @@ const TransactionList = () => {
           <Option value="Debit">Debit</Option>
         </Select>
       </div>
+      <Button  
+            onClick={addTransaction}
+            type="primary"
+            icon={<PlusCircleOutlined />}
+           
+          >
+            Add Transaction
+          </Button>
     </Flex>
   );
 

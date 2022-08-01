@@ -13,6 +13,20 @@ transactionService.getTransaction = async function (query) {
   } catch (err) {
     console.log(err, "show-err");
   }
+
+
 };
+transactionService.createTransaction = async function (data){
+  try {
+    const res = await fetch({
+      url: `${api}/create?senderId=${data.senderId}&amount=${data.amount}&type=${data.type}`,
+      method: 'post',
+      // data: data,
+    })
+    return res
+  } catch (err) {
+    console.log(err, 'show-err')
+  }
+}
 
 export default transactionService;

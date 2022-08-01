@@ -57,9 +57,10 @@ const rules = {
     ]
 }
 
-const GeneralField = (props) => (
+const GeneralField = ({mode,agents,parent}) => (
     <Row gutter={16}>
         <Col xs={24} sm={24} md={24}>
+            {mode === 'EDIT' ? <h2>Parent:{parent}</h2>:""}
             <Card title="Basic Info">
                 <Form.Item name="name" label="Name" rules={rules.name}>
                     <Input placeholder="Name" />
@@ -77,7 +78,7 @@ const GeneralField = (props) => (
                         max={100000}
                     />
                 </Form.Item>
-                {props.mode === 'ADD' ?  <Form.Item 
+                {mode === 'ADD' ?  <Form.Item 
                     label="Password"
                     name="password"
                     rules={rules.password}
@@ -86,6 +87,21 @@ const GeneralField = (props) => (
 
 
                 </Form.Item>  :""}
+                {mode === 'ADD' ? 
+                  <Form.Item
+                  name="parentId"
+                  label="Parent"
+                  rules={rules.parentId}
+                >
+                  <Select placeholder="Parent">
+                    {
+                      agents.map(
+                        (agent) => <Option value={agent.id}>{agent.name}</Option>
+                      )}
+                  </Select>
+                </Form.Item>
+
+                :""}
               
               
                 <Form.Item name="createAgents" label="CreateAgents" rules={rules.name}>

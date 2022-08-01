@@ -46,14 +46,7 @@ const getStatus = (status) => {
 const LotteryTypeList = () => {
   let history = useHistory();
 
-  const [list, setList] = useState([]);
-  const [searchBackupList, setSearchBackupList] = useState([]);
-  const [selectedRows, setSelectedRows] = useState([]);
-  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-  const [lotteries, setLotteries] = useState([]);
-  const [lotteryId, setLotteryId] = useState();
-  const [lotteryGroups, setLotteryGroups] = useState(null);
-  const [lotteryGroupId, setLotteryGroupId] = useState(null);
+
 
   const [list, setList] = useState([])
   const [searchBackupList, setSearchBackupList] = useState([])

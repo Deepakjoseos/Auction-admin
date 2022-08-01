@@ -327,6 +327,7 @@ const dashBoardNavTree = [
         breadcrumb: false,
         submenu: [],
       },
+      
     ],
   },
 ];

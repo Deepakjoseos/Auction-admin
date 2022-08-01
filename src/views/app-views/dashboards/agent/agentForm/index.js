@@ -24,33 +24,51 @@ const AgentForm = (props) => {
   const [form] = Form.useForm()
 
   const [submitLoading, setSubmitLoading] = useState(false)
+  const [agents, setAgents] = useState([])
+  const [parent,setParent] = useState(null)
 
   useEffect(() => {
-   
+    const getAgents = async () => {
+      const data = await agentService.getAgents()
+      if (data) {
+        setAgents(data)
+        console.log(data, 'show-agents')
+      }
+    }
+  
+    getAgents()
     if (mode === EDIT) {
       const fetchBrandById = async () => {
         const { id } = param
         const data = await agentService.getAgentById(id)
         if (data) {
+ 
+          const n= agents.find(e => e.id  === data.parentId);
+          console.log('n',n)
+          // return n?.name ? n.name :"-" 
+          if(n?.name){
+            setParent(n.name)
+          }
           // For setting form values when Load if it is in EDIT mode
+          
           form.setFieldsValue({
             name: data.name,
             status: data.status,
-            email:data.email,
-            commission:data.commission,
-            createAgents:data.createAgents,
-            password:data.password
-          
+            email: data.email,
+            commission: data.commission,
+            createAgents: data.createAgents,
+            password: data.password
+
           })
         } else {
           history.replace('/app/dashboards/catalog/agent/agent-list')
         }
       }
-
+   
       fetchBrandById()
     }
   }, [form, mode, param, props])
-
+ 
   // Trigger When Submit Button pressed
   const onFinish = async () => {
     setSubmitLoading(true)
@@ -58,12 +76,13 @@ const AgentForm = (props) => {
       .validateFields()
       .then(async (values) => {
         const sendingValues = {
-            name: values.name,
-            email:values.email,
-            status: values.status,
-            commission:values.commission,
-            createAgents:values.createAgents,
-            password:values.password
+          name: values.name,
+          email: values.email,
+          status: values.status,
+          commission: values.commission,
+          createAgents: values.createAgents,
+          password: values.password,
+          parentId:values.parentId
 
         }
 
@@ -141,7 +160,7 @@ const AgentForm = (props) => {
         <div className="container">
           <Tabs defaultActiveKey="1" style={{ marginTop: 30 }}>
             <TabPane tab="General" key="1">
-              <GeneralField mode = {mode}/>
+              <GeneralField mode={mode} agents={agents}  parent={parent}/>
             </TabPane>
           </Tabs>
         </div>
