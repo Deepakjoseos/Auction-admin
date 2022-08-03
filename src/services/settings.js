@@ -3,13 +3,14 @@ import fetch from 'auth/FetchInterceptor'
 const settingsService = {}
 const apiRoute = '/settings'
 
-settingsService.getInformations = async function () {
+settingsService.getSettings= async function () {
   try {
     const res = await fetch({
       url: apiRoute,
       method: 'get',
     })
-    return res.data
+    console.log('res-return',res)
+    return [res.data]
   } catch (err) {
     console.log(err, 'show-err')
   }
