@@ -195,8 +195,25 @@ const dashBoardNavTree = [
         breadcrumb: false,
         submenu: [],
       },
+      {
+        key: "dashboards-information",
+        path: `${APP_PREFIX_PATH}/dashboards/information`,
+        title: "Information",
+        icon: AppstoreOutlined,
+        breadcrumb: false,
+        submenu: [],
+      },
+      {
+        key: "dashboards-settings",
+        path: `${APP_PREFIX_PATH}/dashboards/settings`,
+        title: "Settings",
+        icon: AppstoreOutlined,
+        breadcrumb: false,
+        submenu: [],
+      },
     ],
   },
+  
 ];
 
 // const appsNavTree = [
