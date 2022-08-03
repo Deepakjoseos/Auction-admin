@@ -31,7 +31,7 @@ settingsService.createSettings = async function (data) {
 settingsService.editSettings = async function (id, data) {
     try {
       const res = await fetch({
-        url: `${apiRoute}/${id}`,
+        url: `${apiRoute}`,
         method: 'put',
         data: data,
       })
