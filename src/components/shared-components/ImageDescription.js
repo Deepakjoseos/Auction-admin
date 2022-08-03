@@ -1,8 +1,31 @@
 import { Card, Col, Image, Input, Row } from 'antd'
 import React, { useEffect, useState } from 'react'
 
-const ImageDescription = ({ url, file }) => {
+const ImageDescription = ({
+  url,
+  file,
+  description,
+  images,
+  id,
+  setImages,
+}) => {
   const [image, setImage] = useState(null)
+
+  const onDescriptionValueChange = (e) => {
+    const changedImagesDesc = images?.map((cur) => {
+      if (cur.uuid === id) {
+        return {
+          ...cur,
+          description: e.target.value,
+        }
+      }
+      return cur
+    })
+
+    setImages(changedImagesDesc)
+
+    // setImage({ ...image, description: e.target.value })
+  }
 
   const base64Converter = (file) => {
     if (file) {
@@ -29,14 +52,24 @@ const ImageDescription = ({ url, file }) => {
           <Col md={16} sm={24} xs={24}>
             <div className="d-flex align-items-center">
               <Image width={120} height={120} src={url} />
-              <Input placeholder="Description" className="ml-2" />
+              <Input
+                placeholder="Description"
+                value={description}
+                onChange={onDescriptionValueChange}
+                className="ml-2"
+              />
             </div>
           </Col>
         ) : (
           <Col md={16} sm={24} xs={24}>
             <div className="d-flex align-items-center">
               <Image width={120} height={120} src={image} />
-              <Input placeholder="Description" className="ml-2" />
+              <Input
+                placeholder="Description"
+                value={description}
+                onChange={onDescriptionValueChange}
+                className="ml-2"
+              />
             </div>
           </Col>
         )}
