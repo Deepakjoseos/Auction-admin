@@ -59,7 +59,7 @@ const GeneralField = ({ mode }) => (
               <Form.Item
                 name="name"
                 label="Name"
-                rules={rules.name}
+                rules={rules.name} 
               >
                 <Input placeholder="Name" type="text" />
               </Form.Item>

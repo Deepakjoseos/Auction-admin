@@ -22,6 +22,14 @@ const Dashboards = ({ match }) => {
           path={`${match.url}/settings`}
           component={lazy(() => import(`./settings`))}
         />
+          <Route
+          path={`${match.url}/banner`}
+          component={lazy(() => import(`./banner`))}
+        />
+          <Route
+          path={`${match.url}/brand`}
+          component={lazy(() => import(`./brand`))}
+        />
         <Redirect from={`${match.url}`} to={`${match.url}/user`} />
       </Switch>
     </Suspense>

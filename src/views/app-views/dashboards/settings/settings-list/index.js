@@ -44,25 +44,23 @@ const SettingsList = () => {
     // Dropdown menu for each row
     const dropdownMenu = (row) => (
         <Menu>
-            <Menu.Item onClick={() => viewDetails(row)}>
-                <Flex alignItems="center">
-                    <EyeOutlined />
-                    <span className="ml-2">View Details</span>
-                </Flex>
-            </Menu.Item>
-        
-
+          <Menu.Item onClick={() => viewDetails(row)}>
+            <Flex alignItems="center">
+              <EyeOutlined />
+              <span className="ml-2">View Details</span>
+            </Flex>
+          </Menu.Item>
+      
         </Menu>
-
-
-    )
+      )
 
     const addSettings = () => {
         history.push(`/app/dashboards/settings/add-settings`)
     }
 
     const viewDetails = (row) => {
-        history.push(`/app/dashboards/settings/edit-settings/${row.id}`)
+        console.log('id',row._id)
+        history.push(`/app/dashboards/settings/edit-settings/${row._id}`)
     }
 
     // Antd Table Columns
