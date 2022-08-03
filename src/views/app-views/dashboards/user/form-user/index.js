@@ -88,13 +88,13 @@ const UserForm = (props) => {
               alignItems="center"
             >
               <h2 className="mb-3">
-                {mode === "ADD" ? "Add New Lottery Type" : `Edit Lottery Type`}{" "}
+                {mode === "ADD" ? "Add New User" : `Edit User`}{" "}
               </h2>
               <div className="mb-3">
                 <Button
                   className="mr-2"
                   onClick={() =>
-                    history.push("/app/dashboards/lottery-type/list")
+                    history.push("/app/dashboards/user/user-list")
                   }
                 >
                   Discard
