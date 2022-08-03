@@ -4,8 +4,8 @@ import { Tabs, Form, Button, message } from 'antd'
 import Flex from 'components/shared-components/Flex'
 import GeneralField from './GeneralField'
 import useUpload from 'hooks/useUpload'
-import { singleImageUploader } from 'utils/s3/s3ImageUploader'
-import informationService from 'services/information'
+import { multipleImageUpload } from 'utils/s3/s3ImageUploader'
+import carService from 'services/car'
 import Utils from 'utils'
 import { useHistory } from 'react-router-dom'
 import Variant from './variant'
@@ -25,6 +25,7 @@ const InformationForm = (props) => {
   //   const [uploadLoading, setUploadLoading] = useState(false)
   const [submitLoading, setSubmitLoading] = useState(false)
   const [editorRender, setEditorRender] = useState(false)
+  const [variantList, setVariantsList] = useState([])
 
   const {
     fileList: fileListImages,
@@ -33,6 +34,8 @@ const InformationForm = (props) => {
     onRemove: onRemoveImages,
     setFileList: setFileListImages,
   } = useUpload(1, 'multiple')
+
+  console.log(uploadedImg, 'uploadedImg')
 
   const dummyVariants = [
     {
@@ -51,56 +54,57 @@ const InformationForm = (props) => {
     },
   ]
 
+  const fetchCarById = async () => {
+    const { id } = param
+    const data = await carService.getCarById(id)
+    if (data) {
+      // let himg = []
+      // if (data.image) {
+      //   himg = [
+      //     {
+      //       uid: Math.random() * 1000,
+      //       name: Utils.getBaseName(data.image),
+      //       url: data.image,
+      //       thumbUrl: data.image,
+      //     },
+      //   ]
+
+      //   setImage(himg)
+      //   setFileListImages(himg)
+      // }
+
+      const images = data.images.map((cur, i) => {
+        return {
+          uid: i + Math.random() * 10,
+          url: cur?.image,
+          description: cur?.description,
+        }
+      })
+
+      setImage(images)
+
+      setFileListImages(images)
+
+      form.setFieldsValue({
+        name: data.name,
+        status: data.status,
+        description: data.description,
+        videos: data.videos,
+        brandId: data.brandId,
+        vehicleTypeId: data.vehicleTypeId,
+        priceRange: data.priceRange,
+      })
+
+      setEditorRender(true)
+      setVariantsList(data.variants)
+    } else {
+      history.replace('/app/dashboards/car/car-list')
+    }
+  }
+
   useEffect(() => {
     if (mode === EDIT) {
-      const fetchInformationById = async () => {
-        const { id } = param
-        const data = await informationService.getInformationById(id)
-        if (data) {
-          let himg = []
-          // if (data.image) {
-          //   himg = [
-          //     {
-          //       uid: Math.random() * 1000,
-          //       name: Utils.getBaseName(data.image),
-          //       url: data.image,
-          //       thumbUrl: data.image,
-          //     },
-          //   ]
-
-          //   setImage(himg)
-          //   setFileListImages(himg)
-          // }
-
-          data.image = [
-            'https://cdn.pixabay.com/photo/2012/11/02/13/02/car-63930_960_720.jpg',
-          ]
-
-          const images = data.image.map((cur, i) => {
-            return {
-              uid: i + Math.random() * 10,
-              url: cur,
-            }
-          })
-
-          setImage(images)
-
-          setFileListImages(images)
-
-          form.setFieldsValue({
-            name: data.name,
-            status: data.status,
-            priority: data.priority,
-            description: data.description,
-          })
-
-          setEditorRender(true)
-        } else {
-          history.replace('/app/dashboards/car/car-list')
-        }
-      }
-
-      fetchInformationById()
+      fetchCarById()
     }
   }, [form, mode, param, props])
 
@@ -122,22 +126,24 @@ const InformationForm = (props) => {
     form
       .validateFields()
       .then(async (values) => {
+        values.vehicleTypeId = '922af3ff-434d-4ef8-99a2-93f5d66fe7d9'
+        values.brandId = '62ea0981d5859d8db41a4165'
         if (mode === ADD) {
           // Checking if image exists
           if (uploadedImg.length !== 0 && uploadedImg !== null) {
             console.log('uploadedImg', uploadedImg)
-            const imgValue = await singleImageUploader(
-              uploadedImg[0].originFileObj,
+            const imgValues = await multipleImageUpload(
               uploadedImg,
-              uploadedImg[0].url,
-              'information'
+              'productTemplate',
+              'descriptionRequired'
             )
-            values.image = imgValue
+
+            values.images = imgValues
           } else {
-            values.image = null
+            values.images = []
           }
 
-          const created = await informationService.createInformation(values)
+          const created = await carService.createCar(values)
           if (created) {
             message.success(`Created ${values.name} to Car list`)
             history.goBack()
@@ -147,21 +153,17 @@ const InformationForm = (props) => {
           // Checking if image exists
           if (uploadedImg.length !== 0 && uploadedImg !== null) {
             console.log('uploadedImg', uploadedImg)
-            const imgValue = await singleImageUploader(
-              uploadedImg[0].originFileObj,
+            const imgValues = await multipleImageUpload(
               uploadedImg,
-              uploadedImg[0].url,
-              'information'
+              'productTemplate',
+              'descriptionRequired'
             )
-            values.image = imgValue
+            values.images = imgValues
           } else {
-            values.image = null
+            values.images = []
           }
 
-          const edited = await informationService.editInformation(
-            param.id,
-            values
-          )
+          const edited = await carService.editCar(param.id, values)
           if (edited) {
             message.success(`Edited ${values.name} to Information list`)
             history.goBack()
@@ -230,12 +232,13 @@ const InformationForm = (props) => {
               />
             </TabPane>
             <TabPane tab="Variant" key="2">
-              <Variant variantsList={dummyVariants} />
+              <Variant variantsList={variantList} refreshData={fetchCarById} />
             </TabPane>
             <TabPane tab="Images" key="3">
               <ImageField
                 propsImages={propsImages}
-                fileListImages={fileListImages}
+                images={uploadedImg}
+                setImages={setImage}
               />
             </TabPane>
           </Tabs>

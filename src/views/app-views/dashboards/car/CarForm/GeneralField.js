@@ -47,11 +47,7 @@ const GeneralField = (props) => (
         <Form.Item name="name" label="Name" rules={rules.name}>
           <Input placeholder="Name" />
         </Form.Item>
-        <Form.Item
-          name="description"
-          label="Description"
-          rules={rules.description}
-        >
+        <Form.Item name="description" label="Description">
           <Editor
             placeholder="Write something..."
             editorHtml={props.form.getFieldValue('description') || ''}
@@ -59,13 +55,8 @@ const GeneralField = (props) => (
             name="description"
           />
         </Form.Item>
-        <Form.Item name="priority" label="Priority" rules={rules.priority}>
-          <InputNumber
-            placeholder="Priority"
-            size="large"
-            min={0}
-            max={100000}
-          />
+        <Form.Item name="priceRange" label="PriceRange">
+          <Input placeholder="priceRange" />
         </Form.Item>
 
         <Form.Item name="status" label="Status" rules={rules.status}>

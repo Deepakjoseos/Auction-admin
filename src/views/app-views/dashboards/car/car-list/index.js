@@ -12,7 +12,7 @@ import EllipsisDropdown from 'components/shared-components/EllipsisDropdown'
 import Flex from 'components/shared-components/Flex'
 import { useHistory } from 'react-router-dom'
 import utils from 'utils'
-import informationService from 'services/information'
+import carService from 'services/car'
 
 const { Option } = Select
 
@@ -42,15 +42,15 @@ const InformationList = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
 
   useEffect(() => {
-    const getInformations = async () => {
-      const data = await informationService.getInformations()
+    const getCars = async () => {
+      const data = await carService.getCars()
       if (data) {
         setList(data)
         setSearchBackupList(data)
         console.log(data, 'show-data')
       }
     }
-    getInformations()
+    getCars()
   }, [])
 
   const dropdownMenu = (row) => (
@@ -83,7 +83,7 @@ const InformationList = () => {
   }
 
   const deleteRow = async (row) => {
-    const resp = await informationService.deleteInformation(row.id)
+    const resp = await carService.deleteCar(row.id)
 
     if (resp) {
       const objKey = 'id'
@@ -110,22 +110,38 @@ const InformationList = () => {
           <AvatarStatus
             size={60}
             type="square"
-            src={record.image}
+            src={record.images[0].image}
             name={record.name}
           />
         </div>
       ),
       sorter: (a, b) => utils.antdTableSorter(a, b, 'name'),
     },
+    // {
+    //   title: 'Description',
+    //   dataIndex: 'description',
+    //   render: (description) => (
+    //     <div dangerouslySetInnerHTML={{ __html: description }}></div>
+    //   ),
+    // },
     {
-      title: 'Description',
-      dataIndex: 'description',
+      title: 'Vechile Type',
+      dataIndex: 'vehicleType',
+      render: (vehicleType) => vehicleType?.name,
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'color'),
     },
     {
-      title: 'Priority',
-      dataIndex: 'priority',
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'priority'),
+      title: 'Price Range',
+      dataIndex: 'priceRange',
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'color'),
     },
+    {
+      title: 'Brand',
+      dataIndex: 'brand',
+      render: (brand) => brand?.name,
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'color'),
+    },
+
     {
       title: 'Status',
       dataIndex: 'status',

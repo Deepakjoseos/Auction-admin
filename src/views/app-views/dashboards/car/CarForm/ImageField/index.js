@@ -2,9 +2,9 @@ import { Card, Col, Row, Upload } from 'antd'
 import { ImageSvg } from 'assets/svg/icon'
 import CustomIcon from 'components/util-components/CustomIcon'
 import React from 'react'
-import ImageDescription from './ImageDescription'
+import ImageDescription from '../../../../../../components/shared-components/ImageDescription'
 
-const ImageField = ({ propsImages, fileListImages }) => {
+const ImageField = ({ propsImages, images, setImages }) => {
   return (
     <Card title="Media">
       {/* <Row gutter={16}>
@@ -13,15 +13,29 @@ const ImageField = ({ propsImages, fileListImages }) => {
         <CustomIcon className="display-3" svg={ImageSvg} />
       </Upload>
       <h4>Add Description Note </h4>
-      {fileListImages?.map((cur) => (
+      {images?.map((cur) => (
         <>
           {cur?.url ? (
             <>
-              <ImageDescription url={cur?.url} file={null} />
+              <ImageDescription
+                url={cur?.url}
+                description={cur?.description}
+                file={null}
+                setImages={setImages}
+                images={images}
+                id={cur?.uuid}
+              />
             </>
           ) : (
             <>
-              <ImageDescription url={null} file={cur?.originFileObj} />
+              <ImageDescription
+                url={null}
+                description={cur?.description}
+                file={cur?.originFileObj}
+                setImages={setImages}
+                images={images}
+                id={cur?.uuid}
+              />
             </>
           )}
         </>

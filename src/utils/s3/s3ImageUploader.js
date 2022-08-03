@@ -4,7 +4,7 @@ import S3 from 'react-aws-s3'
 
 const { notification } = require('antd')
 
-const multipleImageUpload = async (images, folder) => {
+const multipleImageUpload = async (images, folder, descriptionRequired) => {
   const imagesArray = await images.reduce(async (result, el) => {
     if (el.originFileObj) {
       const config = {
@@ -23,7 +23,14 @@ const multipleImageUpload = async (images, folder) => {
           // formValues.images[1].originFileObj.name,
         )
         if (asyncResult) {
-          ;(await result).push(asyncResult.location)
+          if (descriptionRequired) {
+            ;(await result).push({
+              image: asyncResult.location,
+              description: el.description,
+            })
+          } else {
+            ;(await result).push(asyncResult.location)
+          }
         }
       } catch (err) {
         // (await result).push(result.location);
@@ -34,7 +41,14 @@ const multipleImageUpload = async (images, folder) => {
         console.log(err.message, 'pls')
       }
     } else {
-      ;(await result).push(el.url)
+      if (descriptionRequired) {
+        ;(await result).push({
+          image: el.url,
+          description: el.description,
+        })
+      } else {
+        ;(await result).push(el.url)
+      }
     }
 
     return result
