@@ -204,6 +204,14 @@ const dashBoardNavTree = [
         submenu: [],
       },
       {
+        key: "dashboards-car",
+        path: `${APP_PREFIX_PATH}/dashboards/car`,
+        title: "Car",
+        icon: AppstoreOutlined,
+        breadcrumb: false,
+        submenu: [],
+      },
+      {
         key: "dashboards-settings",
         path: `${APP_PREFIX_PATH}/dashboards/settings`,
         title: "Settings",
