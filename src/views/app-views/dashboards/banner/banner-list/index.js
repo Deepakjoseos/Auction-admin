@@ -90,7 +90,8 @@ const BannerList = () => {
   }
 
   const viewDetails = (row) => {
-   history.push(`/app/dashboards/banner/edit-banner/${row.id}`)
+    console.log('row',row)
+   history.push(`/app/dashboards/banner/edit-banner/${row._id}`)
    }
 
   // For deleting a row

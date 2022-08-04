@@ -13,11 +13,11 @@ const Settings = (props) => {
       <Redirect
         exact
         from={`${match.url}`}
-        to={`${match.url}/settings-list`}
+        to={`${match.url}/edit-settings`}
       />
       <Route path={`${match.url}/add-settings`} component={AddSettings} />
       <Route
-        path={`${match.url}/edit-settings/:id`}
+        path={`${match.url}/edit-settings`}
         component={EditSettings}
       />
       <Route

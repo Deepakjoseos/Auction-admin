@@ -10,7 +10,7 @@ settingsService.getSettings= async function () {
       method: 'get',
     })
     console.log('res-return',res)
-    return [res.data]
+    return res.data
   } catch (err) {
     console.log(err, 'show-err')
   }

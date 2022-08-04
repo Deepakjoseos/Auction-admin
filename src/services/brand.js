@@ -6,7 +6,7 @@ const api= 'brand'
 brandService.getBrands = async function () {
   try {
     const res = await fetch({
-        url:`${api}/all`,
+        url:`${api}/get/all`,
       method: 'get',
     })
     return res.data
@@ -29,7 +29,7 @@ brandService.getBrands = async function () {
 brandService.getBrandById = async function (id) {
     try {
       const res = await fetch({
-        url: `${api}/${id}/admin`,
+        url: `${api}/${id}`,
         method: 'get',
       })
       return res.data
@@ -54,7 +54,7 @@ brandService.createBrand = async function (data) {
 brandService.editBrand = async function (id, data) {
   try {
     const res = await fetch({
-      url: `${api}/${id}`,
+      url: `${api}/${id}?name=${data.name}&logo=${data.logo}&url=${data.url}&status=${data.status}`,
       method: 'put',
       data: data,
     })

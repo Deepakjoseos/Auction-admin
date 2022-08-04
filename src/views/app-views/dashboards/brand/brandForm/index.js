@@ -45,9 +45,9 @@ const BrandForm = (props) => {
             himg = [
               {
                 uid: Math.random() * 1000,
-                name: Utils.getBaseName(data.image),
-                url: data.image,
-                thumbUrl: data.image,
+                name: Utils.getBaseName(data.logo),
+                url: data.logo,
+                thumbUrl: data.logo,
               },
             ]
 
@@ -127,7 +127,7 @@ const BrandForm = (props) => {
 
             //  append image url to values object
             values.logo = imgValue
-
+           console.log('imgvalue',imgValue)
             const edited = await brandService.editBrand(param.id, values)
             if (edited) {
               message.success(`Edited ${values.name} to Brand list`)
@@ -149,7 +149,6 @@ const BrandForm = (props) => {
   return (
     
     <>
-    <h1>hi</h1>
       <Form
         layout="vertical"
         form={form}

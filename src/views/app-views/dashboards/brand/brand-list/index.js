@@ -90,7 +90,8 @@ const BrandList = () => {
   }
 
   const viewDetails = (row) => {
-    history.push(`/app/dashboards/brand/edit-brand/${row.id}`)
+    console.log('row',row)
+    history.push(`/app/dashboards/brand/edit-brand/${row._id}`)
   }
 
   // For deleting a row
