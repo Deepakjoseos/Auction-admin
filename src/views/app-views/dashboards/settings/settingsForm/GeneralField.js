@@ -50,7 +50,7 @@ const rules = {
   ],
 };
 
-const GeneralField = ({ mode }) => (
+const GeneralField = ({ setmode }) => (
   <Row gutter={16}>
     <Col xs={24} sm={24} md={24}>
       <Card title="User Info">

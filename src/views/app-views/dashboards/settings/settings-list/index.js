@@ -59,8 +59,7 @@ const SettingsList = () => {
     }
 
     const viewDetails = (row) => {
-        console.log('id',row._id)
-        history.push(`/app/dashboards/settings/edit-settings/${row._id}`)
+        history.push(`/app/dashboards/settings/edit-settings`)
     }
 
     // Antd Table Columns

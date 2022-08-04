@@ -6,7 +6,7 @@ const api = '/banner'
 bannerService.getBanners = async function () {
   try {
     const res = await fetch({
-      url: `${api}/all`,
+      url: `${api}/get/all`,
       method: 'get',
     })
     return res.data
@@ -17,7 +17,7 @@ bannerService.getBanners = async function () {
 bannerService.getBannerById = async function (id) {
     try {
       const res = await fetch({
-        url: `${api}/${id}/admin`,
+        url: `${api}/${id}`,
         method: 'get',
       })
       return res.data
@@ -51,7 +51,7 @@ bannerService.deleteBanner = async function (id) {
   bannerService.editBanner = async function (id, data) {
     try {
       const res = await fetch({
-        url: `${api}/${id}`,
+        url: `${api}/${id}?title=${data.title}&imageURL=${data.imageURL}&url=${data.url}&priority=${data.priority}&status=${data.status}`,
         method: 'put',
         data: data,
       })

@@ -18,6 +18,37 @@ const SettingsForm = (props) => {
   const [form] = Form.useForm();
   console.log(mode);
   const [submitLoading, setSubmitLoading] = useState(false);
+  const [settings, setSettings] = useState({})
+const[setmode,setMode]=useState('')
+  useEffect(()=>{
+    const getSettings = async () => {
+
+      const data = await settingsService.getSettings()
+      if (data) {
+        const isEmpty = Object.keys(data).length === 0;
+        if(isEmpty){
+          setMode('Add')
+        }else{
+          setMode('Edit')
+          form.setFieldsValue({
+            name: data.name,
+            address: data.address,
+            email: data.email,
+            phone: data.phone,
+            facebookUrl: data.facebookUrl,
+            instagramUrl: data.instagramUrl,
+            twitterUrl: data.twitterUrl,
+          })
+        }
+        console.log('isEmpty',isEmpty)
+        setSettings(data)
+        console.log(data, 'settings')
+      }
+    }
+  
+    getSettings()
+  
+  },[])
 
   // Trigger When Submit Button pressed
   const onFinish = async () => {
@@ -26,20 +57,21 @@ const SettingsForm = (props) => {
       .validateFields()
       .then(async (values) => {
         const sendingValues =
-         { name: values?.name,
-            address: values?.address,
-            email: values?.email,
-            phone: values?.phone,
-            facebookUrl: values?.facebookUrl,
-            instagramUrl: values?.instagramUrl,
-            twitterUrl: values?.twitterUrl,
+        {
+          name: values?.name,
+          address: values?.address,
+          email: values?.email,
+          phone: values?.phone,
+          facebookUrl: values?.facebookUrl,
+          instagramUrl: values?.instagramUrl,
+          twitterUrl: values?.twitterUrl,
         }
-               
-          
+
+
 
         console.log(sendingValues, "values=====");
 
-        if (mode === ADD) {
+        if (setmode === 'Add') {
           const created = await settingsService.createSettings(sendingValues);
           if (created) {
             console.log(created);
@@ -47,27 +79,25 @@ const SettingsForm = (props) => {
             history.goBack();
           }
         }
-        if (mode === EDIT) {
-        
-          
-  
-            const edited = await settingsService.editSettings(
-              param.id,
-              values
-            )
-            if (edited) {
-              message.success(`Edited to Settings list`)
-              history.goBack()
-            }
+        if (setmode === 'Edit') {
+
+          const edited = await settingsService.editSettings(
+            param.id,
+            values
+          )
+          if (edited) {
+            message.success(`Edited settings list`)
+            history.goBack()
           }
-          setSubmitLoading(false)
-        })
-        .catch((info) => {
-          setSubmitLoading(false)
-          console.log('info', info)
-          message.error('Please enter all required field ')
-        })
-    }
+        }
+        setSubmitLoading(false)
+      })
+      .catch((info) => {
+        setSubmitLoading(false)
+        console.log('info', info)
+        message.error('Please enter all required field ')
+      })
+  }
 
   return (
     <>
@@ -89,13 +119,13 @@ const SettingsForm = (props) => {
               alignItems="center"
             >
               <h2 className="mb-3">
-                {mode === "ADD" ? "Add New settings" : `Edit settings`}{" "}
+                {setmode === "ADD" ? "Add New settings" : `Edit settings`}{" "}
               </h2>
               <div className="mb-3">
                 <Button
                   className="mr-2"
                   onClick={() =>
-                    history.push("/app/dashboards/settings/settings-list")
+                    history.push("/app/dashboards/user/user-list")
                   }
                 >
                   Discard
@@ -106,7 +136,7 @@ const SettingsForm = (props) => {
                   htmlType="submit"
                   loading={submitLoading}
                 >
-                  {mode === "ADD" ? "Add" : `Save`}
+                  {setmode === "ADD" ? "Add" : `Save`}
                 </Button>
               </div>
             </Flex>
@@ -115,7 +145,7 @@ const SettingsForm = (props) => {
         <div className="container">
           <Tabs defaultActiveKey="1" style={{ marginTop: 30 }}>
             <TabPane tab="General" key="1">
-              <GeneralField mode={mode} />
+              <GeneralField mode={setmode} />
             </TabPane>
           </Tabs>
         </div>
