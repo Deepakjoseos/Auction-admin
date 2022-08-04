@@ -110,7 +110,7 @@ const InformationList = () => {
           <AvatarStatus
             size={60}
             type="square"
-            src={record.images[0].image}
+            src={record?.images[0]?.image}
             name={record.name}
           />
         </div>
