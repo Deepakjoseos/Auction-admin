@@ -6,7 +6,6 @@ import GeneralField from './GeneralField'
 import useUpload from 'hooks/useUpload'
 import { multipleImageUpload } from 'utils/s3/s3ImageUploader'
 import carService from 'services/car'
-import Utils from 'utils'
 import { useHistory } from 'react-router-dom'
 import Variant from './variant'
 import ImageField from './ImageField'
@@ -18,6 +17,7 @@ const EDIT = 'EDIT'
 
 const InformationForm = (props) => {
   const { mode = ADD, param } = props
+  const id = param?.id
   const history = useHistory()
 
   const [form] = Form.useForm()
@@ -37,42 +37,9 @@ const InformationForm = (props) => {
 
   console.log(uploadedImg, 'uploadedImg')
 
-  const dummyVariants = [
-    {
-      id: 1,
-      name: 'Variant 1',
-      price: '100',
-      quantity: '10',
-      images: ['https://picsum.photos/200/300'],
-    },
-    {
-      id: 2,
-      name: 'Variant 2',
-      price: '200',
-      quantity: '20',
-      images: ['https://picsum.photos/200/301'],
-    },
-  ]
-
   const fetchCarById = async () => {
-    const { id } = param
     const data = await carService.getCarById(id)
     if (data) {
-      // let himg = []
-      // if (data.image) {
-      //   himg = [
-      //     {
-      //       uid: Math.random() * 1000,
-      //       name: Utils.getBaseName(data.image),
-      //       url: data.image,
-      //       thumbUrl: data.image,
-      //     },
-      //   ]
-
-      //   setImage(himg)
-      //   setFileListImages(himg)
-      // }
-
       const images = data.images.map((cur, i) => {
         return {
           uid: i + Math.random() * 10,
@@ -223,17 +190,17 @@ const InformationForm = (props) => {
         <div className="container">
           <Tabs defaultActiveKey="1" style={{ marginTop: 30 }}>
             <TabPane tab="General" key="1">
-              <GeneralField
-                uploadedImg={uploadedImg}
-                // uploadLoading={uploadLoading}
-                // handleUploadChange={handleUploadChange}
-                // propsImages={propsImages}
-                form={form}
-              />
+              <GeneralField uploadedImg={uploadedImg} form={form} />
             </TabPane>
-            <TabPane tab="Variant" key="2">
-              <Variant variantsList={variantList} refreshData={fetchCarById} />
-            </TabPane>
+            {id && (
+              <TabPane tab="Variant" key="2">
+                <Variant
+                  variantsList={variantList}
+                  refreshData={fetchCarById}
+                />
+              </TabPane>
+            )}
+
             <TabPane tab="Images" key="3">
               <ImageField
                 propsImages={propsImages}
