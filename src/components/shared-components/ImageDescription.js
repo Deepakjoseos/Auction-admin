@@ -13,7 +13,7 @@ const ImageDescription = ({
 
   const onDescriptionValueChange = (e) => {
     const changedImagesDesc = images?.map((cur) => {
-      if (cur.uuid === id) {
+      if (cur.uid === id) {
         return {
           ...cur,
           description: e.target.value,
