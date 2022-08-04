@@ -235,6 +235,14 @@ const dashBoardNavTree = [
         breadcrumb: false,
         submenu: [],
       },
+      {
+        key: "dashboards-vehicle-type",
+        path: `${APP_PREFIX_PATH}/dashboards/vehicle-type`,
+        title: "VehicleTypes",
+        icon: AppstoreOutlined,
+        breadcrumb: false,
+        submenu: [],
+      },
     ],
   },
   
