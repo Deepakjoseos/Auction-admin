@@ -66,7 +66,7 @@ const VariantsField = ({ variantsList, refreshData }) => {
         {variantsList.map((variant, index) => (
           <Col xs={24} sm={24} md={12} key={index}>
             <Card
-              title={'Variant' + index}
+              title={variant?.name}
               extra={
                 <Flex alignItems="center">
                   <Button

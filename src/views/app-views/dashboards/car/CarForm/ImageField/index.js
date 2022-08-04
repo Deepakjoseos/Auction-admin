@@ -23,7 +23,7 @@ const ImageField = ({ propsImages, images, setImages }) => {
                 file={null}
                 setImages={setImages}
                 images={images}
-                id={cur?.uuid}
+                id={cur?.uid}
               />
             </>
           ) : (
@@ -34,7 +34,7 @@ const ImageField = ({ propsImages, images, setImages }) => {
                 file={cur?.originFileObj}
                 setImages={setImages}
                 images={images}
-                id={cur?.uuid}
+                id={cur?.uid}
               />
             </>
           )}

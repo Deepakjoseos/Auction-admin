@@ -70,8 +70,6 @@ const VariantsForm = ({
     ],
   }
 
-  console.log(selectedVariant, 'sghduguydegq')
-
   useEffect(() => {
     if (selectedVariant) {
       console.log(selectedVariant.description, 'desc')
@@ -888,7 +886,7 @@ const VariantsForm = ({
                       file={null}
                       setImages={setImages}
                       images={images}
-                      id={cur?.uuid}
+                      id={cur?.uid}
                     />
                   </>
                 ) : (
@@ -899,7 +897,7 @@ const VariantsForm = ({
                       file={cur?.originFileObj}
                       setImages={setImages}
                       images={images}
-                      id={cur?.uuid}
+                      id={cur?.uid}
                     />
                   </>
                 )}
