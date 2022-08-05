@@ -119,8 +119,7 @@ const VehicleTypeForm = (props) => {
               'banner'
             )
 
-            values.imageURL = imgValue
-            // values.mobileImage = mobileImgValue
+            values.image = imgValue
 
             const edited = await vehicletypeService.editVehicleType(param.id, values)
             if (edited) {

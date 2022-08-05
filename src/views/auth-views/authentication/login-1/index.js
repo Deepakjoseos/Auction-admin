@@ -27,7 +27,7 @@ const LoginOne = (props) => {
                     }`}
                     alt=""
                   /> */}
-                  <h2>Booking Application</h2>
+                  <h2>Auction</h2>
                   {/* <p>Don't have an account yet? <a href="/auth/register-1">Sign Up</a></p> */}
                 </div>
                 <Row justify="center">
