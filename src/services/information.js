@@ -1,7 +1,7 @@
 import fetch from 'auth/FetchInterceptor'
 
 const informationService = {}
-const apiRoute = '/information'
+const apiRoute = '/information/get/all/admin'
 
 informationService.getInformations = async function () {
   try {
