@@ -267,6 +267,14 @@ const dashBoardNavTree = [
         breadcrumb: false,
         submenu: [],
       },
+      {
+        key: "dashboards-roles",
+        path: `${APP_PREFIX_PATH}/dashboards/role`,
+        title: "Roles",
+        icon: AppstoreOutlined,
+        breadcrumb: false,
+        submenu: [],
+      },
     ],
   },
   
