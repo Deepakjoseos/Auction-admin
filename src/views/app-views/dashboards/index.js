@@ -43,6 +43,10 @@ const Dashboards = ({ match }) => {
           path={`${match.url}/participant`}
           component={lazy(() => import(`./participant`))}
         />
+           <Route
+          path={`${match.url}/state`}
+          component={lazy(() => import(`./state`))}
+        />
         <Redirect from={`${match.url}`} to={`${match.url}/user`} />
       </Switch>
     </Suspense>
