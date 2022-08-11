@@ -15,73 +15,100 @@ import {
 import React, { useEffect, useState } from 'react'
 import { MinusCircleOutlined } from '@ant-design/icons'
 import authAdminService from 'services/auth/admin'
+import roleService from 'services/role'
 
 const { Option } = Select
 
 const EditRoleSubAdmin = ({ isFormOpen, setIsFormOpen, userId }) => {
   const [submitLoading, setSubmitLoading] = useState(false)
+  const [roles, setRoles] = useState([])
 
-  const initialValues = {
-    id: '',
-    roles: [
-      {
-        module: 'BANNER',
-        add: false,
-        delete: false,
-        edit: false,
-        fetch: false,
-      },
-      {
-        module: 'BRAND',
-        add: false,
-        delete: false,
-        edit: false,
-        fetch: false,
-      },
-      {
-        module: 'CAR',
-        add: false,
-        delete: false,
-        edit: false,
-        fetch: false,
-      },
-      {
-        module: 'USER',
-        add: false,
-        delete: false,
-        edit: false,
-        fetch: false,
-      },
-      {
-        module: 'FUEL TYPE',
-        add: false,
-        delete: false,
-        edit: false,
-        fetch: false,
-      },
-      {
-        module: 'INFORMATION',
-        add: false,
-        delete: false,
-        edit: false,
-        fetch: false,
-      },
-      //   {
-      //     module: 'SETINGS',
-      //     add: false,
-      //     delete: false,
-      //     edit: false,
-      //     fetch: false,
-      //   },
-      {
-        module: 'VEHICLE TYPE',
-        add: false,
-        delete: false,
-        edit: false,
-        fetch: false,
-      },
-    ],
+  const getRoles = async () => {
+    const data = await roleService.getRoles()
+    if (data) {
+      const curRoles = data?.map((item) => {
+        return {
+          module: item.module,
+          add: false,
+          delete: false,
+          edit: false,
+          fetch: false,
+        }
+      })
+      setRoles(curRoles)
+    }
   }
+
+  useEffect(() => {
+    getRoles()
+  }, [])
+
+  useEffect(() => {
+    if (roles?.length > 0) {
+    }
+  }, [roles])
+
+  //   const initialValues = {
+  //     id: '',
+  //     roles: [
+  //       {
+  //         module: 'BANNER',
+  //         add: false,
+  //         delete: false,
+  //         edit: false,
+  //         fetch: false,
+  //       },
+  //       {
+  //         module: 'BRAND',
+  //         add: false,
+  //         delete: false,
+  //         edit: false,
+  //         fetch: false,
+  //       },
+  //       {
+  //         module: 'CAR',
+  //         add: false,
+  //         delete: false,
+  //         edit: false,
+  //         fetch: false,
+  //       },
+  //       {
+  //         module: 'USER',
+  //         add: false,
+  //         delete: false,
+  //         edit: false,
+  //         fetch: false,
+  //       },
+  //       {
+  //         module: 'FUEL TYPE',
+  //         add: false,
+  //         delete: false,
+  //         edit: false,
+  //         fetch: false,
+  //       },
+  //       {
+  //         module: 'INFORMATION',
+  //         add: false,
+  //         delete: false,
+  //         edit: false,
+  //         fetch: false,
+  //       },
+  //       //   {
+  //       //     module: 'SETINGS',
+  //       //     add: false,
+  //       //     delete: false,
+  //       //     edit: false,
+  //       //     fetch: false,
+  //       //   },
+  //       {
+  //         module: 'VEHICLE TYPE',
+  //         add: false,
+  //         delete: false,
+  //         edit: false,
+  //         fetch: false,
+  //       },
+  //     ],
+  //   }
 
   const [form] = Form.useForm()
 
@@ -94,7 +121,7 @@ const EditRoleSubAdmin = ({ isFormOpen, setIsFormOpen, userId }) => {
   }
 
   const updateExistingRolesData = (arra2) => {
-    const arra1 = initialValues.roles.map((item) => {
+    const arra1 = roles.map((item) => {
       const item2 = arra2.find((i2) => i2.module === item.module)
       return item2 ? { ...item, ...item2 } : item
     })
@@ -109,19 +136,21 @@ const EditRoleSubAdmin = ({ isFormOpen, setIsFormOpen, userId }) => {
       form.setFieldsValue({
         id: data._id,
         roles:
-          data.roles?.length > 0
-            ? updateExistingRolesData(data.roles)
-            : initialValues.roles,
+          data.roles?.length > 0 ? updateExistingRolesData(data.roles) : roles,
       })
     }
   }
 
   useEffect(() => {
     console.log(userId, 'userId')
-    if (userId) {
+    if (userId && roles) {
       getSubAdminById(userId)
+    } else if (!userId && roles) {
+      form.setFieldsValue({
+        roles: roles,
+      })
     }
-  }, [userId])
+  }, [userId, roles])
 
   const onFinish = async () => {
     setSubmitLoading(true)
@@ -179,7 +208,7 @@ const EditRoleSubAdmin = ({ isFormOpen, setIsFormOpen, userId }) => {
           layout="vertical"
           hideRequiredMark
           form={form}
-          initialValues={initialValues}
+          //   initialValues={initialValues}
         >
           <Row gutter={16}>
             <>

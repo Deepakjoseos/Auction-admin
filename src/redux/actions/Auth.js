@@ -12,6 +12,7 @@ import {
   SIGNIN_WITH_GOOGLE_AUTHENTICATED,
   SIGNIN_WITH_FACEBOOK,
   SIGNIN_WITH_FACEBOOK_AUTHENTICATED,
+  SET_ROLES,
 } from '../constants/Auth'
 
 export const signIn = (user) => {
@@ -97,5 +98,12 @@ export const showLoading = (loading) => {
   return {
     type: SHOW_LOADING,
     loading,
+  }
+}
+
+export const setRoles = (roles) => {
+  return {
+    type: SET_ROLES,
+    payload: roles,
   }
 }

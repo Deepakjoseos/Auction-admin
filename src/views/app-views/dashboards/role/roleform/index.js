@@ -9,6 +9,7 @@ import informationService from 'services/information'
 import Utils from 'utils'
 import { useHistory } from 'react-router-dom'
 import roleService from 'services/role'
+import constantsService from 'services/constants'
 
 const { TabPane } = Tabs
 
@@ -20,12 +21,10 @@ const RoleForm = (props) => {
   const history = useHistory()
 
   const [form] = Form.useForm()
-  
+
   //   const [uploadLoading, setUploadLoading] = useState(false)
   const [submitLoading, setSubmitLoading] = useState(false)
-  const [editorRender, setEditorRender] = useState(false)
-
-
+  const [constantsRole, setConstantsRole] = useState([])
 
   useEffect(() => {
     // if (mode === EDIT) {
@@ -43,29 +42,35 @@ const RoleForm = (props) => {
     //            thumbUrl: data.image,
     //          },
     //        ]
-
     //        setImage(himg)
     //        setFileListImages(himg)
     //      }
-
     //      form.setFieldsValue({
     //        name: data.name,
     //        status: data.status,
     //        priority: data.priority,
     //        description: data.description,
     //      })
-
     //      setEditorRender(true)
     //    } else {
     //      history.replace('/app/dashboards/information/information-list')
     //    }
     //   }
-
     //   fetchInformationById()
     // }
   }, [form, mode, param, props])
 
+  useEffect(() => {
+    getRolesConstant()
+  }, [])
 
+  const getRolesConstant = async () => {
+    const data = await constantsService.getConstantsRole()
+    if (data) {
+      setConstantsRole(data)
+      console.log(data, 'show-roles-constant')
+    }
+  }
 
   const onFinish = async () => {
     setSubmitLoading(true)
@@ -73,23 +78,19 @@ const RoleForm = (props) => {
       .validateFields()
       .then(async (values) => {
         // if (mode === ADD) {
-          // Checking if image exists
-      
-          const sendingValues =
-          {
-            module: values?.module,
-          
-          }
-  
-  
-  
-          console.log(sendingValues, "values=====");
+        // Checking if image exists
 
-          const created = await roleService.createRole(sendingValues)
-          if (created) {
-            message.success(`Created ${values.module} to roles list`)
-            history.goBack()
-          }
+        const sendingValues = {
+          module: values?.module,
+        }
+
+        console.log(sendingValues, 'values=====')
+
+        const created = await roleService.createRole(sendingValues)
+        if (created) {
+          message.success(`Created ${values.module} to roles list`)
+          history.goBack()
+        }
         // }
         // if (mode === EDIT) {
         //   // Checking if image exists
@@ -149,9 +150,7 @@ const RoleForm = (props) => {
               <div className="mb-3">
                 <Button
                   className="mr-2"
-                  onClick={() =>
-                    history.push('/app/dashboards/role/role-list')
-                  }
+                  onClick={() => history.push('/app/dashboards/role/role-list')}
                 >
                   Discard
                 </Button>
@@ -176,7 +175,8 @@ const RoleForm = (props) => {
                 // uploadLoading={uploadLoading}
                 // handleUploadChange={handleUploadChange}
                 // propsImages={propsImages}
-                 form={form}
+                form={form}
+                constantsRole={constantsRole}
               />
             </TabPane>
           </Tabs>

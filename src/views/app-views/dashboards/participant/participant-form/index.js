@@ -67,7 +67,7 @@ const ParticipantForm = (props) => {
             pan: data.pan,
             participantType: data.participantType,
             pcc: data.pcc,
-            relationshipManagerId: data.relationshipManagerId,
+            relationshipManagerId: data.relationshipManager,
             userType: data.userType,
             buyerEligibleBuisness: data.buyerEligibleBuisness,
             participantClient: data.participantClient,
