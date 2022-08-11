@@ -41,14 +41,14 @@ const ParticipantList = () => {
   const [searchBackupList, setSearchBackupList] = useState([])
   const [selectedRows, setSelectedRows] = useState([])
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
-  const [participants,setParticipants] = useState([])
+  // const [participants, setParticipants] = useState([])
 
   useEffect(() => {
     const getAllParticipants = async () => {
       const data = await authAdminService.getAllParticipants()
       if (data) {
-        setParticipants(data)
-        
+        setList(data)
+        setSearchBackupList(data)
         console.log(data, 'show-data')
       }
     }
@@ -63,7 +63,6 @@ const ParticipantList = () => {
           <span className="ml-2">View Details</span>
         </Flex>
       </Menu.Item>
-  
     </Menu>
   )
 
@@ -72,42 +71,59 @@ const ParticipantList = () => {
   }
 
   const viewDetails = (row) => {
-    history.push(`/app/dashboards/participant/edit-participant/${row.id}`)
+    history.push(`/app/dashboards/participant/edit-participant/${row._id}`)
   }
 
-//   const deleteRow = async (row) => {
-//     const resp = await informationService.deleteInformation(row.id)
+  //   const deleteRow = async (row) => {
+  //     const resp = await informationService.deleteInformation(row.id)
 
-//     if (resp) {
-//       const objKey = 'id'
-//       let data = list
-//       if (selectedRows.length > 1) {
-//         selectedRows.forEach((elm) => {
-//           data = utils.deleteArrayRow(data, objKey, elm.id)
-//           setList(data)
-//           setSelectedRows([])
-//         })
-//       } else {
-//         data = utils.deleteArrayRow(data, objKey, row.id)
-//         setList(data)
-//       }
-//     }
-//   }
+  //     if (resp) {
+  //       const objKey = 'id'
+  //       let data = list
+  //       if (selectedRows.length > 1) {
+  //         selectedRows.forEach((elm) => {
+  //           data = utils.deleteArrayRow(data, objKey, elm.id)
+  //           setList(data)
+  //           setSelectedRows([])
+  //         })
+  //       } else {
+  //         data = utils.deleteArrayRow(data, objKey, row.id)
+  //         setList(data)
+  //       }
+  //     }
+  //   }
 
   const tableColumns = [
     {
       title: 'Name',
       dataIndex: 'name',
-     
-    
+
       sorter: (a, b) => utils.antdTableSorter(a, b, 'name'),
     },
     {
       title: 'Email',
       dataIndex: 'email',
     },
-  
-   
+    {
+      title: 'Contact Number',
+      dataIndex: 'contact',
+    },
+    {
+      title: 'Contact Number',
+      dataIndex: 'contact',
+    },
+    {
+      title: 'Participant Type',
+      dataIndex: 'participantType',
+    },
+    {
+      title: 'GST',
+      dataIndex: 'gst',
+      render: (text, row) => {
+        return <span>{row.gst ? 'Yes' : 'No'}</span>
+      },
+    },
+
     {
       title: '',
       dataIndex: 'actions',
