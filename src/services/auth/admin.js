@@ -57,7 +57,7 @@ authAdminService.createUser = async function (info) {
 authAdminService.getUser = async function (query) {
   try {
     const res = await fetch({
-      url: `${api}/users/all`,
+      url: `user/get/all/admin`,
       method: "get",
     });
     return res.data;
@@ -65,5 +65,26 @@ authAdminService.getUser = async function (query) {
     console.log(err, "show-err");
   }
 };
-
+authAdminService.getAllSubAdmins = async function (query){
+  try{
+    const res = await fetch ({
+      url:'/user/get/all/headadmin?authType=SubAdmin',
+      method:"get",
+    });
+    return res.data
+  }catch (err){
+    console.log(err,'show-error')
+  }
+};  
+authAdminService.getAllParticipants = async function (query){
+  try{
+    const res = await fetch ({
+      url:'/user/get/all/headadmin?authType=Participant',
+      method:"get",
+    });
+    return res.data
+  }catch (err){
+    console.log(err,'show-error')
+  }
+}; 
 export default authAdminService;

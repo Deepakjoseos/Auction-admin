@@ -6,7 +6,7 @@ const api = '/vehicletype'
 vehicletypeService.getVehicleTypes = async function () {
   try {
     const res = await fetch({
-      url: `${api}`,
+      url: `${api}/get/all/admin  `,
       method: 'get',
     })
     return res.data
@@ -17,7 +17,7 @@ vehicletypeService.getVehicleTypes = async function () {
 vehicletypeService.getVehicleTypeById = async function (vehicleTypeId) {
     try {
       const res = await fetch({
-        url: `${api}/${vehicleTypeId}`,
+        url: `${api}/${vehicleTypeId}/admin`,
         method: 'get',
       })
       return res.data
@@ -39,7 +39,7 @@ vehicletypeService.getVehicleTypeById = async function (vehicleTypeId) {
   vehicletypeService.createVehicleType = async function (data) {
     try {
       const res = await fetch({
-        url: `${api}`,
+        url: `${api}/create`,
         method: 'post',
         data: data,
       })

@@ -243,6 +243,22 @@ const dashBoardNavTree = [
         breadcrumb: false,
         submenu: [],
       },
+      {
+        key: "dashboards-fee-type",
+        path: `${APP_PREFIX_PATH}/dashboards/fee-type`,
+        title: "FeeType",
+        icon: AppstoreOutlined,
+        breadcrumb: false,
+        submenu: [],
+      },
+      {
+        key: "dashboards-participant",
+        path: `${APP_PREFIX_PATH}/dashboards/participant`,
+        title: "Participant",
+        icon: AppstoreOutlined,
+        breadcrumb: false,
+        submenu: [],
+      },
     ],
   },
   
