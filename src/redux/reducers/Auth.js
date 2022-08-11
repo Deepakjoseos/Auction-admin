@@ -5,6 +5,7 @@ import {
   SIGNOUT_SUCCESS,
   SIGNUP_SUCCESS,
   SHOW_LOADING,
+  SET_ROLES,
 } from '../constants/Auth'
 
 const initState = {
@@ -15,6 +16,7 @@ const initState = {
   user: null,
   authorized: null,
   token: null,
+  roles: [],
 }
 
 const auth = (state = initState, action) => {
@@ -62,6 +64,12 @@ const auth = (state = initState, action) => {
       return {
         ...state,
         loading: action.loading === null ? true : action.loading,
+      }
+    }
+    case SET_ROLES: {
+      return {
+        ...state,
+        roles: action.payload,
       }
     }
 

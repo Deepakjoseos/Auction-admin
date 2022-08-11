@@ -2,14 +2,17 @@ import fetch from 'auth/FetchInterceptor'
 
 const constantsService = {}
 
-constantsService.getConstants = async function () {
+constantsService.getConstantsRole = async function () {
   try {
     const res = await fetch({
-      url: '/constants',
+      url: '/constants/role',
       method: 'get',
     })
 
-    return res
+    // For coverting array
+    const reciviedData = Object.values(res.data).map((val) => val)
+
+    return reciviedData
   } catch (err) {
     console.log(err, 'show-err')
   }

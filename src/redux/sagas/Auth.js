@@ -4,6 +4,7 @@ import { showAuthMessage, authenticated, signOutSuccess } from '../actions/Auth'
 
 import authAdminService from 'services/auth/admin'
 import { notification } from 'antd'
+import authSubAdminService from 'services/auth/subAdmin'
 
 export function* signIn() {
   yield takeEvery(SIGNIN, function* ({ payload }) {
@@ -20,9 +21,20 @@ export function* signIn() {
       if (user?.sessionToken) {
         console.log('useweer', user)
         notification.success({ message: 'Login success' })
+
         window.localStorage.setItem(AUTH_TOKEN, user.sessionToken)
-        const getAdminProfile = yield call(authAdminService.getProfile)
-        yield put(authenticated(user, getAdminProfile))
+        console.log('user-nklnk', user.sessionToken)
+
+        if (user.AuthType === 'Admin') {
+          const getAdminProfile = yield call(authAdminService.getProfile)
+          window.localStorage.setItem('auth_type', user.AuthType)
+          yield put(authenticated(user, getAdminProfile))
+        } else if (user.AuthType === 'SubAdmin') {
+          const getSubAdminProfile = yield call(authSubAdminService.getProfile)
+          window.localStorage.setItem('auth_type', user.AuthType)
+          window.localStorage.setItem(AUTH_TOKEN, user.sessionToken)
+          yield put(authenticated(user, getSubAdminProfile))
+        }
       }
     } catch (err) {
       yield put(showAuthMessage(err))
