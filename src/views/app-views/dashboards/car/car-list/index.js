@@ -13,6 +13,7 @@ import Flex from 'components/shared-components/Flex'
 import { useHistory } from 'react-router-dom'
 import utils from 'utils'
 import carService from 'services/car'
+import { useSelector } from 'react-redux'
 
 const { Option } = Select
 
@@ -40,6 +41,17 @@ const InformationList = () => {
   const [searchBackupList, setSearchBackupList] = useState([])
   const [selectedRows, setSelectedRows] = useState([])
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
+  const [currentSubAdminRole, setCurrentSubAdminRole] = useState({})
+
+  const { user } = useSelector((state) => state.auth)
+
+  useEffect(() => {
+    if (user) {
+      const carRole = user.roles.find((role) => role.module === 'CAR')
+      console.log('carRole', carRole)
+      setCurrentSubAdminRole(carRole)
+    }
+  }, [user])
 
   useEffect(() => {
     const getCars = async () => {
@@ -53,33 +65,62 @@ const InformationList = () => {
     getCars()
   }, [])
 
-  const dropdownMenu = (row) => (
-    <Menu>
-      <Menu.Item onClick={() => viewDetails(row)}>
-        <Flex alignItems="center">
-          <EyeOutlined />
-          <span className="ml-2">View Details</span>
-        </Flex>
-      </Menu.Item>
-      <Menu.Item onClick={() => deleteRow(row)}>
-        <Flex alignItems="center">
-          <DeleteOutlined />
-          <span className="ml-2">
-            {selectedRows.length > 0
-              ? `Delete (${selectedRows.length})`
-              : 'Delete'}
-          </span>
-        </Flex>
-      </Menu.Item>
-    </Menu>
-  )
+  const dropdownMenu = (row) => {
+    if (window.localStorage.getItem('auth_type') === 'Admin') {
+      return (
+        <Menu>
+          <Menu.Item onClick={() => viewDetails(row)}>
+            <Flex alignItems="center">
+              <EyeOutlined />
+              <span className="ml-2">View Details</span>
+            </Flex>
+          </Menu.Item>
+          <Menu.Item onClick={() => deleteRow(row)}>
+            <Flex alignItems="center">
+              <DeleteOutlined />
+              <span className="ml-2">
+                {selectedRows.length > 0
+                  ? `Delete (${selectedRows.length})`
+                  : 'Delete'}
+              </span>
+            </Flex>
+          </Menu.Item>
+        </Menu>
+      )
+    } else {
+      return (
+        <Menu>
+          {currentSubAdminRole?.edit && (
+            <Menu.Item onClick={() => viewDetails(row)}>
+              <Flex alignItems="center">
+                <EyeOutlined />
+                <span className="ml-2">View Details</span>
+              </Flex>
+            </Menu.Item>
+          )}
+          {currentSubAdminRole?.delete && (
+            <Menu.Item onClick={() => deleteRow(row)}>
+              <Flex alignItems="center">
+                <DeleteOutlined />
+                <span className="ml-2">
+                  {selectedRows.length > 0
+                    ? `Delete (${selectedRows.length})`
+                    : 'Delete'}
+                </span>
+              </Flex>
+            </Menu.Item>
+          )}
+        </Menu>
+      )
+    }
+  }
 
   const addProduct = () => {
     history.push(`/app/dashboards/car/add-car`)
   }
 
   const viewDetails = (row) => {
-    history.push(`/app/dashboards/car/edit-car/${row.id}`)
+    history.push(`/app/dashboards/car/edit-car/${row._id}`)
   }
 
   const deleteRow = async (row) => {
@@ -155,7 +196,13 @@ const InformationList = () => {
       dataIndex: 'actions',
       render: (_, elm) => (
         <div className="text-right">
-          <EllipsisDropdown menu={dropdownMenu(elm)} />
+          {window.localStorage.getItem('auth_type') === 'Admin' ? (
+            <EllipsisDropdown menu={dropdownMenu(elm)} />
+          ) : (
+            (currentSubAdminRole?.edit || currentSubAdminRole?.delete) && (
+              <EllipsisDropdown menu={dropdownMenu(elm)} />
+            )
+          )}
         </div>
       ),
     },
@@ -209,14 +256,29 @@ const InformationList = () => {
       <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
         {filters()}
         <div>
-          <Button
-            onClick={addProduct}
-            type="primary"
-            icon={<PlusCircleOutlined />}
-            block
-          >
-            Add Car
-          </Button>
+          {window.localStorage.getItem('auth_type') === 'SubAdmin' ? (
+            <>
+              {currentSubAdminRole?.add && (
+                <Button
+                  onClick={addProduct}
+                  type="primary"
+                  icon={<PlusCircleOutlined />}
+                  block
+                >
+                  Add Car
+                </Button>
+              )}
+            </>
+          ) : (
+            <Button
+              onClick={addProduct}
+              type="primary"
+              icon={<PlusCircleOutlined />}
+              block
+            >
+              Add Car
+            </Button>
+          )}
         </div>
       </Flex>
       <div className="table-responsive">

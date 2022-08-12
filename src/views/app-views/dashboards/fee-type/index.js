@@ -8,22 +8,13 @@ import FeeTypeList from './fee-type-list'
 
 const FeeType = (props) => {
   const { match } = props
+
   return (
     <Switch>
-      <Redirect
-        exact
-        from={`${match.url}`}
-        to={`${match.url}/fee-type-list`}
-      />
+      <Redirect exact from={`${match.url}`} to={`${match.url}/fee-type-list`} />
       <Route path={`${match.url}/add-fee-type`} component={AddFeeType} />
-      <Route
-        path={`${match.url}/edit-fee-type/:id`}
-        component={EditFeeType}
-      />
-      <Route
-        path={`${match.url}/fee-type-list`}
-        component={FeeTypeList}
-      />
+      <Route path={`${match.url}/edit-fee-type/:id`} component={EditFeeType} />
+      <Route path={`${match.url}/fee-type-list`} component={FeeTypeList} />
     </Switch>
   )
 }

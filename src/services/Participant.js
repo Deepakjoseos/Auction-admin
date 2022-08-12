@@ -17,7 +17,7 @@ participantService.createParticipant = async (data) => {
 participantService.getParticipantById = async function (id) {
   try {
     const res = await fetch({
-      url: `user/${id}/admin`,
+      url: `${apiRoute}/${id}/admin`,
       method: 'get',
     })
     return res.data
@@ -45,6 +45,18 @@ participantService.editParticipantDocument = async (data, id) => {
       data: data,
     })
     return res
+  } catch (err) {
+    console.log(err, 'show-error')
+  }
+}
+
+participantService.getAllParticipants = async function (query) {
+  try {
+    const res = await fetch({
+      url: `${apiRoute}/get/all/admin`,
+      method: 'get',
+    })
+    return res.data
   } catch (err) {
     console.log(err, 'show-error')
   }

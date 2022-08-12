@@ -16,6 +16,7 @@ import React, { useEffect, useState } from 'react'
 import { MinusCircleOutlined } from '@ant-design/icons'
 import authAdminService from 'services/auth/admin'
 import roleService from 'services/role'
+import constantsService from 'services/constants'
 
 const { Option } = Select
 
@@ -24,11 +25,11 @@ const EditRoleSubAdmin = ({ isFormOpen, setIsFormOpen, userId }) => {
   const [roles, setRoles] = useState([])
 
   const getRoles = async () => {
-    const data = await roleService.getRoles()
+    const data = await constantsService.getConstantsRole()
     if (data) {
       const curRoles = data?.map((item) => {
         return {
-          module: item.module,
+          module: item,
           add: false,
           delete: false,
           edit: false,

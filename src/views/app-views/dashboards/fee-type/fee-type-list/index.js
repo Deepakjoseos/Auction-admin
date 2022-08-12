@@ -14,6 +14,7 @@ import { useHistory } from 'react-router-dom'
 import utils from 'utils'
 
 import feeTypeService from 'services/FeeType'
+import { useSelector } from 'react-redux'
 
 const { Option } = Select
 
@@ -41,6 +42,18 @@ const FeeTypeList = () => {
   const [searchBackupList, setSearchBackupList] = useState([])
   const [selectedRows, setSelectedRows] = useState([])
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
+  const [currentSubAdminRole, setCurrentSubAdminRole] = useState({})
+
+  const { user } = useSelector((state) => state.auth)
+
+  useEffect(() => {
+    if (user) {
+      const feeTypeRole = user.roles.find((role) => role.module === 'FEE_TYPE')
+      console.log('feeTypeRole', feeTypeRole)
+      setCurrentSubAdminRole(feeTypeRole)
+    }
+  }, [user])
+  console.log(user, 'jhbjkbuser')
 
   useEffect(() => {
     const getFeeTypes = async () => {
@@ -54,16 +67,33 @@ const FeeTypeList = () => {
     getFeeTypes()
   }, [])
 
-  const dropdownMenu = (row) => (
-    <Menu>
-      <Menu.Item onClick={() => viewDetails(row)}>
-        <Flex alignItems="center">
-          <EyeOutlined />
-          <span className="ml-2">View Details</span>
-        </Flex>
-      </Menu.Item>
-    </Menu>
-  )
+  const dropdownMenu = (row) => {
+    if (window.localStorage.getItem('auth_type') === 'Admin') {
+      return (
+        <Menu>
+          <Menu.Item onClick={() => viewDetails(row)}>
+            <Flex alignItems="center">
+              <EyeOutlined />
+              <span className="ml-2">View Details</span>
+            </Flex>
+          </Menu.Item>
+        </Menu>
+      )
+    } else {
+      if (currentSubAdminRole?.edit) {
+        return (
+          <Menu>
+            <Menu.Item onClick={() => viewDetails(row)}>
+              <Flex alignItems="center">
+                <EyeOutlined />
+                <span className="ml-2">View Details</span>
+              </Flex>
+            </Menu.Item>
+          </Menu>
+        )
+      }
+    }
+  }
 
   const addFeeType = () => {
     history.push(`/app/dashboards/fee-type/add-fee-type`)
@@ -73,24 +103,24 @@ const FeeTypeList = () => {
     history.push(`/app/dashboards/fee-type/edit-fee-type/${row._id}`)
   }
 
-//   const deleteRow = async (row) => {
-//     const resp = await informationService.deleteInformation(row.id)
+  //   const deleteRow = async (row) => {
+  //     const resp = await informationService.deleteInformation(row.id)
 
-//     if (resp) {
-//       const objKey = 'id'
-//       let data = list
-//       if (selectedRows.length > 1) {
-//         selectedRows.forEach((elm) => {
-//           data = utils.deleteArrayRow(data, objKey, elm.id)
-//           setList(data)
-//           setSelectedRows([])
-//         })
-//       } else {
-//         data = utils.deleteArrayRow(data, objKey, row.id)
-//         setList(data)
-//       }
-//     }
-//   }
+  //     if (resp) {
+  //       const objKey = 'id'
+  //       let data = list
+  //       if (selectedRows.length > 1) {
+  //         selectedRows.forEach((elm) => {
+  //           data = utils.deleteArrayRow(data, objKey, elm.id)
+  //           setList(data)
+  //           setSelectedRows([])
+  //         })
+  //       } else {
+  //         data = utils.deleteArrayRow(data, objKey, row.id)
+  //         setList(data)
+  //       }
+  //     }
+  //   }
 
   const tableColumns = [
     // {
@@ -112,7 +142,6 @@ const FeeTypeList = () => {
       title: 'Name',
       dataIndex: 'name',
       sorter: (a, b) => utils.antdTableSorter(a, b, 'name'),
-
     },
     {
       title: 'Order',
@@ -132,7 +161,13 @@ const FeeTypeList = () => {
       dataIndex: 'actions',
       render: (_, elm) => (
         <div className="text-right">
-          <EllipsisDropdown menu={dropdownMenu(elm)} />
+          {window.localStorage.getItem('auth_type') === 'Admin' ? (
+            <EllipsisDropdown menu={dropdownMenu(elm)} />
+          ) : (
+            currentSubAdminRole?.edit && (
+              <EllipsisDropdown menu={dropdownMenu(elm)} />
+            )
+          )}
         </div>
       ),
     },
@@ -186,14 +221,29 @@ const FeeTypeList = () => {
       <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
         {filters()}
         <div>
-          <Button
-            onClick={addFeeType}
-            type="primary"
-            icon={<PlusCircleOutlined />}
-            block
-          >
-            Add FeeType
-          </Button>
+          {window.localStorage.getItem('auth_type') === 'SubAdmin' ? (
+            <>
+              {currentSubAdminRole?.add && (
+                <Button
+                  onClick={addFeeType}
+                  type="primary"
+                  icon={<PlusCircleOutlined />}
+                  block
+                >
+                  Add FeeType
+                </Button>
+              )}
+            </>
+          ) : (
+            <Button
+              onClick={addFeeType}
+              type="primary"
+              icon={<PlusCircleOutlined />}
+              block
+            >
+              Add FeeType
+            </Button>
+          )}
         </div>
       </Flex>
       <div className="table-responsive">

@@ -14,6 +14,8 @@ import { useHistory } from 'react-router-dom'
 import utils from 'utils'
 import informationService from 'services/information'
 import authAdminService from 'services/auth/admin'
+import participantService from 'services/Participant'
+import { useSelector } from 'react-redux'
 
 const { Option } = Select
 
@@ -41,11 +43,25 @@ const ParticipantList = () => {
   const [searchBackupList, setSearchBackupList] = useState([])
   const [selectedRows, setSelectedRows] = useState([])
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
+  const [currentSubAdminRole, setCurrentSubAdminRole] = useState({})
+
+  const { user } = useSelector((state) => state.auth)
+
+  useEffect(() => {
+    if (user) {
+      const paricipantRole = user.roles.find(
+        (role) => role.module === 'PARTICIPANT'
+      )
+      console.log('paricipantRole', paricipantRole)
+      setCurrentSubAdminRole(paricipantRole)
+    }
+  }, [user])
+
   // const [participants, setParticipants] = useState([])
 
   useEffect(() => {
     const getAllParticipants = async () => {
-      const data = await authAdminService.getAllParticipants()
+      const data = await participantService.getAllParticipants()
       if (data) {
         setList(data)
         setSearchBackupList(data)
@@ -55,16 +71,33 @@ const ParticipantList = () => {
     getAllParticipants()
   }, [])
 
-  const dropdownMenu = (row) => (
-    <Menu>
-      <Menu.Item onClick={() => viewDetails(row)}>
-        <Flex alignItems="center">
-          <EyeOutlined />
-          <span className="ml-2">View Details</span>
-        </Flex>
-      </Menu.Item>
-    </Menu>
-  )
+  const dropdownMenu = (row) => {
+    if (window.localStorage.getItem('auth_type') === 'Admin') {
+      return (
+        <Menu>
+          <Menu.Item onClick={() => viewDetails(row)}>
+            <Flex alignItems="center">
+              <EyeOutlined />
+              <span className="ml-2">View Details</span>
+            </Flex>
+          </Menu.Item>
+        </Menu>
+      )
+    } else {
+      if (currentSubAdminRole?.edit) {
+        return (
+          <Menu>
+            <Menu.Item onClick={() => viewDetails(row)}>
+              <Flex alignItems="center">
+                <EyeOutlined />
+                <span className="ml-2">View Details</span>
+              </Flex>
+            </Menu.Item>
+          </Menu>
+        )
+      }
+    }
+  }
 
   const addProduct = () => {
     history.push(`/app/dashboards/participant/add-participant`)
@@ -129,7 +162,13 @@ const ParticipantList = () => {
       dataIndex: 'actions',
       render: (_, elm) => (
         <div className="text-right">
-          <EllipsisDropdown menu={dropdownMenu(elm)} />
+          {window.localStorage.getItem('auth_type') === 'Admin' ? (
+            <EllipsisDropdown menu={dropdownMenu(elm)} />
+          ) : (
+            currentSubAdminRole?.edit && (
+              <EllipsisDropdown menu={dropdownMenu(elm)} />
+            )
+          )}
         </div>
       ),
     },
@@ -183,14 +222,29 @@ const ParticipantList = () => {
       <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
         {filters()}
         <div>
-          <Button
-            onClick={addProduct}
-            type="primary"
-            icon={<PlusCircleOutlined />}
-            block
-          >
-            Add Participant
-          </Button>
+          {window.localStorage.getItem('auth_type') === 'SubAdmin' ? (
+            <>
+              {currentSubAdminRole?.add && (
+                <Button
+                  onClick={addProduct}
+                  type="primary"
+                  icon={<PlusCircleOutlined />}
+                  block
+                >
+                  Add Participant
+                </Button>
+              )}
+            </>
+          ) : (
+            <Button
+              onClick={addProduct}
+              type="primary"
+              icon={<PlusCircleOutlined />}
+              block
+            >
+              Add Participant
+            </Button>
+          )}
         </div>
       </Flex>
       <div className="table-responsive">

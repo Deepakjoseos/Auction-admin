@@ -170,6 +170,7 @@ const GeneralField = ({
   mode,
   setIsBuyer,
   isBuyer,
+  clients,
 }) => {
   const [image, setImage] = useState(false)
 
@@ -211,16 +212,31 @@ const GeneralField = ({
             <Input placeholder="Pan Number" />
           </Form.Item>
           <Form.Item
-            name="relationshipManagerId"
-            label="Relationship Manager"
+            name="clientId"
+            label="Participant Client"
             //   rules={rules.relationshipManagerId}
           >
-            <Select placeholder="Relationship Manager">
-              {subAdmins.map((subAdmin) => (
-                <Option value={subAdmin._id}>{subAdmin.name}</Option>
+            <Select placeholder="Participant Client">
+              {clients.map((client) => (
+                <Option value={client._id}>{client.title}</Option>
               ))}
             </Select>
           </Form.Item>
+
+          {window.localStorage.getItem('auth_type') === 'Admin' && (
+            <Form.Item
+              name="relationshipManagerId"
+              label="Relationship Manager"
+              //   rules={rules.relationshipManagerId}
+            >
+              <Select placeholder="Relationship Manager">
+                {subAdmins.map((subAdmin) => (
+                  <Option value={subAdmin._id}>{subAdmin.name}</Option>
+                ))}
+              </Select>
+            </Form.Item>
+          )}
+
           <Form.Item name="userType" label="User Type" rules={rules.userType}>
             <Select placeholder="User Type">
               <Option value="Employee">Employee</Option>
@@ -277,13 +293,6 @@ const GeneralField = ({
               </Select>
             </Form.Item>
           )}
-          <Form.Item
-            name="participantClient"
-            label="Participant Client"
-            // rules={rules.participantClient}
-          >
-            <Input placeholder="Participant Client" />
-          </Form.Item>
         </Card>
         <Card title="Contact Person">
           <Form.Item name="contact_person_name" label="Name" rules={rules.name}>

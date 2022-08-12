@@ -12,7 +12,7 @@ import {
   SIGNIN_WITH_GOOGLE_AUTHENTICATED,
   SIGNIN_WITH_FACEBOOK,
   SIGNIN_WITH_FACEBOOK_AUTHENTICATED,
-  SET_ROLES,
+  SET_DASHBOARDNAVTREE,
 } from '../constants/Auth'
 
 export const signIn = (user) => {
@@ -101,9 +101,9 @@ export const showLoading = (loading) => {
   }
 }
 
-export const setRoles = (roles) => {
+export const setDashBoardNavTree = (dashBoardNavTree) => {
   return {
-    type: SET_ROLES,
-    payload: roles,
+    type: SET_DASHBOARDNAVTREE,
+    dashBoardNavTree,
   }
 }
