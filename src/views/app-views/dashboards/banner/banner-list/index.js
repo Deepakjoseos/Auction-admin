@@ -13,7 +13,7 @@ import Flex from 'components/shared-components/Flex'
 import { useHistory } from 'react-router-dom'
 import utils from 'utils'
 import bannerService from 'services/banner'
-
+import { useSelector } from 'react-redux'
 
 const { Option } = Select
 
@@ -49,6 +49,7 @@ const BannerList = () => {
   const [searchBackupList, setSearchBackupList] = useState([])
   const [selectedRows, setSelectedRows] = useState([])
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
+  const [currentSubAdminRole, setCurrentSubAdminRole] = useState({})
 
   useEffect(() => {
     // Getting Lotteries List to display in the table
@@ -63,36 +64,75 @@ const BannerList = () => {
     getBanners()
   }, [])
 
+  const { user } = useSelector((state) => state.auth)
+
+  useEffect(() => {
+    if (user) {
+      const bannerRole = user.roles.find((role) => role.module === 'BANNER')
+      console.log('bannerRole', bannerRole)
+      setCurrentSubAdminRole(bannerRole)
+    }
+  }, [user])
+
   // Dropdown menu for each row
-  const dropdownMenu = (row) => (
-    <Menu>
-      <Menu.Item onClick={() => viewDetails(row)}>
-        <Flex alignItems="center">
-          <EyeOutlined />
-          <span className="ml-2">View Details</span>
-        </Flex>
-      </Menu.Item>
-      <Menu.Item onClick={() => deleteRow(row)}>
-        <Flex alignItems="center">
-          <DeleteOutlined />
-          <span className="ml-2">
-            {selectedRows.length > 0
-              ? `Delete (${selectedRows.length})`
-              : 'Delete'}
-          </span>
-        </Flex>
-      </Menu.Item>
-    </Menu>
-  )
+  const dropdownMenu = (row) => {
+    if (window.localStorage.getItem('auth_type') === 'Admin') {
+      return (
+        <Menu>
+          <Menu.Item onClick={() => viewDetails(row)}>
+            <Flex alignItems="center">
+              <EyeOutlined />
+              <span className="ml-2">View Details</span>
+            </Flex>
+          </Menu.Item>
+          <Menu.Item onClick={() => deleteRow(row)}>
+            <Flex alignItems="center">
+              <DeleteOutlined />
+              <span className="ml-2">
+                {selectedRows.length > 0
+                  ? `Delete (${selectedRows.length})`
+                  : 'Delete'}
+              </span>
+            </Flex>
+          </Menu.Item>
+        </Menu>
+      )
+    } else {
+      return (
+        <Menu>
+          {currentSubAdminRole?.edit && (
+            <Menu.Item onClick={() => viewDetails(row)}>
+              <Flex alignItems="center">
+                <EyeOutlined />
+                <span className="ml-2">View Details</span>
+              </Flex>
+            </Menu.Item>
+          )}
+          {currentSubAdminRole?.delete && (
+            <Menu.Item onClick={() => deleteRow(row)}>
+              <Flex alignItems="center">
+                <DeleteOutlined />
+                <span className="ml-2">
+                  {selectedRows.length > 0
+                    ? `Delete (${selectedRows.length})`
+                    : 'Delete'}
+                </span>
+              </Flex>
+            </Menu.Item>
+          )}
+        </Menu>
+      )
+    }
+  }
 
   const addBanner = () => {
     history.push(`/app/dashboards/banner/add-banner`)
   }
 
   const viewDetails = (row) => {
-    console.log('row',row)
-   history.push(`/app/dashboards/banner/edit-banner/${row._id}`)
-   }
+    console.log('row', row)
+    history.push(`/app/dashboards/banner/edit-banner/${row._id}`)
+  }
 
   // For deleting a row
   const deleteRow = async (row) => {
@@ -121,7 +161,7 @@ const BannerList = () => {
       dataIndex: 'title',
       sorter: (a, b) => utils.antdTableSorter(a, b, 'name'),
     },
-   
+
     {
       title: 'Status',
       dataIndex: 'status',
@@ -135,7 +175,13 @@ const BannerList = () => {
       dataIndex: 'actions',
       render: (_, elm) => (
         <div className="text-right">
-          <EllipsisDropdown menu={dropdownMenu(elm)} />
+          {window.localStorage.getItem('auth_type') === 'Admin' ? (
+            <EllipsisDropdown menu={dropdownMenu(elm)} />
+          ) : (
+            (currentSubAdminRole?.edit || currentSubAdminRole?.delete) && (
+              <EllipsisDropdown menu={dropdownMenu(elm)} />
+            )
+          )}
         </div>
       ),
     },
@@ -192,14 +238,29 @@ const BannerList = () => {
       <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
         {filters()}
         <div>
-          <Button
-            onClick={addBanner}
-            type="primary"
-            icon={<PlusCircleOutlined />}
-            block
-          >
-            Add Banner
-          </Button>
+          {window.localStorage.getItem('auth_type') === 'SubAdmin' ? (
+            <>
+              {currentSubAdminRole?.add && (
+                <Button
+                  onClick={addBanner}
+                  type="primary"
+                  icon={<PlusCircleOutlined />}
+                  block
+                >
+                  Add Banner
+                </Button>
+              )}
+            </>
+          ) : (
+            <Button
+              onClick={addBanner}
+              type="primary"
+              icon={<PlusCircleOutlined />}
+              block
+            >
+              Add Banner
+            </Button>
+          )}
         </div>
       </Flex>
       <div className="table-responsive">

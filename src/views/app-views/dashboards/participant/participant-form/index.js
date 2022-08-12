@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-expressions */
 import React, { useState, useEffect } from 'react'
 import PageHeaderAlt from 'components/layout-components/PageHeaderAlt'
 import { Tabs, Form, Button, message } from 'antd'
@@ -11,6 +12,8 @@ import { useHistory } from 'react-router-dom'
 import participantService from 'services/Participant'
 import authAdminService from 'services/auth/admin'
 import { get } from 'lodash'
+import { useSelector } from 'react-redux'
+import clientService from 'services/client'
 
 const { TabPane } = Tabs
 
@@ -27,8 +30,10 @@ const ParticipantForm = (props) => {
   const [submitLoading, setSubmitLoading] = useState(false)
   const [subAdmins, setSubAdmins] = useState([])
   const [participants, setParticipants] = useState([])
+  const [clients, setClients] = useState([])
   const [isEmployee, setIsEmployee] = useState(false)
   const [isBuyer, setIsBuyer] = useState(false)
+  const { user } = useSelector((state) => state.auth)
   //   const [editorRender, setEditorRender] = useState(false)
 
   useEffect(() => {
@@ -41,14 +46,24 @@ const ParticipantForm = (props) => {
     }
 
     const getAllParticipants = async () => {
-      const data = await authAdminService.getAllParticipants()
+      const data = await participantService.getAllParticipants()
       if (data) {
         setParticipants(data)
       }
     }
 
-    getAllSubAdmins()
+    const getAllClients = async () => {
+      const data = await clientService.getClients()
+      if (data) {
+        setClients(data)
+      }
+    }
+
+    if (window.localStorage.getItem('auth_type') === 'Admin') {
+      getAllSubAdmins()
+    }
     getAllParticipants()
+    getAllClients()
     if (mode === EDIT) {
       const fetchParticipantById = async () => {
         const { id } = param
@@ -61,10 +76,11 @@ const ParticipantForm = (props) => {
             contact: data.contact,
             gst: data.gst,
             status: data.status,
+            clientId: data.client,
 
             // parentId: data.parentId,
             hdfcPanValidation: data.hdfcPanValidation,
-            pan: data.pan,
+            pan: data.panNumber,
             participantType: data.participantType,
             pcc: data.pcc,
             relationshipManagerId: data.relationshipManager,
@@ -97,12 +113,15 @@ const ParticipantForm = (props) => {
     }
   }, [form, mode, param, props])
 
+  console.log(user, 'sendingValues')
+
   const onFinish = async () => {
     setSubmitLoading(true)
     form
       .validateFields()
       .then(async (values) => {
         console.log(values, 'valuewewes')
+
         const sendingValues = {
           name: values.name,
           email: values.email,
@@ -111,10 +130,11 @@ const ParticipantForm = (props) => {
           contact: values.contact,
           gst: values.gst,
           hdfcPanValidation: values.hdfcPanValidation,
-          pan: values.pan,
+          panNumber: values.pan,
           participantType: values.participantType,
           participantClient: values.participantClient,
           pcc: values.pcc,
+          clientId: values.clientId,
           //   parentId: values.parentId,
           relationshipManagerId: values.relationshipManagerId,
           userType: values.userType,
@@ -136,6 +156,12 @@ const ParticipantForm = (props) => {
             phone: values.contact_person_phone,
           },
         }
+
+        if (window.localStorage.getItem('auth_type') === 'SubAdmin')
+          sendingValues.relationshipManagerId = user._id
+
+        console.log(sendingValues, 'sendingValues', user._id)
+
         if (mode === ADD) {
           const created = await participantService.createParticipant(
             sendingValues
@@ -220,6 +246,7 @@ const ParticipantForm = (props) => {
                 isEmployee={isEmployee}
                 setIsBuyer={setIsBuyer}
                 isBuyer={isBuyer}
+                clients={clients}
               />
             </TabPane>
           </Tabs>

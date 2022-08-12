@@ -5,7 +5,7 @@ const api = '/sub_admin'
 authSubAdminService.getProfile = async function () {
   try {
     const res = await fetch({
-      url: `${api}/profile`,
+      url: `${api}/profile/get`,
       method: 'get',
     })
     console.log(res.data)

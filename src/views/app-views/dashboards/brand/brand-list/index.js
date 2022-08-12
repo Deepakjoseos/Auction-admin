@@ -14,6 +14,7 @@ import NumberFormat from 'react-number-format'
 import { useHistory } from 'react-router-dom'
 import utils from 'utils'
 import brandService from 'services/brand'
+import { useSelector } from 'react-redux'
 
 const { Option } = Select
 
@@ -33,13 +34,13 @@ const getStockStatus = (status) => {
     )
   }
 
-//   if (status === 'Deleted') {
-//     return (
-//       <>
-//         <Tag color="red">Deleted</Tag>
-//       </>
-//     )
-//   }
+  //   if (status === 'Deleted') {
+  //     return (
+  //       <>
+  //         <Tag color="red">Deleted</Tag>
+  //       </>
+  //     )
+  //   }
   return null
 }
 const BrandList = () => {
@@ -49,6 +50,18 @@ const BrandList = () => {
   const [searchBackupList, setSearchBackupList] = useState([])
   const [selectedRows, setSelectedRows] = useState([])
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
+  const [currentSubAdminRole, setCurrentSubAdminRole] = useState({})
+
+  const { user } = useSelector((state) => state.auth)
+
+  useEffect(() => {
+    if (user) {
+      const brandRole = user.roles.find((role) => role.module === 'BRAND')
+      console.log('brandRole', brandRole)
+      setCurrentSubAdminRole(brandRole)
+    }
+  }, [user])
+  console.log(user, 'jhbjkbuser')
 
   useEffect(() => {
     // Getting Brands List to display in the table
@@ -64,33 +77,40 @@ const BrandList = () => {
   }, [])
 
   // Dropdown menu for each row
-  const dropdownMenu = (row) => (
-    <Menu>
-      <Menu.Item onClick={() => viewDetails(row)}>
-        <Flex alignItems="center">
-          <EyeOutlined />
-          <span className="ml-2">View Details</span>
-        </Flex>
-      </Menu.Item>
-      {/* <Menu.Item onClick={() => deleteRow(row)}>
-        <Flex alignItems="center">
-          <DeleteOutlined />
-          <span className="ml-2">
-            {selectedRows.length > 0
-              ? `Delete (${selectedRows.length})`
-              : 'Delete'}
-          </span>
-        </Flex>
-      </Menu.Item> */}
-    </Menu>
-  )
+  const dropdownMenu = (row) => {
+    if (window.localStorage.getItem('auth_type') === 'Admin') {
+      return (
+        <Menu>
+          <Menu.Item onClick={() => viewDetails(row)}>
+            <Flex alignItems="center">
+              <EyeOutlined />
+              <span className="ml-2">View Details</span>
+            </Flex>
+          </Menu.Item>
+        </Menu>
+      )
+    } else {
+      if (currentSubAdminRole?.edit) {
+        return (
+          <Menu>
+            <Menu.Item onClick={() => viewDetails(row)}>
+              <Flex alignItems="center">
+                <EyeOutlined />
+                <span className="ml-2">View Details</span>
+              </Flex>
+            </Menu.Item>
+          </Menu>
+        )
+      }
+    }
+  }
 
   const addProduct = () => {
     history.push(`/app/dashboards/brand/add-brand`)
   }
 
   const viewDetails = (row) => {
-    console.log('row',row)
+    console.log('row', row)
     history.push(`/app/dashboards/brand/edit-brand/${row._id}`)
   }
 
@@ -149,7 +169,13 @@ const BrandList = () => {
       dataIndex: 'actions',
       render: (_, elm) => (
         <div className="text-right">
-          <EllipsisDropdown menu={dropdownMenu(elm)} />
+          {window.localStorage.getItem('auth_type') === 'Admin' ? (
+            <EllipsisDropdown menu={dropdownMenu(elm)} />
+          ) : (
+            currentSubAdminRole?.edit && (
+              <EllipsisDropdown menu={dropdownMenu(elm)} />
+            )
+          )}
         </div>
       ),
     },
@@ -206,14 +232,29 @@ const BrandList = () => {
       <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
         {filters()}
         <div>
-          <Button
-            onClick={addProduct}
-            type="primary"
-            icon={<PlusCircleOutlined />}
-            block
-          >
-            Add Brand
-          </Button>
+          {window.localStorage.getItem('auth_type') === 'SubAdmin' ? (
+            <>
+              {currentSubAdminRole?.add && (
+                <Button
+                  onClick={addProduct}
+                  type="primary"
+                  icon={<PlusCircleOutlined />}
+                  block
+                >
+                  Add Brand
+                </Button>
+              )}
+            </>
+          ) : (
+            <Button
+              onClick={addProduct}
+              type="primary"
+              icon={<PlusCircleOutlined />}
+              block
+            >
+              Add Brand
+            </Button>
+          )}
         </div>
       </Flex>
       <div className="table-responsive">

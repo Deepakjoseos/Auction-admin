@@ -1,3 +1,4 @@
+import { APP_PREFIX_PATH } from 'configs/AppConfig'
 import {
   AUTHENTICATED,
   SHOW_AUTH_MESSAGE,
@@ -5,8 +6,9 @@ import {
   SIGNOUT_SUCCESS,
   SIGNUP_SUCCESS,
   SHOW_LOADING,
-  SET_ROLES,
+  SET_DASHBOARDNAVTREE,
 } from '../constants/Auth'
+// import navigationConfig from 'configs/NavigationConfig'
 
 const initState = {
   loading: true,
@@ -16,7 +18,7 @@ const initState = {
   user: null,
   authorized: null,
   token: null,
-  roles: [],
+  dashBoardNavTree: [],
 }
 
 const auth = (state = initState, action) => {
@@ -28,7 +30,7 @@ const auth = (state = initState, action) => {
         redirect: '/',
         authorized: true,
         user: action.payload.user,
-        token: action.payload.token,
+        // token: action.payload.token,
       }
     case SHOW_AUTH_MESSAGE:
       return {
@@ -66,10 +68,11 @@ const auth = (state = initState, action) => {
         loading: action.loading === null ? true : action.loading,
       }
     }
-    case SET_ROLES: {
+
+    case SET_DASHBOARDNAVTREE: {
       return {
         ...state,
-        roles: action.payload,
+        dashBoardNavTree: action.dashBoardNavTree,
       }
     }
 

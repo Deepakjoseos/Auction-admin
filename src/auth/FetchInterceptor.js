@@ -57,6 +57,7 @@ service.interceptors.response.use(
       notificationParam.message = 'Authentication Fail'
       notificationParam.description = 'Please login again'
       localStorage.removeItem(AUTH_TOKEN)
+      localStorage.removeItem('auth_type')
       history.push(ENTRY_ROUTE)
       store.dispatch(signOutSuccess())
       // window.location.reload()

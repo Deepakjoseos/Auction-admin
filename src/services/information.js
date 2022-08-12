@@ -1,12 +1,12 @@
 import fetch from 'auth/FetchInterceptor'
 
 const informationService = {}
-const apiRoute = '/information/get/all/admin'
+const apiRoute = '/information'
 
 informationService.getInformations = async function () {
   try {
     const res = await fetch({
-      url: apiRoute,
+      url: `${apiRoute}/get/all/admin`,
       method: 'get',
     })
     const data = res.data.filter((cur) => cur.status !== 'Deleted')
@@ -32,7 +32,7 @@ informationService.deleteInformation = async function (id) {
 informationService.getInformationById = async function (id) {
   try {
     const res = await fetch({
-      url: `${apiRoute}/${id}`,
+      url: `${apiRoute}/${id}/admin`,
       method: 'get',
     })
     return res.data
@@ -44,7 +44,7 @@ informationService.getInformationById = async function (id) {
 informationService.createInformation = async function (data) {
   try {
     const res = await fetch({
-      url: `${apiRoute}`,
+      url: `${apiRoute}/create`,
       method: 'post',
       data: data,
     })

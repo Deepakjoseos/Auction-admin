@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Card, Table, Select, Input, Button, Menu, Tag } from 'antd'
-// import InformationListData from 'assets/data/product-list.data.json'
+// import BrandListData from 'assets/data/product-list.data.json'
 import {
   EyeOutlined,
   DeleteOutlined,
@@ -12,9 +12,7 @@ import EllipsisDropdown from 'components/shared-components/EllipsisDropdown'
 import Flex from 'components/shared-components/Flex'
 import { useHistory } from 'react-router-dom'
 import utils from 'utils'
-import informationService from 'services/information'
-import vehicletypeService from 'services/vehicleType'
-import VehicleTypeForm from '../vehicle-type-form'
+import clientService from 'services/client'
 import { useSelector } from 'react-redux'
 
 const { Option } = Select
@@ -34,9 +32,17 @@ const getStockStatus = (status) => {
       </>
     )
   }
+
+  if (status === 'Deleted') {
+    return (
+      <>
+        <Tag color="red">Deleted</Tag>
+      </>
+    )
+  }
   return null
 }
-const VehicleTypeList = () => {
+const ClientList = () => {
   let history = useHistory()
 
   const [list, setList] = useState([])
@@ -46,30 +52,29 @@ const VehicleTypeList = () => {
   const [currentSubAdminRole, setCurrentSubAdminRole] = useState({})
 
   useEffect(() => {
-    const getVehicleTypes = async () => {
-      const data = await vehicletypeService.getVehicleTypes()
+    // Getting Lotteries List to display in the table
+    const getClients = async () => {
+      const data = await clientService.getClients()
       if (data) {
         setList(data)
         setSearchBackupList(data)
         console.log(data, 'show-data')
       }
     }
-    console.log('hi')
-    getVehicleTypes()
+    getClients()
   }, [])
 
   const { user } = useSelector((state) => state.auth)
 
   useEffect(() => {
     if (user) {
-      const vehicleRole = user.roles.find(
-        (role) => role.module === 'VEHICLE TYPE'
-      )
-      console.log('vehicleRole', vehicleRole)
-      setCurrentSubAdminRole(vehicleRole)
+      const clientRole = user.roles.find((role) => role.module === 'CLIENT')
+      console.log('clientRole', clientRole)
+      setCurrentSubAdminRole(clientRole)
     }
   }, [user])
 
+  // Dropdown menu for each row
   const dropdownMenu = (row) => {
     if (window.localStorage.getItem('auth_type') === 'Admin') {
       return (
@@ -78,16 +83,6 @@ const VehicleTypeList = () => {
             <Flex alignItems="center">
               <EyeOutlined />
               <span className="ml-2">View Details</span>
-            </Flex>
-          </Menu.Item>
-          <Menu.Item onClick={() => deleteRow(row)}>
-            <Flex alignItems="center">
-              <DeleteOutlined />
-              <span className="ml-2">
-                {selectedRows.length > 0
-                  ? `Delete (${selectedRows.length})`
-                  : 'Delete'}
-              </span>
             </Flex>
           </Menu.Item>
         </Menu>
@@ -103,56 +98,54 @@ const VehicleTypeList = () => {
               </Flex>
             </Menu.Item>
           )}
-          {currentSubAdminRole?.delete && (
-            <Menu.Item onClick={() => deleteRow(row)}>
-              <Flex alignItems="center">
-                <DeleteOutlined />
-                <span className="ml-2">
-                  {selectedRows.length > 0
-                    ? `Delete (${selectedRows.length})`
-                    : 'Delete'}
-                </span>
-              </Flex>
-            </Menu.Item>
-          )}
         </Menu>
       )
     }
   }
 
-  const addVehicleType = () => {
-    history.push(`/app/dashboards/vehicle-type/add-vehicle-type`)
+  const addClient = () => {
+    history.push(`/app/dashboards/client/add-client`)
   }
 
   const viewDetails = (row) => {
-    history.push(`/app/dashboards/vehicle-type/edit-vehicle-type/${row.id}`)
+    console.log('row', row)
+    history.push(`/app/dashboards/client/edit-client/${row._id}`)
   }
 
-  const deleteRow = async (row) => {
-    const resp = await vehicletypeService.deleteVehicleType(row.id)
+  // For deleting a row
+  // const deleteRow = async (row) => {
+  //   const resp = await clientService.deleteBanner(row.id)
 
-    if (resp) {
-      const objKey = 'id'
-      let data = list
-      if (selectedRows.length > 1) {
-        selectedRows.forEach((elm) => {
-          data = utils.deleteArrayRow(data, objKey, elm.id)
-          setList(data)
-          setSelectedRows([])
-        })
-      } else {
-        data = utils.deleteArrayRow(data, objKey, row.id)
-        setList(data)
-      }
-    }
-  }
+  //   if (resp) {
+  //     const objKey = 'id'
+  //     let data = list
+  //     if (selectedRows.length > 1) {
+  //       selectedRows.forEach((elm) => {
+  //         data = utils.deleteArrayRow(data, objKey, elm.id)
+  //         setList(data)
+  //         setSelectedRows([])
+  //       })
+  //     } else {
+  //       data = utils.deleteArrayRow(data, objKey, row.id)
+  //       setList(data)
+  //     }
+  //   }
+  // }
 
+  // Antd Table Columns
   const tableColumns = [
     {
-      title: 'Name',
-      dataIndex: 'name',
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'name'),
+      title: 'Title',
+      dataIndex: 'title',
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'title'),
     },
+
+    {
+      title: 'Order',
+      dataIndex: 'order',
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'order'),
+    },
+
     {
       title: 'Status',
       dataIndex: 'status',
@@ -169,7 +162,7 @@ const VehicleTypeList = () => {
           {window.localStorage.getItem('auth_type') === 'Admin' ? (
             <EllipsisDropdown menu={dropdownMenu(elm)} />
           ) : (
-            (currentSubAdminRole?.edit || currentSubAdminRole?.delete) && (
+            currentSubAdminRole?.edit && (
               <EllipsisDropdown menu={dropdownMenu(elm)} />
             )
           )}
@@ -178,6 +171,7 @@ const VehicleTypeList = () => {
     },
   ]
 
+  // When Search is used
   const onSearch = (e) => {
     const value = e.currentTarget.value
     const searchArray = e.currentTarget.value ? list : searchBackupList
@@ -186,6 +180,7 @@ const VehicleTypeList = () => {
     setSelectedRowKeys([])
   }
 
+  // Filter Status Handler
   const handleShowStatus = (value) => {
     if (value !== 'All') {
       const key = 'status'
@@ -196,6 +191,7 @@ const VehicleTypeList = () => {
     }
   }
 
+  // Table Filters JSX Elements
   const filters = () => (
     <Flex className="mb-1" mobileFlex={false}>
       <div className="mr-md-3 mb-3">
@@ -230,23 +226,23 @@ const VehicleTypeList = () => {
             <>
               {currentSubAdminRole?.add && (
                 <Button
-                  onClick={addVehicleType}
+                  onClick={addClient}
                   type="primary"
                   icon={<PlusCircleOutlined />}
                   block
                 >
-                  Add Vehicle Type
+                  Add Client
                 </Button>
               )}
             </>
           ) : (
             <Button
-              onClick={addVehicleType}
+              onClick={addClient}
               type="primary"
               icon={<PlusCircleOutlined />}
               block
             >
-              Add Vehicle Type
+              Add Client
             </Button>
           )}
         </div>
@@ -258,4 +254,4 @@ const VehicleTypeList = () => {
   )
 }
 
-export default VehicleTypeList
+export default ClientList
