@@ -104,6 +104,7 @@ const ParticipantList = () => {
   }
 
   const viewDetails = (row) => {
+    
     history.push(`/app/dashboards/participant/edit-participant/${row._id}`)
   }
 
