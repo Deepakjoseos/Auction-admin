@@ -3,7 +3,8 @@ import React, { useState, useEffect } from 'react'
 import PageHeaderAlt from 'components/layout-components/PageHeaderAlt'
 import { Tabs, Form, Button, message } from 'antd'
 import Flex from 'components/shared-components/Flex'
-import GeneralField from './GeneralField'
+// import GeneralField from '../GeneralField'
+import GeneralField from '../participant-form/GeneralField'
 import useUpload from 'hooks/useUpload'
 import { singleImageUploader } from 'utils/s3/s3ImageUploader'
 import informationService from 'services/information'
@@ -14,7 +15,10 @@ import authAdminService from 'services/auth/admin'
 import { get } from 'lodash'
 import { useSelector } from 'react-redux'
 import clientService from 'services/client'
-
+import registrationService from 'services/registration'
+// import Registrations from '../../registration/list-registration/index'
+import feeTypeService  from 'services/FeeType'
+import RegistrationField from '../registration/registrationForm/RegistrationField'
 const { TabPane } = Tabs
 
 const ADD = 'ADD'
@@ -34,8 +38,11 @@ const ParticipantForm = (props) => {
   const [isEmployee, setIsEmployee] = useState(false)
   const [isBuyer, setIsBuyer] = useState(false)
   const { user } = useSelector((state) => state.auth)
-  //   const [editorRender, setEditorRender] = useState(false)
+  const [currentParticipant,setCurrentParticipant] = useState()
 
+
+  //   const [editorRender, setEditorRender] = useState(false)
+  const [feeTypes,setFeeType]=useState([])
   useEffect(() => {
     const getAllSubAdmins = async () => {
       const data = await authAdminService.getAllSubAdmins()
@@ -58,6 +65,22 @@ const ParticipantForm = (props) => {
         setClients(data)
       }
     }
+    const getFeeTypes = async () => {
+      const data = await feeTypeService.getFeeTypes()
+      if (data) {
+        setFeeType(data)
+        console.log(data, 'feetypes')
+      }
+    }
+    getFeeTypes()
+    // const getAllRegistrations = async ()=>{
+    //   const data = await registrationService.getAllRegistrations()
+    //   if(data){
+    //     setRegistrations()
+    //   }
+    // }
+    // getAllRegistrations()
+
 
     if (window.localStorage.getItem('auth_type') === 'Admin') {
       getAllSubAdmins()
@@ -68,7 +91,9 @@ const ParticipantForm = (props) => {
       const fetchParticipantById = async () => {
         const { id } = param
         const data = await participantService.getParticipantById(id)
+        setCurrentParticipant(data)
         if (data) {
+        
           form.setFieldsValue({
             name: data.name,
             email: data.email,
@@ -248,6 +273,9 @@ const ParticipantForm = (props) => {
                 isBuyer={isBuyer}
                 clients={clients}
               />
+            </TabPane>
+            <TabPane tab="Registration" key="2">
+               <RegistrationField feeTypes={feeTypes} currentParticipant={currentParticipant} />
             </TabPane>
           </Tabs>
         </div>
