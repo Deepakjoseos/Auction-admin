@@ -18,7 +18,7 @@ import clientService from 'services/client'
 import registrationService from 'services/registration'
 // import Registrations from '../../registration/list-registration/index'
 import feeTypeService  from 'services/FeeType'
-import RegistrationField from '../registration/registrationForm/RegistrationField'
+import RegistrationForm from '../registration/registrationForm/index'
 const { TabPane } = Tabs
 
 const ADD = 'ADD'
@@ -39,6 +39,7 @@ const ParticipantForm = (props) => {
   const [isBuyer, setIsBuyer] = useState(false)
   const { user } = useSelector((state) => state.auth)
   const [currentParticipant,setCurrentParticipant] = useState()
+  const [registrations,setRegistrations]= useState([])
 
 
   //   const [editorRender, setEditorRender] = useState(false)
@@ -73,13 +74,7 @@ const ParticipantForm = (props) => {
       }
     }
     getFeeTypes()
-    // const getAllRegistrations = async ()=>{
-    //   const data = await registrationService.getAllRegistrations()
-    //   if(data){
-    //     setRegistrations()
-    //   }
-    // }
-    // getAllRegistrations()
+ 
 
 
     if (window.localStorage.getItem('auth_type') === 'Admin') {
@@ -275,7 +270,7 @@ const ParticipantForm = (props) => {
               />
             </TabPane>
             <TabPane tab="Registration" key="2">
-               <RegistrationField feeTypes={feeTypes} currentParticipant={currentParticipant} />
+               <RegistrationForm participantId={param.id} />
             </TabPane>
           </Tabs>
         </div>

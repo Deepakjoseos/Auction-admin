@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Input,
   Row,
@@ -12,7 +12,7 @@ import {
   Space,
   Button,
   Image,
-  Tag,DatePicker,Table,Menu
+  Tag,DatePicker,Table,Menu,Modal
 } from 'antd'
 import {
   EyeOutlined,
@@ -23,6 +23,9 @@ import {
 import utils from 'utils'
 import EllipsisDropdown from 'components/shared-components/EllipsisDropdown'
 import Flex from 'components/shared-components/Flex'
+import feeTypeService from 'services/FeeType'
+import registrationService from 'services/registration'
+import moment from 'moment'
 
 // const { Dragger } = Upload
 const { Option } = Select
@@ -36,12 +39,12 @@ const rules = {
       message: 'Required',
     },
   ],
-  countedIn: [
-    {
-      required: true,
-      message: 'Required',
-    },
-  ],
+  // countedIn: [
+  //   {
+  //     required: true,
+  //     message: 'Required',
+  //   },
+  // ],
   date: [
     {
       required: true,
@@ -127,56 +130,80 @@ const rules = {
   
  
 }
-const getStockStatus = (status) => {
-  if (status === 'Active') {
-    return (
-      <>
-        <Tag color="green">Active</Tag>
-      </>
-    )
-  }
-  if (status === 'Hold') {
-    return (
-      <>
-        <Tag color="red">Hold</Tag>
-      </>
-    )
-  }
+// const getStockStatus = (status) => {
+//   if (status === 'Active') {
+//     return (
+//       <>
+//         <Tag color="green">Active</Tag>
+//       </>
+//     )
+//   }
+//   if (status === 'Hold') {
+//     return (
+//       <>
+//         <Tag color="red">Hold</Tag>
+//       </>
+//     )
+//   }
 
-  if (status === 'Deleted') {
-    return (
-      <>
-        <Tag color="red">Deleted</Tag>
-      </>
-    )
-  }
-  return null
-}
+//   if (status === 'Deleted') {
+//     return (
+//       <>
+//         <Tag color="red">Deleted</Tag>
+//       </>
+//     )
+//   }
+//   return null
+// }
 
 const RegistrationField = ({
-feeTypes,currentParticipant,registrations
+onFinish
 }) => {
-console.log('participantid',currentParticipant)
 // const initialValues = {
 //     participantId: currentParticipant._id,
  
 //   };
+// console.log(onFinish,"testing onFinish")
   const [registrationsList,setRegistrationsList]= useState([])
   const [searchBackupList, setSearchBackupList] = useState([])
   const [selectedRows, setSelectedRows] = useState([])
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
+  const [feeTypes,setFeeType]=useState([])
+   const [registrations,setRegistrations]= useState([])
+   const [isModalVisible, setIsModalVisible] = useState(false);
 
 
-if(registrations){
-  setRegistrationsList(registrations)
-  setSearchBackupList(registrations)
-}
+useEffect(()=>{
+  const getFeeTypes = async () => {
+    const data = await feeTypeService.getFeeTypes()
+    if (data) {
+      setFeeType(data)
+      console.log(data, 'feetypes')
+    }
+  }
+  getFeeTypes()
+
+  const getAllRegistrations = async ()=>{
+    const data = await registrationService.getRegistrations()
+    if(data){
+      setRegistrations(data)
+    }
+  }
+  getAllRegistrations()
+},[])
+
+const findFeeTypeName= (rowId)=>{
+  console.log('rowId',rowId)
+  const n= feeTypes.find(e => e.id  === rowId);
+  console.log('n',n)
+  return n?.name ? n.name :"-" 
   
+ }
   const dropdownMenu = (row) => {
-    if (window.localStorage.getItem('auth_type') === 'Admin') {
+    // if (window.localStorage.getItem('auth_type') === 'Admin') {
       return (
         <Menu>
-          <Menu.Item onClick={() => viewDetails(row)}>
+          <Menu.Item onClick={() => showModal(row)}>
             <Flex alignItems="center">
               <EyeOutlined />
               <span className="ml-2">View Details</span>
@@ -185,32 +212,27 @@ if(registrations){
         
         </Menu>
       )
-    } else {
-      return (
-        <Menu>
-       
-            <Menu.Item onClick={() => viewDetails(row)}>
-              <Flex alignItems="center">
-                <EyeOutlined />
-                <span className="ml-2">View Details</span>
-              </Flex>
-            </Menu.Item>
-          
-         
-       
-        
-        </Menu>
-      )
-    }
+    // } 
+
   }
 
   // const addBanner = () => {
   //   history.push(`/app/dashboards/banner/add-banner`)
   // }
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
 
+  const handleOk = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
    const viewDetails = (row) => {
      console.log('row', row)
-    //  history.push(`/app/dashboards/banner/edit-banner/${row._id}`)
+    
    }
 
   // For deleting a row
@@ -218,20 +240,61 @@ if(registrations){
 
   // Antd Table Columns
   const tableColumns = [
+  
     {
-      title: 'Title',
-      dataIndex: 'title',
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'name'),
+      title: 'Fee',
+      dataIndex: 'fee',
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'fee'),
     },
+    {
+      title: 'Mode',
+      dataIndex: 'mode',
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'fee'),
+    },
+    {
+      title: 'Registration Date',
+      dataIndex: 'date',
+      render: (date) => {
+       return  moment(parseInt(date)).format('L')
+     },
+    
 
-    {
-      title: 'Status',
-      dataIndex: 'status',
-      render: (status) => (
-        <Flex alignItems="center">{getStockStatus(status)}</Flex>
-      ),
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'status'),
     },
+    {
+      title: 'Expiry Date',
+      dataIndex: 'expiry',
+      render: (expiry) => {
+       return  moment(parseInt(expiry)).format('L')
+     },
+    
+
+    },
+    {
+      title: 'Payment Date',
+      dataIndex: 'paymentDate',
+      render: (paymentDate) => {
+       return  moment(parseInt(paymentDate)).format('L')
+     },
+    
+
+    },
+    {
+      title: "Fee Type",
+      dataIndex: "feeTypeId",
+      key:"feeTypeId",
+      // render: (row) => {console},
+      render : (_,row)=>findFeeTypeName(row.feeTypeId)
+      
+     
+    },
+    // {
+    //   title: 'Bank Name',
+    //   dataIndex: 'payment',
+    //   render: (payment) => (
+    //     <Flex alignItems="center">{payment.bankName}</Flex>
+    //   ),
+    //   // sorter: (a, b) => a.agent.name.localeCompare(b.booking.agent.name),
+    // },
     {
       title: '',
       dataIndex: 'actions',
@@ -240,10 +303,6 @@ if(registrations){
         
             <EllipsisDropdown menu={dropdownMenu(elm)} />
         
-          
-       
-            
-      
         </div>
       ),
     },
@@ -259,15 +318,15 @@ if(registrations){
   }
 
   // Filter Status Handler
-  const handleShowStatus = (value) => {
-    if (value !== 'All') {
-      const key = 'status'
-      const data = utils.filterArray(searchBackupList, key, value)
-      setRegistrationsList(data)
-    } else {
-      setRegistrationsList(searchBackupList)
-    }
-  }
+  // const handleShowStatus = (value) => {
+  //   if (value !== 'All') {
+  //     const key = 'status'
+  //     const data = utils.filterArray(searchBackupList, key, value)
+  //     setRegistrationsList(data)
+  //   } else {
+  //     setRegistrationsList(searchBackupList)
+  //   }
+  // }
 
   // Table Filters JSX Elements
   const filters = () => (
@@ -279,7 +338,7 @@ if(registrations){
           onChange={(e) => onSearch(e)}
         />
       </div>
-      <div className="mb-3">
+      {/* <div className="mb-3">
         <Select
           defaultValue="All"
           className="w-100"
@@ -291,34 +350,35 @@ if(registrations){
           <Option value="Active">Active</Option>
           <Option value="Hold">Hold</Option>
         </Select>
-      </div>
+      </div> */}
     </Flex>
   )
     
   return (
     <>
 
-    {registrationsList ? 
+    {registrations?.length > 0 ? 
     
-     <Table className="table-responsive" columns={tableColumns} dataSource={registrationsList} rowKey="id" />:""}
+     <Table className="table-responsive" columns={tableColumns} dataSource={registrations} rowKey="id" />:""}
   
     <Row gutter={16}>
        <Col xs={24} sm={24} md={17}>
+
     {/* <Form initialValues={initialValues}>  */}
         <Card title="Basic Info">
-        
+
           <Form.Item name="feeRemark" label="FeeRemark" placeholder="FeeRemark" rules={rules.feeRemark}>
             <Input  />
           </Form.Item>
        
           <Form.Item name="countedIn" label="CountedIN" rules={rules.countedIn}  placeholder="CountedIn" >
-            <Input/>
-          </Form.Item>
+          <DatePicker  className="board-card-modal date-picker w-100"  />   
+                 </Form.Item>
           <Form.Item label="Registration Date" name="date" rules={rules.date} placeholder="Registration date">
 				<DatePicker  className="board-card-modal date-picker w-100"  />
 			</Form.Item>
             <Form.Item label="Registration Expiry Date" name="expiry" rules={rules.expiry} placeholder="Registration Expiry Date">
-				<DatePicker  className="board-card-modal date-picker w-100"  />
+				<DatePicker className="board-card-modal date-picker w-100"  />
 			</Form.Item>
           <Form.Item name="status" label="Status" rules={rules.status} placeholder="Status">
             <Select >
@@ -367,7 +427,7 @@ if(registrations){
               ))}
             </Select>
           </Form.Item>
-          <Form.Item
+          {/* <Form.Item
             name="participantId"
             label="Participant"
             rules={rules.participantId}
@@ -375,7 +435,7 @@ if(registrations){
             placeholder='CurrentParticipant'
           >
          <Input />
-          </Form.Item>
+          </Form.Item> */}
         </Card>
       
         <Card title="Payment">
@@ -402,12 +462,18 @@ if(registrations){
             <Input />
           </Form.Item>
           
-          
         </Card>
+        <Button type="primary" htmlType='button' style={{float:"right"}}  onClick={onFinish}>Add</Button>
+
          {/* </Form>  */}
        </Col>
     
      </Row>
+     {/* <Modal title="Basic Modal" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+        <p>Some contents...</p>
+        <p>Some contents...</p>
+        <p>Some contents...</p>
+      </Modal> */}
      </>
     
   )
