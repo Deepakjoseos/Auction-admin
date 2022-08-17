@@ -1,18 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import PageHeaderAlt from 'components/layout-components/PageHeaderAlt'
-import { Tabs, Form, Button, message } from 'antd'
-import Flex from 'components/shared-components/Flex'
-import GeneralField from './GeneralField'
-import useUpload from 'hooks/useUpload'
-import { singleImageUploader } from 'utils/s3/s3ImageUploader'
-import informationService from 'services/information'
-import Utils from 'utils'
+
+import { Tabs, Form, message } from 'antd'
 import { useHistory } from 'react-router-dom'
-import roleService from 'services/role'
-import constantsService from 'services/constants'
+
 import RegistrationField from './RegistrationField'
 import feeTypeService from 'services/FeeType'
 import registrationService from 'services/registration'
+import moment from 'moment'
 
 const { TabPane } = Tabs
 
@@ -20,24 +14,17 @@ const ADD = 'ADD'
 const EDIT = 'EDIT'
 
 const RegistrationForm = (props) => {
-  const { mode = ADD, param } = props
+  const { mode = ADD, param,participantId } = props
   const history = useHistory()
 
   const [form] = Form.useForm()
 
   //   const [uploadLoading, setUploadLoading] = useState(false)
   const [submitLoading, setSubmitLoading] = useState(false)
-   const [feeTypes,setFeeType]=useState([])
+   
 
   useEffect(() => {
-    const getFeeTypes = async () => {
-        const data = await feeTypeService.getFeeTypes()
-        if (data) {
-          setFeeType(data)
-          console.log(data, 'feetypes')
-        }
-      }
-      getFeeTypes()
+  
     // if (mode === EDIT) {
     //   const fetchInformationById = async () => {
     //     const { id } = param
@@ -73,6 +60,7 @@ const RegistrationForm = (props) => {
 
 
   const onFinish = async () => {
+    console.log('submited')
     setSubmitLoading(true)
     form
       .validateFields()
@@ -83,17 +71,17 @@ const RegistrationForm = (props) => {
         const sendingValues = {
 
           status: values?.status,
-          countedIn:values?.countedIn,
-          date:values?.date,
-          expiry:values?.expiry,
+          countedIn:moment(values?.countedIn).format('x'),
+          date:moment(values?.date).format('x'),
+          expiry:moment(values?.expiry).format('x'),
           fee:values?.fee,
           feeRemark:values?.feeRemark,
           feeTypeId:values?.feeTypeId,
           mode:values?.mode,
           note:values?.note,
-          participantId:values?.participantId,
+          participantId:participantId,
      
-          paymentDate:values?.paymentDate,
+          paymentDate:moment(values?.paymentDate).format(),
       
           payment: {
             bankName: values.bankName,
@@ -131,7 +119,7 @@ const RegistrationForm = (props) => {
           status: 'Hold',
         }}
       >
-        <PageHeaderAlt className="border-bottom" overlap>
+        {/* <PageHeaderAlt className="border-bottom" overlap>
           <div className="container">
             <Flex
               className="py-2"
@@ -154,20 +142,20 @@ const RegistrationForm = (props) => {
                   htmlType="submit"
                   loading={submitLoading}
                 >
-                  {mode === 'ADD' ? 'Add' : `Save`}
+                Submit
                 </Button>
               </div>
             </Flex>
           </div>
-        </PageHeaderAlt>
+        </PageHeaderAlt> */}
         <div className="container">
-          <Tabs defaultActiveKey="1" style={{ marginTop: 30 }}>
-            <TabPane tab="General" key="1">
-              <RegistrationField
-              feeTypes={feeTypes} 
+          {/* <Tabs defaultActiveKey="1" style={{ marginTop: 30 }}> */}
+            {/* <TabPane tab="Generalfaefaef" key="1"> */}
+              <RegistrationField 
+              onFinish={onFinish}
               />
-            </TabPane>
-          </Tabs>
+            {/* </TabPane> */}
+          {/* </Tabs> */}
         </div>
       </Form>
     </>
