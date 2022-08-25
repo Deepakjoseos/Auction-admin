@@ -126,6 +126,7 @@ const ParticipantList = () => {
   //       }
   //     }
   //   }
+ 
 
   const tableColumns = [
     {
@@ -157,7 +158,7 @@ const ParticipantList = () => {
         return <span>{row.gst ? 'Yes' : 'No'}</span>
       },
     },
-
+ 
     {
       title: '',
       dataIndex: 'actions',
