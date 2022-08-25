@@ -259,6 +259,22 @@ const dashBoardNavTree = [
         breadcrumb: false,
         submenu: [],
       },
+      {
+        key: "dashboards-state",
+        path: `${APP_PREFIX_PATH}/dashboards/state`,
+        title: "State",
+        icon: AppstoreOutlined,
+        breadcrumb: false,
+        submenu: [],
+      },
+      {
+        key: "dashboards-city",
+        path: `${APP_PREFIX_PATH}/dashboards/city`,
+        title: "City",
+        icon: AppstoreOutlined,
+        breadcrumb: false,
+        submenu: [],
+      },
       // {
       //   key: "dashboards-states",
       //   path: `${APP_PREFIX_PATH}/dashboards/state`,

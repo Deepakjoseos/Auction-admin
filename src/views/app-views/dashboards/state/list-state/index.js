@@ -86,7 +86,11 @@ const StateList = () => {
         setSelectedRowKeys([])
     }
 
- 
+ const addState=()=>{
+
+        history.push(`/app/dashboards/state/add-state`)
+      
+ }
  
     //  Table Filters JSX Elements
      const filters = () => (
@@ -107,7 +111,18 @@ const StateList = () => {
             <Card>
                 <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
                     {filters()}
-              
+                    <div>
+         
+            <Button
+              onClick={addState}
+              type="primary"
+              icon={<PlusCircleOutlined />}
+              block
+            >
+              Add State
+            </Button>
+          
+        </div>
                 </Flex>
                 <div className="table-responsive">
                     <Table columns={tableColumns} dataSource={list} rowKey="id" />

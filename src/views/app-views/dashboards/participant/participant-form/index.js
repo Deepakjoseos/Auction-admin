@@ -270,7 +270,7 @@ const ParticipantForm = (props) => {
               />
             </TabPane>
             <TabPane tab="Registration" key="2">
-               <RegistrationForm participantId={param.id} />
+               <RegistrationForm participantId={param?.id} />
             </TabPane>
           </Tabs>
         </div>

@@ -1,5 +1,6 @@
 import React from 'react'
 import { Route, Switch, Redirect } from 'react-router-dom'
+import AddState from './add-state'
 
 // import Orders from './orders'
 import StateList from './list-state'
@@ -18,6 +19,10 @@ const States = (props) => {
       <Route
         path={`${match.url}/state-list`}
         component={StateList}
+      />
+       <Route
+        path={`${match.url}/add-state`}
+        component={AddState}
       />
     </Switch>
   )
