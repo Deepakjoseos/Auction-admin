@@ -17,6 +17,7 @@ const ADD = 'ADD'
 const EDIT = 'EDIT'
 
 const AddCityForm = (props) => {
+  console.log(props);
   const { mode = ADD, param } = props
   const history = useHistory()
 
@@ -27,29 +28,29 @@ const AddCityForm = (props) => {
 
  
 
-//   useEffect(() => {
-//     if (mode === EDIT) {
-//       const fetchfeeTypeById = async () => {
-//         const { id } = param
-//         const data = await feeTypeService.getFeeTypeById(id)
-//         if (data) {
+  useEffect(() => {
+    if (mode === EDIT) {
+      const fetchCityById = async () => {
+        const { id } = param
+        const data = await cityService.getCityById(id)
+        if (data) {
         
 
-//           form.setFieldsValue({
-//             name: data.name,
-//             order: data.order,
-//             status:data.status
+          form.setFieldsValue({
+            name: data.name,
+            stateId: data.state._id,
+            status:data.status
         
-//           })
+          })
 
-//         } else {
-//           history.replace('/app/dashboards/fee-type/fee-type-list')
-//         }
-//       }
+        } else {
+          history.replace('/app/dashboards/fee-type/fee-type-list')
+        }
+      }
 
-//       fetchfeeTypeById()
-//     }
-//   }, [form, mode, param, props])
+      fetchCityById()
+    }
+  }, [form, mode, param, props])
 
 
 
@@ -72,9 +73,9 @@ const AddCityForm = (props) => {
         if (mode === EDIT) {
          
        
-          const edited = await feeTypeService.editFeeType(
-            param.id,
-            values
+          const edited = await cityService.editCity(
+            {id:param.id,
+            data:values}
           )
           if (edited) {
             message.success(`Edited ${values.name} to Fee Type list`)

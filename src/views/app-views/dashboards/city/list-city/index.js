@@ -13,7 +13,7 @@ import Flex from 'components/shared-components/Flex'
 import { useHistory } from 'react-router-dom'
 import utils from 'utils'
 import settingsService from 'services/settings'
-import stateService from 'services/state'
+import cityService from 'services/city'
 
 const { Option } = Select
 
@@ -28,8 +28,8 @@ const CityList = () => {
 
     useEffect(() => {
         // Getting Lotteries List to display in the table
-        const getStates = async () => {
-            const data = await stateService.getStates()
+        const getCities = async () => {
+            const data = await cityService.getCities()
             if (data) {
                 setList(data)
                 setSearchBackupList(data)
@@ -37,31 +37,31 @@ const CityList = () => {
             }
         }
         
-        getStates()
+        getCities()
     }, [])
   
  
 
     // Dropdown menu for each row
-    // const dropdownMenu = (row) => (
-    //     <Menu>
-    //       <Menu.Item onClick={() => viewDetails(row)}>
-    //         <Flex alignItems="center">
-    //           <EyeOutlined />
-    //           <span className="ml-2">View Details</span>
-    //         </Flex>
-    //       </Menu.Item>
+    const dropdownMenu = (row) => (
+        <Menu>
+          <Menu.Item onClick={() => viewDetails(row)}>
+            <Flex alignItems="center">
+              <EyeOutlined />
+              <span className="ml-2">View Details</span>
+            </Flex>
+          </Menu.Item>
       
-    //     </Menu>
-    //   )
+        </Menu>
+      )
 
     // const addSettings = () => {
     //     history.push(`/app/dashboards/settings/add-settings`)
     // }
 
-    // const viewDetails = (row) => {
-    //     history.push(`/app/dashboards/settings/edit-settings`)
-    // }
+    const viewDetails = (row) => {
+        history.push(`/app/dashboards/city/edit-city/${row?._id}`)
+    }
 
     // Antd Table Columns
     const tableColumns = [
@@ -74,7 +74,15 @@ const CityList = () => {
              title: 'Abbreviation',
              dataIndex: 'abbreviation',
              sorter: (a, b) => utils.antdTableSorter(a, b, 'abbreviation'),
-         },
+         },{
+			title: '',
+			dataIndex: 'actions',
+			render: (_, elm) => (
+				<div className="text-right">
+					<EllipsisDropdown menu={dropdownMenu(elm)}/>
+				</div>
+			)
+		}
         ]
 
     // When Search is used

@@ -12,7 +12,7 @@ const rules = {
             message: 'Required',
         },
     ],
-    abbreviation: [
+   stateId: [
         {
             required: true,
             message: 'Required',
@@ -34,21 +34,16 @@ const GeneralField = (props) => (
                 <Form.Item name="name" label="Name" rules={rules.name}>
                     <Input placeholder="Name" />
                 </Form.Item>
-                <Form.Item
-                    name="abbreviation"
-                    label="Abbreviation"
-                    rules={rules.abbreviation}
-                >
-                    <Input
-                        placeholder="Abbreviation"
-                       
-                       
-                    />
+                <Form.Item name="stateId" label="stateId" rules={rules.stateId}>
+                    <Select placeholder="stateId">
+                    <Option value="630724bde0c0cbd8eab230db">GOAAAA</Option>
+                        <Option value="630737e3e0c0cbd8eab230fa">TEST</Option>
+                    </Select>
                 </Form.Item>
                 <Form.Item name="status" label="Status" rules={rules.status}>
                     <Select placeholder="Status">
-                        <Option value="Active">Active</Option>
-                        <Option value="Hold">Hold</Option>
+                    <Option value="Active">Active</Option>
+                    <Option value="Hold">Hold</Option>
                     </Select>
                 </Form.Item>
             </Card>

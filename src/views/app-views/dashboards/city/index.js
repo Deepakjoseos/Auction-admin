@@ -1,6 +1,7 @@
 import React from 'react'
 import { Route, Switch, Redirect } from 'react-router-dom'
 import AddCity from './add-city'
+import EditCity from './edit-city/EditCity'
 
 // import Orders from './orders'
 import CityList from './list-city'
@@ -23,6 +24,10 @@ const States = (props) => {
        <Route
         path={`${match.url}/add-city`}
         component={AddCity}
+      />
+        <Route
+        path={`${match.url}/edit-city/:id`}
+        component={EditCity}
       />
     </Switch>
   )

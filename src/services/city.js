@@ -31,4 +31,28 @@ cityService.postCity=async function(data){
     console.log(err, 'show-err')
   }
 }
+cityService.getCityById=async function(id){
+  try {
+    const res=await fetch({
+      url:`city/${id}`,
+      method:'get'
+    })
+    return res.data;
+  } catch (error) {
+    console.log(error,'err')
+  }
+}
+
+cityService.editCity=async function({id,data}){
+try {
+  const res=await fetch({
+    url:`city/${id}/update/admin`,
+    method:'put',
+    data
+  })
+  return res.data;
+} catch (error) {
+  console.log(error,'err');
+}
+}
 export default cityService

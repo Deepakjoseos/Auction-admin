@@ -197,15 +197,7 @@ const InformationForm = (props) => {
                 form={form}
               />
             </TabPane>
-            <TabPane tab="Edit Documents" key="2">
-              {/* <GeneralField
-                uploadedImg={uploadedImg}
-                // uploadLoading={uploadLoading}
-                // handleUploadChange={handleUploadChange}
-                propsImages={propsImages}
-                form={form}
-              /> */}
-            </TabPane>
+          
           </Tabs>
         </div>
       </Form>
