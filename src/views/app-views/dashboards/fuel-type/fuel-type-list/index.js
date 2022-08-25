@@ -15,6 +15,7 @@ import utils from 'utils'
 
 import feeTypeService from 'services/FeeType'
 import { useSelector } from 'react-redux'
+import FuelTypeService from 'services/FuelType'
 
 const { Option } = Select
 
@@ -57,7 +58,7 @@ const FeeTypeList = () => {
 
   useEffect(() => {
     const getFeeTypes = async () => {
-      const data = await feeTypeService.getFeeTypes()
+      const data = await FuelTypeService.getFuelTypes()
       if (data) {
         setList(data)
         setSearchBackupList(data)

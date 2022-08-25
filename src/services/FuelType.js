@@ -15,5 +15,16 @@ FuelTypeService.addFuelType = async function (data) {
     console.log(err, 'show-err')
   }
 }
-
+FuelTypeService.getFuelTypes=async function(){
+  try {
+    const res=await fetch({
+      url:`${apiRoute}/get/all/admin`,
+      method:'get'
+    })
+    const activeData=res.data.filter((cur) => cur.status !== 'Deleted');
+    return activeData;
+  } catch (error) {
+    console.log(error,"err");
+  }
+}
 export default FuelTypeService;
