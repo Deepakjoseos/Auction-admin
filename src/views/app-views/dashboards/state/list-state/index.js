@@ -43,25 +43,26 @@ const StateList = () => {
  
 
     // Dropdown menu for each row
-    // const dropdownMenu = (row) => (
-    //     <Menu>
-    //       <Menu.Item onClick={() => viewDetails(row)}>
-    //         <Flex alignItems="center">
-    //           <EyeOutlined />
-    //           <span className="ml-2">View Details</span>
-    //         </Flex>
-    //       </Menu.Item>
+    const dropdownMenu = (row) => (
+        <Menu>
+          <Menu.Item onClick={() => viewDetails(row)}>
+            <Flex alignItems="center">
+              <EyeOutlined />
+              <span className="ml-2">View Details</span>
+            </Flex>
+          </Menu.Item>
       
-    //     </Menu>
-    //   )
+        </Menu>
+      )
 
     // const addSettings = () => {
     //     history.push(`/app/dashboards/settings/add-settings`)
     // }
 
-    // const viewDetails = (row) => {
-    //     history.push(`/app/dashboards/settings/edit-settings`)
-    // }
+    const viewDetails = (row) => {
+        console.log(row?._id);
+        history.push(`/app/dashboards/state/edit-state/${row?._id}`)
+    }
 
     // Antd Table Columns
     const tableColumns = [
@@ -74,7 +75,15 @@ const StateList = () => {
              title: 'Abbreviation',
              dataIndex: 'abbreviation',
              sorter: (a, b) => utils.antdTableSorter(a, b, 'abbreviation'),
-         },
+         }	,{
+			title: '',
+			dataIndex: 'actions',
+			render: (_, elm) => (
+				<div className="text-right">
+					<EllipsisDropdown menu={dropdownMenu(elm)}/>
+				</div>
+			)
+		}
         ]
 
     // When Search is used

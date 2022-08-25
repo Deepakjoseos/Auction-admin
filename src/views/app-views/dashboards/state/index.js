@@ -1,6 +1,7 @@
 import React from 'react'
 import { Route, Switch, Redirect } from 'react-router-dom'
 import AddState from './add-state'
+import EditState from './edit-state/EditState'
 
 // import Orders from './orders'
 import StateList from './list-state'
@@ -23,6 +24,10 @@ const States = (props) => {
        <Route
         path={`${match.url}/add-state`}
         component={AddState}
+      />
+       <Route
+        path={`${match.url}/edit-state/:id`}
+        component={EditState}
       />
     </Switch>
   )

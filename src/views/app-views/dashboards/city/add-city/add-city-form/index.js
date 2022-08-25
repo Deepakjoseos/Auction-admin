@@ -9,6 +9,7 @@ import GeneralField from './GeneralForm';
 // import Utils from 'utils'
 import { useHistory } from 'react-router-dom'
 import feeTypeService from 'services/FeeType'
+import cityService from 'services/city';
 
 const { TabPane } = Tabs
 
@@ -62,7 +63,7 @@ const AddCityForm = (props) => {
         if (mode === ADD) {
           // Checking if image exists
         
-          const created = await feeTypeService.createFeeType(values)
+          const created = await cityService.postCity(values);
           if (created) {
             message.success(`Created ${values.name} to FeeType list`)
             history.goBack()
