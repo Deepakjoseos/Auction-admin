@@ -1,10 +1,10 @@
 import React from 'react'
-import FeeTypeForm from '../add-fuel-type/fuel-type-form'
+import FuelTypeForm from '../add-fuel-type/fuel-type-form'
 
 
-const EditFeeType = (props) => {
+const EditFuelType = (props) => {
   console.log(props);
-  return <FeeTypeForm mode="EDIT" param={props.match.params} />
+  return <FuelTypeForm mode="EDIT" param={props.match.params} />
 }
 
-export default EditFeeType
+export default EditFuelType

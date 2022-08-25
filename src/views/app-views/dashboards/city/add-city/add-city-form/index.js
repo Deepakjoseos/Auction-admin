@@ -10,6 +10,7 @@ import GeneralField from './GeneralForm';
 import { useHistory } from 'react-router-dom'
 import feeTypeService from 'services/FeeType'
 import cityService from 'services/city';
+import stateService from 'services/state';
 
 const { TabPane } = Tabs
 
@@ -23,6 +24,7 @@ const AddCityForm = (props) => {
 
   const [form] = Form.useForm()
   const [uploadedImg, setImage] = useState(null)
+  const [states,setStates]=useState(null);
   //   const [uploadLoading, setUploadLoading] = useState(false)
   const [submitLoading, setSubmitLoading] = useState(false)
 
@@ -52,7 +54,19 @@ const AddCityForm = (props) => {
     }
   }, [form, mode, param, props])
 
+useEffect(()=>{
 
+  const fetchStates=async()=>{
+    try {
+      const res=await stateService.getStates();
+      console.log(res);
+      setStates(res);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+ fetchStates();
+},[])
 
 
 
@@ -143,6 +157,7 @@ const AddCityForm = (props) => {
                 // uploadLoading={uploadLoading}
                 // handleUploadChange={handleUploadChange}
                 // propsImages={propsImages}
+                states={states}
                 form={form}
               />
             </TabPane>

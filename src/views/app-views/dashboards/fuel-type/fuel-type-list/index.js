@@ -13,7 +13,6 @@ import Flex from 'components/shared-components/Flex'
 import { useHistory } from 'react-router-dom'
 import utils from 'utils'
 
-import feeTypeService from 'services/FeeType'
 import { useSelector } from 'react-redux'
 import FuelTypeService from 'services/FuelType'
 
@@ -36,7 +35,7 @@ const getStockStatus = (status) => {
   }
   return null
 }
-const FeeTypeList = () => {
+const FuelTypeList = () => {
   let history = useHistory()
 
   const [list, setList] = useState([])
@@ -57,7 +56,7 @@ const FeeTypeList = () => {
   console.log(user, 'jhbjkbuser')
 
   useEffect(() => {
-    const getFeeTypes = async () => {
+    const getFuelTypes = async () => {
       const data = await FuelTypeService.getFuelTypes()
       if (data) {
         setList(data)
@@ -65,7 +64,7 @@ const FeeTypeList = () => {
         console.log(data, 'show-data')
       }
     }
-    getFeeTypes()
+    getFuelTypes()
   }, [])
 
   const dropdownMenu = (row) => {
@@ -114,11 +113,14 @@ const FeeTypeList = () => {
 
     const deleteRow = async (row) => {
       console.log(row);
-      const resp = await FuelTypeService.removeFuelType(row.id)
-
+      const resp = await FuelTypeService.removeFuelType(row)
+      console.log(selectedRows);
+      window.location.reload();
       if (resp) {
+      
         const objKey = 'id'
         let data = list
+        console.log(selectedRows);
         if (selectedRows.length > 1) {
           selectedRows.forEach((elm) => {
             data = utils.deleteArrayRow(data, objKey, elm.id)
@@ -126,7 +128,8 @@ const FeeTypeList = () => {
             setSelectedRows([])
           })
         } else {
-          data = utils.deleteArrayRow(data, objKey, row.id)
+          data = utils.deleteArrayRow(data, objKey, row)
+        
           setList(data)
         }
       }
@@ -236,7 +239,7 @@ const FeeTypeList = () => {
                   icon={<PlusCircleOutlined />}
                   block
                 >
-                  Add FeeType
+                  Add FuelType
                 </Button>
               )}
             </>
@@ -247,7 +250,7 @@ const FeeTypeList = () => {
               icon={<PlusCircleOutlined />}
               block
             >
-              Add FeeType
+              Add FuelType
             </Button>
           )}
         </div>
@@ -259,4 +262,4 @@ const FeeTypeList = () => {
   )
 }
 
-export default FeeTypeList
+export default FuelTypeList

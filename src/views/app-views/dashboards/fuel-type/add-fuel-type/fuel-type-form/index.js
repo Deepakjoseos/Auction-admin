@@ -8,7 +8,6 @@ import { singleImageUploader } from 'utils/s3/s3ImageUploader'
 import informationService from 'services/information'
 import Utils from 'utils'
 import { useHistory } from 'react-router-dom'
-import feeTypeService from 'services/FeeType'
 import FuelTypeService from 'services/FuelType'
 
 const { TabPane } = Tabs

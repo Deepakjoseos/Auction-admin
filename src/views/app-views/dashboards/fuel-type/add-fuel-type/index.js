@@ -1,8 +1,8 @@
 import React from 'react'
-import FeeTypeForm from './fuel-type-form'
+import FuelTypeForm from './fuel-type-form'
 
-const AddFeeType = () => {
-  return  <FeeTypeForm mode="ADD" />
+const AddFuelType = () => {
+  return  <FuelTypeForm mode="ADD" />
 }
 
-export default AddFeeType
+export default AddFuelType
