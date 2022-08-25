@@ -77,6 +77,14 @@ const FeeTypeList = () => {
               <EyeOutlined />
               <span className="ml-2">View Details</span>
             </Flex>
+            
+          </Menu.Item>
+          <Menu.Item onClick={()=>deleteRow(row?._id)}>
+            <Flex alignItems="center">
+              
+              <span className="ml-2">Delete</span>
+            </Flex>
+            
           </Menu.Item>
         </Menu>
       )
@@ -104,24 +112,25 @@ const FeeTypeList = () => {
     history.push(`/app/dashboards/fuel-type/edit-fuel-type/${row._id}`)
   }
 
-  //   const deleteRow = async (row) => {
-  //     const resp = await informationService.deleteInformation(row.id)
+    const deleteRow = async (row) => {
+      console.log(row);
+      const resp = await FuelTypeService.removeFuelType(row.id)
 
-  //     if (resp) {
-  //       const objKey = 'id'
-  //       let data = list
-  //       if (selectedRows.length > 1) {
-  //         selectedRows.forEach((elm) => {
-  //           data = utils.deleteArrayRow(data, objKey, elm.id)
-  //           setList(data)
-  //           setSelectedRows([])
-  //         })
-  //       } else {
-  //         data = utils.deleteArrayRow(data, objKey, row.id)
-  //         setList(data)
-  //       }
-  //     }
-  //   }
+      if (resp) {
+        const objKey = 'id'
+        let data = list
+        if (selectedRows.length > 1) {
+          selectedRows.forEach((elm) => {
+            data = utils.deleteArrayRow(data, objKey, elm.id)
+            setList(data)
+            setSelectedRows([])
+          })
+        } else {
+          data = utils.deleteArrayRow(data, objKey, row.id)
+          setList(data)
+        }
+      }
+    }
 
   const tableColumns = [
     // {

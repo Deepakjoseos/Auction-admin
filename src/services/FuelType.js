@@ -51,4 +51,15 @@ FuelTypeService.editFuelType=async function({id,data}){
     console.log(error,'err');
   }
 }
+FuelTypeService.removeFuelType=async function(id){
+  try {
+    const res=await fetch({
+      url:`${apiRoute}/${id}`,
+      method:'delete'
+    });
+    return res.data;
+  } catch (error) {
+    console.log(error,'err');
+  }
+}
 export default FuelTypeService;
