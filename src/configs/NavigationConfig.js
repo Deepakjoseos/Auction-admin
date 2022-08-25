@@ -275,6 +275,14 @@ const dashBoardNavTree = [
         breadcrumb: false,
         submenu: [],
       },
+      {
+        key: "dashboards-fuel-type",
+        path: `${APP_PREFIX_PATH}/dashboards/fuel-type`,
+        title: "FuelType",
+        icon: AppstoreOutlined,
+        breadcrumb: false,
+        submenu: [],
+      },
       // {
       //   key: "dashboards-states",
       //   path: `${APP_PREFIX_PATH}/dashboards/state`,

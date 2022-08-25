@@ -41,6 +41,10 @@ const Dashboards = ({ match }) => {
           component={lazy(() => import(`./fee-type`))}
         />
         <Route
+          path={`${match.url}/fuel-type`}
+          component={lazy(() => import(`./fuel-type`))}
+        />
+        <Route
           path={`${match.url}/participant`}
           component={lazy(() => import(`./participant`))}
         />
