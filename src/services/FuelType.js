@@ -27,4 +27,28 @@ FuelTypeService.getFuelTypes=async function(){
     console.log(error,"err");
   }
 }
+FuelTypeService.getFuelTypeById=async function(id){
+  try {
+    const res=await fetch({
+      url:`${apiRoute}/${id}/admin`,
+      method:'get'
+    })
+
+    return res.data;
+  } catch (error) {
+    console.log(error,"err");
+  }
+}
+FuelTypeService.editFuelType=async function({id,data}){
+  try {
+    const res=await fetch({
+      url:`${apiRoute}/${id}`,
+      method:'put',
+      data
+    })
+    return res.data;
+  } catch (error) {
+    console.log(error,'err');
+  }
+}
 export default FuelTypeService;

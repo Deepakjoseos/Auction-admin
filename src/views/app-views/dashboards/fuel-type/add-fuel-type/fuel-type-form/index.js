@@ -16,7 +16,8 @@ const { TabPane } = Tabs
 const ADD = 'ADD'
 const EDIT = 'EDIT'
 
-const FeeTypeForm = (props) => {
+const FuelTypeForm = (props) => {
+  console.log(props);
   const { mode = ADD, param } = props
   const history = useHistory()
 
@@ -29,17 +30,15 @@ const FeeTypeForm = (props) => {
 
   useEffect(() => {
     if (mode === EDIT) {
-      const fetchfeeTypeById = async () => {
+      const fetchfuelTypeById = async () => {
         const { id } = param
-        const data = await feeTypeService.getFeeTypeById(id)
+        const data = await FuelTypeService.getFuelTypeById(id)
         if (data) {
         
 
           form.setFieldsValue({
             name: data.name,
-            order: data.order,
             status:data.status
-        
           })
 
         } else {
@@ -47,7 +46,7 @@ const FeeTypeForm = (props) => {
         }
       }
 
-      fetchfeeTypeById()
+      fetchfuelTypeById()
     }
   }, [form, mode, param, props])
 
@@ -72,12 +71,12 @@ const FeeTypeForm = (props) => {
         if (mode === EDIT) {
          
        
-          const edited = await feeTypeService.editFeeType(
-            param.id,
-            values
+          const edited = await FuelTypeService.editFuelType(
+           {id: param.id,
+           data: values}
           )
           if (edited) {
-            message.success(`Edited ${values.name} to Fee Type list`)
+            message.success(`Edited ${values.name} to Fuel Type list`)
             history.goBack()
           }
         }
@@ -152,4 +151,4 @@ const FeeTypeForm = (props) => {
   )
 }
 
-export default FeeTypeForm
+export default FuelTypeForm

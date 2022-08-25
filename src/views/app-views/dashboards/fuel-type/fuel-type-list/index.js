@@ -144,11 +144,7 @@ const FeeTypeList = () => {
       dataIndex: 'name',
       sorter: (a, b) => utils.antdTableSorter(a, b, 'name'),
     },
-    {
-      title: 'Order',
-      dataIndex: 'order',
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'order'),
-    },
+   
     {
       title: 'Status',
       dataIndex: 'status',
