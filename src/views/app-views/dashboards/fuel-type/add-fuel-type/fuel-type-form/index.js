@@ -9,6 +9,7 @@ import informationService from 'services/information'
 import Utils from 'utils'
 import { useHistory } from 'react-router-dom'
 import feeTypeService from 'services/FeeType'
+import FuelTypeService from 'services/FuelType'
 
 const { TabPane } = Tabs
 
@@ -62,9 +63,9 @@ const FeeTypeForm = (props) => {
         if (mode === ADD) {
           // Checking if image exists
         
-          const created = await feeTypeService.createFeeType(values)
+          const created = await FuelTypeService.addFuelType(values)
           if (created) {
-            message.success(`Created ${values.name} to FeeType list`)
+            message.success(`Created ${values.name} to FuelType list`)
             history.goBack()
           }
         }
