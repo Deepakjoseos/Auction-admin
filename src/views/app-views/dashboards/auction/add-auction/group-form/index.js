@@ -93,6 +93,16 @@ const FeeTypeForm = (props) => {
         className="ant-advanced-search-form"
         initialValues={{
           status: "Hold",
+          showRegNumber:false,
+          showChasisNumber:false,
+          showEngineNumber:false,
+          showGST:false,
+          extendAuctionForLessBid:false,
+          showVehiclesWithoutLogin:false,
+          auctionViewOnly:false,
+          onlyPCCBuyersAllowed:false,
+          showTNC:false,
+          showVehicleDownload:false,
         }}
       >
         <PageHeaderAlt className="border-bottom" overlap>
