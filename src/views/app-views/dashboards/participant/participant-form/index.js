@@ -178,9 +178,9 @@ const ParticipantForm = (props) => {
         }
 
         if (window.localStorage.getItem('auth_type') === 'SubAdmin')
-          sendingValues.relationshipManagerId = user._id
+          sendingValues.relationshipManagerId = user?._id
 
-        console.log(sendingValues, 'sendingValues', user._id)
+        console.log(sendingValues, 'sendingValues', user?._id)
 
         if (mode === ADD) {
           const created = await participantService.createParticipant(
@@ -270,7 +270,10 @@ const ParticipantForm = (props) => {
               />
             </TabPane>
             <TabPane tab="Registration" key="2">
-               <RegistrationForm participantId={param.id} />
+               <RegistrationForm participantId={param?.id} />
+            </TabPane>
+            <TabPane tab="Document Upload" key="3">
+              
             </TabPane>
           </Tabs>
         </div>

@@ -252,6 +252,14 @@ const dashBoardNavTree = [
         submenu: [],
       },
       {
+        key: "dashboards-auction-inventory",
+        path: `${APP_PREFIX_PATH}/dashboards/auction-inventory`,
+        title: "Auction Inventory",
+        icon: AppstoreOutlined,
+        breadcrumb: false,
+        submenu: [],
+      },
+      {
         key: "dashboards-participant",
         path: `${APP_PREFIX_PATH}/dashboards/participant`,
         title: "Participant",
