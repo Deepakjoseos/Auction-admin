@@ -9,8 +9,7 @@ import informationService from "services/information";
 import Utils from "utils";
 import { useHistory } from "react-router-dom";
 // import groupService from "services/group";
-import groupService from "services/group";
-
+import auctionService from "services/auction";
 const { TabPane } = Tabs;
 
 const ADD = "ADD";
@@ -21,7 +20,6 @@ const FeeTypeForm = (props) => {
   const history = useHistory();
 
   const [form] = Form.useForm();
-  const [uploadedImg, setImage] = useState(null);
   //   const [uploadLoading, setUploadLoading] = useState(false)
   const [submitLoading, setSubmitLoading] = useState(false);
 
@@ -29,7 +27,7 @@ const FeeTypeForm = (props) => {
     if (mode === EDIT) {
       const fetchfeeTypeById = async () => {
         const { id } = param;
-        const data = await groupService.getGroupById(id);
+        const data = await auctionService.getauctionById(id);
         if (data) {
           form.setFieldsValue({
             name: data.name,
@@ -38,9 +36,10 @@ const FeeTypeForm = (props) => {
             regionId: data.region.name,
             status: data.status,
             business: data.business,
+
           });
         } else {
-          history.replace("/app/dashboards/group/group-list");
+          history.replace("/app/dashboards/auction/auction-list");
         }
       };
 
@@ -54,20 +53,25 @@ const FeeTypeForm = (props) => {
       .validateFields()
       .then(async (values) => {
         console.log(values, "values");
+    values.bidLimit=Number(values.bidLimit)
+ 
+    values.startTimestamp=`${(new Date(values.startTimestamp)).getTime()}`;
+    values.endTimestamp=`${(new Date(values.endTimestamp)).getTime()}`;
+
         if (mode === ADD) {
           // Checking if image exists
-
-          const created = await groupService.createGroup(values);
+          console.log(values, "asasasqwertyuijhgv");
+          const created = await auctionService.createauction(values);
           if (created) {
-            message.success(`Created ${values.name} to group list`);
+            message.success(`Created ${values.name} to auction list`);
             history.goBack();
           }
         }
         if (mode === EDIT) {
           console.log(param.id);
-          const edited = await groupService.updateGroup(param.id, values);
+          const edited = await auctionService.updateauction(param.id, values);
           if (edited) {
-            message.success(`Edited ${values.name} to group list`);
+            message.success(`Edited ${values.name} to Auction list`);
             history.goBack();
           }
         }
@@ -100,7 +104,7 @@ const FeeTypeForm = (props) => {
               alignItems="center"
             >
               <h2 className="mb-3">
-                {mode === "ADD" ? "Add New FeeType" : `Edit FeeType`}{" "}
+                {mode === "ADD" ? "Add New Auction" : `Edit Auction`}{" "}
               </h2>
               <div className="mb-3">
                 <Button

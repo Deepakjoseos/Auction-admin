@@ -5,46 +5,39 @@ import Flex from "components/shared-components/Flex";
 import GeneralField from "./GeneralField";
 import useUpload from "hooks/useUpload";
 import { singleImageUploader } from "utils/s3/s3ImageUploader";
-import informationService from "services/information";
 import Utils from "utils";
 import { useHistory } from "react-router-dom";
-// import groupService from "services/group";
-import groupService from "services/group";
+import regionService from "services/region";
 
 const { TabPane } = Tabs;
 
 const ADD = "ADD";
 const EDIT = "EDIT";
 
-const FeeTypeForm = (props) => {
+const ClientForm = (props) => {
   const { mode = ADD, param } = props;
   const history = useHistory();
 
   const [form] = Form.useForm();
-  const [uploadedImg, setImage] = useState(null);
-  //   const [uploadLoading, setUploadLoading] = useState(false)
   const [submitLoading, setSubmitLoading] = useState(false);
 
   useEffect(() => {
     if (mode === EDIT) {
-      const fetchfeeTypeById = async () => {
+      const fetchBannerById = async () => {
         const { id } = param;
-        const data = await groupService.getGroupById(id);
+        const data = await regionService.getRegionsByID(id);
         if (data) {
           form.setFieldsValue({
             name: data.name,
-            vehicleTypeId: data.vehicleType.name,
-            cityId: data.city.name,
-            regionId: data.region.name,
             status: data.status,
-            business: data.business,
+            priority: data.priority,
           });
         } else {
-          history.replace("/app/dashboards/group/group-list");
+          history.replace("/app/dashboards/region/region-list");
         }
       };
 
-      fetchfeeTypeById();
+      fetchBannerById();
     }
   }, [form, mode, param, props]);
 
@@ -53,21 +46,23 @@ const FeeTypeForm = (props) => {
     form
       .validateFields()
       .then(async (values) => {
-        console.log(values, "values");
         if (mode === ADD) {
           // Checking if image exists
 
-          const created = await groupService.createGroup(values);
+          const created = await regionService.createRegion(values);
           if (created) {
-            message.success(`Created ${values.name} to group list`);
+            message.success(`Created ${values.title} to Region list`);
             history.goBack();
           }
         }
         if (mode === EDIT) {
-          console.log(param.id);
-          const edited = await groupService.updateGroup(param.id, values);
+          // Checking if image exists
+
+          // values.mobileImage = mobileImgValue
+
+          const edited = await regionService.updateRegion(param.id, values);
           if (edited) {
-            message.success(`Edited ${values.name} to group list`);
+            message.success(`Edited ${values.title} to Client list`);
             history.goBack();
           }
         }
@@ -100,13 +95,13 @@ const FeeTypeForm = (props) => {
               alignItems="center"
             >
               <h2 className="mb-3">
-                {mode === "ADD" ? "Add New FeeType" : `Edit FeeType`}{" "}
+                {mode === "ADD" ? "Add New Client" : `Edit Client`}{" "}
               </h2>
               <div className="mb-3">
                 <Button
                   className="mr-2"
                   onClick={() =>
-                    history.push("/app/dashboards/group/group-list")
+                    history.push("/app/dashboards/region/region-list")
                   }
                 >
                   Discard
@@ -114,7 +109,6 @@ const FeeTypeForm = (props) => {
                 <Button
                   type="primary"
                   onClick={() => onFinish()}
-                  // disabled={submitLoading}
                   htmlType="submit"
                   loading={submitLoading}
                 >
@@ -128,11 +122,10 @@ const FeeTypeForm = (props) => {
           <Tabs defaultActiveKey="1" style={{ marginTop: 30 }}>
             <TabPane tab="General" key="1">
               <GeneralField
-                // uploadedImg={uploadedImg}
-                // uploadLoading={uploadLoading}
-                // handleUploadChange={handleUploadChange}
-                // propsImages={propsImages}
-                form={form}
+              // uploadLoading={uploadLoading}
+              // handleUploadChange={handleUploadChange}
+
+              // propsMobileImages={propsMobileImages}
               />
             </TabPane>
           </Tabs>
@@ -142,4 +135,4 @@ const FeeTypeForm = (props) => {
   );
 };
 
-export default FeeTypeForm;
+export default ClientForm;

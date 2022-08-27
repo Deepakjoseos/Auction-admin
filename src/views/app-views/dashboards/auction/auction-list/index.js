@@ -11,8 +11,7 @@ import EllipsisDropdown from "components/shared-components/EllipsisDropdown";
 import Flex from "components/shared-components/Flex";
 import { useHistory } from "react-router-dom";
 import utils from "utils";
-
-import groupService from "services/group";
+import auctionService from "services/auction";
 import { useSelector } from "react-redux";
 
 const { Option } = Select;
@@ -34,7 +33,7 @@ const getStockStatus = (status) => {
   }
   return null;
 };
-const FeeTypeList = () => {
+const GroupList = () => {
   let history = useHistory();
 
   const [list, setList] = useState([]);
@@ -46,8 +45,8 @@ const FeeTypeList = () => {
   const { user } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    const getFeeTypes = async () => {
-      const data = await groupService.getGroups();
+    const getGroups = async () => {
+      const data = await auctionService.getauctions();
       if (data) {
         setList(data);
         console.log(data);
@@ -55,7 +54,7 @@ const FeeTypeList = () => {
         console.log(data, "show-data");
       }
     };
-    getFeeTypes();
+    getGroups();
   }, []);
 
   const dropdownMenu = (row) => {
@@ -86,30 +85,15 @@ const FeeTypeList = () => {
     }
   };
 
-  const addFeeType = () => {
-    history.push(`/app/dashboards/group/add-group`);
+  const addGroup = () => {
+    history.push(`/app/dashboards/auction/add-auction`);
   };
 
   const viewDetails = (row) => {
-    history.push(`/app/dashboards/group/edit-group/${row._id}`);
+    history.push(`/app/dashboards/auction/edit-auction/${row._id}`);
   };
 
   const tableColumns = [
-    // {
-    //   title: 'Information',
-    //   dataIndex: 'name',
-    //   render: (_, record) => (
-    //     <div className="d-flex">
-    //       <AvatarStatus
-    //         size={60}
-    //         type="square"
-    //         src={record.image}
-    //         name={record.name}
-    //       />
-    //     </div>
-    //   ),
-    //   sorter: (a, b) => utils.antdTableSorter(a, b, 'name'),
-    // },
     {
       title: "Name",
       dataIndex: "name",
@@ -117,12 +101,12 @@ const FeeTypeList = () => {
     },
     {
       title: "Business",
-      dataIndex: "business",
+      dataIndex: "businessType",
       sorter: (a, b) => utils.antdTableSorter(a, b, "business"),
     },
     {
       title: "Vehicle",
-      dataIndex: "vehicle",
+      dataIndex: "vehicleType",
       render: (_, rec) => <>{rec.vehicleType.name}</>,
       sorter: (a, b) => utils.antdTableSorter(a, b, "vehicle"),
     },
@@ -217,23 +201,23 @@ const FeeTypeList = () => {
             <>
               {currentSubAdminRole?.add && (
                 <Button
-                  onClick={addFeeType}
+                  onClick={addGroup}
                   type="primary"
                   icon={<PlusCircleOutlined />}
                   block
                 >
-                  Add Group
+                  Add Auction
                 </Button>
               )}
             </>
           ) : (
             <Button
-              onClick={addFeeType}
+              onClick={addGroup}
               type="primary"
               icon={<PlusCircleOutlined />}
               block
             >
-              Add Group
+              Add Auction
             </Button>
           )}
         </div>
@@ -245,4 +229,4 @@ const FeeTypeList = () => {
   );
 };
 
-export default FeeTypeList;
+export default GroupList;

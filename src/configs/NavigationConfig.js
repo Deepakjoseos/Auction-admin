@@ -260,33 +260,17 @@ const dashBoardNavTree = [
         submenu: [],
       },
       {
-        key: "dashboards-state",
-        path: `${APP_PREFIX_PATH}/dashboards/state`,
-        title: "State",
-        icon: AppstoreOutlined,
-        breadcrumb: false,
-        submenu: [],
-      },
-      {
-        key: "dashboards-city",
-        path: `${APP_PREFIX_PATH}/dashboards/city`,
-        title: "City",
-        icon: AppstoreOutlined,
-        breadcrumb: false,
-        submenu: [],
-      },
-      {
         key: "dashboards-group",
         path: `${APP_PREFIX_PATH}/dashboards/group`,
-        title: "Group",
+        title: "Groups",
         icon: AppstoreOutlined,
         breadcrumb: false,
         submenu: [],
       },
       {
-        key: "dashboards-fuel-type",
-        path: `${APP_PREFIX_PATH}/dashboards/fuel-type`,
-        title: "FuelType",
+        key: "dashboards-auction",
+        path: `${APP_PREFIX_PATH}/dashboards/auction`,
+        title: "Auction",
         icon: AppstoreOutlined,
         breadcrumb: false,
         submenu: [],
@@ -317,7 +301,6 @@ const dashBoardNavTree = [
       },
     ],
   },
-  
 ];
 
 // const appsNavTree = [

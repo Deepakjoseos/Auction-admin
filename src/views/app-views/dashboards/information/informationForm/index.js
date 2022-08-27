@@ -197,7 +197,6 @@ const InformationForm = (props) => {
                 form={form}
               />
             </TabPane>
-          
           </Tabs>
         </div>
       </Form>

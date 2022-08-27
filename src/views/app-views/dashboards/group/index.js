@@ -1,13 +1,13 @@
-import React from 'react'
-import { Route, Switch, Redirect } from 'react-router-dom'
-import AddGroup from './add-group'
-import EditGroup from './edit-group'
+import React from "react";
+import { Route, Switch, Redirect } from "react-router-dom";
+import AddGroup from "./add-group";
+import EditGroup from "./edit-group";
 
-import GroupList from './group-list'
+import GroupList from "./group-list";
 // import Orders from './orders'
 
-const Group = (props) => {
-  const { match } = props
+const FeeType = (props) => {
+  const { match } = props;
 
   return (
     <Switch>
@@ -16,7 +16,7 @@ const Group = (props) => {
       <Route path={`${match.url}/edit-group/:id`} component={EditGroup} />
       <Route path={`${match.url}/group-list`} component={GroupList} />
     </Switch>
-  )
-}
+  );
+};
 
-export default Group
+export default FeeType;

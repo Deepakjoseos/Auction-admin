@@ -40,13 +40,7 @@ const ParticipantForm = (props) => {
   const { user } = useSelector((state) => state.auth)
   const [currentParticipant,setCurrentParticipant] = useState()
   const [registrations,setRegistrations]= useState([])
-  const {
-    fileList: fileListImages,
-    beforeUpload: beforeUploadImages,
-    onChange: onChangeImages,
-    onRemove: onRemoveImages,
-    setFileList: setFileListImages,
-  } = useUpload(1)
+
 
   //   const [editorRender, setEditorRender] = useState(false)
   const [feeTypes,setFeeType]=useState([])
@@ -140,13 +134,6 @@ const ParticipantForm = (props) => {
   }, [form, mode, param, props])
 
   console.log(user, 'sendingValues')
-  const propsImages = {
-    multiple: true,
-    beforeUpload: beforeUploadImages,
-    onRemove: onRemoveImages,
-    onChange: onChangeImages,
-    fileList: fileListImages,
-  }
 
   const onFinish = async () => {
     setSubmitLoading(true)
@@ -283,16 +270,7 @@ const ParticipantForm = (props) => {
               />
             </TabPane>
             <TabPane tab="Registration" key="2">
-               <RegistrationForm participantId={param?.id} />
-            </TabPane>
-            <TabPane tab="Edit Documents" key="3">
-              <GeneralField
-                uploadedImg={uploadedImg}
-                // uploadLoading={uploadLoading}
-                // handleUploadChange={handleUploadChange}
-                propsImages={propsImages}
-                form={form}
-              />
+               <RegistrationForm participantId={param.id} />
             </TabPane>
           </Tabs>
         </div>

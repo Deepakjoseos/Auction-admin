@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { Card, Table, Select, Input, Button, Menu, Tag } from "antd";
-// import InformationListData from 'assets/data/product-list.data.json'
+// import BrandListData from 'assets/data/product-list.data.json'
 import {
   EyeOutlined,
   DeleteOutlined,
   SearchOutlined,
   PlusCircleOutlined,
 } from "@ant-design/icons";
+import AvatarStatus from "components/shared-components/AvatarStatus";
 import EllipsisDropdown from "components/shared-components/EllipsisDropdown";
 import Flex from "components/shared-components/Flex";
 import { useHistory } from "react-router-dom";
 import utils from "utils";
-
-import groupService from "services/group";
+import regionService from "services/region";
 import { useSelector } from "react-redux";
 
 const { Option } = Select;
@@ -32,9 +32,17 @@ const getStockStatus = (status) => {
       </>
     );
   }
+
+  if (status === "Deleted") {
+    return (
+      <>
+        <Tag color="red">Deleted</Tag>
+      </>
+    );
+  }
   return null;
 };
-const FeeTypeList = () => {
+const ClientList = () => {
   let history = useHistory();
 
   const [list, setList] = useState([]);
@@ -43,21 +51,30 @@ const FeeTypeList = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [currentSubAdminRole, setCurrentSubAdminRole] = useState({});
 
-  const { user } = useSelector((state) => state.auth);
-
   useEffect(() => {
-    const getFeeTypes = async () => {
-      const data = await groupService.getGroups();
+    // Getting Lotteries List to display in the table
+    const getClients = async () => {
+      const data = await regionService.getRegions();
       if (data) {
         setList(data);
-        console.log(data);
         setSearchBackupList(data);
         console.log(data, "show-data");
       }
     };
-    getFeeTypes();
+    getClients();
   }, []);
 
+  const { user } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    if (user) {
+      const clientRole = user.roles.find((role) => role.module === "CLIENT");
+      console.log("clientRole", clientRole);
+      setCurrentSubAdminRole(clientRole);
+    }
+  }, [user]);
+
+  // Dropdown menu for each row
   const dropdownMenu = (row) => {
     if (window.localStorage.getItem("auth_type") === "Admin") {
       return (
@@ -71,75 +88,64 @@ const FeeTypeList = () => {
         </Menu>
       );
     } else {
-      if (currentSubAdminRole?.edit) {
-        return (
-          <Menu>
+      return (
+        <Menu>
+          {currentSubAdminRole?.edit && (
             <Menu.Item onClick={() => viewDetails(row)}>
               <Flex alignItems="center">
                 <EyeOutlined />
                 <span className="ml-2">View Details</span>
               </Flex>
             </Menu.Item>
-          </Menu>
-        );
-      }
+          )}
+        </Menu>
+      );
     }
   };
 
-  const addFeeType = () => {
-    history.push(`/app/dashboards/group/add-group`);
+  const addClient = () => {
+    history.push(`/app/dashboards/region/add-region`);
   };
 
   const viewDetails = (row) => {
-    history.push(`/app/dashboards/group/edit-group/${row._id}`);
+    console.log("row", row);
+    history.push(`/app/dashboards/region/edit-region/${row._id}`);
   };
 
+  // For deleting a row
+  // const deleteRow = async (row) => {
+  //   const resp = await clientService.deleteBanner(row.id)
+
+  //   if (resp) {
+  //     const objKey = 'id'
+  //     let data = list
+  //     if (selectedRows.length > 1) {
+  //       selectedRows.forEach((elm) => {
+  //         data = utils.deleteArrayRow(data, objKey, elm.id)
+  //         setList(data)
+  //         setSelectedRows([])
+  //       })
+  //     } else {
+  //       data = utils.deleteArrayRow(data, objKey, row.id)
+  //       setList(data)
+  //     }
+  //   }
+  // }
+
+  // Antd Table Columns
   const tableColumns = [
-    // {
-    //   title: 'Information',
-    //   dataIndex: 'name',
-    //   render: (_, record) => (
-    //     <div className="d-flex">
-    //       <AvatarStatus
-    //         size={60}
-    //         type="square"
-    //         src={record.image}
-    //         name={record.name}
-    //       />
-    //     </div>
-    //   ),
-    //   sorter: (a, b) => utils.antdTableSorter(a, b, 'name'),
-    // },
     {
       title: "Name",
       dataIndex: "name",
-      sorter: (a, b) => utils.antdTableSorter(a, b, "name"),
-    },
-    {
-      title: "Business",
-      dataIndex: "business",
-      sorter: (a, b) => utils.antdTableSorter(a, b, "business"),
-    },
-    {
-      title: "Vehicle",
-      dataIndex: "vehicle",
-      render: (_, rec) => <>{rec.vehicleType.name}</>,
-      sorter: (a, b) => utils.antdTableSorter(a, b, "vehicle"),
+      sorter: (a, b) => utils.antdTableSorter(a, b, "title"),
     },
 
     {
-      title: "Region",
-      dataIndex: "region",
-      render: (_, rec) => <>{rec.region.name}</>,
-      sorter: (a, b) => utils.antdTableSorter(a, b, "region"),
+      title: "Priority",
+      dataIndex: "priority",
+      sorter: (a, b) => utils.antdTableSorter(a, b, "order"),
     },
 
-    {
-      title: "City",
-      dataIndex: "city",
-      render: (_, rec) => <>{rec.city.name}</>,
-      sorter: (a, b) => utils.antdTableSorter(a, b, "city"),
-    },
     {
       title: "Status",
       dataIndex: "status",
@@ -165,6 +171,7 @@ const FeeTypeList = () => {
     },
   ];
 
+  // When Search is used
   const onSearch = (e) => {
     const value = e.currentTarget.value;
     const searchArray = e.currentTarget.value ? list : searchBackupList;
@@ -173,6 +180,7 @@ const FeeTypeList = () => {
     setSelectedRowKeys([]);
   };
 
+  // Filter Status Handler
   const handleShowStatus = (value) => {
     if (value !== "All") {
       const key = "status";
@@ -183,6 +191,7 @@ const FeeTypeList = () => {
     }
   };
 
+  // Table Filters JSX Elements
   const filters = () => (
     <Flex className="mb-1" mobileFlex={false}>
       <div className="mr-md-3 mb-3">
@@ -217,23 +226,23 @@ const FeeTypeList = () => {
             <>
               {currentSubAdminRole?.add && (
                 <Button
-                  onClick={addFeeType}
+                  onClick={addClient}
                   type="primary"
                   icon={<PlusCircleOutlined />}
                   block
                 >
-                  Add Group
+                  Add Region
                 </Button>
               )}
             </>
           ) : (
             <Button
-              onClick={addFeeType}
+              onClick={addClient}
               type="primary"
               icon={<PlusCircleOutlined />}
               block
             >
-              Add Group
+              Add Region
             </Button>
           )}
         </div>
@@ -245,4 +254,4 @@ const FeeTypeList = () => {
   );
 };
 
-export default FeeTypeList;
+export default ClientList;

@@ -1,8 +1,8 @@
-import React from 'react'
-import GroupForm from './group-form'
+import React from "react";
+import FeeTypeForm from "./group-form";
 
-const AddGroup = () => {
-  return  <GroupForm mode="ADD" />
-}
+const AddFeeType = () => {
+  return <FeeTypeForm mode="ADD" />;
+};
 
-export default AddGroup
+export default AddFeeType;
