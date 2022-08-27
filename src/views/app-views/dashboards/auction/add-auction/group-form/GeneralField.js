@@ -44,6 +44,7 @@ const GeneralField = (props) => {
   const [regions, setRegions] = useState([]);
   const [vehicleType, setVehicleType] = useState([]);
   const [clients, setClients] = useState([]);
+
   useEffect(() => {
     const getData = async () => {
       try {
@@ -172,50 +173,51 @@ const GeneralField = (props) => {
           >
             <DatePicker />
           </Form.Item>
+
           <Form.Item
             name="showRegNumber"
             lable="Show Reg Number"
             valuePropName="checked"
           >
-            <Checkbox checked={false}>Show Reg Number</Checkbox>
+            <Checkbox>Show Reg Number</Checkbox>
           </Form.Item>
           <Form.Item
             name="showChasisNumber"
             lable="show Chasis Number"
             valuePropName="checked"
           >
-            <Checkbox checked={false}>show Chasis Number</Checkbox>
+            <Checkbox>show Chasis Number</Checkbox>
           </Form.Item>
           <Form.Item
             name="showEngineNumber"
             lable="showEngineNumber"
             valuePropName="checked"
           >
-            <Checkbox checked={false}>show Engine Number </Checkbox>
+            <Checkbox>show Engine Number </Checkbox>
           </Form.Item>
           <Form.Item name="showGST" lable="Show GST" valuePropName="checked">
-            <Checkbox checked={false}>Show GST</Checkbox>
+            <Checkbox>Show GST</Checkbox>
           </Form.Item>
           <Form.Item
             name="extendAuctionForLessBid"
             lable="extend Auction For Less Bid"
             valuePropName="checked"
           >
-            <Checkbox checked={false}>extend Auction For Less Bid</Checkbox>
+            <Checkbox>extend Auction For Less Bid</Checkbox>
           </Form.Item>
           <Form.Item
             name="showVehiclesWithoutLogin"
             lable="show Vehicles Without Login"
             valuePropName="checked"
           >
-            <Checkbox checked={false}>show Vehicles Without Login</Checkbox>
+            <Checkbox>show Vehicles Without Login</Checkbox>
           </Form.Item>
           <Form.Item
             name="auctionViewOnly"
             lable="auction View Only"
             valuePropName="checked"
           >
-            <Checkbox checked={false}>auction View Only</Checkbox>
+            <Checkbox>auction View Only</Checkbox>
           </Form.Item>
           <Form.Item
             name="onlyPCCBuyersAllowed"
@@ -236,7 +238,7 @@ const GeneralField = (props) => {
             lable="showEngineNumber"
             valuePropName="checked"
           >
-            <Checkbox checked={false}>showVehicleDownload </Checkbox>
+            <Checkbox>show Vehicle Download </Checkbox>
           </Form.Item>
         </Card>
       </Col>

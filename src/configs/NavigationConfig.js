@@ -260,6 +260,14 @@ const dashBoardNavTree = [
         submenu: [],
       },
       {
+        key: "dashboards-region",
+        path: `${APP_PREFIX_PATH}/dashboards/region`,
+        title: "Region",
+        icon: AppstoreOutlined,
+        breadcrumb: false,
+        submenu: [],
+      },
+      {
         key: "dashboards-group",
         path: `${APP_PREFIX_PATH}/dashboards/group`,
         title: "Groups",

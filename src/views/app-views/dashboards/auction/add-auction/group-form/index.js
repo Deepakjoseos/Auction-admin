@@ -29,14 +29,36 @@ const FeeTypeForm = (props) => {
         const { id } = param;
         const data = await auctionService.getauctionById(id);
         if (data) {
+          // form.setFieldsValue({
+          //   name: data.name,
+          //   businessType: data.businessType,
+          //   type: data.type,
+          //   cityId: data.cityId,
+          //   regionId: data.regionId,
+          //   clientId: data.clientId,
+          //   vehicleTypeId: data.vehicleTypeId,
+          //   format: data.format,
+          //   status: data.status,
+          //   closeType: data.closeType,
+          //   bidLimit: data.bidLimit,
+          //   termsAndConditions: data.termsAndConditions,
+          //   // startTimestamp: data.startTimestamp,
+          //   // endTimestamp: data.endTimestamp,
+          //   showRegNumber: data.showRegNumber,
+          //   showChasisNumber: data.showChasisNumber,
+          //   showEngineNumber: data.showEngineNumber,
+          //   showGST: data.showGST,
+          //   extendAuctionForLessBid: data.extendAuctionForLessBid,
+          //   showVehiclesWithoutLogin: data.showVehiclesWithoutLogin,
+          //   auctionViewOnly: data.auctionViewOnly,
+          //   onlyPCCBuyersAllowed: data.onlyPCCBuyersAllowed,
+          //   showTNC: data.showTNC,
+          //   showVehicleDownload: data.showVehicleDownload,
+          // });
           form.setFieldsValue({
-            name: data.name,
-            vehicleTypeId: data.vehicleType.name,
-            cityId: data.city.name,
-            regionId: data.region.name,
-            status: data.status,
-            business: data.business,
-
+            ...data,
+            startTimestamp: "",
+            endTimestamp: "",
           });
         } else {
           history.replace("/app/dashboards/auction/auction-list");
@@ -53,10 +75,10 @@ const FeeTypeForm = (props) => {
       .validateFields()
       .then(async (values) => {
         console.log(values, "values");
-    values.bidLimit=Number(values.bidLimit)
- 
-    values.startTimestamp=`${(new Date(values.startTimestamp)).getTime()}`;
-    values.endTimestamp=`${(new Date(values.endTimestamp)).getTime()}`;
+        values.bidLimit = Number(values.bidLimit);
+
+        values.startTimestamp = `${new Date(values.startTimestamp).getTime()}`;
+        values.endTimestamp = `${new Date(values.endTimestamp).getTime()}`;
 
         if (mode === ADD) {
           // Checking if image exists
@@ -92,17 +114,18 @@ const FeeTypeForm = (props) => {
         name="advanced_search"
         className="ant-advanced-search-form"
         initialValues={{
+          auctionViewOnly: false,
+          showRegNumber: false,
+          showVehicleDownload: false,
+          showTNC: false,
+          showChasisNumber: false,
+          showEngineNumber: false,
+          showGST: false,
+          extendAuctionForLessBid: false,
+          showVehiclesWithoutLogin: false,
+          auctionViewOnly: false,
+          onlyPCCBuyersAllowed: false,
           status: "Hold",
-          showRegNumber:false,
-          showChasisNumber:false,
-          showEngineNumber:false,
-          showGST:false,
-          extendAuctionForLessBid:false,
-          showVehiclesWithoutLogin:false,
-          auctionViewOnly:false,
-          onlyPCCBuyersAllowed:false,
-          showTNC:false,
-          showVehicleDownload:false,
         }}
       >
         <PageHeaderAlt className="border-bottom" overlap>
@@ -120,7 +143,7 @@ const FeeTypeForm = (props) => {
                 <Button
                   className="mr-2"
                   onClick={() =>
-                    history.push("/app/dashboards/group/group-list")
+                    history.push("/app/dashboards/auction/auction-list")
                   }
                 >
                   Discard

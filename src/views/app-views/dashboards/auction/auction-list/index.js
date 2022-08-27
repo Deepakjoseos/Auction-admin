@@ -105,25 +105,34 @@ const GroupList = () => {
       sorter: (a, b) => utils.antdTableSorter(a, b, "business"),
     },
     {
-      title: "Vehicle",
-      dataIndex: "vehicleType",
-      render: (_, rec) => <>{rec.vehicleType.name}</>,
-      sorter: (a, b) => utils.antdTableSorter(a, b, "vehicle"),
+      title: "Bid Limit",
+      dataIndex: "bidLimit",
+      sorter: (a, b) => utils.antdTableSorter(a, b, "business"),
+    },
+    {
+      title: "Business",
+      dataIndex: "businessType",
+      sorter: (a, b) => utils.antdTableSorter(a, b, "business"),
+    },
+    {
+      title: "Start Time",
+      dataIndex: "startTimestamp",
+      render: (status) => {
+        var d = new Date(Number(status)).toDateString();
+        return <Flex alignItems="center">{d}</Flex>;
+      },
+      sorter: (a, b) => utils.antdTableSorter(a, b, "business"),
+    },
+    {
+      title: "End Time",
+      dataIndex: "endTimestamp",
+      render: (status) => {
+        var d = new Date(Number(status)).toDateString();
+        return <Flex alignItems="center">{d}</Flex>;
+      },
+      sorter: (a, b) => utils.antdTableSorter(a, b, "business"),
     },
 
-    {
-      title: "Region",
-      dataIndex: "region",
-      render: (_, rec) => <>{rec.region.name}</>,
-      sorter: (a, b) => utils.antdTableSorter(a, b, "region"),
-    },
-
-    {
-      title: "City",
-      dataIndex: "city",
-      render: (_, rec) => <>{rec.city.name}</>,
-      sorter: (a, b) => utils.antdTableSorter(a, b, "city"),
-    },
     {
       title: "Status",
       dataIndex: "status",
