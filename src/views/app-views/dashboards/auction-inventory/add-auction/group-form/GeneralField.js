@@ -45,6 +45,14 @@ const GeneralField = (props) => {
   const [vehicleType, setVehicleType] = useState([]);
   const [clients, setClients] = useState([]);
 
+const postDocument=async()=>{
+  try {
+    const res=await fetch(``)
+  } catch (error) {
+    
+  }
+}
+
   useEffect(() => {
     const getData = async () => {
       try {
