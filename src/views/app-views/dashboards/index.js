@@ -60,17 +60,33 @@ const Dashboards = ({ match }) => {
           path={`${match.url}/participant/registration`}
           component={lazy(() => import(`./registration`))}
         /> */}
-        {/* <Route
+        <Route
+          path={`${match.url}/wallet`}
+          component={lazy(() => import(`./wallet`))}
+        />
+        <Route
           path={`${match.url}/state`}
           component={lazy(() => import(`./state`))}
         />
-        <Route
+        {/* <Route
           path={`${match.url}/role`}
           component={lazy(() => import(`./role`))}
         /> */}
-         <Route
+        <Route
+          path={`${match.url}/city`}
+          component={lazy(() => import(`./city`))}
+        />
+        <Route
           path={`${match.url}/auction-inventory`}
           component={lazy(() => import(`./auction-inventory`))}
+        />
+        <Route
+          path={`${match.url}/deposit`}
+          component={lazy(() => import(`./deposit`))}
+        />
+        <Route
+          path={`${match.url}/wallet-transaction`}
+          component={lazy(() => import(`./wallet-transaction`))}
         />
         <Route
           path={`${match.url}/client`}

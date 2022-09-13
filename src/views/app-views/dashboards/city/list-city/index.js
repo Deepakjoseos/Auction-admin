@@ -10,8 +10,7 @@ import { useHistory } from "react-router-dom";
 import utils from "utils";
 import stateService from "services/state";
 import EllipsisDropdown from "components/shared-components/EllipsisDropdown";
-
-const { Option } = Select;
+import cityService from "services/city";
 
 const getStockStatus = (status) => {
   if (status === "Active") {
@@ -32,17 +31,16 @@ const getStockStatus = (status) => {
   return null;
 };
 
-const StateList = () => {
+const CityList = () => {
   let history = useHistory();
 
   const [list, setList] = useState([]);
   const [searchBackupList, setSearchBackupList] = useState([]);
-  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [currentSubAdminRole, setCurrentSubAdminRole] = useState({});
   useEffect(() => {
     // Getting Lotteries List to display in the table
     const getStates = async () => {
-      const data = await stateService.getStates();
+      const data = await cityService.getCities();
       console.log(data);
       if (data) {
         setList(data);
@@ -67,11 +65,11 @@ const StateList = () => {
   );
 
   const addState = () => {
-    history.push(`/app/dashboards/state/add-state`);
+    history.push(`/app/dashboards/city/add-city`);
   };
 
   const viewDetails = (row) => {
-    history.push(`/app/dashboards/state/edit-state/${row._id}`);
+    history.push(`/app/dashboards/city/edit-city/${row._id}`);
   };
 
   // Antd Table Columns
@@ -82,9 +80,10 @@ const StateList = () => {
       sorter: (a, b) => utils.antdTableSorter(a, b, "name"),
     },
     {
-      title: "Abbreviation",
-      dataIndex: "abbreviation",
-      sorter: (a, b) => utils.antdTableSorter(a, b, "abbreviation"),
+      title: "State",
+      dataIndex: "state",
+      render: (state) => state?.name,
+      sorter: (a, b) => utils.antdTableSorter(a, b, "name"),
     },
     {
       title: "Status",
@@ -118,7 +117,6 @@ const StateList = () => {
     const searchArray = e.currentTarget.value ? list : searchBackupList;
     const data = utils.wildCardSearch(searchArray, value);
     setList(data);
-    setSelectedRowKeys([]);
   };
 
   //  Table Filters JSX Elements
@@ -149,7 +147,7 @@ const StateList = () => {
                     icon={<PlusCircleOutlined />}
                     block
                   >
-                    Add State
+                    Add City
                   </Button>
                 )}
               </>
@@ -160,7 +158,7 @@ const StateList = () => {
                 icon={<PlusCircleOutlined />}
                 block
               >
-                Add State
+                Add City
               </Button>
             )}
           </div>
@@ -173,4 +171,4 @@ const StateList = () => {
   );
 };
 
-export default StateList;
+export default CityList;

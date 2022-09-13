@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from "react";
 import {
   Card,
   Table,
@@ -10,73 +10,72 @@ import {
   Modal,
   Form,
   notification,
-} from 'antd'
+} from "antd";
 // import BrandListData from 'assets/data/product-list.data.json'
 import {
   EyeOutlined,
   SearchOutlined,
   PlusCircleOutlined,
-} from '@ant-design/icons'
-import EllipsisDropdown from 'components/shared-components/EllipsisDropdown'
-import Flex from 'components/shared-components/Flex'
-import { useHistory } from 'react-router-dom'
-import utils from 'utils'
-import authAdminService from 'services/auth/admin'
-import EditRoleSubAdmin from './EditRoleSubAdmin'
+} from "@ant-design/icons";
+import EllipsisDropdown from "components/shared-components/EllipsisDropdown";
+import Flex from "components/shared-components/Flex";
+import { useHistory } from "react-router-dom";
+import utils from "utils";
+import authAdminService from "services/auth/admin";
+import EditRoleSubAdmin from "./EditRoleSubAdmin";
 
-const { Option } = Select
+const { Option } = Select;
 
 const getStockStatus = (status) => {
-  if (status === 'Active') {
+  if (status === "Active") {
     return (
       <>
         <Tag color="green">Active</Tag>
       </>
-    )
+    );
   }
-  if (status === 'Hold') {
+  if (status === "Hold") {
     return (
       <>
         <Tag color="red">Hold</Tag>
       </>
-    )
+    );
   }
 
-  return null
-}
+  return null;
+};
 const UserList = () => {
-  let history = useHistory()
+  let history = useHistory();
 
-  const [list, setList] = useState([])
-  const [searchBackupList, setSearchBackupList] = useState([])
-  const [isModalVisible, setIsModalVisible] = useState(false)
-  const [agentIdForPassword, setAgentIdForPassword] = useState(null)
-  const [agentPassword, setAgentPassword] = useState(null)
-  const [isEditRoleFormOpen, setIsEditRoleFormOpen] = useState(false)
-  const [selectedUserId, setSelectedUserId] = useState(null)
+  const [list, setList] = useState([]);
+  const [searchBackupList, setSearchBackupList] = useState([]);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [agentIdForPassword, setAgentIdForPassword] = useState(null);
+  const [agentPassword, setAgentPassword] = useState(null);
+  const [isEditRoleFormOpen, setIsEditRoleFormOpen] = useState(false);
+  const [selectedUserId, setSelectedUserId] = useState(null);
 
   const getUsers = async () => {
-    const data = await authAdminService.getAllSubAdmins()
+    const data = await authAdminService.getAllSubAdmins();
     if (data) {
-      console.log(data)
-      setList(data)
-      setSearchBackupList(data)
+      setList(data);
+      setSearchBackupList(data);
     }
-  }
+  };
 
   useEffect(() => {
-    getUsers()
-  }, [])
+    getUsers();
+  }, []);
 
   const showModal = (row) => {
-    setIsModalVisible(true)
-    setAgentIdForPassword(row.id)
-  }
+    setIsModalVisible(true);
+    setAgentIdForPassword(row.id);
+  };
   const handleCancel = () => {
-    setIsModalVisible(false)
-    setAgentIdForPassword(null)
-    setAgentPassword(null)
-  }
+    setIsModalVisible(false);
+    setAgentIdForPassword(null);
+    setAgentPassword(null);
+  };
 
   // Dropdown menu for each row
   const dropdownMenu = (row) => (
@@ -89,8 +88,8 @@ const UserList = () => {
       </Menu.Item> */}
       <Menu.Item
         onClick={() => {
-          setIsEditRoleFormOpen(true)
-          setSelectedUserId(row._id)
+          setIsEditRoleFormOpen(true);
+          setSelectedUserId(row._id);
         }}
       >
         <Flex alignItems="center">
@@ -99,85 +98,85 @@ const UserList = () => {
         </Flex>
       </Menu.Item>
     </Menu>
-  )
+  );
 
   const addLottery = () => {
-    history.push(`/app/dashboards/user/add-user`)
-  }
+    history.push(`/app/dashboards/user/add-user`);
+  };
 
   const viewDetails = (row) => {
-    history.push(`/app/dashboards/user/edit-user/${row._id}`)
-  }
+    history.push(`/app/dashboards/user/edit-user/${row._id}`);
+  };
 
   // Antd Table Columns
   const tableColumns = [
     {
-      title: 'Name',
-      dataIndex: 'name',
+      title: "Name",
+      dataIndex: "name",
       render: (name) => {
-        return <Flex alignItems="center">{name}</Flex>
+        return <Flex alignItems="center">{name}</Flex>;
       },
       sorter: (a, b) => a.name?.first?.localeCompare(b?.name?.first),
     },
 
     {
-      title: 'Email',
-      dataIndex: 'email',
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'email'),
+      title: "Email",
+      dataIndex: "email",
+      sorter: (a, b) => utils.antdTableSorter(a, b, "email"),
     },
 
     {
-      title: 'Contact',
-      dataIndex: 'contact',
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'contact'),
+      title: "Contact",
+      dataIndex: "contact",
+      sorter: (a, b) => utils.antdTableSorter(a, b, "contact"),
     },
 
     {
-      title: 'Role',
-      dataIndex: 'auth',
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'auth'),
+      title: "Role",
+      dataIndex: "auth",
+      sorter: (a, b) => utils.antdTableSorter(a, b, "auth"),
     },
 
     {
-      title: 'Status',
-      dataIndex: 'status',
+      title: "Status",
+      dataIndex: "status",
       render: (status) => (
         <Flex alignItems="center">{getStockStatus(status)}</Flex>
       ),
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'status'),
+      sorter: (a, b) => utils.antdTableSorter(a, b, "status"),
     },
 
     {
-      title: '',
-      dataIndex: 'actions',
+      title: "",
+      dataIndex: "actions",
       render: (_, elm) => (
         <div className="text-right">
           <EllipsisDropdown menu={dropdownMenu(elm)} />
         </div>
       ),
     },
-  ]
+  ];
 
   // When Search is used
   const onSearch = (e) => {
-    const value = e.currentTarget.value
-    const searchArray = e.currentTarget.value ? list : searchBackupList
-    const data = utils.wildCardSearch(searchArray, value)
-    setList(data)
-  }
+    const value = e.currentTarget.value;
+    const searchArray = e.currentTarget.value ? list : searchBackupList;
+    const data = utils.wildCardSearch(searchArray, value);
+    setList(data);
+  };
 
   // Filter Status Handler
   const handleShowStatus = (value) => {
-    if (value !== 'All') {
-      const key = 'status'
-      const data = utils.filterArray(searchBackupList, key, value)
-      setList(data)
+    if (value !== "All") {
+      const key = "status";
+      const data = utils.filterArray(searchBackupList, key, value);
+      setList(data);
     } else {
-      setList(searchBackupList)
+      setList(searchBackupList);
     }
-  }
+  };
   const editAgentPassword = async () => {
-    console.log('agentpassword', agentPassword)
+    console.log("agentpassword", agentPassword);
     // if (agentPassword?.length > 0) {
     //   const res = await agentService.editPassword(agentIdForPassword, {
     //     password: agentPassword,
@@ -191,7 +190,7 @@ const UserList = () => {
     //     setAgentIdForPassword(null);
     //   }
     // }
-  }
+  };
   // Table Filters JSX Elements
   const filters = () => (
     <Flex className="mb-1" mobileFlex={false}>
@@ -216,7 +215,7 @@ const UserList = () => {
         </Select>
       </div>
     </Flex>
-  )
+  );
 
   return (
     <>
@@ -271,7 +270,7 @@ const UserList = () => {
         userId={selectedUserId}
       />
     </>
-  )
-}
+  );
+};
 
-export default UserList
+export default UserList;
