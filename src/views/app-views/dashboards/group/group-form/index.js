@@ -3,50 +3,42 @@ import PageHeaderAlt from "components/layout-components/PageHeaderAlt";
 import { Tabs, Form, Button, message } from "antd";
 import Flex from "components/shared-components/Flex";
 import GeneralField from "./GeneralField";
-import useUpload from "hooks/useUpload";
-import { singleImageUploader } from "utils/s3/s3ImageUploader";
-import informationService from "services/information";
-import Utils from "utils";
 import { useHistory } from "react-router-dom";
-// import groupService from "services/group";
 import groupService from "services/group";
+import UpdateParticipantsField from "./update-group-members";
 
 const { TabPane } = Tabs;
 
 const ADD = "ADD";
 const EDIT = "EDIT";
-
-const FeeTypeForm = (props) => {
-  const { mode = ADD, param } = props;
+const GroupForm = (props) => {
+  const { param } = props;
   const history = useHistory();
-
+  const [mode, setMode] = useState("EDIT");
   const [form] = Form.useForm();
-  const [uploadedImg, setImage] = useState(null);
-  //   const [uploadLoading, setUploadLoading] = useState(false)
   const [submitLoading, setSubmitLoading] = useState(false);
 
   useEffect(() => {
-    if (mode === EDIT) {
-      const fetchfeeTypeById = async () => {
-        const { id } = param;
-        const data = await groupService.getGroupById(id);
-        if (data) {
-          form.setFieldsValue({
-            name: data.name,
-            vehicleTypeId: data.vehicleType.name,
-            cityId: data.city.name,
-            regionId: data.region.name,
-            status: data.status,
-            business: data.business,
-          });
-        } else {
-          history.replace("/app/dashboards/group/group-list");
-        }
-      };
-
-      fetchfeeTypeById();
-    }
+    if (mode === EDIT) fetchGroup();
   }, [form, mode, param, props]);
+
+  console.log(mode);
+  const fetchGroup = async () => {
+    const { id } = param;
+    const data = await groupService.getGroupById(id);
+    if (data) {
+      form.setFieldsValue({
+        name: data.name,
+        vehicleTypeId: data.vehicleType.name,
+        cityId: data.city.name,
+        regionId: data.region.name,
+        status: data.status,
+        business: data.business,
+      });
+    } else {
+      history.replace("/app/dashboards/group/group-list");
+    }
+  };
 
   const onFinish = async () => {
     setSubmitLoading(true);
@@ -64,13 +56,13 @@ const FeeTypeForm = (props) => {
           }
         }
         if (mode === EDIT) {
-          console.log(param.id);
           const edited = await groupService.updateGroup(param.id, values);
           if (edited) {
             message.success(`Edited ${values.name} to group list`);
             history.goBack();
           }
         }
+
         setSubmitLoading(false);
       })
       .catch((info) => {
@@ -127,13 +119,14 @@ const FeeTypeForm = (props) => {
         <div className="container">
           <Tabs defaultActiveKey="1" style={{ marginTop: 30 }}>
             <TabPane tab="General" key="1">
-              <GeneralField
-                // uploadedImg={uploadedImg}
-                // uploadLoading={uploadLoading}
-                // handleUploadChange={handleUploadChange}
-                // propsImages={propsImages}
-                form={form}
-              />
+              <div onClick={() => setMode(EDIT)}>
+                <GeneralField form={form} />
+              </div>
+            </TabPane>
+            <TabPane tab="Update Participants" key="2">
+              <div onClick={() => setMode(EDIT)}>
+                <UpdateParticipantsField param={param} />
+              </div>
             </TabPane>
           </Tabs>
         </div>
@@ -142,4 +135,4 @@ const FeeTypeForm = (props) => {
   );
 };
 
-export default FeeTypeForm;
+export default GroupForm;

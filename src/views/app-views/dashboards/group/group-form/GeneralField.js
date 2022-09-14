@@ -34,30 +34,30 @@ const GeneralField = (props) => {
   const [vehicleType, setVehicleType] = useState([]);
   const [participants, setParticipants] = useState([]);
   useEffect(() => {
-    const getData = async () => {
-      try {
-        const data = await cityService.getcity();
-        console.log(data, "city");
-        setCitys(data);
-        const data1 = await vehicletypeService.getVehicleTypes();
-        console.log(data1, "city");
-        setVehicleType(data1);
-        console.log(regions, "asas");
-        const data2 = await participantService.getAllParticipants();
-        console.log(data2, "city");
-        setParticipants(data2);
-        const data3 = await regionService.getRegions();
-        console.log(data3, "city");
-        setRegions(data3);
-
-        // console.log(vehicleType);
-      } catch (error) {
-        console.log(error, "err");
-      }
-    };
-
     getData();
   }, []);
+
+  const getData = async () => {
+    try {
+      const data = await cityService.getCities();
+      console.log(data, "city");
+      setCitys(data);
+      const data1 = await vehicletypeService.getVehicleTypes();
+      console.log(data1, "city");
+      setVehicleType(data1);
+      console.log(regions, "asas");
+      const data2 = await participantService.getAllParticipants();
+      console.log(data2, "city");
+      setParticipants(data2);
+      const data3 = await regionService.getRegions();
+      console.log(data3, "city");
+      setRegions(data3);
+
+      // console.log(vehicleType);
+    } catch (error) {
+      console.log(error, "err");
+    }
+  };
 
   return (
     <Row gutter={16}>

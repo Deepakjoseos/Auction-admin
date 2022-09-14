@@ -29,6 +29,10 @@ const Dashboards = ({ match }) => {
           component={lazy(() => import(`./group`))}
         />
         <Route
+          path={`${match.url}/group-members`}
+          component={lazy(() => import(`./group-members`))}
+        />
+        <Route
           path={`${match.url}/information`}
           component={lazy(() => import(`./information`))}
         />
@@ -63,6 +67,10 @@ const Dashboards = ({ match }) => {
         <Route
           path={`${match.url}/wallet`}
           component={lazy(() => import(`./wallet`))}
+        />
+        <Route
+          path={`${match.url}/buying-limit`}
+          component={lazy(() => import(`./buying-limit`))}
         />
         <Route
           path={`${match.url}/state`}

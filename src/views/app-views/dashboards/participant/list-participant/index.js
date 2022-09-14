@@ -122,9 +122,13 @@ const ParticipantList = () => {
 
   const tableColumns = [
     {
+      title: "id",
+      dataIndex: "_id",
+      sorter: (a, b) => utils.antdTableSorter(a, b, "_id"),
+    },
+    {
       title: "Name",
       dataIndex: "name",
-
       sorter: (a, b) => utils.antdTableSorter(a, b, "name"),
     },
     {

@@ -1,8 +1,9 @@
 import React from "react";
-import AuctionForm from "../add-auction/group-form";
+import AuctionInventoryForm from "../add-auction/auction-inventory-form";
 
-const EditAuction = (props) => {
-  return <AuctionForm mode="EDIT" param={props.match.params} />;
+const EditAuctionInventory = (props) => {
+  console.log(`Hello`);
+  return <AuctionInventoryForm mode="EDIT" param={props.match.params} />;
 };
 
-export default EditAuction;
+export default EditAuctionInventory;

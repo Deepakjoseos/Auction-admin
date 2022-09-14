@@ -54,4 +54,20 @@ groupService.updateGroup = async function (id, data) {
   }
 };
 
+groupService.uploadMembers = async function (id, data) {
+  try {
+    const res = await fetch({
+      url: `${apiRoute}/${id}/upload`,
+      method: "PUT",
+      data: data,
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return res;
+  } catch (err) {
+    console.log(err, "show-err");
+  }
+};
+
 export default groupService;

@@ -3,7 +3,6 @@ import { Card, Table, Select, Input, Button, Menu, Tag } from "antd";
 // import InformationListData from 'assets/data/product-list.data.json'
 import {
   EyeOutlined,
-  DeleteOutlined,
   SearchOutlined,
   PlusCircleOutlined,
 } from "@ant-design/icons";
@@ -13,7 +12,6 @@ import { useHistory } from "react-router-dom";
 import utils from "utils";
 
 import groupService from "services/group";
-import { useSelector } from "react-redux";
 
 const { Option } = Select;
 
@@ -34,16 +32,12 @@ const getStockStatus = (status) => {
   }
   return null;
 };
-const FeeTypeList = () => {
+const GroupList = () => {
   let history = useHistory();
 
   const [list, setList] = useState([]);
   const [searchBackupList, setSearchBackupList] = useState([]);
-  const [selectedRows, setSelectedRows] = useState([]);
-  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [currentSubAdminRole, setCurrentSubAdminRole] = useState({});
-
-  const { user } = useSelector((state) => state.auth);
 
   useEffect(() => {
     const getFeeTypes = async () => {
@@ -68,6 +62,12 @@ const FeeTypeList = () => {
               <span className="ml-2">View Details</span>
             </Flex>
           </Menu.Item>
+          <Menu.Item onClick={() => uploadMembers(row)}>
+            <Flex alignItems="center">
+              <EyeOutlined />
+              <span className="ml-2">Upload Members</span>
+            </Flex>
+          </Menu.Item>
         </Menu>
       );
     } else {
@@ -80,18 +80,28 @@ const FeeTypeList = () => {
                 <span className="ml-2">View Details</span>
               </Flex>
             </Menu.Item>
+            <Menu.Item onClick={() => uploadMembers(row)}>
+              <Flex alignItems="center">
+                <EyeOutlined />
+                <span className="ml-2">Upload Members</span>
+              </Flex>
+            </Menu.Item>
           </Menu>
         );
       }
     }
   };
 
-  const addFeeType = () => {
+  const addGroup = () => {
     history.push(`/app/dashboards/group/add-group`);
   };
 
   const viewDetails = (row) => {
     history.push(`/app/dashboards/group/edit-group/${row._id}`);
+  };
+
+  const uploadMembers = (row) => {
+    history.push(`/app/dashboards/group/upload-members/${row._id}`);
   };
 
   const tableColumns = [
@@ -170,7 +180,6 @@ const FeeTypeList = () => {
     const searchArray = e.currentTarget.value ? list : searchBackupList;
     const data = utils.wildCardSearch(searchArray, value);
     setList(data);
-    setSelectedRowKeys([]);
   };
 
   const handleShowStatus = (value) => {
@@ -217,7 +226,7 @@ const FeeTypeList = () => {
             <>
               {currentSubAdminRole?.add && (
                 <Button
-                  onClick={addFeeType}
+                  onClick={addGroup}
                   type="primary"
                   icon={<PlusCircleOutlined />}
                   block
@@ -228,7 +237,7 @@ const FeeTypeList = () => {
             </>
           ) : (
             <Button
-              onClick={addFeeType}
+              onClick={addGroup}
               type="primary"
               icon={<PlusCircleOutlined />}
               block
@@ -245,4 +254,4 @@ const FeeTypeList = () => {
   );
 };
 
-export default FeeTypeList;
+export default GroupList;

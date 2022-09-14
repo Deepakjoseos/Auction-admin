@@ -44,25 +44,9 @@ const DepositList = () => {
     }
   };
 
-  // Dropdown menu for each row
-  // const dropdownMenu = (row) => (
-  //   <Menu>
-  //     <Menu.Item onClick={() => viewDetails(row)}>
-  //       <Flex alignItems="center">
-  //         <EyeOutlined />
-  //         <span className="ml-2">View Details</span>
-  //       </Flex>
-  //     </Menu.Item>
-  //   </Menu>
-  // );
-
   const makeDeposit = () => {
     history.push(`/app/dashboards/deposit/make-deposit`);
   };
-
-  // const viewDetails = (row) => {
-  //   history.push(`/app/dashboards/state/edit-state/${row._id}`);
-  // };
 
   // Antd Table Columns
   const tableColumns = [

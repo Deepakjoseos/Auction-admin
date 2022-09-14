@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Card, Table, Select, Input, Button, Menu, Tag } from "antd";
-// import InformationListData from 'assets/data/product-list.data.json'
+import { Card, Table, Input, Button, Menu } from "antd";
 import {
   EyeOutlined,
-  DeleteOutlined,
   SearchOutlined,
   PlusCircleOutlined,
 } from "@ant-design/icons";
@@ -11,45 +9,23 @@ import EllipsisDropdown from "components/shared-components/EllipsisDropdown";
 import Flex from "components/shared-components/Flex";
 import { useHistory } from "react-router-dom";
 import utils from "utils";
-import auctionService from "services/auction";
 import { useSelector } from "react-redux";
+import auctionInventoryService from "services/auctionInventory";
 
-const { Option } = Select;
-
-const getStockStatus = (status) => {
-  if (status === "Active") {
-    return (
-      <>
-        <Tag color="green">Active</Tag>
-      </>
-    );
-  }
-  if (status === "Hold") {
-    return (
-      <>
-        <Tag color="red">Hold</Tag>
-      </>
-    );
-  }
-  return null;
-};
-const GroupList = () => {
+const AuctionInventoryList = () => {
   let history = useHistory();
 
   const [list, setList] = useState([]);
   const [searchBackupList, setSearchBackupList] = useState([]);
-  const [selectedRows, setSelectedRows] = useState([]);
-  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [currentSubAdminRole, setCurrentSubAdminRole] = useState({});
 
   const { user } = useSelector((state) => state.auth);
 
   useEffect(() => {
     const getGroups = async () => {
-      const data = await auctionService.getauctions();
+      const data = await auctionInventoryService.getInventories();
       if (data) {
         setList(data);
-        console.log(data);
         setSearchBackupList(data);
         console.log(data, "show-data");
       }
@@ -90,56 +66,50 @@ const GroupList = () => {
   };
 
   const viewDetails = (row) => {
-    history.push(`/app/dashboards/auction/edit-auction/${row._id}`);
+    // auction-inventory/edit-auction-inventory/6321b3d6e2dbb9f6ae8dfd1f
+    history.push(
+      `/app/dashboards/auction-inventory/edit-auction-inventory/${row._id}`
+    );
   };
 
   const tableColumns = [
     {
-      title: "Name",
-      dataIndex: "name",
+      title: "Auction Name",
+      dataIndex: "auction",
+      render: (auction) => <Flex alignItems="center">{auction.name}</Flex>,
       sorter: (a, b) => utils.antdTableSorter(a, b, "name"),
     },
     {
-      title: "Business",
-      dataIndex: "businessType",
-      sorter: (a, b) => utils.antdTableSorter(a, b, "business"),
+      title: "Chasis Number",
+      dataIndex: "chasisNumber",
+      sorter: (a, b) => utils.antdTableSorter(a, b, "chasisNumber"),
     },
     {
       title: "Bid Limit",
       dataIndex: "bidLimit",
-      sorter: (a, b) => utils.antdTableSorter(a, b, "business"),
+      sorter: (a, b) => utils.antdTableSorter(a, b, "bidLimit"),
     },
     {
-      title: "Business",
-      dataIndex: "businessType",
-      sorter: (a, b) => utils.antdTableSorter(a, b, "business"),
+      title: "Start Date",
+      dataIndex: "startDate",
+      sorter: (a, b) => utils.antdTableSorter(a, b, "startDate"),
     },
     {
-      title: "Start Time",
-      dataIndex: "startTimestamp",
-      render: (status) => {
-        var d = new Date(Number(status)).toDateString();
-        return <Flex alignItems="center">{d}</Flex>;
-      },
-      sorter: (a, b) => utils.antdTableSorter(a, b, "business"),
+      title: "End Date",
+      dataIndex: "endDate",
+      sorter: (a, b) => utils.antdTableSorter(a, b, "endDate"),
     },
     {
-      title: "End Time",
-      dataIndex: "endTimestamp",
-      render: (status) => {
-        var d = new Date(Number(status)).toDateString();
-        return <Flex alignItems="center">{d}</Flex>;
-      },
-      sorter: (a, b) => utils.antdTableSorter(a, b, "business"),
+      title: "Created By",
+      dataIndex: "createdBy",
+      render: (createdBy) => <Flex alignItems="center">{createdBy.name}</Flex>,
+      sorter: (a, b) => utils.antdTableSorter(a, b, "name"),
     },
-
     {
-      title: "Status",
-      dataIndex: "status",
-      render: (status) => (
-        <Flex alignItems="center">{getStockStatus(status)}</Flex>
-      ),
-      sorter: (a, b) => utils.antdTableSorter(a, b, "status"),
+      title: "Updated By",
+      dataIndex: "updatedBy",
+      render: (updatedBy) => <Flex alignItems="center">{updatedBy.name}</Flex>,
+      sorter: (a, b) => utils.antdTableSorter(a, b, "name"),
     },
     {
       title: "",
@@ -163,17 +133,6 @@ const GroupList = () => {
     const searchArray = e.currentTarget.value ? list : searchBackupList;
     const data = utils.wildCardSearch(searchArray, value);
     setList(data);
-    setSelectedRowKeys([]);
-  };
-
-  const handleShowStatus = (value) => {
-    if (value !== "All") {
-      const key = "status";
-      const data = utils.filterArray(searchBackupList, key, value);
-      setList(data);
-    } else {
-      setList(searchBackupList);
-    }
   };
 
   const filters = () => (
@@ -184,19 +143,6 @@ const GroupList = () => {
           prefix={<SearchOutlined />}
           onChange={(e) => onSearch(e)}
         />
-      </div>
-      <div className="mb-3">
-        <Select
-          defaultValue="All"
-          className="w-100"
-          style={{ minWidth: 180 }}
-          onChange={handleShowStatus}
-          placeholder="Status"
-        >
-          <Option value="All">All</Option>
-          <Option value="Active">Active</Option>
-          <Option value="Hold">Hold</Option>
-        </Select>
       </div>
     </Flex>
   );
@@ -226,7 +172,7 @@ const GroupList = () => {
               icon={<PlusCircleOutlined />}
               block
             >
-              Add Auction
+              Add Auction Inventory
             </Button>
           )}
         </div>
@@ -238,4 +184,4 @@ const GroupList = () => {
   );
 };
 
-export default GroupList;
+export default AuctionInventoryList;

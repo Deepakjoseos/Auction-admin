@@ -19,14 +19,14 @@ buyinglLimitService.update = async (data) => {
 buyinglLimitService.getAll = async (query) => {
   try {
     let url = `${apiRoute}/get/all/admin?api=buyingLimit`;
-    if (query.participantId)
+    if (query?.participantId)
       url = `${url}&participantId=${query.participantId}`;
 
     const res = await fetch({
       url,
-      method: "post",
+      method: "get",
     });
-    return res;
+    return res.data;
   } catch (err) {
     console.log(err, "show-err");
   }

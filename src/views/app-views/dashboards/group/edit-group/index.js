@@ -1,8 +1,8 @@
 import React from "react";
-import FeeTypeForm from "../add-group/group-form";
+import GroupForm from "../group-form";
 
-const EditFeeType = (props) => {
-  return <FeeTypeForm mode="EDIT" param={props.match.params} />;
+const EditGroup = (props) => {
+  return <GroupForm mode="EDIT" param={props.match.params} />;
 };
 
-export default EditFeeType;
+export default EditGroup;
