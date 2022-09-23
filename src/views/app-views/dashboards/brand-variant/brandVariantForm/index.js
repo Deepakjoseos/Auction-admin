@@ -8,13 +8,14 @@ import { singleImageUploader } from "utils/s3/s3ImageUploader";
 import brandService from "services/brand";
 import Utils from "utils";
 import { useHistory } from "react-router-dom";
+import brandVariantService from "services/brandVariant.service";
 
 const { TabPane } = Tabs;
 
 const ADD = "ADD";
 const EDIT = "EDIT";
 
-const BrandForm = (props) => {
+const BrandVariantForm = (props) => {
   const { mode = ADD, param } = props;
   const history = useHistory();
 
@@ -23,6 +24,8 @@ const BrandForm = (props) => {
   // For Image Upload
   const [uploadedImg, setImage] = useState(null);
   const [submitLoading, setSubmitLoading] = useState(false);
+  const [brands, setBrands] = useState([]);
+  const [brandId, setBrandId] = useState([]);
 
   // For Image upload
   const {
@@ -31,43 +34,47 @@ const BrandForm = (props) => {
     onChange: onChangeImages,
     onRemove: onRemoveImages,
     setFileList: setFileListImages,
-  } = useUpload(1); // useUpload(1, 'multiple') or useUpload(1)
+  } = useUpload(1);
 
   useEffect(() => {
-    if (mode === EDIT) {
-      const fetchBrandById = async () => {
-        const { id } = param;
-        const data = await brandService.getBrandById(id);
-        if (data) {
-          // For Image upload
-          let himg = [];
-          if (data.logo) {
-            himg = [
-              {
-                uid: Math.random() * 1000,
-                name: Utils.getBaseName(data.logo),
-                url: data.logo,
-                thumbUrl: data.logo,
-              },
-            ];
-
-            setImage(himg);
-            setFileListImages(himg);
-          }
-          // For setting form values when Load if it is in EDIT mode
-          form.setFieldsValue({
-            name: data.name,
-            status: data.status,
-            url: data.url,
-          });
-        } else {
-          history.replace("/app/dashboards/brand/brands-list");
-        }
-      };
-
-      fetchBrandById();
-    }
+    if (mode === EDIT) fetchBrandVariantById();
+    fetchBrands();
   }, [form, mode, param, props]);
+
+  const fetchBrands = async () => {
+    const data = await brandService.getBrands();
+    if (data) setBrands(data);
+  };
+
+  const fetchBrandVariantById = async () => {
+    const { id } = param;
+    const data = await brandVariantService.getById(id);
+    if (data) {
+      // For Image upload
+      let himg = [];
+      if (data.logo) {
+        himg = [
+          {
+            uid: Math.random() * 1000,
+            name: Utils.getBaseName(data.logo),
+            url: data.logo,
+            thumbUrl: data.logo,
+          },
+        ];
+
+        setImage(himg);
+        setFileListImages(himg);
+      }
+      // For setting form values when Load if it is in EDIT mode
+      form.setFieldsValue({
+        name: data.name,
+        status: data.status,
+        brandId: data.brand._id,
+      });
+    } else {
+      history.replace("/app/dashboards/brand-variant/list");
+    }
+  };
 
   // Image Upload
   const propsImages = {
@@ -102,11 +109,12 @@ const BrandForm = (props) => {
             );
 
             //  append image url to values object
-            values.logo = imgValue;
+            // values.logo = imgValue;
+            values.logo = `google.com`;
 
-            const created = await brandService.createBrand(values);
+            const created = await brandVariantService.create(values);
             if (created) {
-              message.success(`Created ${values.name} to Brand list`);
+              message.success(`Add ${values.name} to Brand Variant List`);
               history.goBack();
             }
           } else {
@@ -126,11 +134,12 @@ const BrandForm = (props) => {
             );
 
             //  append image url to values object
-            values.logo = imgValue;
-            console.log("imgvalue", imgValue);
-            const edited = await brandService.editBrand(param.id, values);
+            // values.logo = imgValue;
+            values.logo = `google.com`;
+            console.log("imgvalue", values);
+            const edited = await brandVariantService.edit(param.id, values);
             if (edited) {
-              message.success(`Edited ${values.name} to Brand list`);
+              message.success(`Edited ${values.name} to Brand Variant list`);
               history.goBack();
             }
           } else {
@@ -145,7 +154,6 @@ const BrandForm = (props) => {
         message.error("Please enter all required field ");
       });
   };
-
   return (
     <>
       <Form
@@ -172,7 +180,7 @@ const BrandForm = (props) => {
                 <Button
                   className="mr-2"
                   onClick={() =>
-                    history.push("/app/dashboards/brand/brands-list")
+                    history.push("/app/dashboards/brand-variant/list")
                   }
                 >
                   Discard
@@ -193,10 +201,12 @@ const BrandForm = (props) => {
           <Tabs defaultActiveKey="1" style={{ marginTop: 30 }}>
             <TabPane tab="General" key="1">
               <GeneralField
+                brands={brands}
                 uploadedImg={uploadedImg}
                 // uploadLoading={uploadLoading}
                 // handleUploadChange={handleUploadChange}
                 propsImages={propsImages}
+                formMode={mode}
               />
             </TabPane>
           </Tabs>
@@ -206,4 +216,4 @@ const BrandForm = (props) => {
   );
 };
 
-export default BrandForm;
+export default BrandVariantForm;

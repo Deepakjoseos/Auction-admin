@@ -1,37 +1,30 @@
-import React from 'react'
-import { Input, Row, Col, Card, Form, Upload, InputNumber, Select } from 'antd'
-import { ImageSvg } from 'assets/svg/icon'
-import CustomIcon from 'components/util-components/CustomIcon'
+import React from "react";
+import { Input, Row, Col, Card, Form, Upload, Select } from "antd";
+import { ImageSvg } from "assets/svg/icon";
+import CustomIcon from "components/util-components/CustomIcon";
 
-// const { Dragger } = Upload
-const { Option } = Select
+const { Option } = Select;
 
 const rules = {
   name: [
     {
       required: true,
-      message: 'Required',
-    },
-  ],
-  image: [
-    {
-      required: true,
-      message: 'Required',
+      message: "Required",
     },
   ],
   status: [
     {
       required: true,
-      message: 'Required',
+      message: "Required",
     },
   ],
   url: [
     {
       required: true,
-      message: 'Required',
+      message: "Required",
     },
   ],
-}
+};
 
 const GeneralField = (props) => (
   <Row gutter={16}>
@@ -60,6 +53,6 @@ const GeneralField = (props) => (
       </Card>
     </Col>
   </Row>
-)
+);
 
-export default GeneralField
+export default GeneralField;
