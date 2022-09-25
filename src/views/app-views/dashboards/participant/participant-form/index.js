@@ -5,20 +5,15 @@ import { Tabs, Form, Button, message } from "antd";
 import Flex from "components/shared-components/Flex";
 // import GeneralField from '../GeneralField'
 import GeneralField from "../participant-form/GeneralField";
-import useUpload from "hooks/useUpload";
-import { singleImageUploader } from "utils/s3/s3ImageUploader";
-import informationService from "services/information";
-import Utils from "utils";
 import { useHistory } from "react-router-dom";
 import participantService from "services/Participant";
 import authAdminService from "services/auth/admin";
-import { get } from "lodash";
 import { useSelector } from "react-redux";
 import clientService from "services/client";
-import registrationService from "services/registration";
 // import Registrations from '../../registration/list-registration/index'
 import feeTypeService from "services/FeeType";
 import RegistrationForm from "../registration/registrationForm/index";
+import DepositForm from "../make-Deposit";
 const { TabPane } = Tabs;
 
 const ADD = "ADD";
@@ -29,7 +24,6 @@ const ParticipantForm = (props) => {
   const history = useHistory();
 
   const [form] = Form.useForm();
-  const [uploadedImg, setImage] = useState(null);
   //   const [uploadLoading, setUploadLoading] = useState(false)
   const [submitLoading, setSubmitLoading] = useState(false);
   const [subAdmins, setSubAdmins] = useState([]);
@@ -39,7 +33,6 @@ const ParticipantForm = (props) => {
   const [isBuyer, setIsBuyer] = useState(false);
   const { user } = useSelector((state) => state.auth);
   const [currentParticipant, setCurrentParticipant] = useState();
-  const [registrations, setRegistrations] = useState([]);
 
   //   const [editorRender, setEditorRender] = useState(false)
   const [feeTypes, setFeeType] = useState([]);
@@ -266,7 +259,10 @@ const ParticipantForm = (props) => {
             <TabPane tab="Registration" key="2">
               <RegistrationForm participantId={param?.id} />
             </TabPane>
-            <TabPane tab="Document Upload" key="3"></TabPane>
+            <TabPane tab="Deposit" key="3">
+              <DepositForm participantId={param?.id} />
+            </TabPane>
+            <TabPane tab="Document Upload" key="4"></TabPane>
           </Tabs>
         </div>
       </Form>
