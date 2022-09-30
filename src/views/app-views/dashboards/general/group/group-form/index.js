@@ -14,13 +14,20 @@ const EDIT = "EDIT";
 const GroupForm = (props) => {
   const { param } = props;
   const history = useHistory();
-  const [mode, setMode] = useState("EDIT");
+  const [mode, setMode] = useState("ADD");
   const [form] = Form.useForm();
   const [submitLoading, setSubmitLoading] = useState(false);
 
   useEffect(() => {
     if (mode === EDIT && param?.id) fetchGroup();
   }, [form, mode, param, props]);
+  useEffect(()=>{
+   if(param?.id){
+    setMode('EDIT')
+   }else{
+    setMode('ADD')
+   }
+  },[param?.id])
 
   console.log(mode);
   const fetchGroup = async () => {
@@ -30,9 +37,9 @@ const GroupForm = (props) => {
     if (data) {
       form.setFieldsValue({
         name: data.name,
-        vehicleTypeId: data.vehicleType.name,
-        cityId: data.city.name,
-        regionId: data.region.name,
+        vehicleTypeId: data.vehicleType?._id,
+        cityId: data.city?._id,
+        regionId: data.region?._id,
         status: data.status,
         business: data.business,
       });
@@ -121,9 +128,9 @@ const GroupForm = (props) => {
         <div className="container">
           <Tabs defaultActiveKey="1" style={{ marginTop: 30 }}>
             <TabPane tab="General" key="1">
-              <div onClick={() => setMode(EDIT)}>
+              {/* <div onClick={() => setMode(EDIT)}> */}
                 <GeneralField form={form} />
-              </div>
+              {/* </div> */}
             </TabPane>
             <TabPane tab="Update Participants" key="2">
               <div onClick={() => setMode(EDIT)}>
