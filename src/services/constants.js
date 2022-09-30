@@ -33,5 +33,20 @@ constantsService.getRegistrationConstant = async function () {
     console.log(err, "show-err");
   }
 };
+constantsService.getTemplates = async function () {
+  try {
+    const res = await fetch({
+      url: "/constants/template",
+      method: "get",
+    });
 
+    // For coverting array
+    // const listingType = Object.values(res.data.ListingType).map((val) => val);
+    
+
+    return res.data.ListingType;
+  } catch (err) {
+    console.log(err, "show-err");
+  }
+};
 export default constantsService;

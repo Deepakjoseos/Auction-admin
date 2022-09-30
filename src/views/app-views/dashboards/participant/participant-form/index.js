@@ -14,6 +14,10 @@ import clientService from "services/client";
 import feeTypeService from "services/FeeType";
 import RegistrationForm from "../registration/registrationForm/index";
 import DepositForm from "../make-Deposit";
+import WalletField from "../wallet/walletField";
+import WalletTransaction from "../../wallet-transaction";
+import WalletTransactionParticipant from "./wallet-transactions-list";
+import WalletFieldForm from "../wallet";
 const { TabPane } = Tabs;
 
 const ADD = "ADD";
@@ -263,6 +267,14 @@ const ParticipantForm = (props) => {
               <DepositForm participantId={param?.id} />
             </TabPane>
             <TabPane tab="Document Upload" key="4"></TabPane>
+            <TabPane tab="Wallet" key="5">
+            <WalletFieldForm participantId={param?.id}/>
+            </TabPane>
+            <TabPane tab="Wallet Transactions" key="6">
+             <WalletTransactionParticipant participantId={param?.id}/>
+            </TabPane>
+
+
           </Tabs>
         </div>
       </Form>

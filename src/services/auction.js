@@ -44,7 +44,7 @@ auctionService.createauction = async function (data) {
 auctionService.updateauction = async function (id, data) {
   try {
     const res = await fetch({
-      url: `${apiRoute}/${id}/update`,
+      url: `${apiRoute}/${id}/admin`,
       method: "PUT",
       data: data,
     });

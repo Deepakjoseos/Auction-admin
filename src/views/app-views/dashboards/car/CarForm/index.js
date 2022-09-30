@@ -9,6 +9,8 @@ import carService from 'services/car'
 import { useHistory } from 'react-router-dom'
 import Variant from './variant'
 import ImageField from './ImageField'
+import vehicletypeService from 'services/vehicleType'
+import brandService from 'services/brand'
 
 const { TabPane } = Tabs
 
@@ -26,6 +28,8 @@ const InformationForm = (props) => {
   const [submitLoading, setSubmitLoading] = useState(false)
   const [editorRender, setEditorRender] = useState(false)
   const [variantList, setVariantsList] = useState([])
+  const[vehicleTypes,setVehicleTypes] =useState([])
+  const [brands,setBrands] =useState([])
 
   const {
     fileList: fileListImages,
@@ -68,11 +72,25 @@ const InformationForm = (props) => {
       history.replace('/app/dashboards/car/car-list')
     }
   }
+  const getVehicleTypes = async ()=>{
+    const data = await vehicletypeService.getVehicleTypes()
+    if(data){
+      setVehicleTypes(data)
+    }
+  }
+  const getBrands = async () =>{
+    const data = await brandService.getBrands()
+    if(data){
+      setBrands(data)
+    }
+  }
 
   useEffect(() => {
     if (mode === EDIT) {
       fetchCarById()
     }
+    getVehicleTypes()
+    getBrands()
   }, [form, mode, param, props])
 
   const propsImages = {
@@ -93,8 +111,17 @@ const InformationForm = (props) => {
     form
       .validateFields()
       .then(async (values) => {
-        values.vehicleTypeId = '922af3ff-434d-4ef8-99a2-93f5d66fe7d9'
-        values.brandId = '62ea0981d5859d8db41a4165'
+        // values.vehicleTypeId = '922af3ff-434d-4ef8-99a2-93f5d66fe7d9'
+        // values.brandId = '62ea0981d5859d8db41a4165'
+        const sendingValues={
+          name: values?.name,
+          status: values?.status,
+          description: values?.description,
+          videos: values?.videos,
+          brandId: values?.brandId,
+          vehicleTypeId: values?.vehicleTypeId,
+          priceRange: values?.priceRange,
+        }
         if (mode === ADD) {
           // Checking if image exists
           if (uploadedImg.length !== 0 && uploadedImg !== null) {
@@ -110,7 +137,7 @@ const InformationForm = (props) => {
             values.images = []
           }
 
-          const created = await carService.createCar(values)
+          const created = await carService.createCar(sendingValues)
           if (created) {
             message.success(`Created ${values.name} to Car list`)
             history.goBack()
@@ -190,7 +217,7 @@ const InformationForm = (props) => {
         <div className="container">
           <Tabs defaultActiveKey="1" style={{ marginTop: 30 }}>
             <TabPane tab="General" key="1">
-              <GeneralField uploadedImg={uploadedImg} form={form} />
+              <GeneralField uploadedImg={uploadedImg} form={form} vehicleTypes={vehicleTypes} brands={brands}/>
             </TabPane>
             {id && (
               <TabPane tab="Variant" key="2">

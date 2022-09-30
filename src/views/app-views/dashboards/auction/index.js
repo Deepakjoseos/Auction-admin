@@ -1,22 +1,25 @@
-import React from "react";
-import { Route, Switch, Redirect } from "react-router-dom";
-import AddAuction from "./add-auction";
-import EditAuction from "./edit-auction";
+import React from 'react'
+import { Redirect, Route, Switch } from 'react-router-dom'
+import Auction from './auction'
+import AuctionInventory from './auction-inventory'
+import Bidding from './bidding'
 
-import AuctionList from "./auction-list";
-// import Orders from './orders'
-
-const Auction = (props) => {
-  const { match } = props;
-
+const Auctions
+ = ({ match }) => {
   return (
     <Switch>
-      <Redirect exact from={`${match.url}`} to={`${match.url}/auction-list`} />
-      <Route path={`${match.url}/add-auction`} component={AddAuction} />
-      <Route path={`${match.url}/edit-auction/:id`} component={EditAuction} />
-      <Route path={`${match.url}/auction-list`} component={AuctionList} />
-    </Switch>
-  );
-};
+      <Redirect
+        exact
+        from={`${match.url}`}
+        to={`${match.url}/auction/auction-list`}
+      />
+      <Route path={`${match.url}/auction`} component={Auction} />
+      <Route path={`${match.url}/auction-inventory`} component={AuctionInventory} />
+      <Route path={`${match.url}/bidding`} component={Bidding} />
 
-export default Auction;
+    </Switch>
+  )
+}
+
+export default Auctions
+

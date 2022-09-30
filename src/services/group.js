@@ -17,6 +17,7 @@ groupService.getGroups = async function () {
 };
 
 groupService.getGroupById = async function (id) {
+  console.log('groupiiiiiddd',id)
   try {
     const res = await fetch({
       url: `${apiRoute}/${id}/admin`,

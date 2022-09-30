@@ -36,6 +36,7 @@ const BuyingLimitForm = (props) => {
   };
 
   const onFinish = async () => {
+    console.log('walletYupdates')
     setSubmitLoading(true);
     form
       .validateFields()

@@ -14,6 +14,7 @@ import { useHistory } from 'react-router-dom'
 import utils from 'utils'
 import informationService from 'services/information'
 import { useSelector } from 'react-redux'
+import { TruncateLines } from "react-truncate-lines";
 
 const { Option } = Select
 
@@ -124,7 +125,13 @@ const InformationList = () => {
   const viewDetails = (row) => {
     history.push(`/app/dashboards/information/edit-information/${row._id}`)
   }
-
+  const  stripHtml =(description)=> {
+    var temporalDivElement = document.createElement('div')
+    temporalDivElement.innerHTML = description
+    let content =
+      temporalDivElement.textContent || temporalDivElement.innerText || ''
+    return content
+  }
   const deleteRow = async (row) => {
     const resp = await informationService.deleteInformation(row._id)
 
@@ -163,6 +170,11 @@ const InformationList = () => {
     {
       title: 'Description',
       dataIndex: 'description',
+      render: (description) => (
+        <TruncateLines lines={1} ellipsis={<span>...</span>}>
+          {stripHtml(description)}
+          </TruncateLines>
+      ),
     },
     {
       title: 'Priority',

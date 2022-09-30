@@ -50,7 +50,7 @@ const UserForm = (props) => {
           const created = await authAdminService.createUser(sendingValues)
           if (created) {
             console.log(created)
-            message.success(`Created New ${values.type}`)
+            message.success(`Created New user ${values?.name}`)
             history.goBack()
           }
         }
