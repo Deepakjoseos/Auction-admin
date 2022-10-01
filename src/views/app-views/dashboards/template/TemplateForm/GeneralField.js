@@ -70,7 +70,8 @@ const rules = {
 }
 
 const GeneralField = ({ form, tempConstants, form_statuses }) => {
-  console.log('constants', tempConstants)
+
+  console.log('constantstemplist', tempConstants)
   return (
     <Row gutter={16}>
       <Col xs={24} sm={24} md={24}>
@@ -89,16 +90,9 @@ const GeneralField = ({ form, tempConstants, form_statuses }) => {
               filterOption={(input, option) =>
                 option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
               }>
-              {
-                Object.keys(tempConstants).map(function (key) {
-                  return (
-                    <Option key={key} value={key}>
-                      {tempConstants[key]}
-                    </Option>
-                  )
-                  // console.log(key, data.WALLET['FUND_ACCOUNT_TYPE'][key],'constants-wallent');
-                })
-              }
+              {tempConstants?.map((item) => (
+                    <Option value={item}>{item}</Option>
+                  ))}
             </Select>
           </Form.Item>
 
@@ -139,7 +133,7 @@ const GeneralField = ({ form, tempConstants, form_statuses }) => {
                 />
               </Form.Item>
             </Col>
-            <Col xs={24} sm={24} md={8}>
+            {/* <Col xs={24} sm={24} md={8}>
               <h5>Copy Keys</h5>
               <div
                 style={{
@@ -173,7 +167,7 @@ const GeneralField = ({ form, tempConstants, form_statuses }) => {
                   )}
                 />
               </div>
-            </Col>
+            </Col> */}
             <Col xs={24} sm={24} md={16}>
               <Form.Item name="emailStatus" label="Status" rules={rules.status}>
                 <Select placeholder="Status">
@@ -211,7 +205,7 @@ const GeneralField = ({ form, tempConstants, form_statuses }) => {
                 />
               </Form.Item>
             </Col>
-            <Col xs={24} sm={24} md={8}>
+            {/* <Col xs={24} sm={24} md={8}>
               <h5>Copy Keys</h5>
               <div
                 style={{
@@ -245,7 +239,7 @@ const GeneralField = ({ form, tempConstants, form_statuses }) => {
                   )}
                 />
               </div>
-            </Col>
+            </Col> */}
             <Col xs={24} sm={24} md={16}>
               <Form.Item name="smsStatus" label="Status" rules={rules.status}>
                 <Select placeholder="Status">
@@ -283,7 +277,7 @@ const GeneralField = ({ form, tempConstants, form_statuses }) => {
                 />
               </Form.Item>
             </Col>
-            <Col xs={24} sm={24} md={8}>
+            {/* <Col xs={24} sm={24} md={8}>
               <h5>Copy Keys</h5>
               <div
                 style={{
@@ -300,7 +294,7 @@ const GeneralField = ({ form, tempConstants, form_statuses }) => {
                       : []
                   }
                   renderItem={(item) => (
-                    <List.Item key={item}>
+                    <List.Item key={item}> 
                       <List.Item.Meta title={item} />
 
                       <CopyToClipboard
@@ -317,7 +311,7 @@ const GeneralField = ({ form, tempConstants, form_statuses }) => {
                   )}
                 />
               </div>
-            </Col>
+            </Col> */}
             <Col xs={24} sm={24} md={16}>
               <Form.Item name="fcmStatus" label="Status" rules={rules.status}>
                 <Select placeholder="Status">

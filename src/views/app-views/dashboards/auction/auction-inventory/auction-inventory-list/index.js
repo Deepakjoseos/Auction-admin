@@ -161,21 +161,27 @@ const AuctionInventoryList = () => {
                   icon={<PlusCircleOutlined />}
                   block
                 >
-                  Add Auction Inventory
+                 Upload Auction Inventory
                 </Button>
               )}
             </>
           ) : (
+            <>
             <Button
               onClick={addGroup}
               type="primary"
               icon={<PlusCircleOutlined />}
               block
             >
-              Add Auction Inventory
+              Upload Auction Inventory
             </Button>
+            
+          </>
           )}
+          
+          
         </div>
+        
       </Flex>
       <div className="table-responsive">
         <Table columns={tableColumns} dataSource={list} rowKey="id" />

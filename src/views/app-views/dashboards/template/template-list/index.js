@@ -40,25 +40,26 @@ const TemplateList = () => {
   const [searchBackupList, setSearchBackupList] = useState([])
   const [selectedRows, setSelectedRows] = useState([])
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
-  const [statuses,setStatuses] = useState([])
+  const [statuses, setStatuses] = useState([])
   // const fetchConstants = async () => {
   //   const data = await constantsService.getConstants()
   //   if (data) {
   //     // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
-  
+
   //     setStatuses(Object.values(data.GENERAL['STATUS']))
-  
+
   //   }
   // }
-  useEffect(() => {
-    const getTemplates = async () => {
-      const data = await templateService.getTemplates()
-      if (data) {
-        setList(data)
-        setSearchBackupList(data)
-        console.log(data, 'show-data')
-      }
+  const getTemplates = async () => {
+    const data = await templateService.getTemplates()
+    if (data) {
+      setList(data)
+      setSearchBackupList(data)
+      console.log(data, 'show-data')
     }
+  }
+  useEffect(() => {
+
     getTemplates()
     // fetchConstants()
   }, [])
@@ -93,22 +94,25 @@ const TemplateList = () => {
   }
 
   const deleteRow = async (row) => {
-    const resp = await templateService.deleteTemplate(row.id)
-
+    const resp = await templateService.deleteTemplate(row._id)
     if (resp) {
-      const objKey = 'id'
-      let data = list
-      if (selectedRows.length > 1) {
-        selectedRows.forEach((elm) => {
-          data = utils.deleteArrayRow(data, objKey, elm.id)
-          setList(data)
-          setSelectedRows([])
-        })
-      } else {
-        data = utils.deleteArrayRow(data, objKey, row.id)
-        setList(data)
-      }
+      getTemplates()
     }
+    // if (resp) {
+    //   const objKey = 'id'
+    //   let data = list
+    //   if (selectedRows.length > 1) {
+    //     selectedRows.forEach((elm) => {
+    //       data = utils.deleteArrayRow(data, objKey, elm.id)
+    //       setList(data)
+    //       setSelectedRows([])
+    //     })
+    //   } else {
+    //     data = utils.deleteArrayRow(data, objKey, row.id)
+    //     setList(data)
+    //   }
+    // }
+
   }
 
   const tableColumns = [
@@ -168,20 +172,20 @@ const TemplateList = () => {
         />
       </div>
       <div className="mb-3">
-      <Select
-              className="w-100"
-              style={{ minWidth: 180 }}
-              placeholder="Status"
-            >
-              <Option value="">All</Option>
-            {/* {statuses.map((item) => (
+        <Select
+          className="w-100"
+          style={{ minWidth: 180 }}
+          placeholder="Status"
+        >
+          <Option value="">All</Option>
+          {/* {statuses.map((item) => (
                 <Option key={item.id} value={item}>
                   {item}
                 </Option>
               ))} */}
-              <Option value="Active">Active</Option>
-              <Option value="Hold">Hold</Option>
-            </Select>
+          <Option value="Active">Active</Option>
+          <Option value="Hold">Hold</Option>
+        </Select>
       </div>
     </Flex>
   )

@@ -58,10 +58,10 @@ const GeneralField = ({form,vehicleTypes,brands}) => (
         <Form.Item name="priceRange" label="PriceRange">
           <Input placeholder="priceRange" />
         </Form.Item>
-        <Form.Item name="vehicleType" label="Vehicle Type" >
+        <Form.Item name="vehicleTypeId" label="Vehicle Type" >
             <Select placeholder="Vehicle Type">
               {vehicleTypes.map((item) => (
-                <Option key={item.id} value={item.id}>
+                <Option key={item.id} value={item._id}>
                   {item.name}
                 </Option>
               ))}
@@ -70,7 +70,7 @@ const GeneralField = ({form,vehicleTypes,brands}) => (
           <Form.Item name="brandId" label="Brand" rules={rules.status}>
             <Select placeholder="Brand">
               {brands.map((item) => (
-                <Option key={item.id} value={item.id}>
+                <Option key={item.id} value={item._id}>
                   {item.name}
                 </Option>
               ))}

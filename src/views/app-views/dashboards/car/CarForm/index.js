@@ -44,7 +44,7 @@ const InformationForm = (props) => {
   const fetchCarById = async () => {
     const data = await carService.getCarById(id)
     if (data) {
-      const images = data.images.map((cur, i) => {
+      const images = data.images?.map((cur, i) => {
         return {
           uid: i + Math.random() * 10,
           url: cur?.image,

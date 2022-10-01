@@ -41,10 +41,11 @@ constantsService.getTemplates = async function () {
     });
 
     // For coverting array
-    // const listingType = Object.values(res.data.ListingType).map((val) => val);
+     const listingTypes = Object.values(res.data.ListingType).map((val) => val);
     
 
-    return res.data.ListingType;
+    // return res.data.ListingType;
+    return listingTypes
   } catch (err) {
     console.log(err, "show-err");
   }

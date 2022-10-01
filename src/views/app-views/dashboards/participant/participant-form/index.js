@@ -25,6 +25,7 @@ const EDIT = "EDIT";
 
 const ParticipantForm = (props) => {
   const { mode = ADD, param } = props;
+  const id = param?.id
   const history = useHistory();
 
   const [form] = Form.useForm();
@@ -260,19 +261,24 @@ const ParticipantForm = (props) => {
                 clients={clients}
               />
             </TabPane>
-            <TabPane tab="Registration" key="2">
-              <RegistrationForm participantId={param?.id} />
-            </TabPane>
-            <TabPane tab="Deposit" key="3">
-              <DepositForm participantId={param?.id} />
-            </TabPane>
-            <TabPane tab="Document Upload" key="4"></TabPane>
-            <TabPane tab="Wallet" key="5">
-            <WalletFieldForm participantId={param?.id}/>
-            </TabPane>
-            <TabPane tab="Wallet Transactions" key="6">
-             <WalletTransactionParticipant participantId={param?.id}/>
-            </TabPane>
+            {id  && (
+              <>
+                <TabPane tab="Registration" key="2">
+                  <RegistrationForm participantId={param?.id} />
+                </TabPane>
+                <TabPane tab="Deposit" key="3">
+                  <DepositForm participantId={param?.id} />
+                </TabPane>
+                <TabPane tab="Document Upload" key="4"></TabPane>
+                <TabPane tab="Wallet" key="5">
+                  <WalletFieldForm participantId={param?.id} />
+                </TabPane>
+                <TabPane tab="Wallet Transactions" key="6">
+                  <WalletTransactionParticipant participantId={param?.id} />
+                </TabPane>
+              </>
+            )}
+
 
 
           </Tabs>

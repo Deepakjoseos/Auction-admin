@@ -22,7 +22,7 @@ const TemplateForm = (props) => {
   const [form] = Form.useForm()
   //   const [uploadLoading, setUploadLoading] = useState(false)
   const [submitLoading, setSubmitLoading] = useState(false)
-  const [tempConstants, setTempConstants] = useState({})
+  const [tempConstants, setTempConstants] = useState([])
   const [editorRender, setEditorRender] = useState(false)
   const[form_statuses,setStatuses] = useState([])
   // const[customer,setCustomers] = useState([])
@@ -43,14 +43,11 @@ const TemplateForm = (props) => {
       const data = await constantsService.getTemplates()
       if (data) {
         // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
-  
+         console.log('listingTypes',data)
         setTempConstants(data)
-
-  
-        console.log('listiknglet',tempConstants)
-     
   
       }
+      // console.log('listiknglet',tempConstants)
     }
     
     fetchConstants()

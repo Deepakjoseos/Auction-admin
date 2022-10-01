@@ -161,7 +161,7 @@ const AuctionInventoryList = () => {
                   icon={<PlusCircleOutlined />}
                   block
                 >
-                  Add Auction Inventory
+                  Upload Auction Inventory
                 </Button>
               )}
             </>
@@ -172,7 +172,7 @@ const AuctionInventoryList = () => {
               icon={<PlusCircleOutlined />}
               block
             >
-              Add Auction Inventory
+              Upload Auction Inventory
             </Button>
           )}
         </div>
