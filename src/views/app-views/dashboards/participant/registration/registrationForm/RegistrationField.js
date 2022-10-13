@@ -127,8 +127,6 @@ const rules = {
       message: 'Required',
     },
   ],
-  
- 
 }
 // const getStockStatus = (status) => {
 //   if (status === 'Active') {
@@ -172,6 +170,10 @@ onFinish
    const [registrations,setRegistrations]= useState([])
    const [isModalVisible, setIsModalVisible] = useState(false);
 
+  if (registrations) {
+    setRegistrationsList(registrations)
+    setSearchBackupList(registrations)
+  }
 
 useEffect(()=>{
   const getFeeTypes = async () => {
@@ -209,7 +211,6 @@ const findFeeTypeName= (rowId)=>{
               <span className="ml-2">View Details</span>
             </Flex>
           </Menu.Item>
-        
         </Menu>
       )
     // } 
@@ -236,7 +237,6 @@ const findFeeTypeName= (rowId)=>{
    }
 
   // For deleting a row
-  
 
   // Antd Table Columns
   const tableColumns = [
@@ -311,7 +311,7 @@ const findFeeTypeName= (rowId)=>{
   // When Search is used
   const onSearch = (e) => {
     const value = e.currentTarget.value
-    const searchArray =  searchBackupList
+    const searchArray = searchBackupList
     const data = utils.wildCardSearch(searchArray, value)
     setRegistrationsList(data)
     setSelectedRowKeys([])
@@ -353,9 +353,110 @@ const findFeeTypeName= (rowId)=>{
       </div> */}
     </Flex>
   )
-    
+
   return (
     <>
+      {registrationsList ? (
+        <Table
+          className="table-responsive"
+          columns={tableColumns}
+          dataSource={registrationsList}
+          rowKey="id"
+        />
+      ) : (
+        ''
+      )}
+
+      <Row gutter={16}>
+        <Col xs={24} sm={24} md={17}>
+          {/* <Form initialValues={initialValues}>  */}
+          <Card title="Basic Info">
+            <Form.Item
+              name="feeRemark"
+              label="FeeRemark"
+              placeholder="FeeRemark"
+              rules={rules.feeRemark}
+            >
+              <Input />
+            </Form.Item>
+
+            <Form.Item
+              name="countedIn"
+              label="CountedIN"
+              rules={rules.countedIn}
+              placeholder="CountedIn"
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label="Registration Date"
+              name="date"
+              rules={rules.date}
+              placeholder="Registration date"
+            >
+              <DatePicker className="board-card-modal date-picker w-100" />
+            </Form.Item>
+            <Form.Item
+              label="Registration Expiry Date"
+              name="expiry"
+              rules={rules.expiry}
+              placeholder="Registration Expiry Date"
+            >
+              <DatePicker className="board-card-modal date-picker w-100" />
+            </Form.Item>
+            <Form.Item
+              name="status"
+              label="Status"
+              rules={rules.status}
+              placeholder="Status"
+            >
+              <Select>
+                <Option value="Verified">Verified</Option>
+                <Option value="Evaluating">Evaluating</Option>
+              </Select>
+            </Form.Item>
+            <Form.Item
+              name="mode"
+              label="Mode"
+              rules={rules.mode}
+              placeholder="Mode"
+            >
+              <Select>
+                <Option value="Wallet">Wallet</Option>
+                <Option value="RTGS">RTGS</Option>
+                <Option value="Cash">Cash</Option>
+                <Option value="Cheque">Cheque</Option>
+                <Option value="DD">DD</Option>
+                <Option value="NEFT">NEFT</Option>
+                <Option value="Card">Card</Option>
+                <Option value="PayTm">PayTm</Option>
+                <Option value="TEMP ">TEMP </Option>
+              </Select>
+            </Form.Item>
+            <Form.Item
+              label="Notes"
+              name="note"
+              rules={rules.note}
+              placeholder="Notes"
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label="Payment Date"
+              name="paymentDate"
+              rules={rules.paymentDate}
+              placeholder="Payment Date"
+            >
+              <DatePicker className="board-card-modal date-picker w-100" />
+            </Form.Item>
+            <Form.Item
+              name="fee"
+              label="Fee"
+              rules={rules.fee}
+              placeholder="Fee"
+            >
+              <InputNumber />
+            </Form.Item>
 
     {registrations?.length > 0 ? 
     
