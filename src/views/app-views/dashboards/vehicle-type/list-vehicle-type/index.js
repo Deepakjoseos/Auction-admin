@@ -45,7 +45,7 @@ const VehicleTypeList = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
   const [currentSubAdminRole, setCurrentSubAdminRole] = useState({})
 
-  useEffect(() => {
+  
     const getVehicleTypes = async () => {
       const data = await vehicletypeService.getVehicleTypes()
       if (data) {
@@ -54,97 +54,50 @@ const VehicleTypeList = () => {
         console.log(data, 'show-data')
       }
     }
-    console.log('hi')
+   
+    useEffect(() => {
     getVehicleTypes()
   }, [])
 
-  const { user } = useSelector((state) => state.auth)
 
-  useEffect(() => {
-    if (user) {
-      const vehicleRole = user.roles.find(
-        (role) => role.module === 'VEHICLE TYPE'
-      )
-      console.log('vehicleRole', vehicleRole)
-      setCurrentSubAdminRole(vehicleRole)
-    }
-  }, [user])
 
-  const dropdownMenu = (row) => {
-    if (window.localStorage.getItem('auth_type') === 'Admin') {
-      return (
-        <Menu>
-          <Menu.Item onClick={() => viewDetails(row)}>
-            <Flex alignItems="center">
-              <EyeOutlined />
-              <span className="ml-2">View Details</span>
-            </Flex>
-          </Menu.Item>
-          <Menu.Item onClick={() => deleteRow(row)}>
-            <Flex alignItems="center">
-              <DeleteOutlined />
-              <span className="ml-2">
-                {selectedRows.length > 0
-                  ? `Delete (${selectedRows.length})`
-                  : 'Delete'}
-              </span>
-            </Flex>
-          </Menu.Item>
-        </Menu>
-      )
-    } else {
-      return (
-        <Menu>
-          {currentSubAdminRole?.edit && (
-            <Menu.Item onClick={() => viewDetails(row)}>
-              <Flex alignItems="center">
-                <EyeOutlined />
-                <span className="ml-2">View Details</span>
-              </Flex>
-            </Menu.Item>
-          )}
-          {currentSubAdminRole?.delete && (
-            <Menu.Item onClick={() => deleteRow(row)}>
-              <Flex alignItems="center">
-                <DeleteOutlined />
-                <span className="ml-2">
-                  {selectedRows.length > 0
-                    ? `Delete (${selectedRows.length})`
-                    : 'Delete'}
-                </span>
-              </Flex>
-            </Menu.Item>
-          )}
-        </Menu>
-      )
-    }
-  }
+  
 
+  const dropdownMenu = (row) => (
+    <Menu>
+      <Menu.Item onClick={() => viewDetails(row)}>
+        <Flex alignItems="center">
+          <EyeOutlined />
+          <span className="ml-2">View Details</span>
+        </Flex>
+      </Menu.Item>
+      <Menu.Item onClick={() => deleteRow(row)}>
+        <Flex alignItems="center">
+          <DeleteOutlined />
+          <span className="ml-2">
+            {selectedRows.length > 0
+              ? `Delete (${selectedRows.length})`
+              : 'Delete'}
+          </span>
+        </Flex>
+      </Menu.Item>
+    </Menu>
+  )
   const addVehicleType = () => {
     history.push(`/app/dashboards/vehicle-type/add-vehicle-type`)
   }
 
   const viewDetails = (row) => {
-    history.push(`/app/dashboards/vehicle-type/edit-vehicle-type/${row.id}`)
+    history.push(`/app/dashboards/vehicle-type/edit-vehicle-type/${row._id}`)
   }
+ 
 
   const deleteRow = async (row) => {
-    const resp = await vehicletypeService.deleteVehicleType(row.id)
-
+    const resp = await vehicletypeService.deleteVehicleType(row._id)
     if (resp) {
-      const objKey = 'id'
-      let data = list
-      if (selectedRows.length > 1) {
-        selectedRows.forEach((elm) => {
-          data = utils.deleteArrayRow(data, objKey, elm.id)
-          setList(data)
-          setSelectedRows([])
-        })
-      } else {
-        data = utils.deleteArrayRow(data, objKey, row.id)
-        setList(data)
-      }
+      getVehicleTypes()
     }
+    
   }
 
   const tableColumns = [

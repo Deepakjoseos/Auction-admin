@@ -79,25 +79,46 @@ const AuctionInventoryList = () => {
       render: (auction) => <Flex alignItems="center">{auction.name}</Flex>,
       sorter: (a, b) => utils.antdTableSorter(a, b, "name"),
     },
+     
     {
-      title: "Chasis Number",
-      dataIndex: "chasisNumber",
-      sorter: (a, b) => utils.antdTableSorter(a, b, "chasisNumber"),
+      title: 'chasisNumber',
+      dataIndex: 'vehicleInfo',
+      render: (vehicleInfo) => (
+          <Flex alignItems="center">{vehicleInfo?.chasisNumber} </Flex>
+         
+      ),
+      //   sorter: (a, b) => utils.antdTableSorter(a, b, 'status'),
+      
+   
+  },
+  {
+    title: 'bidLimit',
+    dataIndex: 'auction',
+    render: (auction) => (
+        <Flex alignItems="center">{auction?.bidLimit} </Flex>
+       
+    ),
+    //   sorter: (a, b) => utils.antdTableSorter(a, b, 'status'),
+    
+ 
+},
+    {
+      title: "Start Time",
+      dataIndex: "startTimestamp",
+      render: (status) => {
+        var d = new Date(Number(status)).toDateString();
+        return <Flex alignItems="center">{d}</Flex>;
+      },
+      sorter: (a, b) => utils.antdTableSorter(a, b, "business"),
     },
     {
-      title: "Bid Limit",
-      dataIndex: "bidLimit",
-      sorter: (a, b) => utils.antdTableSorter(a, b, "bidLimit"),
-    },
-    {
-      title: "Start Date",
-      dataIndex: "startDate",
-      sorter: (a, b) => utils.antdTableSorter(a, b, "startDate"),
-    },
-    {
-      title: "End Date",
-      dataIndex: "endDate",
-      sorter: (a, b) => utils.antdTableSorter(a, b, "endDate"),
+      title: "End Time",
+      dataIndex: "endTimestamp",
+      render: (status) => {
+        var d = new Date(Number(status)).toDateString();
+        return <Flex alignItems="center">{d}</Flex>;
+      },
+      sorter: (a, b) => utils.antdTableSorter(a, b, "business"),
     },
     {
       title: "Created By",

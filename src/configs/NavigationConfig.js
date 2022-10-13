@@ -200,13 +200,35 @@ const dashBoardNavTree = [
         submenu: [],
       },
       {
-        key: "dashboards-information",
-        path: `${APP_PREFIX_PATH}/dashboards/information`,
-        title: "Information",
+        
+        
+        title: "General",
         icon: AppstoreOutlined,
         breadcrumb: false,
-        submenu: [],
+        submenu: [
+          {
+            key: "dashboards-information",
+            path: `${APP_PREFIX_PATH}/dashboards/information`,
+            title: "Information",
+            icon: AppstoreOutlined,
+            breadcrumb: false,
+            submenu: [ ],
+          },
+              {
+                key: "dashboards-banner",
+                path: `${APP_PREFIX_PATH}/dashboards/banner`,
+                title: "Banner",
+                icon: AppstoreOutlined,
+                breadcrumb: false,
+                submenu: [],
+              },
+           
+        ],
       },
+  
+            
+     
+     
       {
         key: "dashboards-car",
         path: `${APP_PREFIX_PATH}/dashboards/car`,
@@ -215,22 +237,9 @@ const dashBoardNavTree = [
         breadcrumb: false,
         submenu: [],
       },
-      {
-        key: "dashboards-settings",
-        path: `${APP_PREFIX_PATH}/dashboards/settings`,
-        title: "Settings",
-        icon: AppstoreOutlined,
-        breadcrumb: false,
-        submenu: [],
-      },
-      {
-        key: "dashboards-banner",
-        path: `${APP_PREFIX_PATH}/dashboards/banner`,
-        title: "Banner",
-        icon: AppstoreOutlined,
-        breadcrumb: false,
-        submenu: [],
-      },
+
+    
+      
       // {
       //   key: "dashboards-auction-bidding",
       //   path: `${APP_PREFIX_PATH}/dashboards/auction-bidding`,
@@ -283,7 +292,7 @@ const dashBoardNavTree = [
       {
         key: 'dashboards-general',
         path: `${APP_PREFIX_PATH}/dashboards/general`,
-        title: 'General',
+        title: 'Location',
         icon: NodeExpandOutlined,
         breadcrumb: false,
         submenu: [
@@ -440,6 +449,14 @@ const dashBoardNavTree = [
             breadcrumb: false,
             submenu: [],
           },
+          {
+            key: "dashboards-watchlist",
+            path: `${APP_PREFIX_PATH}/dashboards/watchlist`,
+            title: "Watchlist",
+            icon: NodeExpandOutlined,
+            breadcrumb: false,
+            submenu: [],
+          },
         ],
       },
       // {
@@ -486,6 +503,14 @@ const dashBoardNavTree = [
         key: "dashboards-client",
         path: `${APP_PREFIX_PATH}/dashboards/client`,
         title: "Client",
+        icon: AppstoreOutlined,
+        breadcrumb: false,
+        submenu: [],
+      },
+      {
+        key: "dashboards-settings",
+        path: `${APP_PREFIX_PATH}/dashboards/settings`,
+        title: "Settings",
         icon: AppstoreOutlined,
         breadcrumb: false,
         submenu: [],

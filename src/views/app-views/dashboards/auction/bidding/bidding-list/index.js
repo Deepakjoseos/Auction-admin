@@ -20,6 +20,8 @@ import auctionService from 'services/auction'
 import auctionInventoryService from 'services/auctionInventory'
 import participantService from 'services/Participant'
 
+
+
 const { Option } = Select
 
 const getStockStatus = (status) => {
@@ -165,13 +167,9 @@ const BiddingList = () => {
         }
     }
 
-    const addBanner = () => {
-        history.push(`/app/dashboards/banner/add-banner`)
-    }
-
     const viewDetails = (row) => {
-        console.log('row', row)
-        history.push(`/app/dashboards/banner/edit-banner/${row._id}`)
+      
+        history.push(`/app/dashboards/auction/bidding/biddingview/${row._id}`)
     }
 
 
@@ -186,14 +184,7 @@ const BiddingList = () => {
             ),
             //   sorter: (a, b) => utils.antdTableSorter(a, b, 'name'),
         },
-        {
-            title: 'Auction Type',
-            dataIndex: 'auction',
-            render: (auction) => (
-                <Flex alignItems="center">{auction?.type}</Flex>
-            ),
-            //   sorter: (a, b) => utils.antdTableSorter(a, b, 'name'),
-        },
+       
         {
             title: 'Business Type',
             dataIndex: 'auction',
@@ -202,23 +193,17 @@ const BiddingList = () => {
             ),
             //   sorter: (a, b) => utils.antdTableSorter(a, b, 'name'),
         },
+        
         {
-            title: 'Bid Limit',
+            title: 'Type',
             dataIndex: 'auction',
             render: (auction) => (
-                <Flex alignItems="center">{auction?.bidLimit}</Flex>
+                <Flex alignItems="center">{auction?.type}</Flex>
             ),
             //   sorter: (a, b) => utils.antdTableSorter(a, b, 'name'),
         },
 
-        {
-            title: 'Client',
-            dataIndex: 'auction',
-            render: (auction) => (
-                <Flex alignItems="center">{auction?.client}</Flex>
-            ),
-            //   sorter: (a, b) => utils.antdTableSorter(a, b, 'status'),
-        },
+       
         {
             title: 'Bidder Name',
             dataIndex: 'bidder',
@@ -227,22 +212,57 @@ const BiddingList = () => {
             ),
             //   sorter: (a, b) => utils.antdTableSorter(a, b, 'status'),
         },
+       
         {
-            title: 'Buyer Type',
+            title: 'Auth',
             dataIndex: 'bidder',
             render: (bidder) => (
-                <Flex alignItems="center">{bidder?.buyerType}</Flex>
+                <Flex alignItems="center">{bidder?.auth} &nbsp;({bidder?.participantType})</Flex>
+               
             ),
             //   sorter: (a, b) => utils.antdTableSorter(a, b, 'status'),
+            
+         
         },
+
         {
-            title: 'Buyer Role',
-            dataIndex: 'bidder',
-            render: (bidder) => (
-                <Flex alignItems="center">{bidder?.auth}</Flex>
-            ),
-            //   sorter: (a, b) => utils.antdTableSorter(a, b, 'status'),
-        },
+          title: 'Make-model',
+          dataIndex:'auctionInventory',
+          render: (auctionInventory) => (
+              <Flex alignItems="center">{auctionInventory?.vehicleInfo?.make}
+              ({auctionInventory?.vehicleInfo?.model})</Flex>
+             
+          ),
+
+      },
+      {
+      title: "Start Time",
+      dataIndex: "startTimestamp",
+      render: (status) => {
+        var d = new Date(Number(status)).toDateString();
+        return <Flex alignItems="center">{d}</Flex>;
+      },
+      sorter: (a, b) => utils.antdTableSorter(a, b, "business"),
+    },
+    {
+      title: "End Time",
+      dataIndex: "endTimestamp",
+      render: (status) => {
+        var d = new Date(Number(status)).toDateString();
+        return <Flex alignItems="center">{d}</Flex>;
+      },
+      sorter: (a, b) => utils.antdTableSorter(a, b, "business"),
+    },
+      {
+        title: 'Amount',
+        dataIndex:'amount',
+        render: (amount) => (
+            <Flex alignItems="center">{amount}/-</Flex>
+           
+        ),
+
+    },
+       
         {
             title: 'Status',
             dataIndex: 'auction',
@@ -259,21 +279,21 @@ const BiddingList = () => {
         //     ),
         //   //   sorter: (a, b) => utils.antdTableSorter(a, b, 'status'),
         //   },
-        {
-            title: '',
-            dataIndex: 'actions',
-            render: (_, elm) => (
-                <div className="text-right">
-                    {window.localStorage.getItem('auth_type') === 'Admin' ? (
-                        <EllipsisDropdown menu={dropdownMenu(elm)} />
-                    ) : (
-                        (currentSubAdminRole?.edit || currentSubAdminRole?.delete) && (
-                            <EllipsisDropdown menu={dropdownMenu(elm)} />
-                        )
-                    )}
-                </div>
-            ),
-        },
+        // {
+        //     title: '',
+        //     dataIndex: 'actions',
+        //     render: (_, elm) => (
+        //         <div className="text-right">
+        //             {window.localStorage.getItem('auth_type') === 'Admin' ? (
+        //                 <EllipsisDropdown menu={dropdownMenu(elm)} />
+        //             ) : (
+        //                 (currentSubAdminRole?.edit || currentSubAdminRole?.delete) && (
+        //                     <EllipsisDropdown menu={dropdownMenu(elm)} />
+        //                 )
+        //             )}
+        //         </div>
+        //     ),
+        // },
     ]
 
     // When Search is used

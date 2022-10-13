@@ -112,20 +112,24 @@ const BrandVariantList = () => {
   const deleteRow = async (row) => {
     console.log(row);
     const resp = await brandVariantService.delete(row._id);
-
     if (resp) {
-      const objKey = "id";
-      let data = list;
-      if (selectedRows.length > 1) {
-        selectedRows.forEach((elm) => {
-          data = utils.deleteArrayRow(data, objKey, elm.id);
-          setList(data);
-        });
-      } else {
-        data = utils.deleteArrayRow(data, objKey, row.id);
-        setList(data);
-      }
+      getBrandVariants()
     }
+     
+
+    // if (resp) {
+    //   const objKey = "id";
+    //   let data = list;
+    //   if (selectedRows.length > 1) {
+    //     selectedRows.forEach((elm) => {
+    //       data = utils.deleteArrayRow(data, objKey, elm.id);
+    //       setList(data);
+    //     });
+    //   } else {
+    //     data = utils.deleteArrayRow(data, objKey, row.id);
+    //     setList(data);
+    //   }
+    // }
   };
 
   // Antd Table Columns

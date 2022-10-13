@@ -39,7 +39,7 @@ const rules = {
   ],
 };
 
-const GeneralField = ({vehicleTypes,regions,cities,clients}) => {
+const GeneralField = ({vehicleTypes,regions,cities,clients,participant}) => {
   // const [citys, setCitys] = useState([]);
   // const [regions, setRegions] = useState([]);
   // const [vehicleType, setVehicleType] = useState([]);
@@ -85,12 +85,28 @@ const GeneralField = ({vehicleTypes,regions,cities,clients}) => {
             label="Business Type"
             rules={rules.status}
           >
+            
             <Select placeholder="Business Type">
               <Option value="Bank">Bank</Option>
               <Option value="Insurance">Insuarance</Option>
               <Option value="Consumer Auction">Consumer Auction</Option>
             </Select>
           </Form.Item>
+
+
+
+          <Form.Item name="incrementAmount" label="IncrementAmount">
+          <InputNumber
+              placeholder="incrementAmount"
+              size="large"
+              min={0}
+              max={100000}
+            />
+          </Form.Item>
+
+
+
+
           <Form.Item
             name="vehicleTypeId"
             label="Vehicle Type"
@@ -122,6 +138,8 @@ const GeneralField = ({vehicleTypes,regions,cities,clients}) => {
               ))}
             </Select>
           </Form.Item>
+
+
           <Form.Item name="clientId" label="Client" >
           <Select placeholder="Client">
               {clients.map((item) => (
@@ -131,12 +149,25 @@ const GeneralField = ({vehicleTypes,regions,cities,clients}) => {
               ))}
             </Select>
           </Form.Item>
+
+
+
+          <Form.Item name="sellerId" label="sellerId" >
+          <Select placeholder="seller">
+              {participant.map((participant) => (
+                <Option key={participant._id} value={participant._id}>
+                  {participant.name}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+          
           <Form.Item name="type" label="Type" >
             <Select placeholder="Type">
               <Option value="Yard">Yard</Option>
               <Option value="Online">Online</Option>
 
-              <Option value="Open">Open</Option>
+              {/* <Option value="Open">Open</Option> */}
             </Select>
           </Form.Item>
           <Form.Item name="format" label="Format" >
@@ -145,12 +176,16 @@ const GeneralField = ({vehicleTypes,regions,cities,clients}) => {
               <Option value="Open">Open</Option>
             </Select>
           </Form.Item>
+
+
           <Form.Item name="status" label="Status" rules={rules.status}>
             <Select placeholder="Status">
               <Option value="Active">Active</Option>
               <Option value="Hold">Hold</Option>
             </Select>
           </Form.Item>
+
+
           <Form.Item name="closeType" label="closeType" rules={rules.status}>
             <Select placeholder="Close Type">
               <Option value="Show Rank">Show rank</Option>

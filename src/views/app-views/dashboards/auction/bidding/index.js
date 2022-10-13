@@ -1,6 +1,7 @@
 import React from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
 
+
 import BiddingList from "./bidding-list";
 // import Orders from './orders'
 
@@ -13,6 +14,7 @@ const Bidding = (props) => {
       {/* <Route path={`${match.url}/add-auction`} component={AddAuction} />
       <Route path={`${match.url}/edit-auction/:id`} component={EditAuction} /> */}
       <Route path={`${match.url}/bidding-list`} component={BiddingList} />
+    
     </Switch>
   );
 };

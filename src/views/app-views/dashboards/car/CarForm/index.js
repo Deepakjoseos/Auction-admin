@@ -61,9 +61,9 @@ const InformationForm = (props) => {
         status: data.status,
         description: data.description,
         videos: data.videos,
-        brandId: data.brandId,
-        vehicleTypeId: data.vehicleTypeId,
-        priceRange: data.priceRange,
+        brandId:data.brandId,
+        vehicleTypeId:data.vehicleTypeId,
+        priceRange:data.priceRange,
       })
 
       setEditorRender(true)

@@ -24,6 +24,11 @@ const Dashboards = ({ match }) => {
           path={`${match.url}/template`}
           component={lazy(() => import(`./template`))}
         />
+        
+        <Route
+          path={`${match.url}/watchlist`}
+          component={lazy(() => import(`./watchlist`))}
+        />
           
       
     
