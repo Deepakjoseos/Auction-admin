@@ -167,6 +167,7 @@ const rules = {
 const GeneralField = ({
   subAdmins,
   participants,
+  participant,
   mode,
   setIsBuyer,
   isBuyer,
@@ -258,19 +259,20 @@ const GeneralField = ({
               <Option value={true}>Yes</Option>
             </Select>
           </Form.Item>
-          <Form.Item
-            name="participantType"
-            label="participantType"
-            rules={rules.participantType}
-          >
-            <Select
-              placeholder="participantType"
-              onChange={(e) => setIsBuyer(e === 'Buyer' ? true : false)}
-            >
-              <Option value="Seller">Seller</Option>
-              <Option value="Buyer">Buyer</Option>
-            </Select>
-          </Form.Item>
+
+
+          <Form.Item name="ParticipantType" label="ParticipantType" >
+              <Select placeholder="ParticipantType">
+                {participant.map((item, index) => (
+                  <Option key={index} value={item}>
+                    {item}
+                  </Option>
+                ))}
+              
+              </Select>
+            </Form.Item>
+
+         
           {isBuyer && (
             <Form.Item
               name="buyerEligibleBuisness"

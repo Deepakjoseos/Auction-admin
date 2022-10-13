@@ -49,5 +49,25 @@ constantsService.getTemplates = async function () {
   } catch (err) {
     console.log(err, "show-err");
   }
+
+};
+  constantsService.getParticipant = async function () {
+    try {
+      const res = await fetch({
+        url: "/constants/participant",
+        method: "get",
+      });
+  
+      // For coverting array
+       const ParticipantType = Object.values(res.data.ParticipantType).map((val) => val);
+       const BuyerType = Object.values(res.data.BuyerType).map((val) => val);
+       const UserType = Object.values(res.data.ParticipantType).map((val) => val);
+       const BuyerEligibleBuisness = Object.values(res.data.ParticipantType).map((val) => val);
+  
+      // return res.data.ListingType;
+      return { ParticipantType, BuyerType,UserType,BuyerEligibleBuisness }
+    } catch (err) {
+      console.log(err, "show-err");
+    }
 };
 export default constantsService;
