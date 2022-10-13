@@ -1,22 +1,22 @@
 import React from 'react'
-import { Route, Switch, Redirect } from 'react-router-dom'
-import BrandList from './brand-list'
-import AddBrand from './add-brand'
-import EditBrand from './edit-brand'
-// import Orders from './orders'
+import { Redirect, Route, Switch } from 'react-router-dom'
+import Brand from './brand'
+import BrandVariant from './brand-variant'
 
-// In here we will define all our routes
-const Brand = (props) => {
-  const { match } = props
+const Brands
+ = ({ match }) => {
   return (
     <Switch>
-      <Redirect exact from={`${match.url}`} to={`${match.url}/brands-list`} />
-      <Route path={`${match.url}/add-brand`} component={AddBrand} />
-      <Route path={`${match.url}/edit-brand/:id`} component={EditBrand} />
-      <Route path={`${match.url}/brands-list`} component={BrandList} />
-      {/* <Route path={`${match.url}/orders`} component={Orders} /> */}
+      <Redirect
+        exact
+        from={`${match.url}`}
+        to={`${match.url}/brand/brands-list`}
+      />
+      <Route path={`${match.url}/brand`} component={Brand} />
+      <Route path={`${match.url}/brand-variant`} component={BrandVariant} />
     </Switch>
   )
 }
 
-export default Brand
+export default Brands
+

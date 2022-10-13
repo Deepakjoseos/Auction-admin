@@ -76,7 +76,7 @@ const[setmode,setMode]=useState('')
           if (created) {
             console.log(created);
             message.success(`Created New Settings`);
-            history.goBack();
+            // history.goBack();
           }
         }
         if (setmode === 'Edit') {
@@ -87,7 +87,7 @@ const[setmode,setMode]=useState('')
           )
           if (edited) {
             message.success(`Edited settings list`)
-            history.goBack()
+            // history.goBack()
           }
         }
         setSubmitLoading(false)

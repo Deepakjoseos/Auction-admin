@@ -1,78 +1,72 @@
-import React, { useEffect, useState } from 'react'
-import { Card, Table, Select, Input, Button, Menu, Tag } from 'antd'
+import React, { useEffect, useState } from "react";
+import { Card, Table, Select, Input, Button, Menu, Tag } from "antd";
 // import InformationListData from 'assets/data/product-list.data.json'
 import {
   EyeOutlined,
-  DeleteOutlined,
   SearchOutlined,
   PlusCircleOutlined,
-} from '@ant-design/icons'
-import AvatarStatus from 'components/shared-components/AvatarStatus'
-import EllipsisDropdown from 'components/shared-components/EllipsisDropdown'
-import Flex from 'components/shared-components/Flex'
-import { useHistory } from 'react-router-dom'
-import utils from 'utils'
-import informationService from 'services/information'
-import authAdminService from 'services/auth/admin'
-import participantService from 'services/Participant'
-import { useSelector } from 'react-redux'
+} from "@ant-design/icons";
+import EllipsisDropdown from "components/shared-components/EllipsisDropdown";
+import Flex from "components/shared-components/Flex";
+import { useHistory } from "react-router-dom";
+import utils from "utils";
+import participantService from "services/Participant";
+import { useSelector } from "react-redux";
 
-const { Option } = Select
+const { Option } = Select;
 
 const getStockStatus = (status) => {
-  if (status === 'Active') {
+  if (status === "Active") {
     return (
       <>
         <Tag color="green">Active</Tag>
       </>
-    )
+    );
   }
-  if (status === 'Hold') {
+  if (status === "Hold") {
     return (
       <>
         <Tag color="red">Hold</Tag>
       </>
-    )
+    );
   }
-  return null
-}
+  return null;
+};
 const ParticipantList = () => {
-  let history = useHistory()
+  let history = useHistory();
 
-  const [list, setList] = useState([])
-  const [searchBackupList, setSearchBackupList] = useState([])
-  const [selectedRows, setSelectedRows] = useState([])
-  const [selectedRowKeys, setSelectedRowKeys] = useState([])
-  const [currentSubAdminRole, setCurrentSubAdminRole] = useState({})
+  const [list, setList] = useState([]);
+  const [searchBackupList, setSearchBackupList] = useState([]);
+  const [currentSubAdminRole, setCurrentSubAdminRole] = useState({});
 
-  const { user } = useSelector((state) => state.auth)
+  const { user } = useSelector((state) => state.auth);
 
   useEffect(() => {
     if (user) {
       const paricipantRole = user.roles.find(
-        (role) => role.module === 'PARTICIPANT'
-      )
-      console.log('paricipantRole', paricipantRole)
-      setCurrentSubAdminRole(paricipantRole)
+        (role) => role.module === "PARTICIPANT"
+      );
+      console.log("paricipantRole", paricipantRole);
+      setCurrentSubAdminRole(paricipantRole);
     }
-  }, [user])
+  }, [user]);
 
   // const [participants, setParticipants] = useState([])
 
   useEffect(() => {
     const getAllParticipants = async () => {
-      const data = await participantService.getAllParticipants()
+      const data = await participantService.getAllParticipants();
       if (data) {
-        setList(data)
-        setSearchBackupList(data)
-        console.log(data, 'show-data')
+        setList(data);
+        setSearchBackupList(data);
+        console.log(data, "show-data");
       }
-    }
-    getAllParticipants()
-  }, [])
+    };
+    getAllParticipants();
+  }, []);
 
   const dropdownMenu = (row) => {
-    if (window.localStorage.getItem('auth_type') === 'Admin') {
+    if (window.localStorage.getItem("auth_type") === "Admin") {
       return (
         <Menu>
           <Menu.Item onClick={() => viewDetails(row)}>
@@ -82,7 +76,7 @@ const ParticipantList = () => {
             </Flex>
           </Menu.Item>
         </Menu>
-      )
+      );
     } else {
       if (currentSubAdminRole?.edit) {
         return (
@@ -94,19 +88,18 @@ const ParticipantList = () => {
               </Flex>
             </Menu.Item>
           </Menu>
-        )
+        );
       }
     }
-  }
+  };
 
   const addProduct = () => {
-    history.push(`/app/dashboards/participant/add-participant`)
-  }
+    history.push(`/app/dashboards/participant/add-participant`);
+  };
 
   const viewDetails = (row) => {
-    
-    history.push(`/app/dashboards/participant/edit-participant/${row._id}`)
-  }
+    history.push(`/app/dashboards/participant/edit-participant/${row._id}`);
+  };
 
   //   const deleteRow = async (row) => {
   //     const resp = await informationService.deleteInformation(row.id)
@@ -130,41 +123,45 @@ const ParticipantList = () => {
 
   const tableColumns = [
     {
-      title: 'Name',
-      dataIndex: 'name',
-
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'name'),
+      title: "id",
+      dataIndex: "_id",
+      sorter: (a, b) => utils.antdTableSorter(a, b, "_id"),
     },
     {
-      title: 'Email',
-      dataIndex: 'email',
+      title: "Name",
+      dataIndex: "name",
+      sorter: (a, b) => utils.antdTableSorter(a, b, "name"),
     },
     {
-      title: 'Contact Number',
-      dataIndex: 'contact',
+      title: "Email",
+      dataIndex: "email",
     },
     {
-      title: 'Contact Number',
-      dataIndex: 'contact',
+      title: "Contact Number",
+      dataIndex: "contact",
     },
     {
-      title: 'Participant Type',
-      dataIndex: 'participantType',
+      title: "Contact Number",
+      dataIndex: "contact",
     },
     {
-      title: 'GST',
-      dataIndex: 'gst',
+      title: "Participant Type",
+      dataIndex: "participantType",
+    },
+    {
+      title: "GST",
+      dataIndex: "gst",
       render: (text, row) => {
-        return <span>{row.gst ? 'Yes' : 'No'}</span>
+        return <span>{row.gst ? "Yes" : "No"}</span>;
       },
     },
  
     {
-      title: '',
-      dataIndex: 'actions',
+      title: "",
+      dataIndex: "actions",
       render: (_, elm) => (
         <div className="text-right">
-          {window.localStorage.getItem('auth_type') === 'Admin' ? (
+          {window.localStorage.getItem("auth_type") === "Admin" ? (
             <EllipsisDropdown menu={dropdownMenu(elm)} />
           ) : (
             currentSubAdminRole?.edit && (
@@ -174,25 +171,24 @@ const ParticipantList = () => {
         </div>
       ),
     },
-  ]
+  ];
 
   const onSearch = (e) => {
-    const value = e.currentTarget.value
-    const searchArray = e.currentTarget.value ? list : searchBackupList
-    const data = utils.wildCardSearch(searchArray, value)
-    setList(data)
-    setSelectedRowKeys([])
-  }
+    const value = e.currentTarget.value;
+    const searchArray = e.currentTarget.value ? list : searchBackupList;
+    const data = utils.wildCardSearch(searchArray, value);
+    setList(data);
+  };
 
   const handleShowStatus = (value) => {
-    if (value !== 'All') {
-      const key = 'status'
-      const data = utils.filterArray(searchBackupList, key, value)
-      setList(data)
+    if (value !== "All") {
+      const key = "status";
+      const data = utils.filterArray(searchBackupList, key, value);
+      setList(data);
     } else {
-      setList(searchBackupList)
+      setList(searchBackupList);
     }
-  }
+  };
 
   const filters = () => (
     <Flex className="mb-1" mobileFlex={false}>
@@ -217,14 +213,14 @@ const ParticipantList = () => {
         </Select>
       </div>
     </Flex>
-  )
+  );
 
   return (
     <Card>
       <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
         {filters()}
         <div>
-          {window.localStorage.getItem('auth_type') === 'SubAdmin' ? (
+          {window.localStorage.getItem("auth_type") === "SubAdmin" ? (
             <>
               {currentSubAdminRole?.add && (
                 <Button
@@ -253,7 +249,7 @@ const ParticipantList = () => {
         <Table columns={tableColumns} dataSource={list} rowKey="id" />
       </div>
     </Card>
-  )
-}
+  );
+};
 
-export default ParticipantList
+export default ParticipantList;

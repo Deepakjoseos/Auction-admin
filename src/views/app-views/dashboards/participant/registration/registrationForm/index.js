@@ -1,30 +1,28 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from "react";
 
-import { Tabs, Form, message } from 'antd'
-import { useHistory } from 'react-router-dom'
+import { Tabs, Form, message } from "antd";
+import { useHistory } from "react-router-dom";
 
-import RegistrationField from './RegistrationField'
-import feeTypeService from 'services/FeeType'
-import registrationService from 'services/registration'
-import moment from 'moment'
+import RegistrationField from "./RegistrationField";
+import feeTypeService from "services/FeeType";
+import registrationService from "services/registration";
+import moment from "moment";
 
-const { TabPane } = Tabs
+const { TabPane } = Tabs;
 
-const ADD = 'ADD'
-const EDIT = 'EDIT'
+const ADD = "ADD";
+const EDIT = "EDIT";
 
 const RegistrationForm = (props) => {
-  const { mode = ADD, param,participantId } = props
-  const history = useHistory()
+  const { mode = ADD, param, participantId } = props;
+  const history = useHistory();
 
-  const [form] = Form.useForm()
+  const [form] = Form.useForm();
 
   //   const [uploadLoading, setUploadLoading] = useState(false)
-  const [submitLoading, setSubmitLoading] = useState(false)
-   
+  const [submitLoading, setSubmitLoading] = useState(false);
 
   useEffect(() => {
-  
     // if (mode === EDIT) {
     //   const fetchInformationById = async () => {
     //     const { id } = param
@@ -56,12 +54,11 @@ const RegistrationForm = (props) => {
     //   }
     //   fetchInformationById()
     // }
-  }, [form, mode, param, props])
-
+  }, [form, mode, param, props]);
 
   const onFinish = async () => {
-    console.log('submited')
-    setSubmitLoading(true)
+    console.log("submited");
+    setSubmitLoading(true);
     form
       .validateFields()
       .then(async (values) => {
@@ -69,44 +66,45 @@ const RegistrationForm = (props) => {
         // Checking if image exists
 
         const sendingValues = {
-
           status: values?.status,
-          countedIn:moment(values?.countedIn).format('x'),
-          date:moment(values?.date).format('x'),
-          expiry:moment(values?.expiry).format('x'),
-          fee:values?.fee,
-          feeRemark:values?.feeRemark,
-          feeTypeId:values?.feeTypeId,
-          mode:values?.mode,
-          note:values?.note,
-          participantId:participantId,
-     
-          paymentDate:moment(values?.paymentDate).format(),
-      
+          countedIn: moment(values?.countedIn).format("x"),
+          date: moment(values?.date).format("x"),
+          expiry: moment(values?.expiry).format("x"),
+          fee: values?.fee,
+          feeRemark: values?.feeRemark,
+          feeTypeId: values?.feeTypeId,
+          mode: values?.mode,
+          note: values?.note,
+          participantId: participantId,
+
+          paymentDate: moment(values?.paymentDate).format(),
+
           payment: {
             bankName: values.bankName,
             branchName: values.branchName,
             number: values.number,
             receipt: values.receipt,
           },
-        }
+        };
 
-        console.log(sendingValues, 'values=====')
+        console.log(sendingValues, "values=====");
 
-        const created = await registrationService.createRegistration(sendingValues)
+        const created = await registrationService.createRegistration(
+          sendingValues
+        );
         if (created) {
-          message.success(`Created  registration`)
-          history.goBack()
+          message.success(`Created  registration`);
+          history.goBack();
         }
-   
-        setSubmitLoading(false)
+
+        setSubmitLoading(false);
       })
       .catch((info) => {
-        setSubmitLoading(false)
-        console.log('info', info)
-        message.error('Please enter all required field ')
-      })
-  }
+        setSubmitLoading(false);
+        console.log("info", info);
+        message.error("Please enter all required field ");
+      });
+  };
 
   return (
     <>
@@ -116,7 +114,7 @@ const RegistrationForm = (props) => {
         name="advanced_search"
         className="ant-advanced-search-form"
         initialValues={{
-          status: 'Hold',
+          status: "Hold",
         }}
       >
         {/* <PageHeaderAlt className="border-bottom" overlap>
@@ -150,16 +148,14 @@ const RegistrationForm = (props) => {
         </PageHeaderAlt> */}
         <div className="container">
           {/* <Tabs defaultActiveKey="1" style={{ marginTop: 30 }}> */}
-            {/* <TabPane tab="Generalfaefaef" key="1"> */}
-              <RegistrationField 
-              onFinish={onFinish}
-              />
-            {/* </TabPane> */}
+          {/* <TabPane tab="Generalfaefaef" key="1"> */}
+          <RegistrationField onFinish={onFinish} />
+          {/* </TabPane> */}
           {/* </Tabs> */}
         </div>
       </Form>
     </>
-  )
-}
+  );
+};
 
-export default RegistrationForm
+export default RegistrationForm;

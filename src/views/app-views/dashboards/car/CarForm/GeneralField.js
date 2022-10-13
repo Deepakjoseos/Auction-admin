@@ -40,7 +40,7 @@ const rules = {
   ],
 }
 
-const GeneralField = (props) => (
+const GeneralField = ({form,vehicleTypes,brands}) => (
   <Row gutter={16}>
     <Col xs={24} sm={24} md={24}>
       <Card title="Basic Info">
@@ -50,14 +50,32 @@ const GeneralField = (props) => (
         <Form.Item name="description" label="Description">
           <Editor
             placeholder="Write something..."
-            editorHtml={props.form.getFieldValue('description') || ''}
-            onChange={(e) => props.form.setFieldsValue({ description: e })}
+            editorHtml={form.getFieldValue('description') || ''}
+            onChange={(e) => form.setFieldsValue({ description: e })}
             name="description"
           />
         </Form.Item>
         <Form.Item name="priceRange" label="PriceRange">
           <Input placeholder="priceRange" />
         </Form.Item>
+        <Form.Item name="vehicleTypeId" label="Vehicle Type" >
+            <Select placeholder="Vehicle Type">
+              {vehicleTypes.map((item) => (
+                <Option key={item.id} value={item._id}>
+                  {item.name}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+          <Form.Item name="brandId" label="Brand" rules={rules.status}>
+            <Select placeholder="Brand">
+              {brands.map((item) => (
+                <Option key={item.id} value={item._id}>
+                  {item.name}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
 
         <Form.Item name="status" label="Status" rules={rules.status}>
           <Select placeholder="Status">

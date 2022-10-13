@@ -1,94 +1,88 @@
 /* eslint-disable no-unused-expressions */
-import React, { useState, useEffect } from 'react'
-import PageHeaderAlt from 'components/layout-components/PageHeaderAlt'
-import { Tabs, Form, Button, message } from 'antd'
-import Flex from 'components/shared-components/Flex'
+import React, { useState, useEffect } from "react";
+import PageHeaderAlt from "components/layout-components/PageHeaderAlt";
+import { Tabs, Form, Button, message } from "antd";
+import Flex from "components/shared-components/Flex";
 // import GeneralField from '../GeneralField'
-import GeneralField from '../participant-form/GeneralField'
-import useUpload from 'hooks/useUpload'
-import { singleImageUploader } from 'utils/s3/s3ImageUploader'
-import informationService from 'services/information'
-import Utils from 'utils'
-import { useHistory } from 'react-router-dom'
-import participantService from 'services/Participant'
-import authAdminService from 'services/auth/admin'
-import { get } from 'lodash'
-import { useSelector } from 'react-redux'
-import clientService from 'services/client'
-import registrationService from 'services/registration'
+import GeneralField from "../participant-form/GeneralField";
+import { useHistory } from "react-router-dom";
+import participantService from "services/Participant";
+import authAdminService from "services/auth/admin";
+import { useSelector } from "react-redux";
+import clientService from "services/client";
 // import Registrations from '../../registration/list-registration/index'
-import feeTypeService  from 'services/FeeType'
-import RegistrationForm from '../registration/registrationForm/index'
-const { TabPane } = Tabs
+import feeTypeService from "services/FeeType";
+import RegistrationForm from "../registration/registrationForm/index";
+import DepositForm from "../make-Deposit";
+import WalletField from "../wallet/walletField";
+import WalletTransaction from "../../wallet-transaction";
+import WalletTransactionParticipant from "./wallet-transactions-list";
+import WalletFieldForm from "../wallet";
+const { TabPane } = Tabs;
 
-const ADD = 'ADD'
-const EDIT = 'EDIT'
+const ADD = "ADD";
+const EDIT = "EDIT";
 
 const ParticipantForm = (props) => {
-  const { mode = ADD, param } = props
-  const history = useHistory()
+  const { mode = ADD, param } = props;
+  const id = param?.id
+  const history = useHistory();
 
-  const [form] = Form.useForm()
-  const [uploadedImg, setImage] = useState(null)
+  const [form] = Form.useForm();
   //   const [uploadLoading, setUploadLoading] = useState(false)
-  const [submitLoading, setSubmitLoading] = useState(false)
-  const [subAdmins, setSubAdmins] = useState([])
-  const [participants, setParticipants] = useState([])
-  const [clients, setClients] = useState([])
-  const [isEmployee, setIsEmployee] = useState(false)
-  const [isBuyer, setIsBuyer] = useState(false)
-  const { user } = useSelector((state) => state.auth)
-  const [currentParticipant,setCurrentParticipant] = useState()
-  const [registrations,setRegistrations]= useState([])
-
+  const [submitLoading, setSubmitLoading] = useState(false);
+  const [subAdmins, setSubAdmins] = useState([]);
+  const [participants, setParticipants] = useState([]);
+  const [clients, setClients] = useState([]);
+  const [isEmployee, setIsEmployee] = useState(false);
+  const [isBuyer, setIsBuyer] = useState(false);
+  const { user } = useSelector((state) => state.auth);
+  const [currentParticipant, setCurrentParticipant] = useState();
 
   //   const [editorRender, setEditorRender] = useState(false)
-  const [feeTypes,setFeeType]=useState([])
+  const [feeTypes, setFeeType] = useState([]);
   useEffect(() => {
     const getAllSubAdmins = async () => {
-      const data = await authAdminService.getAllSubAdmins()
+      const data = await authAdminService.getAllSubAdmins();
       if (data) {
-        setSubAdmins(data)
-        console.log(data, 'show-subadmins')
+        setSubAdmins(data);
+        console.log(data, "show-subadmins");
       }
-    }
+    };
 
     const getAllParticipants = async () => {
-      const data = await participantService.getAllParticipants()
+      const data = await participantService.getAllParticipants();
       if (data) {
-        setParticipants(data)
+        setParticipants(data);
       }
-    }
+    };
 
     const getAllClients = async () => {
-      const data = await clientService.getClients()
+      const data = await clientService.getClients();
       if (data) {
-        setClients(data)
+        setClients(data);
       }
-    }
+    };
     const getFeeTypes = async () => {
-      const data = await feeTypeService.getFeeTypes()
+      const data = await feeTypeService.getFeeTypes();
       if (data) {
-        setFeeType(data)
-        console.log(data, 'feetypes')
+        setFeeType(data);
+        console.log(data, "feetypes");
       }
-    }
-    getFeeTypes()
- 
+    };
+    getFeeTypes();
 
-
-    if (window.localStorage.getItem('auth_type') === 'Admin') {
-      getAllSubAdmins()
+    if (window.localStorage.getItem("auth_type") === "Admin") {
+      getAllSubAdmins();
     }
-    getAllParticipants()
-    getAllClients()
+    getAllParticipants();
+    getAllClients();
     if (mode === EDIT) {
       const fetchParticipantById = async () => {
-        const { id } = param
-        const data = await participantService.getParticipantById(id)
-        setCurrentParticipant(data)
+        const { id } = param;
+        const data = await participantService.getParticipantById(id);
+        setCurrentParticipant(data);
         if (data) {
-        
           form.setFieldsValue({
             name: data.name,
             email: data.email,
@@ -120,27 +114,27 @@ const ParticipantForm = (props) => {
 
             contact_person_name: data.contactPerson.phone,
             contact_person_phone: data.contactPerson.phone,
-          })
+          });
 
-          setIsEmployee(data.userType === 'Employee' ? true : false)
-          setIsBuyer(data.participantType === 'Buyer' ? true : false)
+          setIsEmployee(data.userType === "Employee" ? true : false);
+          setIsBuyer(data.participantType === "Buyer" ? true : false);
         } else {
-          history.replace('/app/dashboards/user/user-list')
+          history.replace("/app/dashboards/user/user-list");
         }
-      }
+      };
 
-      fetchParticipantById()
+      fetchParticipantById();
     }
-  }, [form, mode, param, props])
+  }, [form, mode, param, props]);
 
-  console.log(user, 'sendingValues')
+  console.log(user, "sendingValues");
 
   const onFinish = async () => {
-    setSubmitLoading(true)
+    setSubmitLoading(true);
     form
       .validateFields()
       .then(async (values) => {
-        console.log(values, 'valuewewes')
+        console.log(values, "valuewewes");
 
         const sendingValues = {
           name: values.name,
@@ -175,40 +169,38 @@ const ParticipantForm = (props) => {
             name: values.contact_person_name,
             phone: values.contact_person_phone,
           },
-        }
+        };
 
-        if (window.localStorage.getItem('auth_type') === 'SubAdmin')
-          sendingValues.relationshipManagerId = user._id
-
-        console.log(sendingValues, 'sendingValues', user._id)
+        if (window.localStorage.getItem("auth_type") === "SubAdmin")
+          sendingValues.relationshipManagerId = user?._id;
+        const body = { ...sendingValues, buyingLimit: 0, securityDeposit: 0 };
+        console.log(sendingValues, "sendingValues", user?._id);
 
         if (mode === ADD) {
-          const created = await participantService.createParticipant(
-            sendingValues
-          )
+          const created = await participantService.createParticipant(body);
           if (created) {
-            message.success(`Created ${values.name} to participant list`)
-            history.goBack()
+            message.success(`Created ${values.name} to participant list`);
+            history.goBack();
           }
         }
         if (mode === EDIT) {
           const edited = await participantService.editParticipant(
             param.id,
             sendingValues
-          )
+          );
           if (edited) {
-            message.success(`Edited ${values.name} to participant list`)
-            history.goBack()
+            message.success(`Edited ${values.name} to participant list`);
+            history.goBack();
           }
         }
-        setSubmitLoading(false)
+        setSubmitLoading(false);
       })
       .catch((info) => {
-        setSubmitLoading(false)
-        console.log('info', info)
-        message.error('Please enter all required field ')
-      })
-  }
+        setSubmitLoading(false);
+        console.log("info", info);
+        message.error("Please enter all required field ");
+      });
+  };
 
   return (
     <>
@@ -218,7 +210,7 @@ const ParticipantForm = (props) => {
         name="advanced_search"
         className="ant-advanced-search-form"
         initialValues={{
-          status: 'Hold',
+          status: "Hold",
         }}
       >
         <PageHeaderAlt className="border-bottom" overlap>
@@ -230,13 +222,13 @@ const ParticipantForm = (props) => {
               alignItems="center"
             >
               <h2 className="mb-3">
-                {mode === 'ADD' ? 'Add New Participant' : `Edit Participant`}{' '}
+                {mode === "ADD" ? "Add New Participant" : `Edit Participant`}{" "}
               </h2>
               <div className="mb-3">
                 <Button
                   className="mr-2"
                   onClick={() =>
-                    history.push('/app/dashboards/participant/participant-list')
+                    history.push("/app/dashboards/participant/participant-list")
                   }
                 >
                   Discard
@@ -248,7 +240,7 @@ const ParticipantForm = (props) => {
                   htmlType="submit"
                   loading={submitLoading}
                 >
-                  {mode === 'ADD' ? 'Add' : `Save`}
+                  {mode === "ADD" ? "Add" : `Save`}
                 </Button>
               </div>
             </Flex>
@@ -269,14 +261,31 @@ const ParticipantForm = (props) => {
                 clients={clients}
               />
             </TabPane>
-            <TabPane tab="Registration" key="2">
-               <RegistrationForm participantId={param.id} />
-            </TabPane>
+            {id  && (
+              <>
+                <TabPane tab="Registration" key="2">
+                  <RegistrationForm participantId={param?.id} />
+                </TabPane>
+                <TabPane tab="Deposit" key="3">
+                  <DepositForm participantId={param?.id} />
+                </TabPane>
+                <TabPane tab="Document Upload" key="4"></TabPane>
+                <TabPane tab="Wallet" key="5">
+                  <WalletFieldForm participantId={param?.id} />
+                </TabPane>
+                <TabPane tab="Wallet Transactions" key="6">
+                  <WalletTransactionParticipant participantId={param?.id} />
+                </TabPane>
+              </>
+            )}
+
+
+
           </Tabs>
         </div>
       </Form>
     </>
-  )
-}
+  );
+};
 
-export default ParticipantForm
+export default ParticipantForm;

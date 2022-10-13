@@ -46,14 +46,15 @@ function App() {
         dispatch(showLoading(false))
       }
       dispatch(showLoading(false))
-    }
+    } 
   }
 
   // Auth check
   useEffect(() => {
     dispatch(showLoading(true))
     const token = window.localStorage.getItem(AUTH_TOKEN)
-    if (token) {
+    const auth_type = window.localStorage.getItem('auth_type')
+    if (token && auth_type) {
       getProfile()
     } else {
       dispatch(showLoading(false))
