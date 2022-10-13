@@ -44,12 +44,14 @@ const FeeTypeList = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
   const [currentSubAdminRole, setCurrentSubAdminRole] = useState({})
 
+  const AUTH_TYPE = window.localStorage.getItem('auth_type')
+
   const { user } = useSelector((state) => state.auth)
 
+  // This wull only work for subadmin
   useEffect(() => {
     if (user) {
       const feeTypeRole = user.roles.find((role) => role.module === 'FEE_TYPE')
-      console.log('feeTypeRole', feeTypeRole)
       setCurrentSubAdminRole(feeTypeRole)
     }
   }, [user])
@@ -68,7 +70,7 @@ const FeeTypeList = () => {
   }, [])
 
   const dropdownMenu = (row) => {
-    if (window.localStorage.getItem('auth_type') === 'Admin') {
+    if (AUTH_TYPE === 'Admin') {
       return (
         <Menu>
           <Menu.Item onClick={() => viewDetails(row)}>
@@ -161,7 +163,7 @@ const FeeTypeList = () => {
       dataIndex: 'actions',
       render: (_, elm) => (
         <div className="text-right">
-          {window.localStorage.getItem('auth_type') === 'Admin' ? (
+          {AUTH_TYPE === 'Admin' ? (
             <EllipsisDropdown menu={dropdownMenu(elm)} />
           ) : (
             currentSubAdminRole?.edit && (
@@ -221,7 +223,7 @@ const FeeTypeList = () => {
       <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
         {filters()}
         <div>
-          {window.localStorage.getItem('auth_type') === 'SubAdmin' ? (
+          {AUTH_TYPE === 'SubAdmin' ? (
             <>
               {currentSubAdminRole?.add && (
                 <Button

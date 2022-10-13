@@ -12,7 +12,10 @@ import {
   Space,
   Button,
   Image,
-  Tag,DatePicker,Table,Menu
+  Tag,
+  DatePicker,
+  Table,
+  Menu,
 } from 'antd'
 import {
   EyeOutlined,
@@ -124,8 +127,6 @@ const rules = {
       message: 'Required',
     },
   ],
-  
- 
 }
 const getStockStatus = (status) => {
   if (status === 'Active') {
@@ -153,25 +154,22 @@ const getStockStatus = (status) => {
   return null
 }
 
-const RegistrationField = ({
-feeTypes,currentParticipant,registrations
-}) => {
-console.log('participantid',currentParticipant)
-// const initialValues = {
-//     participantId: currentParticipant._id,
- 
-//   };
-  const [registrationsList,setRegistrationsList]= useState([])
+const RegistrationField = ({ feeTypes, currentParticipant, registrations }) => {
+  console.log('participantid', currentParticipant)
+  // const initialValues = {
+  //     participantId: currentParticipant._id,
+
+  //   };
+  const [registrationsList, setRegistrationsList] = useState([])
   const [searchBackupList, setSearchBackupList] = useState([])
   const [selectedRows, setSelectedRows] = useState([])
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
 
+  if (registrations) {
+    setRegistrationsList(registrations)
+    setSearchBackupList(registrations)
+  }
 
-if(registrations){
-  setRegistrationsList(registrations)
-  setSearchBackupList(registrations)
-}
-  
   const dropdownMenu = (row) => {
     if (window.localStorage.getItem('auth_type') === 'Admin') {
       return (
@@ -182,23 +180,17 @@ if(registrations){
               <span className="ml-2">View Details</span>
             </Flex>
           </Menu.Item>
-        
         </Menu>
       )
     } else {
       return (
         <Menu>
-       
-            <Menu.Item onClick={() => viewDetails(row)}>
-              <Flex alignItems="center">
-                <EyeOutlined />
-                <span className="ml-2">View Details</span>
-              </Flex>
-            </Menu.Item>
-          
-         
-       
-        
+          <Menu.Item onClick={() => viewDetails(row)}>
+            <Flex alignItems="center">
+              <EyeOutlined />
+              <span className="ml-2">View Details</span>
+            </Flex>
+          </Menu.Item>
         </Menu>
       )
     }
@@ -208,13 +200,12 @@ if(registrations){
   //   history.push(`/app/dashboards/banner/add-banner`)
   // }
 
-   const viewDetails = (row) => {
-     console.log('row', row)
+  const viewDetails = (row) => {
+    console.log('row', row)
     //  history.push(`/app/dashboards/banner/edit-banner/${row._id}`)
-   }
+  }
 
   // For deleting a row
-  
 
   // Antd Table Columns
   const tableColumns = [
@@ -237,13 +228,7 @@ if(registrations){
       dataIndex: 'actions',
       render: (_, elm) => (
         <div className="text-right">
-        
-            <EllipsisDropdown menu={dropdownMenu(elm)} />
-        
-          
-       
-            
-      
+          <EllipsisDropdown menu={dropdownMenu(elm)} />
         </div>
       ),
     },
@@ -252,7 +237,7 @@ if(registrations){
   // When Search is used
   const onSearch = (e) => {
     const value = e.currentTarget.value
-    const searchArray =  searchBackupList
+    const searchArray = searchBackupList
     const data = utils.wildCardSearch(searchArray, value)
     setRegistrationsList(data)
     setSelectedRowKeys([])
@@ -294,122 +279,172 @@ if(registrations){
       </div>
     </Flex>
   )
-    
+
   return (
     <>
+      {registrationsList ? (
+        <Table
+          className="table-responsive"
+          columns={tableColumns}
+          dataSource={registrationsList}
+          rowKey="id"
+        />
+      ) : (
+        ''
+      )}
 
-    {registrationsList ? 
-    
-     <Table className="table-responsive" columns={tableColumns} dataSource={registrationsList} rowKey="id" />:""}
-  
-    <Row gutter={16}>
-       <Col xs={24} sm={24} md={17}>
-    {/* <Form initialValues={initialValues}>  */}
-        <Card title="Basic Info">
-        
-          <Form.Item name="feeRemark" label="FeeRemark" placeholder="FeeRemark" rules={rules.feeRemark}>
-            <Input  />
-          </Form.Item>
-       
-          <Form.Item name="countedIn" label="CountedIN" rules={rules.countedIn}  placeholder="CountedIn" >
-            <Input/>
-          </Form.Item>
-          <Form.Item label="Registration Date" name="date" rules={rules.date} placeholder="Registration date">
-				<DatePicker  className="board-card-modal date-picker w-100"  />
-			</Form.Item>
-            <Form.Item label="Registration Expiry Date" name="expiry" rules={rules.expiry} placeholder="Registration Expiry Date">
-				<DatePicker  className="board-card-modal date-picker w-100"  />
-			</Form.Item>
-          <Form.Item name="status" label="Status" rules={rules.status} placeholder="Status">
-            <Select >
-              <Option value="Verified">Verified</Option>
-              <Option value="Evaluating">Evaluating</Option>
-            </Select>
-          </Form.Item>
-          <Form.Item name="mode" label="Mode" rules={rules.mode} placeholder="Mode">
-            <Select >
-              <Option value="Wallet">Wallet</Option>
-              <Option value="RTGS">RTGS</Option>
-              <Option value="Cash">Cash</Option>
-              <Option value="Cheque">Cheque</Option>
-              <Option value="DD">DD</Option>
-              <Option value="NEFT">NEFT</Option>
-              <Option value="Card">Card</Option>
-              <Option value="PayTm">PayTm</Option>
-              <Option value="TEMP ">TEMP </Option>
+      <Row gutter={16}>
+        <Col xs={24} sm={24} md={17}>
+          {/* <Form initialValues={initialValues}>  */}
+          <Card title="Basic Info">
+            <Form.Item
+              name="feeRemark"
+              label="FeeRemark"
+              placeholder="FeeRemark"
+              rules={rules.feeRemark}
+            >
+              <Input />
+            </Form.Item>
 
-            </Select>
-          </Form.Item>
-          <Form.Item label="Notes" name="note" rules={rules.note} placeholder='Notes'>
-            <Input />
-			</Form.Item>
-            <Form.Item label="Payment Date" name="paymentDate" rules={rules.paymentDate} placeholder="Payment Date" >
-				<DatePicker className="board-card-modal date-picker w-100"  />
-			</Form.Item>
-          <Form.Item
-            name="fee"
-            label="Fee"
-            rules={rules.fee}
-            placeholder='Fee'
-          >
-          <InputNumber />
-          </Form.Item>
-         
-          <Form.Item
-            name="feeTypeId"
-            label="Fee Type"
-               rules={rules.feeTypeId}
-            placeholder="Fee Type"
-          >
-            <Select >
-              {feeTypes.map((feeType) => (
-                <Option value={feeType._id}>{feeType.name}</Option>
-              ))}
-            </Select>
-          </Form.Item>
-          <Form.Item
-            name="participantId"
-            label="Participant"
-            rules={rules.participantId}
-            value={currentParticipant._id}
-            placeholder='CurrentParticipant'
-          >
-         <Input />
-          </Form.Item>
-        </Card>
-      
-        <Card title="Payment">
-          <Form.Item
-            name="bankName"
-            label="Bank Name"
-            rules={rules.bankName}
-            placeholder="Bank Name" 
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item name="branchName" label="Branch Name" rules={rules.branchName} placeholder="Branch Name"> 
-            <Input  />
-          </Form.Item>
-          <Form.Item
-            name="number"
-            label="Number"
-            rules={rules.number}
-            placeholder="Number/id of doucument involved in payment eg - DD no., Cheque no"
-          >
-            <Input  />
-          </Form.Item>
-          <Form.Item name="receipt" label="Reciept" rules={rules.state}  placeholder="Receipt image URL">
-            <Input />
-          </Form.Item>
-          
-          
-        </Card>
-         {/* </Form>  */}
-       </Col>
-    
-     </Row>
-     </>
-    
+            <Form.Item
+              name="countedIn"
+              label="CountedIN"
+              rules={rules.countedIn}
+              placeholder="CountedIn"
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label="Registration Date"
+              name="date"
+              rules={rules.date}
+              placeholder="Registration date"
+            >
+              <DatePicker className="board-card-modal date-picker w-100" />
+            </Form.Item>
+            <Form.Item
+              label="Registration Expiry Date"
+              name="expiry"
+              rules={rules.expiry}
+              placeholder="Registration Expiry Date"
+            >
+              <DatePicker className="board-card-modal date-picker w-100" />
+            </Form.Item>
+            <Form.Item
+              name="status"
+              label="Status"
+              rules={rules.status}
+              placeholder="Status"
+            >
+              <Select>
+                <Option value="Verified">Verified</Option>
+                <Option value="Evaluating">Evaluating</Option>
+              </Select>
+            </Form.Item>
+            <Form.Item
+              name="mode"
+              label="Mode"
+              rules={rules.mode}
+              placeholder="Mode"
+            >
+              <Select>
+                <Option value="Wallet">Wallet</Option>
+                <Option value="RTGS">RTGS</Option>
+                <Option value="Cash">Cash</Option>
+                <Option value="Cheque">Cheque</Option>
+                <Option value="DD">DD</Option>
+                <Option value="NEFT">NEFT</Option>
+                <Option value="Card">Card</Option>
+                <Option value="PayTm">PayTm</Option>
+                <Option value="TEMP ">TEMP </Option>
+              </Select>
+            </Form.Item>
+            <Form.Item
+              label="Notes"
+              name="note"
+              rules={rules.note}
+              placeholder="Notes"
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label="Payment Date"
+              name="paymentDate"
+              rules={rules.paymentDate}
+              placeholder="Payment Date"
+            >
+              <DatePicker className="board-card-modal date-picker w-100" />
+            </Form.Item>
+            <Form.Item
+              name="fee"
+              label="Fee"
+              rules={rules.fee}
+              placeholder="Fee"
+            >
+              <InputNumber />
+            </Form.Item>
+
+            <Form.Item
+              name="feeTypeId"
+              label="Fee Type"
+              rules={rules.feeTypeId}
+              placeholder="Fee Type"
+            >
+              <Select>
+                {feeTypes.map((feeType) => (
+                  <Option value={feeType._id}>{feeType.name}</Option>
+                ))}
+              </Select>
+            </Form.Item>
+            <Form.Item
+              name="participantId"
+              label="Participant"
+              rules={rules.participantId}
+              value={currentParticipant?._id}
+              placeholder="CurrentParticipant"
+            >
+              <Input />
+            </Form.Item>
+          </Card>
+
+          <Card title="Payment">
+            <Form.Item
+              name="bankName"
+              label="Bank Name"
+              rules={rules.bankName}
+              placeholder="Bank Name"
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              name="branchName"
+              label="Branch Name"
+              rules={rules.branchName}
+              placeholder="Branch Name"
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              name="number"
+              label="Number"
+              rules={rules.number}
+              placeholder="Number/id of doucument involved in payment eg - DD no., Cheque no"
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              name="receipt"
+              label="Reciept"
+              rules={rules.state}
+              placeholder="Receipt image URL"
+            >
+              <Input />
+            </Form.Item>
+          </Card>
+          {/* </Form>  */}
+        </Col>
+      </Row>
+    </>
   )
 }
 

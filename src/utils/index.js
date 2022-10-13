@@ -391,7 +391,6 @@ class Utils {
       } else if (role.module === 'REGISTRATION') {
         // Add Register Later
       } else if (role.module === 'CLIENT') {
-        // Add Client Later
         if (role.fetch) {
           navItems[0].submenu.push({
             key: 'dashboards-client',
