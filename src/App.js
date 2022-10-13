@@ -10,6 +10,7 @@ import {
   authenticated,
   setDashBoardNavTree,
   showLoading,
+  signOutSuccess,
 } from 'redux/actions/Auth'
 import { AUTH_TOKEN } from 'redux/constants/Auth'
 import authSubAdminService from 'services/auth/subAdmin'
@@ -46,7 +47,7 @@ function App() {
         dispatch(showLoading(false))
       }
       dispatch(showLoading(false))
-    } 
+    }
   }
 
   // Auth check
@@ -57,6 +58,7 @@ function App() {
     if (token && auth_type) {
       getProfile()
     } else {
+      dispatch(signOutSuccess())
       dispatch(showLoading(false))
     }
   }, [])
