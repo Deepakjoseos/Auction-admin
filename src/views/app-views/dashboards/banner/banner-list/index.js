@@ -66,93 +66,58 @@ const BannerList = () => {
 
   const { user } = useSelector((state) => state.auth)
 
+  const getBanners = async () => {
+    const data = await bannerService.getBanners()
+    if (data) {
+      setList(data)
+      setSearchBackupList(data)
+      console.log(data, 'show-data')
+    }
+  }
   useEffect(() => {
-    if (user) {
-      const bannerRole = user.roles.find((role) => role.module === 'BANNER')
-      console.log('bannerRole', bannerRole)
-      setCurrentSubAdminRole(bannerRole)
-    }
-  }, [user])
 
-  // Dropdown menu for each row
-  const dropdownMenu = (row) => {
-    if (window.localStorage.getItem('auth_type') === 'Admin') {
-      return (
-        <Menu>
-          <Menu.Item onClick={() => viewDetails(row)}>
-            <Flex alignItems="center">
-              <EyeOutlined />
-              <span className="ml-2">View Details</span>
-            </Flex>
-          </Menu.Item>
-          <Menu.Item onClick={() => deleteRow(row)}>
-            <Flex alignItems="center">
-              <DeleteOutlined />
-              <span className="ml-2">
-                {selectedRows.length > 0
-                  ? `Delete (${selectedRows.length})`
-                  : 'Delete'}
-              </span>
-            </Flex>
-          </Menu.Item>
-        </Menu>
-      )
-    } else {
-      return (
-        <Menu>
-          {currentSubAdminRole?.edit && (
-            <Menu.Item onClick={() => viewDetails(row)}>
-              <Flex alignItems="center">
-                <EyeOutlined />
-                <span className="ml-2">View Details</span>
-              </Flex>
-            </Menu.Item>
-          )}
-          {currentSubAdminRole?.delete && (
-            <Menu.Item onClick={() => deleteRow(row)}>
-              <Flex alignItems="center">
-                <DeleteOutlined />
-                <span className="ml-2">
-                  {selectedRows.length > 0
-                    ? `Delete (${selectedRows.length})`
-                    : 'Delete'}
-                </span>
-              </Flex>
-            </Menu.Item>
-          )}
-        </Menu>
-      )
-    }
-  }
+    getBanners()
+    // fetchConstants()
+  }, [])
 
-  const addBanner = () => {
-    history.push(`/app/dashboards/banner/add-banner`)
-  }
+  const dropdownMenu = (row) => (
+    <Menu>
+      <Menu.Item onClick={() => viewDetails(row)}>
+        <Flex alignItems="center">
+          <EyeOutlined />
+          <span className="ml-2">View Details</span>
+        </Flex>
+      </Menu.Item>
+      <Menu.Item onClick={() => deleteRow(row)}>
+        <Flex alignItems="center">
+          <DeleteOutlined />
+          <span className="ml-2">
+            {selectedRows.length > 0
+              ? `Delete (${selectedRows.length})`
+              : 'Delete'}
+          </span>
+        </Flex>
+      </Menu.Item>
+    </Menu>
+  )
 
-  const viewDetails = (row) => {
-    console.log('row', row)
-    history.push(`/app/dashboards/banner/edit-banner/${row._id}`)
-  }
+  
+ const addBanner = () => {
+  history.push(`/app/dashboards/banner/add-banner`)
+}
 
-  // For deleting a row
+const viewDetails = (row) => {
+  console.log('row', row)
+  history.push(`/app/dashboards/banner/edit-banner/${row._id}`)
+}
   const deleteRow = async (row) => {
-    const resp = await bannerService.deleteBanner(row.id)
-
+    const resp = await bannerService.deleteBanner(row._id)
     if (resp) {
-      const objKey = 'id'
-      let data = list
-      if (selectedRows.length > 1) {
-        selectedRows.forEach((elm) => {
-          data = utils.deleteArrayRow(data, objKey, elm.id)
-          setList(data)
-          setSelectedRows([])
-        })
-      } else {
-        data = utils.deleteArrayRow(data, objKey, row.id)
-        setList(data)
-      }
+      getBanners()
     }
   }
+
+
 
   // Antd Table Columns
   const tableColumns = [

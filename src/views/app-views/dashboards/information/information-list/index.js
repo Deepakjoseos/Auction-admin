@@ -44,79 +44,40 @@ const InformationList = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
   const [currentSubAdminRole, setCurrentSubAdminRole] = useState({})
 
-  useEffect(() => {
-    const getInformations = async () => {
-      const data = await informationService.getInformations()
-      if (data) {
-        setList(data)
-        setSearchBackupList(data)
-        console.log(data, 'show-data')
-      }
-    }
-    getInformations()
-  }, [])
-
-  const { user } = useSelector((state) => state.auth)
-
-  useEffect(() => {
-    if (user) {
-      const informationRole = user.roles.find(
-        (role) => role.module === 'INFORMATION'
-      )
-      console.log('informationRole', informationRole)
-      setCurrentSubAdminRole(informationRole)
-    }
-  }, [user])
-
-  const dropdownMenu = (row) => {
-    if (window.localStorage.getItem('auth_type') === 'Admin') {
-      return (
-        <Menu>
-          <Menu.Item onClick={() => viewDetails(row)}>
-            <Flex alignItems="center">
-              <EyeOutlined />
-              <span className="ml-2">View Details</span>
-            </Flex>
-          </Menu.Item>
-          <Menu.Item onClick={() => deleteRow(row)}>
-            <Flex alignItems="center">
-              <DeleteOutlined />
-              <span className="ml-2">
-                {selectedRows.length > 0
-                  ? `Delete (${selectedRows.length})`
-                  : 'Delete'}
-              </span>
-            </Flex>
-          </Menu.Item>
-        </Menu>
-      )
-    } else {
-      return (
-        <Menu>
-          {currentSubAdminRole?.edit && (
-            <Menu.Item onClick={() => viewDetails(row)}>
-              <Flex alignItems="center">
-                <EyeOutlined />
-                <span className="ml-2">View Details</span>
-              </Flex>
-            </Menu.Item>
-          )}
-          {currentSubAdminRole?.delete && (
-            <Menu.Item onClick={() => deleteRow(row)}>
-              <Flex alignItems="center">
-                <DeleteOutlined />
-                <span className="ml-2">
-                  {selectedRows.length > 0
-                    ? `Delete (${selectedRows.length})`
-                    : 'Delete'}
-                </span>
-              </Flex>
-            </Menu.Item>
-          )}
-        </Menu>
-      )
+  const getInformations = async () => {
+    const data = await informationService.getInformations()
+    if (data) {
+      setList(data)
+      setSearchBackupList(data)
+      console.log(data, 'show-data')
     }
   }
+  useEffect(() => {
+
+    getInformations()
+    // fetchConstants()
+  }, [])
+
+  const dropdownMenu = (row) => (
+    <Menu>
+      <Menu.Item onClick={() => viewDetails(row)}>
+        <Flex alignItems="center">
+          <EyeOutlined />
+          <span className="ml-2">View Details</span>
+        </Flex>
+      </Menu.Item>
+      <Menu.Item onClick={() => deleteRow(row)}>
+        <Flex alignItems="center">
+          <DeleteOutlined />
+          <span className="ml-2">
+            {selectedRows.length > 0
+              ? `Delete (${selectedRows.length})`
+              : 'Delete'}
+          </span>
+        </Flex>
+      </Menu.Item>
+    </Menu>
+  )
 
   const addProduct = () => {
     history.push(`/app/dashboards/information/add-information`)
@@ -125,29 +86,10 @@ const InformationList = () => {
   const viewDetails = (row) => {
     history.push(`/app/dashboards/information/edit-information/${row._id}`)
   }
-  const  stripHtml =(description)=> {
-    var temporalDivElement = document.createElement('div')
-    temporalDivElement.innerHTML = description
-    let content =
-      temporalDivElement.textContent || temporalDivElement.innerText || ''
-    return content
-  }
   const deleteRow = async (row) => {
     const resp = await informationService.deleteInformation(row._id)
-
     if (resp) {
-      const objKey = 'id'
-      let data = list
-      if (selectedRows.length > 1) {
-        selectedRows.forEach((elm) => {
-          data = utils.deleteArrayRow(data, objKey, elm.id)
-          setList(data)
-          setSelectedRows([])
-        })
-      } else {
-        data = utils.deleteArrayRow(data, objKey, row.id)
-        setList(data)
-      }
+      getInformations()
     }
   }
 
@@ -170,11 +112,8 @@ const InformationList = () => {
     {
       title: 'Description',
       dataIndex: 'description',
-      render: (description) => (
-        <TruncateLines lines={1} ellipsis={<span>...</span>}>
-          {stripHtml(description)}
-          </TruncateLines>
-      ),
+      render:	(description)	=>			<div dangerouslySetInnerHTML={{ __html: description}} />
+
     },
     {
       title: 'Priority',

@@ -168,7 +168,7 @@ const BannerForm = (props) => {
                 <Button
                   className="mr-2"
                   onClick={() =>
-                    history.push('/app/dashboards/catalog/banner/banner-list')
+                    history.push('/app/dashboards/banner/banner-list')
                   }
                 >
                   Discard

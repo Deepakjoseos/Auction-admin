@@ -3,10 +3,12 @@ import fetch from "auth/FetchInterceptor";
 const auctionService = {};
 const apiRoute = "/auction";
 
-auctionService.getauctions = async function () {
+auctionService.getauctions = async function (
+  query =''
+) {
   try {
     const res = await fetch({
-      url: `${apiRoute}/get/all/admin`,
+      url: `${apiRoute}/get/all/admin?${query}`,
       method: "get",
     });
     const data = res.data.filter((cur) => cur.status !== "Deleted");

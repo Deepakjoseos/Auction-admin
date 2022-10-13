@@ -14,6 +14,7 @@ import vehicletypeService from "services/vehicleType";
 import cityService from "services/city";
 import regionService from "services/region";
 import clientService from "services/client";
+import participantService from "services/Participant";
 const { TabPane } = Tabs;
 
 const ADD = "ADD";
@@ -30,6 +31,7 @@ const FeeTypeForm = (props) => {
   const [cities,setCities] = useState([])
   const [regions,setRegions] = useState([])
   const [clients,setClients] = useState([])
+  const [participant,setParticipants] = useState([])
   const getVehicleTypes = async ()=>{
     const data = await vehicletypeService.getVehicleTypes()
     if(data){
@@ -53,12 +55,20 @@ const FeeTypeForm = (props) => {
     if(data){
       setClients(data)
     }
+      }
+  const getAllParticipants = async ()=>{
+    const data = await participantService.getAllParticipants(`participantType=Seller`)
+    console.log(data, 'heetgevt')
+    if(data){
+      setParticipants(data)
+    }
   }
   useEffect(()=>{
   getVehicleTypes()
   getCities()
   getRegions()
   getClients()
+  getAllParticipants()
   },[])
   
 
@@ -70,6 +80,7 @@ const FeeTypeForm = (props) => {
         if (data) {
            form.setFieldsValue({
              name: data.name,
+             incrementAmount:data.incrementAmount,
              businessType: data.businessType,
              type: data.type,
              cityId: data.city?._id,
@@ -183,7 +194,7 @@ const FeeTypeForm = (props) => {
                 <Button
                   className="mr-2"
                   onClick={() =>
-                    history.push("/app/dashboards/auction/auction-list")
+                    history.push("/app/dashboards/auction/auction/auction-list")
                   }
                 >
                   Discard
@@ -209,7 +220,7 @@ const FeeTypeForm = (props) => {
                 // uploadLoading={uploadLoading}
                 // handleUploadChange={handleUploadChange}
                 // propsImages={propsImages}
-                form={form} vehicleTypes={vehicleTypes} regions={regions} cities={cities} clients={clients}
+                form={form} vehicleTypes={vehicleTypes} regions={regions} cities={cities} clients={clients} participant={participant}
               />
             </TabPane>
           </Tabs>

@@ -75,7 +75,7 @@ const InformationList = () => {
               <span className="ml-2">View Details</span>
             </Flex>
           </Menu.Item>
-          <Menu.Item onClick={() => deleteRow(row)}>
+          {/* <Menu.Item onClick={() => deleteRow(row)}>
             <Flex alignItems="center">
               <DeleteOutlined />
               <span className="ml-2">
@@ -84,7 +84,7 @@ const InformationList = () => {
                   : "Delete"}
               </span>
             </Flex>
-          </Menu.Item>
+          </Menu.Item> */}
         </Menu>
       );
     } else {
@@ -98,18 +98,18 @@ const InformationList = () => {
               </Flex>
             </Menu.Item>
           )}
-          {currentSubAdminRole?.delete && (
-            <Menu.Item onClick={() => deleteRow(row)}>
-              <Flex alignItems="center">
-                <DeleteOutlined />
-                <span className="ml-2">
-                  {selectedRows.length > 0
-                    ? `Delete (${selectedRows.length})`
-                    : "Delete"}
-                </span>
-              </Flex>
-            </Menu.Item>
-          )}
+          {/* {currentSubAdminRole?.delete && (
+            // <Menu.Item onClick={() => deleteRow(row)}>
+            //   <Flex alignItems="center">
+            //     <DeleteOutlined />
+            //     <span className="ml-2">
+            //       {selectedRows.length > 0
+            //         ? `Delete (${selectedRows.length})`
+            //         : "Delete"}
+            //     </span>
+            //   </Flex>
+            // </Menu.Item>
+          )} */}
         </Menu>
       );
     }
@@ -123,24 +123,24 @@ const InformationList = () => {
     history.push(`/app/dashboards/car/edit-car/${row._id}`);
   };
 
-  const deleteRow = async (row) => {
-    const resp = await carService.deleteCar(row.id);
+  // const deleteRow = async (row) => {
+  //   const resp = await carService.deleteCar(row.id);
 
-    if (resp) {
-      const objKey = "id";
-      let data = list;
-      if (selectedRows.length > 1) {
-        selectedRows.forEach((elm) => {
-          data = utils.deleteArrayRow(data, objKey, elm.id);
-          setList(data);
-          setSelectedRows([]);
-        });
-      } else {
-        data = utils.deleteArrayRow(data, objKey, row.id);
-        setList(data);
-      }
-    }
-  };
+  //   if (resp) {
+  //     const objKey = "id";
+  //     let data = list;
+  //     if (selectedRows.length > 1) {
+  //       selectedRows.forEach((elm) => {
+  //         data = utils.deleteArrayRow(data, objKey, elm.id);
+  //         setList(data);
+  //         setSelectedRows([]);
+  //       });
+  //     } else {
+  //       data = utils.deleteArrayRow(data, objKey, row.id);
+  //       setList(data);
+  //     }
+  //   }
+  // };
 
   const tableColumns = [
     {
