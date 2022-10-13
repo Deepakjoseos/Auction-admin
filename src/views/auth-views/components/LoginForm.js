@@ -62,7 +62,11 @@ export const LoginForm = (props) => {
   }
 
   useEffect(() => {
-    if (window.localStorage.getItem(AUTH_TOKEN) !== null && allowRedirect) {
+    if (
+      window.localStorage.getItem(AUTH_TOKEN) !== null &&
+      window.localStorage.getItem('auth_type') !== null &&
+      allowRedirect
+    ) {
       history.push(redirect)
     }
     if (showMessage) {
