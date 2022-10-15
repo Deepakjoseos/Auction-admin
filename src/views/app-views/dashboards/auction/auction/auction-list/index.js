@@ -178,11 +178,7 @@ const GroupList = () => {
       dataIndex: "name",
       sorter: (a, b) => utils.antdTableSorter(a, b, "name"),
     },
-    {
-      title: "Business",
-      dataIndex: "businessType",
-      sorter: (a, b) => utils.antdTableSorter(a, b, "business"),
-    },
+    
     {
       title: "Bid Limit",
       dataIndex: "bidLimit",
@@ -191,6 +187,16 @@ const GroupList = () => {
     {
       title: "Business",
       dataIndex: "businessType",
+      sorter: (a, b) => utils.antdTableSorter(a, b, "business"),
+    },
+    {
+      title: "Type",
+      dataIndex: "type",
+      sorter: (a, b) => utils.antdTableSorter(a, b, "business"),
+    },
+    {
+      title: "Format",
+      dataIndex: "format",
       sorter: (a, b) => utils.antdTableSorter(a, b, "business"),
     },
     {

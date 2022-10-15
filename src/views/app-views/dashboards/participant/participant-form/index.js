@@ -4,7 +4,7 @@ import PageHeaderAlt from "components/layout-components/PageHeaderAlt";
 import { Tabs, Form, Button, message } from "antd";
 import Flex from "components/shared-components/Flex";
 // import GeneralField from '../GeneralField'
-import GeneralField from "../participant-form/GeneralField";
+import GeneralField from "./GeneralField";
 import { useHistory } from "react-router-dom";
 import participantService from "services/Participant";
 import authAdminService from "services/auth/admin";
@@ -18,6 +18,10 @@ import WalletField from "../wallet/walletField";
 import WalletTransaction from "../../wallet-transaction";
 import WalletTransactionParticipant from "./wallet-transactions-list";
 import WalletFieldForm from "../wallet";
+import DocumentFieldForm from "../documentupload";
+import constantsService from 'services/constants'
+import { set } from "lodash";
+
 const { TabPane } = Tabs;
 
 const ADD = "ADD";
@@ -38,6 +42,9 @@ const ParticipantForm = (props) => {
   const [isBuyer, setIsBuyer] = useState(false);
   const { user } = useSelector((state) => state.auth);
   const [currentParticipant, setCurrentParticipant] = useState();
+  const [participant, setParticipant] = useState([])
+  const [usertype, setUsertype] = useState([])
+  const [buyerEligibleBuisness, setBuyerEligibleBuisness] = useState([])
 
   //   const [editorRender, setEditorRender] = useState(false)
   const [feeTypes, setFeeType] = useState([]);
@@ -98,7 +105,7 @@ const ParticipantForm = (props) => {
             participantType: data.participantType,
             pcc: data.pcc,
             relationshipManagerId: data.relationshipManager,
-            userType: data.userType,
+            UserType: data.UserType,
             buyerEligibleBuisness: data.buyerEligibleBuisness,
             participantClient: data.participantClient,
 
@@ -127,6 +134,22 @@ const ParticipantForm = (props) => {
     }
   }, [form, mode, param, props]);
 
+
+  useEffect(() => {
+    getParticipant()
+  }, [])
+
+  const getParticipant = async () => {
+    const data = await constantsService.getParticipant()
+    if (data) {
+      setParticipant(data)
+      setUsertype(data)
+      setBuyerEligibleBuisness(data)
+    
+    }
+  }
+
+
   console.log(user, "sendingValues");
 
   const onFinish = async () => {
@@ -145,7 +168,7 @@ const ParticipantForm = (props) => {
           gst: values.gst,
           hdfcPanValidation: values.hdfcPanValidation,
           panNumber: values.pan,
-          participantType: values.participantType,
+          ParticipantType: values.ParticipantType,
           participantClient: values.participantClient,
           pcc: values.pcc,
           clientId: values.clientId,
@@ -259,6 +282,10 @@ const ParticipantForm = (props) => {
                 setIsBuyer={setIsBuyer}
                 isBuyer={isBuyer}
                 clients={clients}
+                participant={participant}
+                buyerEligibleBuisness={buyerEligibleBuisness}
+                usertype={usertype}
+
               />
             </TabPane>
             {id  && (
@@ -269,11 +296,14 @@ const ParticipantForm = (props) => {
                 <TabPane tab="Deposit" key="3">
                   <DepositForm participantId={param?.id} />
                 </TabPane>
-                <TabPane tab="Document Upload" key="4"></TabPane>
+                <TabPane tab="Document Upload" key="4">
+                <DocumentFieldForm participantId={param?.id} />
+                </TabPane>
                 <TabPane tab="Wallet" key="5">
                   <WalletFieldForm participantId={param?.id} />
                 </TabPane>
                 <TabPane tab="Wallet Transactions" key="6">
+                
                   <WalletTransactionParticipant participantId={param?.id} />
                 </TabPane>
               </>
