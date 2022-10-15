@@ -138,12 +138,7 @@ const rules = {
       message: 'Required',
     },
   ],
-  userType: [
-    {
-      required: true,
-      message: 'Required',
-    },
-  ],
+ 
   status: [
     {
       required: true,
@@ -167,10 +162,13 @@ const rules = {
 const GeneralField = ({
   subAdmins,
   participants,
+  participant,
   mode,
   setIsBuyer,
   isBuyer,
   clients,
+  buyerEligibleBuisness,
+  usertype
 }) => {
   const [image, setImage] = useState(false)
 
@@ -237,53 +235,42 @@ const GeneralField = ({
             </Form.Item>
           )}
 
-          <Form.Item name="userType" label="User Type" rules={rules.userType}>
-            <Select placeholder="User Type">
-              <Option value="Employee">Employee</Option>
-              <Option value="NonEmployee">Non Employee</Option>
-            </Select>
-          </Form.Item>
-          {/* {isEmployee && (
-            <Form.Item name="parentId" label="Parent">
-              <Select placeholder="Parent">
-                {participants.map((user) => (
-                  <Option value={user._id}>{user.name}</Option>
-                ))}
-              </Select>
-            </Form.Item>
-          )} */}
           <Form.Item name="pcc" label="PCC" rules={rules.pcc}>
             <Select placeholder="Pcc">
               <Option value={false}>No</Option>
               <Option value={true}>Yes</Option>
             </Select>
           </Form.Item>
-          <Form.Item
-            name="participantType"
-            label="participantType"
-            rules={rules.participantType}
-          >
-            <Select
-              placeholder="participantType"
-              onChange={(e) => setIsBuyer(e === 'Buyer' ? true : false)}
-            >
-              <Option value="Seller">Seller</Option>
-              <Option value="Buyer">Buyer</Option>
-            </Select>
-          </Form.Item>
-          {isBuyer && (
-            <Form.Item
-              name="buyerEligibleBuisness"
-              label="Buyer Eligible business type"
-              // rules={rules.buyerEligibleBuisness}
-            >
-              <Select placeholder="Buyer Eligible business type">
-                <Option value={'Bank'}>Bank</Option>
-                <Option value={'Consumer'}>Consumer</Option>
-                <Option value={'Insurance'}>Insurance</Option>
+           <Form.Item name="UserType" label="userType" >
+              <Select placeholder="userType">
+                {usertype?.UserType?.map((item, index) => ( 
+                  <Option key={index} value={item}> {item} </Option>
+                ))}
               </Select>
             </Form.Item>
-          )}
+
+
+          <Form.Item name="ParticipantType" label="ParticipantType" >
+              <Select placeholder="ParticipantType">
+                {participant?.ParticipantType?.map((item, index) => ( 
+                  <Option key={index} value={item}> {item} </Option>
+                ))}
+              </Select>
+            </Form.Item>
+
+
+           
+            
+            <Form.Item name="BuyerEligibleBuisness" label="buyerEligibleBuisness" >
+              <Select placeholder="buyerEligibleBuisness">
+                {buyerEligibleBuisness?.BuyerEligibleBuisness?.map((item, index) => ( 
+                  <Option key={index} value={item}> {item} </Option>
+                ))}
+              </Select>
+            </Form.Item>
+            
+         
+       
 
           {mode === 'EDIT' && (
             <Form.Item name="status" label="Status" rules={rules.status}>

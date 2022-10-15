@@ -33,7 +33,7 @@ const ClientForm = (props) => {
 
   useEffect(() => {
     if (mode === EDIT) {
-      const fetchBannerById = async () => {
+      const fetchClientById = async () => {
         const { id } = param
         const data = await clientService.getClientById(id)
         if (data) {
@@ -62,7 +62,7 @@ const ClientForm = (props) => {
         }
       }
 
-      fetchBannerById()
+      fetchClientById()
     }
   }, [form, mode, param, props])
 
@@ -116,7 +116,7 @@ const ClientForm = (props) => {
               uploadedImg[0].originFileObj,
               uploadedImg,
               uploadedImg[0].url,
-              'banner'
+              'client'
             )
 
             values.image = imgValue
@@ -193,6 +193,8 @@ const ClientForm = (props) => {
                 // handleUploadChange={handleUploadChange}
                 propsImages={propsImages}
                 // propsMobileImages={propsMobileImages}
+
+                form={form}
               />
             </TabPane>
           </Tabs>

@@ -43,17 +43,17 @@ auctionInventoryService.getInventory = async function (id) {
   }
 };
 
-// auctionInventoryService.updateauction = async function (id, data) {
-//   try {
-//     const res = await fetch({
-//       url: `${apiRoute}/${id}/update`,
-//       method: "PUT",
-//       data: data,
-//     });
-//     return res;
-//   } catch (err) {
-//     console.log(err, "show-err");
-//   }
-// };
+auctionInventoryService.updateauction = async function (id, data) {
+  try {
+    const res = await fetch({
+      url: `${apiRoute}/${id}/image/asFile`,
+      method: "PUT",
+      data: data,
+    });
+    return res;
+  } catch (err) {
+    console.log(err, "show-err");
+  }
+};
 
 export default auctionInventoryService;

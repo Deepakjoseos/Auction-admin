@@ -64,6 +64,8 @@ const GeneralField = ({ setSheet, auctions, mode, setAuctionId }) => {
                   ))}
                 </Select>
               </Form.Item>
+
+              
               <Upload.Dragger
                 multiple={false}
                 type="file"

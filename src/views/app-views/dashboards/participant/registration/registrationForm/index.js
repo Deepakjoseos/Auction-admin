@@ -159,3 +159,4 @@ const RegistrationForm = (props) => {
 };
 
 export default RegistrationForm;
+
