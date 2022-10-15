@@ -223,16 +223,17 @@ const WalletField = ({
                         <Card title="Current Buying Limit">{wallet?.currentBuyingLimit}</Card>
                     
                         <Card title="Used Buying Limit">{wallet?.usedBuyingLimit}</Card>
+                        <Card title="Buying limit history">{wallet?.historyBuyingLimit}</Card>
                     
-                        <Card title="Blocked Buying Limit">{wallet?.blockedAmount}</Card>
+                        {/* <Card title="Blocked Buying Limit">{wallet?.blockedAmount}</Card> */}
                     </List.Item>
 
                 </List>
                 : ""}
             <Row gutter={16}>
-                <Col xs={24} sm={24} md={17}>
+                <Col xs={24} sm={24} md={30}>
                     <Card title="Basic Info">
-                        <div style={{ display: "flex", flexDirection: "row", gap: "1rem" }}>
+                        <div style={{ display: "flex", flexDirection: "row", gap: "3rem" }}>
                             <Form.Item name="amount" label="Limit Amount" rules={rules.amount}>
                                 <InputNumber placeholder="Amount" min={0} />
                             </Form.Item>

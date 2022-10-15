@@ -38,9 +38,9 @@ const GroupList = () => {
   const [list, setList] = useState([]);
   const [searchBackupList, setSearchBackupList] = useState([]);
   const [currentSubAdminRole, setCurrentSubAdminRole] = useState({});
-
+  const AUTH_TYPE = window.localStorage.getItem('auth_type')
   useEffect(() => {
-    const getFeeTypes = async () => {
+    const getGroups = async () => {
       const data = await groupService.getGroups();
       if (data) {
         setList(data);
@@ -49,11 +49,11 @@ const GroupList = () => {
         console.log(data, "show-data");
       }
     };
-    getFeeTypes();
+    getGroups();
   }, []);
 
   const dropdownMenu = (row) => {
-    if (window.localStorage.getItem("auth_type") === "Admin") {
+    if (AUTH_TYPE === "Admin") {
       return (
         <Menu>
           <Menu.Item onClick={() => viewDetails(row)}>
@@ -130,26 +130,26 @@ const GroupList = () => {
       dataIndex: "business",
       sorter: (a, b) => utils.antdTableSorter(a, b, "business"),
     },
-    {
-      title: "Vehicle",
-      dataIndex: "vehicle",
-      render: (_, rec) => <>{rec.vehicleType.name}</>,
-      sorter: (a, b) => utils.antdTableSorter(a, b, "vehicle"),
-    },
+    // {
+    //   title: "Vehicle",
+    //   dataIndex: "vehicle",
+    //   render: (_, rec) => <>{rec.vehicleType.name}</>,
+    //   sorter: (a, b) => utils.antdTableSorter(a, b, "vehicle"),
+    // },
 
-    {
-      title: "Region",
-      dataIndex: "region",
-      render: (_, rec) => <>{rec.region.name}</>,
-      sorter: (a, b) => utils.antdTableSorter(a, b, "region"),
-    },
+    // {
+    //   title: "Region",
+    //   dataIndex: "region",
+    //   render: (_, rec) => <>{rec.region.name}</>,
+    //   sorter: (a, b) => utils.antdTableSorter(a, b, "region"),
+    // },
 
-    {
-      title: "City",
-      dataIndex: "city",
-      render: (_, rec) => <>{rec.city.name}</>,
-      sorter: (a, b) => utils.antdTableSorter(a, b, "city"),
-    },
+    // {
+    //   title: "City",
+    //   dataIndex: "city",
+    //   render: (_, rec) => <>{rec.city.name}</>,
+    //   sorter: (a, b) => utils.antdTableSorter(a, b, "city"),
+    // },
     {
       title: "Status",
       dataIndex: "status",
@@ -163,7 +163,7 @@ const GroupList = () => {
       dataIndex: "actions",
       render: (_, elm) => (
         <div className="text-right">
-          {window.localStorage.getItem("auth_type") === "Admin" ? (
+          {AUTH_TYPE === 'Admin' ? (
             <EllipsisDropdown menu={dropdownMenu(elm)} />
           ) : (
             currentSubAdminRole?.edit && (
@@ -180,6 +180,7 @@ const GroupList = () => {
     const searchArray = e.currentTarget.value ? list : searchBackupList;
     const data = utils.wildCardSearch(searchArray, value);
     setList(data);
+    
   };
 
   const handleShowStatus = (value) => {
@@ -222,7 +223,7 @@ const GroupList = () => {
       <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
         {filters()}
         <div>
-          {window.localStorage.getItem("auth_type") === "SubAdmin" ? (
+        {AUTH_TYPE === 'SubAdmin' ? (
             <>
               {currentSubAdminRole?.add && (
                 <Button

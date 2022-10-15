@@ -61,8 +61,8 @@ constantsService.getTemplates = async function () {
       // For coverting array
        const ParticipantType = Object.values(res.data.ParticipantType).map((val) => val);
        const BuyerType = Object.values(res.data.BuyerType).map((val) => val);
-       const UserType = Object.values(res.data.ParticipantType).map((val) => val);
-       const BuyerEligibleBuisness = Object.values(res.data.ParticipantType).map((val) => val);
+       const UserType = Object.values(res.data.UserType).map((val) => val);
+       const BuyerEligibleBuisness = Object.values(res.data.BuyerEligibleBuisness).map((val) => val);
   
       // return res.data.ListingType;
       return { ParticipantType, BuyerType,UserType,BuyerEligibleBuisness }

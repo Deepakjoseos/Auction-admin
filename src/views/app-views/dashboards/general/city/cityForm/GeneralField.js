@@ -26,10 +26,10 @@ const rules = {
 };
 
 const GeneralField = ({ states }) => (
-  <Row gutter={16}>
+  <Row gutter={20}>
     <Col xs={24} sm={24} md={17}>
       <Card title="Basic Info">
-        <div style={{ display: "flex", flexDirection: "row", gap: "1rem" }}>
+       
           <Form.Item name="name" label="Name" rules={rules.name}>
             <Input placeholder="Name" />
           </Form.Item>
@@ -55,7 +55,7 @@ const GeneralField = ({ states }) => (
               <Option value="Hold">Hold</Option>
             </Select>
           </Form.Item>
-        </div>
+        
       </Card>
     </Col>
   </Row>

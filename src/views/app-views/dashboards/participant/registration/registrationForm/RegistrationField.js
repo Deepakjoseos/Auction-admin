@@ -12,7 +12,11 @@ import {
   Space,
   Button,
   Image,
-  Tag,DatePicker,Table,Menu,Modal
+  Tag,
+  DatePicker,
+  Table,
+  Menu,
+  Modal,
 } from 'antd'
 import {
   EyeOutlined,
@@ -154,93 +158,87 @@ const rules = {
 //   return null
 // }
 
-const RegistrationField = ({
-onFinish
-}) => {
-// const initialValues = {
-//     participantId: currentParticipant._id,
- 
-//   };
-// console.log(onFinish,"testing onFinish")
-  const [registrationsList,setRegistrationsList]= useState([])
+const RegistrationField = ({ onFinish }) => {
+  // const initialValues = {
+  //     participantId: currentParticipant._id,
+
+  //   };
+  // console.log(onFinish,"testing onFinish")
+  const [registrationsList, setRegistrationsList] = useState([])
   const [searchBackupList, setSearchBackupList] = useState([])
   const [selectedRows, setSelectedRows] = useState([])
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
-  const [feeTypes,setFeeType]=useState([])
-   const [registrations,setRegistrations]= useState([])
-   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [feeTypes, setFeeType] = useState([])
+  const [registrations, setRegistrations] = useState([])
+  const [isModalVisible, setIsModalVisible] = useState(false)
 
   if (registrations) {
     setRegistrationsList(registrations)
     setSearchBackupList(registrations)
   }
 
-useEffect(()=>{
-  const getFeeTypes = async () => {
-    const data = await feeTypeService.getFeeTypes()
-    if (data) {
-      setFeeType(data)
-      console.log(data, 'feetypes')
+  useEffect(() => {
+    const getFeeTypes = async () => {
+      const data = await feeTypeService.getFeeTypes()
+      if (data) {
+        setFeeType(data)
+        console.log(data, 'feetypes')
+      }
     }
-  }
-  getFeeTypes()
+    getFeeTypes()
 
-  const getAllRegistrations = async ()=>{
-    const data = await registrationService.getRegistrations()
-    if(data){
-      setRegistrations(data)
+    const getAllRegistrations = async () => {
+      const data = await registrationService.getRegistrations()
+      if (data) {
+        setRegistrations(data)
+      }
     }
-  }
-  getAllRegistrations()
-},[])
+    getAllRegistrations()
+  }, [])
 
-const findFeeTypeName= (rowId)=>{
-  console.log('rowId',rowId)
-  const n= feeTypes.find(e => e.id  === rowId);
-  console.log('n',n)
-  return n?.name ? n.name :"-" 
-  
- }
+  const findFeeTypeName = (rowId) => {
+    console.log('rowId', rowId)
+    const n = feeTypes.find((e) => e.id === rowId)
+    console.log('n', n)
+    return n?.name ? n.name : '-'
+  }
   const dropdownMenu = (row) => {
     // if (window.localStorage.getItem('auth_type') === 'Admin') {
-      return (
-        <Menu>
-          <Menu.Item onClick={() => showModal(row)}>
-            <Flex alignItems="center">
-              <EyeOutlined />
-              <span className="ml-2">View Details</span>
-            </Flex>
-          </Menu.Item>
-        </Menu>
-      )
-    // } 
-
+    return (
+      <Menu>
+        <Menu.Item onClick={() => showModal(row)}>
+          <Flex alignItems="center">
+            <EyeOutlined />
+            <span className="ml-2">View Details</span>
+          </Flex>
+        </Menu.Item>
+      </Menu>
+    )
+    // }
   }
 
   // const addBanner = () => {
   //   history.push(`/app/dashboards/banner/add-banner`)
   // }
   const showModal = () => {
-    setIsModalVisible(true);
-  };
+    setIsModalVisible(true)
+  }
 
   const handleOk = () => {
-    setIsModalVisible(false);
-  };
+    setIsModalVisible(false)
+  }
 
   const handleCancel = () => {
-    setIsModalVisible(false);
-  };
-   const viewDetails = (row) => {
-     console.log('row', row)
-    
-   }
+    setIsModalVisible(false)
+  }
+  const viewDetails = (row) => {
+    console.log('row', row)
+  }
 
   // For deleting a row
 
   // Antd Table Columns
   const tableColumns = [
-  
     {
       title: 'Fee',
       dataIndex: 'fee',
@@ -255,37 +253,29 @@ const findFeeTypeName= (rowId)=>{
       title: 'Registration Date',
       dataIndex: 'date',
       render: (date) => {
-       return  moment(parseInt(date)).format('L')
-     },
-    
-
+        return moment(parseInt(date)).format('L')
+      },
     },
     {
       title: 'Expiry Date',
       dataIndex: 'expiry',
       render: (expiry) => {
-       return  moment(parseInt(expiry)).format('L')
-     },
-    
-
+        return moment(parseInt(expiry)).format('L')
+      },
     },
     {
       title: 'Payment Date',
       dataIndex: 'paymentDate',
       render: (paymentDate) => {
-       return  moment(parseInt(paymentDate)).format('L')
-     },
-    
-
+        return moment(parseInt(paymentDate)).format('L')
+      },
     },
     {
-      title: "Fee Type",
-      dataIndex: "feeTypeId",
-      key:"feeTypeId",
+      title: 'Fee Type',
+      dataIndex: 'feeTypeId',
+      key: 'feeTypeId',
       // render: (row) => {console},
-      render : (_,row)=>findFeeTypeName(row.feeTypeId)
-      
-     
+      render: (_, row) => findFeeTypeName(row.feeTypeId),
     },
     // {
     //   title: 'Bank Name',
@@ -300,9 +290,7 @@ const findFeeTypeName= (rowId)=>{
       dataIndex: 'actions',
       render: (_, elm) => (
         <div className="text-right">
-        
-            <EllipsisDropdown menu={dropdownMenu(elm)} />
-        
+          <EllipsisDropdown menu={dropdownMenu(elm)} />
         </div>
       ),
     },
@@ -356,78 +344,226 @@ const findFeeTypeName= (rowId)=>{
 
   return (
     <>
+      {registrationsList ? (
+        <Table
+          className="table-responsive"
+          columns={tableColumns}
+          dataSource={registrationsList}
+          rowKey="id"
+        />
+      ) : (
+        ''
+      )}
 
-    {registrations?.length > 0 ? 
-    
-     <Table className="table-responsive" columns={tableColumns} dataSource={registrations} rowKey="id" />:""}
-  
-    <Row gutter={16}>
-       <Col xs={24} sm={24} md={17}>
+      <Row gutter={16}>
+        <Col xs={24} sm={24} md={17}>
+          {/* <Form initialValues={initialValues}>  */}
+          <Card title="Basic Info">
+            <Form.Item
+              name="feeRemark"
+              label="FeeRemark"
+              placeholder="FeeRemark"
+              rules={rules.feeRemark}
+            >
+              <Input />
+            </Form.Item>
 
-    {/* <Form initialValues={initialValues}>  */}
-        <Card title="Basic Info">
+            <Form.Item
+              name="countedIn"
+              label="CountedIN"
+              rules={rules.countedIn}
+              placeholder="CountedIn"
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label="Registration Date"
+              name="date"
+              rules={rules.date}
+              placeholder="Registration date"
+            >
+              <DatePicker className="board-card-modal date-picker w-100" />
+            </Form.Item>
+            <Form.Item
+              label="Registration Expiry Date"
+              name="expiry"
+              rules={rules.expiry}
+              placeholder="Registration Expiry Date"
+            >
+              <DatePicker className="board-card-modal date-picker w-100" />
+            </Form.Item>
+            <Form.Item
+              name="status"
+              label="Status"
+              rules={rules.status}
+              placeholder="Status"
+            >
+              <Select>
+                <Option value="Verified">Verified</Option>
+                <Option value="Evaluating">Evaluating</Option>
+              </Select>
+            </Form.Item>
+            <Form.Item
+              name="mode"
+              label="Mode"
+              rules={rules.mode}
+              placeholder="Mode"
+            >
+              <Select>
+                <Option value="Wallet">Wallet</Option>
+                <Option value="RTGS">RTGS</Option>
+                <Option value="Cash">Cash</Option>
+                <Option value="Cheque">Cheque</Option>
+                <Option value="DD">DD</Option>
+                <Option value="NEFT">NEFT</Option>
+                <Option value="Card">Card</Option>
+                <Option value="PayTm">PayTm</Option>
+                <Option value="TEMP ">TEMP </Option>
+              </Select>
+            </Form.Item>
+            <Form.Item
+              label="Notes"
+              name="note"
+              rules={rules.note}
+              placeholder="Notes"
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label="Payment Date"
+              name="paymentDate"
+              rules={rules.paymentDate}
+              placeholder="Payment Date"
+            >
+              <DatePicker className="board-card-modal date-picker w-100" />
+            </Form.Item>
+            <Form.Item
+              name="fee"
+              label="Fee"
+              rules={rules.fee}
+              placeholder="Fee"
+            >
+              <InputNumber />
+            </Form.Item>
+          </Card>
+        </Col>
+      </Row>
 
-          <Form.Item name="feeRemark" label="FeeRemark" placeholder="FeeRemark" rules={rules.feeRemark}>
-            <Input  />
-          </Form.Item>
-       
-          <Form.Item name="countedIn" label="CountedIN" rules={rules.countedIn}  placeholder="CountedIn" >
-          <DatePicker  className="board-card-modal date-picker w-100"  />   
-                 </Form.Item>
-          <Form.Item label="Registration Date" name="date" rules={rules.date} placeholder="Registration date">
-				<DatePicker  className="board-card-modal date-picker w-100"  />
-			</Form.Item>
-            <Form.Item label="Registration Expiry Date" name="expiry" rules={rules.expiry} placeholder="Registration Expiry Date">
-				<DatePicker className="board-card-modal date-picker w-100"  />
-			</Form.Item>
-          <Form.Item name="status" label="Status" rules={rules.status} placeholder="Status">
-            <Select >
-              <Option value="Verified">Verified</Option>
-              <Option value="Evaluating">Evaluating</Option>
-            </Select>
-          </Form.Item>
-          <Form.Item name="mode" label="Mode" rules={rules.mode} placeholder="Mode">
-            <Select >
-              <Option value="Wallet">Wallet</Option>
-              <Option value="RTGS">RTGS</Option>
-              <Option value="Cash">Cash</Option>
-              <Option value="Cheque">Cheque</Option>
-              <Option value="DD">DD</Option>
-              <Option value="NEFT">NEFT</Option>
-              <Option value="Card">Card</Option>
-              <Option value="PayTm">PayTm</Option>
-              <Option value="TEMP ">TEMP </Option>
+      {registrations?.length > 0 ? (
+        <Table
+          className="table-responsive"
+          columns={tableColumns}
+          dataSource={registrations}
+          rowKey="id"
+        />
+      ) : (
+        ''
+      )}
 
-            </Select>
-          </Form.Item>
-          <Form.Item label="Notes" name="note" rules={rules.note} placeholder='Notes'>
-            <Input />
-			</Form.Item>
-            <Form.Item label="Payment Date" name="paymentDate" rules={rules.paymentDate} placeholder="Payment Date" >
-				<DatePicker className="board-card-modal date-picker w-100"  />
-			</Form.Item>
-          <Form.Item
-            name="fee"
-            label="Fee"
-            rules={rules.fee}
-            placeholder='Fee'
-          >
-          <InputNumber />
-          </Form.Item>
-         
-          <Form.Item
-            name="feeTypeId"
-            label="Fee Type"
-               rules={rules.feeTypeId}
-            placeholder="Fee Type"
-          >
-            <Select >
-              {feeTypes.map((feeType) => (
-                <Option value={feeType._id}>{feeType.name}</Option>
-              ))}
-            </Select>
-          </Form.Item>
-          {/* <Form.Item
+      <Row gutter={16}>
+        <Col xs={24} sm={24} md={17}>
+          {/* <Form initialValues={initialValues}>  */}
+          <Card title="Basic Info">
+            <Form.Item
+              name="feeRemark"
+              label="FeeRemark"
+              placeholder="FeeRemark"
+              rules={rules.feeRemark}
+            >
+              <Input />
+            </Form.Item>
+
+            <Form.Item
+              name="countedIn"
+              label="CountedIN"
+              rules={rules.countedIn}
+              placeholder="CountedIn"
+            >
+              <DatePicker className="board-card-modal date-picker w-100" />
+            </Form.Item>
+            <Form.Item
+              label="Registration Date"
+              name="date"
+              rules={rules.date}
+              placeholder="Registration date"
+            >
+              <DatePicker className="board-card-modal date-picker w-100" />
+            </Form.Item>
+            <Form.Item
+              label="Registration Expiry Date"
+              name="expiry"
+              rules={rules.expiry}
+              placeholder="Registration Expiry Date"
+            >
+              <DatePicker className="board-card-modal date-picker w-100" />
+            </Form.Item>
+            <Form.Item
+              name="status"
+              label="Status"
+              rules={rules.status}
+              placeholder="Status"
+            >
+              <Select>
+                <Option value="Verified">Verified</Option>
+                <Option value="Evaluating">Evaluating</Option>
+              </Select>
+            </Form.Item>
+            <Form.Item
+              name="mode"
+              label="Mode"
+              rules={rules.mode}
+              placeholder="Mode"
+            >
+              <Select>
+                <Option value="Wallet">Wallet</Option>
+                <Option value="RTGS">RTGS</Option>
+                <Option value="Cash">Cash</Option>
+                <Option value="Cheque">Cheque</Option>
+                <Option value="DD">DD</Option>
+                <Option value="NEFT">NEFT</Option>
+                <Option value="Card">Card</Option>
+                <Option value="PayTm">PayTm</Option>
+                <Option value="TEMP ">TEMP </Option>
+              </Select>
+            </Form.Item>
+            <Form.Item
+              label="Notes"
+              name="note"
+              rules={rules.note}
+              placeholder="Notes"
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label="Payment Date"
+              name="paymentDate"
+              rules={rules.paymentDate}
+              placeholder="Payment Date"
+            >
+              <DatePicker className="board-card-modal date-picker w-100" />
+            </Form.Item>
+            <Form.Item
+              name="fee"
+              label="Fee"
+              rules={rules.fee}
+              placeholder="Fee"
+            >
+              <InputNumber />
+            </Form.Item>
+
+            <Form.Item
+              name="feeTypeId"
+              label="Fee Type"
+              rules={rules.feeTypeId}
+              placeholder="Fee Type"
+            >
+              <Select>
+                {feeTypes.map((feeType) => (
+                  <Option value={feeType._id}>{feeType.name}</Option>
+                ))}
+              </Select>
+            </Form.Item>
+            {/* <Form.Item
             name="participantId"
             label="Participant"
             rules={rules.participantId}
@@ -436,46 +572,60 @@ const findFeeTypeName= (rowId)=>{
           >
          <Input />
           </Form.Item> */}
-        </Card>
-      
-        <Card title="Payment">
-          <Form.Item
-            name="bankName"
-            label="Bank Name"
-            rules={rules.bankName}
-            placeholder="Bank Name" 
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item name="branchName" label="Branch Name" rules={rules.branchName} placeholder="Branch Name"> 
-            <Input  />
-          </Form.Item>
-          <Form.Item
-            name="number"
-            label="Number"
-            rules={rules.number}
-            placeholder="Number/id of doucument involved in payment eg - DD no., Cheque no"
-          >
-            <Input  />
-          </Form.Item>
-          <Form.Item name="receipt" label="Reciept" rules={rules.state}  placeholder="Receipt image URL">
-            <Input />
-          </Form.Item>
-          
-        </Card>
-        <Button type="primary" htmlType='button' style={{float:"right"}}  onClick={onFinish}>Add</Button>
+          </Card>
 
-         {/* </Form>  */}
-       </Col>
-    
-     </Row>
-     {/* <Modal title="Basic Modal" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+          <Card title="Payment">
+            <Form.Item
+              name="bankName"
+              label="Bank Name"
+              rules={rules.bankName}
+              placeholder="Bank Name"
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              name="branchName"
+              label="Branch Name"
+              rules={rules.branchName}
+              placeholder="Branch Name"
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              name="number"
+              label="Number"
+              rules={rules.number}
+              placeholder="Number/id of doucument involved in payment eg - DD no., Cheque no"
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              name="receipt"
+              label="Reciept"
+              rules={rules.state}
+              placeholder="Receipt image URL"
+            >
+              <Input />
+            </Form.Item>
+          </Card>
+          <Button
+            type="primary"
+            htmlType="button"
+            style={{ float: 'right' }}
+            onClick={onFinish}
+          >
+            Add
+          </Button>
+
+          {/* </Form>  */}
+        </Col>
+      </Row>
+      {/* <Modal title="Basic Modal" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
         <p>Some contents...</p>
         <p>Some contents...</p>
         <p>Some contents...</p>
       </Modal> */}
-     </>
-    
+    </>
   )
 }
 

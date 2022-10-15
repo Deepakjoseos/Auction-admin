@@ -18,7 +18,9 @@ import WalletField from "../wallet/walletField";
 import WalletTransaction from "../../wallet-transaction";
 import WalletTransactionParticipant from "./wallet-transactions-list";
 import WalletFieldForm from "../wallet";
+import DocumentFieldForm from "../documentupload";
 import constantsService from 'services/constants'
+import { set } from "lodash";
 
 const { TabPane } = Tabs;
 
@@ -41,6 +43,8 @@ const ParticipantForm = (props) => {
   const { user } = useSelector((state) => state.auth);
   const [currentParticipant, setCurrentParticipant] = useState();
   const [participant, setParticipant] = useState([])
+  const [usertype, setUsertype] = useState([])
+  const [buyerEligibleBuisness, setBuyerEligibleBuisness] = useState([])
 
   //   const [editorRender, setEditorRender] = useState(false)
   const [feeTypes, setFeeType] = useState([]);
@@ -101,7 +105,7 @@ const ParticipantForm = (props) => {
             participantType: data.participantType,
             pcc: data.pcc,
             relationshipManagerId: data.relationshipManager,
-            userType: data.userType,
+            UserType: data.UserType,
             buyerEligibleBuisness: data.buyerEligibleBuisness,
             participantClient: data.participantClient,
 
@@ -139,7 +143,9 @@ const ParticipantForm = (props) => {
     const data = await constantsService.getParticipant()
     if (data) {
       setParticipant(data)
-      console.log(data, 'show-roles-constant')
+      setUsertype(data)
+      setBuyerEligibleBuisness(data)
+    
     }
   }
 
@@ -162,7 +168,7 @@ const ParticipantForm = (props) => {
           gst: values.gst,
           hdfcPanValidation: values.hdfcPanValidation,
           panNumber: values.pan,
-          participantType: values.participantType,
+          ParticipantType: values.ParticipantType,
           participantClient: values.participantClient,
           pcc: values.pcc,
           clientId: values.clientId,
@@ -277,6 +283,9 @@ const ParticipantForm = (props) => {
                 isBuyer={isBuyer}
                 clients={clients}
                 participant={participant}
+                buyerEligibleBuisness={buyerEligibleBuisness}
+                usertype={usertype}
+
               />
             </TabPane>
             {id  && (
@@ -287,7 +296,9 @@ const ParticipantForm = (props) => {
                 <TabPane tab="Deposit" key="3">
                   <DepositForm participantId={param?.id} />
                 </TabPane>
-                <TabPane tab="Document Upload" key="4"></TabPane>
+                <TabPane tab="Document Upload" key="4">
+                <DocumentFieldForm participantId={param?.id} />
+                </TabPane>
                 <TabPane tab="Wallet" key="5">
                   <WalletFieldForm participantId={param?.id} />
                 </TabPane>

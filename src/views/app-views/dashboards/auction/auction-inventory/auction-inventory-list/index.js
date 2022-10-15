@@ -104,18 +104,18 @@ const AuctionInventoryList = () => {
 },
     {
       title: "Start Time",
-      dataIndex: "startTimestamp",
-      render: (status) => {
-        var d = new Date(Number(status)).toDateString();
+      dataIndex: "auction",
+      render: (auction) => {
+        var d = new Date(Number(auction?.startTimestamp)).toDateString();
         return <Flex alignItems="center">{d}</Flex>;
       },
       sorter: (a, b) => utils.antdTableSorter(a, b, "business"),
     },
     {
       title: "End Time",
-      dataIndex: "endTimestamp",
-      render: (status) => {
-        var d = new Date(Number(status)).toDateString();
+      dataIndex: "auction",
+      render: (auction) => {
+        var d = new Date(Number(auction?.endTimestamp)).toDateString();
         return <Flex alignItems="center">{d}</Flex>;
       },
       sorter: (a, b) => utils.antdTableSorter(a, b, "business"),
