@@ -10,7 +10,6 @@ fuelTypeService.getFuelTypes = async function () {
       url: `${apiRoute}/get/all/admin`,
       method: 'get'
     });
-    // const data = res.data.filter((cur) => cur.status !== 'Deleted')
     return res.data;
   } catch (err) {
     console.log(err, 'show-err');

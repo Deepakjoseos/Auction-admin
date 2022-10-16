@@ -88,44 +88,18 @@ const AuctionInventoryForm = (props) => {
   const fetchInventory = async () => {
     const { id } = param;
     const data = await auctionInventoryService.getInventory(id);
-    console.log(data);
     if (data) {
-      // form.setFieldsValue({
-      //   name: data.name,
-      //   businessType: data.businessType,
-      //   type: data.type,
-      //   cityId: data.cityId,
-      //   regionId: data.regionId,
-      //   clientId: data.clientId,
-      //   vehicleTypeId: data.vehicleTypeId,
-      //   format: data.format,
-      //   status: data.status,
-      //   closeType: data.closeType,
-      //   bidLimit: data.bidLimit,
-      //   termsAndConditions: data.termsAndConditions,
-      //   // startTimestamp: data.startTimestamp,
-      //   // endTimestamp: data.endTimestamp,
-      //   showRegNumber: data.showRegNumber,
-      //   showChasisNumber: data.showChasisNumber,
-      //   showEngineNumber: data.showEngineNumber,
-      //   showGST: data.showGST,
-      //   extendAuctionForLessBid: data.extendAuctionForLessBid,
-      //   showVehiclesWithoutLogin: data.showVehiclesWithoutLogin,
-      //   auctionViewOnly: data.auctionViewOnly,
-      //   onlyPCCBuyersAllowed: data.onlyPCCBuyersAllowed,
-      //   showTNC: data.showTNC,
-      //   showVehicleDownload: data.showVehicleDownload
-      // });
       form.setFieldsValue({
         ...data,
         hypothecation: data.hypothecation.toLowerCase() === 'true',
-        ...data.registrationInfo,
+        // ...data.registrationInfo,
+        // registrationDate: data.registrationInfo.registrationDate,
         rcAvailable: data.registrationInfo.rcAvailable,
         registrationYear: data.registrationInfo.year,
         ...data.vehicleInfo,
         ...data.insuranceInfo,
         insuranceType: data.insuranceInfo?.type,
-        insuranceExpiryDate: data.insuranceInfo?.expiryDate,
+        // insuranceExpiryDate: data.insuranceInfo?.expiryDate,
         insuranceInfo_Availability: data.insuranceInfo?.availability,
         ...data.taxInfo,
         taxType: data.taxInfo?.type,
@@ -176,14 +150,14 @@ const AuctionInventoryForm = (props) => {
             reservedPrice: values.reservedPrice,
             registrationInfo: {
               rcAvailable: values.rcAvailable,
-              registrationDate: values.rcAvailable,
+              registrationDate: values.registrationDate,
               registrationType: values.registrationType,
               year: values.registrationYear
             },
             vehicleInfo: {
               make: values.make,
               model: values.model,
-              version: values.version,
+              version: values.version.toString(),
               chasisNumber: values.chasisNumber,
               engineNumber: values.engineNumber,
               color: values.color,
@@ -245,39 +219,6 @@ const AuctionInventoryForm = (props) => {
           message.error('Please enter all required field ');
         });
     }
-    // form
-    //   .validateFields()
-    //   .then(async (values) => {
-    //     console.log(values, 'values');
-    //     values.bidLimit = Number(values.bidLimit);
-
-    //     values.startTimestamp = `${new Date(values.startTimestamp).getTime()}`;
-    //     values.endTimestamp = `${new Date(values.endTimestamp).getTime()}`;
-
-    //     if (mode === ADD) {
-    //       // Checking if image exists
-    //       console.log(values, 'asasasqwertyuijhgv');
-    //       const created = await auctionService.createauction(values);
-    //       if (created) {
-    //         message.success(`Created ${values.name} to auction list`);
-    //         history.goBack();
-    //       }
-    //     }
-    //     if (mode === EDIT) {
-    //       console.log(param.id);
-    //       const edited = await auctionService.updateauction(param.id, values);
-    //       if (edited) {
-    //         message.success(`Edited ${values.name} to Auction list`);
-    //         history.goBack();
-    //       }
-    //     }
-    //     setSubmitLoading(false);
-    //   })
-    //   .catch((info) => {
-    //     setSubmitLoading(false);
-    //     console.log('info', info);
-    //     message.error('Please enter all required field ');
-    //   });
   };
 
   return (
@@ -297,7 +238,9 @@ const AuctionInventoryForm = (props) => {
               alignItems="center"
             >
               <h2 className="mb-3">
-                {mode === 'ADD' ? 'Add New Auction Inventory' : `Edit Auction`}{' '}
+                {mode === 'ADD'
+                  ? 'Add New Auction Inventory'
+                  : `Edit Auction Inventory`}{' '}
               </h2>
               <div className="mb-3">
                 <Button

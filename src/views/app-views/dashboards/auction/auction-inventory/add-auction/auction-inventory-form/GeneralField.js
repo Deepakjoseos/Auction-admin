@@ -125,7 +125,7 @@ const GeneralField = ({
       return (
         <Row gutter={16}>
           <Col xs={24} sm={24} md={17}>
-            <Card title="Upload Auction Inventory">
+            <Card title="Edit Auction Inventory">
               <Form.Item
                 name="registrationNumber"
                 label="Registration Number"
@@ -174,7 +174,7 @@ const GeneralField = ({
               </Form.Item>
               {/* registrationInfo */}
               <Form.Item
-                name={'registrationDate'}
+                name='registrationDate'
                 label="Registration Date"
                 rules={rules.required}
               >

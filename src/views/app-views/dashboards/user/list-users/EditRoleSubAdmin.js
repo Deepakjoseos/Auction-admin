@@ -1,4 +1,4 @@
-import { PlusOutlined } from '@ant-design/icons'
+import { PlusOutlined } from '@ant-design/icons';
 import {
   Button,
   Checkbox,
@@ -10,22 +10,22 @@ import {
   message,
   Row,
   Select,
-  Space,
-} from 'antd'
-import React, { useEffect, useState } from 'react'
-import { MinusCircleOutlined } from '@ant-design/icons'
-import authAdminService from 'services/auth/admin'
-import roleService from 'services/role'
-import constantsService from 'services/constants'
+  Space
+} from 'antd';
+import React, { useEffect, useState } from 'react';
+import { MinusCircleOutlined } from '@ant-design/icons';
+import authAdminService from 'services/auth/admin';
+import roleService from 'services/role';
+import constantsService from 'services/constants';
 
-const { Option } = Select
+const { Option } = Select;
 
 const EditRoleSubAdmin = ({ isFormOpen, setIsFormOpen, userId }) => {
-  const [submitLoading, setSubmitLoading] = useState(false)
-  const [roles, setRoles] = useState([])
+  const [submitLoading, setSubmitLoading] = useState(false);
+  const [roles, setRoles] = useState([]);
 
   const getRoles = async () => {
-    const data = await constantsService.getConstantsRole()
+    const data = await constantsService.getConstantsRole();
     if (data) {
       const curRoles = data?.map((item) => {
         return {
@@ -33,21 +33,21 @@ const EditRoleSubAdmin = ({ isFormOpen, setIsFormOpen, userId }) => {
           add: false,
           delete: false,
           edit: false,
-          fetch: false,
-        }
-      })
-      setRoles(curRoles)
+          fetch: false
+        };
+      });
+      setRoles(curRoles);
     }
-  }
+  };
 
   useEffect(() => {
-    getRoles()
-  }, [])
+    getRoles();
+  }, []);
 
   useEffect(() => {
     if (roles?.length > 0) {
     }
-  }, [roles])
+  }, [roles]);
 
   //   const initialValues = {
   //     id: '',
@@ -111,64 +111,64 @@ const EditRoleSubAdmin = ({ isFormOpen, setIsFormOpen, userId }) => {
   //     ],
   //   }
 
-  const [form] = Form.useForm()
+  const [form] = Form.useForm();
 
   const showDrawer = () => {
-    setIsFormOpen(true)
-  }
+    setIsFormOpen(true);
+  };
 
   const onClose = () => {
-    setIsFormOpen(false)
-  }
+    setIsFormOpen(false);
+  };
 
   const updateExistingRolesData = (arra2) => {
     const arra1 = roles.map((item) => {
-      const item2 = arra2.find((i2) => i2.module === item.module)
-      return item2 ? { ...item, ...item2 } : item
-    })
+      const item2 = arra2.find((i2) => i2.module === item.module);
+      return item2 ? { ...item, ...item2 } : item;
+    });
 
-    return arra1
-  }
+    return arra1;
+  };
 
   const getSubAdminById = async (id) => {
-    const data = await authAdminService.getSubAdminById(id)
-    console.log(data, 'datasdsd')
+    const data = await authAdminService.getSubAdminById(id);
+    console.log(data, 'datasdsd');
     if (data) {
       form.setFieldsValue({
         id: data._id,
         roles:
-          data.roles?.length > 0 ? updateExistingRolesData(data.roles) : roles,
-      })
+          data.roles?.length > 0 ? updateExistingRolesData(data.roles) : roles
+      });
     }
-  }
+  };
 
   useEffect(() => {
-    console.log(userId, 'userId')
+    console.log(userId, 'userId');
     if (userId && roles) {
-      getSubAdminById(userId)
+      getSubAdminById(userId);
     } else if (!userId && roles) {
       form.setFieldsValue({
-        roles: roles,
-      })
+        roles: roles
+      });
     }
-  }, [userId, roles])
+  }, [userId, roles]);
 
   const onFinish = async () => {
-    setSubmitLoading(true)
+    setSubmitLoading(true);
     form
       .validateFields()
       .then(async (values) => {
-        console.log(values, 'values=====')
+        console.log(values, 'values=====');
 
         const sendingValues = {
           id: values.id || userId,
-          roles: values.roles,
-        }
+          roles: values.roles
+        };
 
-        const updated = await authAdminService.editSubAdminRole(sendingValues)
+        const updated = await authAdminService.editSubAdminRole(sendingValues);
         if (updated) {
-          message.success(`Updated Role`)
-          onClose()
+          message.success(`Updated Role`);
+          onClose();
         }
         // values.country = 'India'
         // const data = await authVendorService.addPickupLocation(values)
@@ -179,12 +179,12 @@ const EditRoleSubAdmin = ({ isFormOpen, setIsFormOpen, userId }) => {
         // }
       })
       .catch((info) => {
-        setSubmitLoading(false)
-        console.log('info', info)
-        message.error('Please enter all required field ')
-      })
-    setSubmitLoading(false)
-  }
+        setSubmitLoading(false);
+        console.log('info', info);
+        message.error('Please enter all required field ');
+      });
+    setSubmitLoading(false);
+  };
 
   return (
     <>
@@ -194,7 +194,7 @@ const EditRoleSubAdmin = ({ isFormOpen, setIsFormOpen, userId }) => {
         onClose={onClose}
         visible={isFormOpen}
         bodyStyle={{
-          paddingBottom: 80,
+          paddingBottom: 80
         }}
         extra={
           <Space>
@@ -215,7 +215,7 @@ const EditRoleSubAdmin = ({ isFormOpen, setIsFormOpen, userId }) => {
             <>
               <Form.List name="roles">
                 {(fields, { add, remove }) => {
-                  console.log(fields, 'fieldwdwdrws')
+                  console.log(fields, 'fieldwdwdrws');
                   return (
                     <>
                       {fields.map((field) => (
@@ -288,15 +288,15 @@ const EditRoleSubAdmin = ({ isFormOpen, setIsFormOpen, userId }) => {
                                   .delete === true
                               }
                               onChange={(e) => {
-                                const newFields = form.getFieldValue('roles')
-                                newFields[field.name].fetch = e.target.checked
-                                newFields[field.name].delete = e.target.checked
-                                newFields[field.name].add = e.target.checked
-                                newFields[field.name].edit = e.target.checked
+                                const newFields = form.getFieldValue('roles');
+                                newFields[field.name].fetch = e.target.checked;
+                                newFields[field.name].delete = e.target.checked;
+                                newFields[field.name].add = e.target.checked;
+                                newFields[field.name].edit = e.target.checked;
 
                                 form.setFieldsValue({
-                                  roles: newFields,
-                                })
+                                  roles: newFields
+                                });
                               }}
                             >
                               Select All
@@ -305,7 +305,7 @@ const EditRoleSubAdmin = ({ isFormOpen, setIsFormOpen, userId }) => {
                         </Space>
                       ))}
                     </>
-                  )
+                  );
                 }}
               </Form.List>
             </>
@@ -313,7 +313,7 @@ const EditRoleSubAdmin = ({ isFormOpen, setIsFormOpen, userId }) => {
         </Form>
       </Drawer>
     </>
-  )
-}
+  );
+};
 
-export default EditRoleSubAdmin
+export default EditRoleSubAdmin;

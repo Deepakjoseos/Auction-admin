@@ -1,26 +1,40 @@
-import React, { useState, useEffect } from 'react'
-import PageHeaderAlt from 'components/layout-components/PageHeaderAlt'
-import { Tabs, Form, Button, message } from 'antd'
-import Flex from 'components/shared-components/Flex'
-import GeneralField from './GeneralField'
-import { useHistory } from 'react-router-dom'
-import authAdminService from 'services/auth/admin'
+import React, { useState, useEffect } from 'react';
+import PageHeaderAlt from 'components/layout-components/PageHeaderAlt';
+import { Tabs, Form, Button, message } from 'antd';
+import Flex from 'components/shared-components/Flex';
+import GeneralField from './GeneralField';
+import { useHistory } from 'react-router-dom';
+import authAdminService from 'services/auth/admin';
+import employeeTypeService from 'services/employeeType';
 
-const { TabPane } = Tabs
+const { TabPane } = Tabs;
 
-const ADD = 'ADD'
-const EDIT = 'EDIT'
+const ADD = 'ADD';
+const EDIT = 'EDIT';
 
 const UserForm = (props) => {
-  const { mode = ADD, param } = props
-  const history = useHistory()
-  const [form] = Form.useForm()
-  console.log(mode)
-  const [submitLoading, setSubmitLoading] = useState(false)
+  const { mode = ADD, param } = props;
+  const history = useHistory();
+  const [form] = Form.useForm();
+  console.log(mode);
+  const [submitLoading, setSubmitLoading] = useState(false);
+
+  const [employeeTypes, setEmployeeTypes] = useState([]);
+
+  const getEmployeeTypes = async () => {
+    const data = await employeeTypeService.getEmployeeTypes();
+    if (data) {
+      setEmployeeTypes(data);
+    }
+  };
+
+  useEffect(() => {
+    getEmployeeTypes();
+  }, []);
 
   // Trigger When Submit Button pressed
   const onFinish = async () => {
-    setSubmitLoading(true)
+    setSubmitLoading(true);
     form
       .validateFields()
       .then(async (values) => {
@@ -38,20 +52,21 @@ const UserForm = (props) => {
                 email: values?.email,
                 password: values?.password,
                 contact: values?.contact,
+                employeeTypeId: values?.employeeTypeId
               }
             : {
                 price: Math.round(parseFloat(values.price) * 100) / 100,
-                status: values.status,
-              }
+                status: values.status
+              };
 
-        console.log(sendingValues, 'values=====')
+        console.log(sendingValues, 'values=====');
 
         if (mode === ADD) {
-          const created = await authAdminService.createUser(sendingValues)
+          const created = await authAdminService.createUser(sendingValues);
           if (created) {
-            console.log(created)
-            message.success(`Created New user ${values?.name}`)
-            history.goBack()
+            console.log(created);
+            message.success(`Created New user ${values?.name}`);
+            history.goBack();
           }
         }
         if (mode === EDIT) {
@@ -64,13 +79,13 @@ const UserForm = (props) => {
           //     history.goBack();
           //   }
         }
-        setSubmitLoading(false)
+        setSubmitLoading(false);
       })
       .catch((info) => {
-        setSubmitLoading(false)
-        message.error('Please enter all required field ')
-      })
-  }
+        setSubmitLoading(false);
+        message.error('Please enter all required field ');
+      });
+  };
 
   return (
     <>
@@ -80,7 +95,7 @@ const UserForm = (props) => {
         name="advanced_search"
         className="ant-advanced-search-form"
         initialValues={{
-          group: 1,
+          group: 1
         }}
       >
         <PageHeaderAlt className="border-bottom" overlap>
@@ -116,13 +131,13 @@ const UserForm = (props) => {
         <div className="container">
           <Tabs defaultActiveKey="1" style={{ marginTop: 30 }}>
             <TabPane tab="General" key="1">
-              <GeneralField mode={mode} />
+              <GeneralField mode={mode} employeeTypes={employeeTypes} />
             </TabPane>
           </Tabs>
         </div>
       </Form>
     </>
-  )
-}
+  );
+};
 
-export default UserForm
+export default UserForm;

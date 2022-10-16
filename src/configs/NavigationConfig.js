@@ -33,12 +33,12 @@ import {
   // FormatPainterOutlined,
   // UserOutlined,
   // ApartmentOutlined,
-   NodeExpandOutlined
-} from "@ant-design/icons";
+  NodeExpandOutlined
+} from '@ant-design/icons';
 import {
-  APP_PREFIX_PATH,
+  APP_PREFIX_PATH
   //  AUTH_PREFIX_PATH
-} from "configs/AppConfig";
+} from 'configs/AppConfig';
 
 // const extraNavTree = [
 //   {
@@ -185,61 +185,61 @@ import {
 
 const dashBoardNavTree = [
   {
-    key: "dashboards",
+    key: 'dashboards',
     path: `${APP_PREFIX_PATH}/dashboards`,
-    title: "sidenav.dashboard",
+    title: 'sidenav.dashboard',
     icon: DashboardOutlined,
     breadcrumb: false,
     submenu: [
       {
-        key: "dashboards-user",
+        key: 'dashboards-user',
         path: `${APP_PREFIX_PATH}/dashboards/user`,
-        title: "User",
+        title: 'User',
         icon: AppstoreOutlined,
         breadcrumb: false,
-        submenu: [],
+        submenu: []
       },
       {
-        
-        
-        title: "General",
+        key: 'dashboards-employee-type',
+        path: `${APP_PREFIX_PATH}/dashboards/employee-type`,
+        title: 'Employee Types',
+        icon: AppstoreOutlined,
+        breadcrumb: false,
+        submenu: []
+      },
+      {
+        title: 'General',
         icon: AppstoreOutlined,
         breadcrumb: false,
         submenu: [
           {
-            key: "dashboards-information",
+            key: 'dashboards-information',
             path: `${APP_PREFIX_PATH}/dashboards/information`,
-            title: "Information",
+            title: 'Information',
             icon: AppstoreOutlined,
             breadcrumb: false,
-            submenu: [ ],
+            submenu: []
           },
-              {
-                key: "dashboards-banner",
-                path: `${APP_PREFIX_PATH}/dashboards/banner`,
-                title: "Banner",
-                icon: AppstoreOutlined,
-                breadcrumb: false,
-                submenu: [],
-              },
-           
-        ],
-      },
-  
-            
-     
-     
-      {
-        key: "dashboards-car",
-        path: `${APP_PREFIX_PATH}/dashboards/car`,
-        title: "Car",
-        icon: AppstoreOutlined,
-        breadcrumb: false,
-        submenu: [],
+          {
+            key: 'dashboards-banner',
+            path: `${APP_PREFIX_PATH}/dashboards/banner`,
+            title: 'Banner',
+            icon: AppstoreOutlined,
+            breadcrumb: false,
+            submenu: []
+          }
+        ]
       },
 
-    
-      
+      {
+        key: 'dashboards-car',
+        path: `${APP_PREFIX_PATH}/dashboards/car`,
+        title: 'Car',
+        icon: AppstoreOutlined,
+        breadcrumb: false,
+        submenu: []
+      },
+
       // {
       //   key: "dashboards-auction-bidding",
       //   path: `${APP_PREFIX_PATH}/dashboards/auction-bidding`,
@@ -277,7 +277,7 @@ const dashBoardNavTree = [
             title: 'Brands',
             icon: NodeExpandOutlined,
             breadcrumb: false,
-            submenu: [],
+            submenu: []
           },
           {
             key: 'dashboards-brand-brand-variant',
@@ -285,9 +285,9 @@ const dashBoardNavTree = [
             title: 'Brand Variant',
             icon: NodeExpandOutlined,
             breadcrumb: false,
-            submenu: [],
-          },
-        ],
+            submenu: []
+          }
+        ]
       },
       {
         key: 'dashboards-general',
@@ -302,7 +302,7 @@ const dashBoardNavTree = [
             title: 'City',
             icon: NodeExpandOutlined,
             breadcrumb: false,
-            submenu: [],
+            submenu: []
           },
           {
             key: 'dashboards-general-group',
@@ -310,7 +310,7 @@ const dashBoardNavTree = [
             title: 'Groups',
             icon: NodeExpandOutlined,
             breadcrumb: false,
-            submenu: [],
+            submenu: []
           },
           {
             key: 'dashboards-general-region',
@@ -318,7 +318,7 @@ const dashBoardNavTree = [
             title: 'Region',
             icon: NodeExpandOutlined,
             breadcrumb: false,
-            submenu: [],
+            submenu: []
           },
           {
             key: 'dashboards-general-state',
@@ -326,25 +326,25 @@ const dashBoardNavTree = [
             title: 'State',
             icon: NodeExpandOutlined,
             breadcrumb: false,
-            submenu: [],
-          },
-        ],
+            submenu: []
+          }
+        ]
       },
       {
-        key: "dashboards-vehicle-type",
+        key: 'dashboards-vehicle-type',
         path: `${APP_PREFIX_PATH}/dashboards/vehicle-type`,
-        title: "Vehicle Type",
+        title: 'Vehicle Type',
         icon: AppstoreOutlined,
         breadcrumb: false,
-        submenu: [],
+        submenu: []
       },
       {
-        key: "dashboards-fee-type",
+        key: 'dashboards-fee-type',
         path: `${APP_PREFIX_PATH}/dashboards/fee-type`,
-        title: "FeeType",
+        title: 'FeeType',
         icon: AppstoreOutlined,
         breadcrumb: false,
-        submenu: [],
+        submenu: []
       },
       // {
       //   key: "dashboards-auction-inventory",
@@ -355,28 +355,28 @@ const dashBoardNavTree = [
       //   submenu: [],
       // },
       {
-        key: "dashboards-participant",
+        key: 'dashboards-participant',
         path: `${APP_PREFIX_PATH}/dashboards/participant`,
-        title: "Participant",
+        title: 'Participant',
         icon: AppstoreOutlined,
         breadcrumb: false,
-        submenu: [],
+        submenu: []
       },
       {
-        key: "dashboards-wallet",
+        key: 'dashboards-wallet',
         path: `${APP_PREFIX_PATH}/dashboards/wallet`,
-        title: "Wallet",
+        title: 'Wallet',
         icon: AppstoreOutlined,
         breadcrumb: false,
-        submenu: [],
+        submenu: []
       },
       {
-        key: "dashboards-buying-limit",
+        key: 'dashboards-buying-limit',
         path: `${APP_PREFIX_PATH}/dashboards/buying-limit`,
-        title: "Buying Limits",
+        title: 'Buying Limits',
         icon: AppstoreOutlined,
         breadcrumb: false,
-        submenu: [],
+        submenu: []
       },
       // {
       //   key: "dashboards-region",
@@ -395,20 +395,20 @@ const dashBoardNavTree = [
       //   submenu: [],
       // },
       {
-        key: "dashboards-group-members",
+        key: 'dashboards-group-members',
         path: `${APP_PREFIX_PATH}/dashboards/group-members`,
-        title: "Group Members",
+        title: 'Group Members',
         icon: AppstoreOutlined,
         breadcrumb: false,
-        submenu: [],
+        submenu: []
       },
       {
-        key: "dashboards-templates",
+        key: 'dashboards-templates',
         path: `${APP_PREFIX_PATH}/dashboards/template`,
-        title: "Templates",
+        title: 'Templates',
         icon: AppstoreOutlined,
         breadcrumb: false,
-        submenu: [],
+        submenu: []
       },
       // {
       //   key: "dashboards-auction",
@@ -431,7 +431,7 @@ const dashBoardNavTree = [
             title: 'Auction',
             icon: NodeExpandOutlined,
             breadcrumb: false,
-            submenu: [],
+            submenu: []
           },
           {
             key: 'dashboards-auction-auction-inventory',
@@ -439,7 +439,7 @@ const dashBoardNavTree = [
             title: 'Auction Inventory',
             icon: NodeExpandOutlined,
             breadcrumb: false,
-            submenu: [],
+            submenu: []
           },
           {
             key: 'dashboards-auction-bidding',
@@ -447,17 +447,17 @@ const dashBoardNavTree = [
             title: 'Bidding',
             icon: NodeExpandOutlined,
             breadcrumb: false,
-            submenu: [],
+            submenu: []
           },
           {
-            key: "dashboards-watchlist",
+            key: 'dashboards-watchlist',
             path: `${APP_PREFIX_PATH}/dashboards/watchlist`,
-            title: "Watchlist",
+            title: 'Watchlist',
             icon: NodeExpandOutlined,
             breadcrumb: false,
-            submenu: [],
-          },
-        ],
+            submenu: []
+          }
+        ]
       },
       // {
       //   key: "dashboards-states",
@@ -476,20 +476,20 @@ const dashBoardNavTree = [
       //   submenu: [],
       // },
       {
-        key: "dashboards-deposits",
+        key: 'dashboards-deposits',
         path: `${APP_PREFIX_PATH}/dashboards/deposit`,
-        title: "Deposits",
+        title: 'Deposits',
         icon: AppstoreOutlined,
         breadcrumb: false,
-        submenu: [],
+        submenu: []
       },
       {
-        key: "dashboards-wallet-transactions",
+        key: 'dashboards-wallet-transactions',
         path: `${APP_PREFIX_PATH}/dashboards/wallet-transaction`,
-        title: "Wallet Transactions",
+        title: 'Wallet Transactions',
         icon: AppstoreOutlined,
         breadcrumb: false,
-        submenu: [],
+        submenu: []
       },
       // {
       //   key: "dashboards-roles",
@@ -500,23 +500,23 @@ const dashBoardNavTree = [
       //   submenu: [],
       // },
       {
-        key: "dashboards-client",
+        key: 'dashboards-client',
         path: `${APP_PREFIX_PATH}/dashboards/client`,
-        title: "Client",
+        title: 'Client',
         icon: AppstoreOutlined,
         breadcrumb: false,
-        submenu: [],
+        submenu: []
       },
       {
-        key: "dashboards-settings",
+        key: 'dashboards-settings',
         path: `${APP_PREFIX_PATH}/dashboards/settings`,
-        title: "Settings",
+        title: 'Settings',
         icon: AppstoreOutlined,
         breadcrumb: false,
-        submenu: [],
-      },
-    ],
-  },
+        submenu: []
+      }
+    ]
+  }
 ];
 
 // const appsNavTree = [
@@ -1263,7 +1263,7 @@ const dashBoardNavTree = [
 // ]
 
 const navigationConfig = [
-  ...dashBoardNavTree,
+  ...dashBoardNavTree
   // ...appsNavTree,
   // ...componentsNavTree,
   //  ...extraNavTree,

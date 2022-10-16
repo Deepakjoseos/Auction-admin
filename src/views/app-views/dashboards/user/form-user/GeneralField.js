@@ -46,7 +46,7 @@ const rules = {
   ],
 }
 
-const GeneralField = ({ mode }) => (
+const GeneralField = ({ mode, employeeTypes }) => (
   <Row gutter={16}>
     <Col xs={24} sm={24} md={24}>
       <Card title="User Info">
@@ -74,6 +74,15 @@ const GeneralField = ({ mode }) => (
                 rules={rules.password}
               >
                 <Input.Password />
+              </Form.Item>
+              <Form.Item name="employeeTypeId" label="Employee Type">
+                <Select placeholder="Employee Type">
+                  {employeeTypes.map((employeeType) => (
+                    <Option key={employeeType._id} value={employeeType._id}>
+                      {employeeType.name}
+                    </Option>
+                  ))}
+                </Select>
               </Form.Item>
               {/* <Form.Item
                 name="middleName"
@@ -138,6 +147,6 @@ const GeneralField = ({ mode }) => (
       </Card>
     </Col>
   </Row>
-)
+);
 
 export default GeneralField
