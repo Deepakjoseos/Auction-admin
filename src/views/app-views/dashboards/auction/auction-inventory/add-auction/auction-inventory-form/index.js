@@ -1,20 +1,25 @@
-import React, { useState, useEffect } from "react";
-import PageHeaderAlt from "components/layout-components/PageHeaderAlt";
-import { Tabs, Form, Button, message } from "antd";
-import Flex from "components/shared-components/Flex";
-import GeneralField from "./GeneralField";
-import useUpload from "hooks/useUpload";
-import { singleImageUploader } from "utils/s3/s3ImageUploader";
-import informationService from "services/information";
-import Utils from "utils";
-import { useHistory } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import PageHeaderAlt from 'components/layout-components/PageHeaderAlt';
+import { Tabs, Form, Button, message } from 'antd';
+import Flex from 'components/shared-components/Flex';
+import GeneralField from './GeneralField';
+import useUpload from 'hooks/useUpload';
+import { singleImageUploader } from 'utils/s3/s3ImageUploader';
+import informationService from 'services/information';
+import Utils from 'utils';
+import { useHistory } from 'react-router-dom';
 // import groupService from "services/group";
-import auctionService from "services/auction";
-import auctionInventoryService from "services/auctionInventory";
+import auctionService from 'services/auction';
+import auctionInventoryService from 'services/auctionInventory';
+import cityService from 'services/city';
+import brandService from 'services/brand';
+import brandVariantService from 'services/brandVariant.service';
+import fuelTypeService from 'services/fuelType';
+
 const { TabPane } = Tabs;
 
-const ADD = "ADD";
-const EDIT = "EDIT";
+const ADD = 'ADD';
+const EDIT = 'EDIT';
 
 const AuctionInventoryForm = (props) => {
   const { mode = ADD, param } = props;
@@ -25,7 +30,46 @@ const AuctionInventoryForm = (props) => {
   const [auctions, setAuctions] = useState();
   const [auctionId, setAuctionId] = useState();
   const [sheet, setSheet] = useState();
-  
+
+  const [cities, setCities] = useState([]);
+  const [brands, setBrands] = useState([]);
+  const [brandVariants, setBrandVariants] = useState([]);
+  const [fuelTypes, setFuelTypes] = useState([]);
+
+  const getCities = async () => {
+    const data = await cityService.getCities();
+    if (data) {
+      setCities(data);
+    }
+  };
+
+  const getBrands = async () => {
+    const data = await brandService.getBrands();
+    if (data) {
+      setBrands(data);
+    }
+  };
+
+  const getBrandVariants = async () => {
+    const data = await brandVariantService.getAll();
+    if (data) {
+      setBrandVariants(data);
+    }
+  };
+
+  const getFuelTypes = async () => {
+    const data = await fuelTypeService.getFuelTypes();
+    if (data) {
+      setFuelTypes(data);
+    }
+  };
+
+  useEffect(() => {
+    getCities();
+    getBrands();
+    getBrandVariants();
+    getFuelTypes();
+  }, []);
 
   useEffect(() => {
     if (mode === ADD) fetchAuctions();
@@ -37,7 +81,7 @@ const AuctionInventoryForm = (props) => {
     const data = await auctionService.getauctions();
     if (data) {
       setAuctions(data);
-      console.log(`Auctions`, data);
+      // console.log(`Auctions`, data);
     }
   };
 
@@ -46,100 +90,194 @@ const AuctionInventoryForm = (props) => {
     const data = await auctionInventoryService.getInventory(id);
     console.log(data);
     if (data) {
-      form.setFieldsValue({
-        name: data.name,
-        businessType: data.businessType,
-        type: data.type,
-        cityId: data.cityId,
-        regionId: data.regionId,
-        clientId: data.clientId,
-        vehicleTypeId: data.vehicleTypeId,
-        format: data.format,
-        status: data.status,
-        closeType: data.closeType,
-        bidLimit: data.bidLimit,
-        termsAndConditions: data.termsAndConditions,
-        // startTimestamp: data.startTimestamp,
-        // endTimestamp: data.endTimestamp,
-        showRegNumber: data.showRegNumber,
-        showChasisNumber: data.showChasisNumber,
-        showEngineNumber: data.showEngineNumber,
-        showGST: data.showGST,
-        extendAuctionForLessBid: data.extendAuctionForLessBid,
-        showVehiclesWithoutLogin: data.showVehiclesWithoutLogin,
-        auctionViewOnly: data.auctionViewOnly,
-        onlyPCCBuyersAllowed: data.onlyPCCBuyersAllowed,
-        showTNC: data.showTNC,
-        showVehicleDownload: data.showVehicleDownload,
-      });
+      // form.setFieldsValue({
+      //   name: data.name,
+      //   businessType: data.businessType,
+      //   type: data.type,
+      //   cityId: data.cityId,
+      //   regionId: data.regionId,
+      //   clientId: data.clientId,
+      //   vehicleTypeId: data.vehicleTypeId,
+      //   format: data.format,
+      //   status: data.status,
+      //   closeType: data.closeType,
+      //   bidLimit: data.bidLimit,
+      //   termsAndConditions: data.termsAndConditions,
+      //   // startTimestamp: data.startTimestamp,
+      //   // endTimestamp: data.endTimestamp,
+      //   showRegNumber: data.showRegNumber,
+      //   showChasisNumber: data.showChasisNumber,
+      //   showEngineNumber: data.showEngineNumber,
+      //   showGST: data.showGST,
+      //   extendAuctionForLessBid: data.extendAuctionForLessBid,
+      //   showVehiclesWithoutLogin: data.showVehiclesWithoutLogin,
+      //   auctionViewOnly: data.auctionViewOnly,
+      //   onlyPCCBuyersAllowed: data.onlyPCCBuyersAllowed,
+      //   showTNC: data.showTNC,
+      //   showVehicleDownload: data.showVehicleDownload
+      // });
       form.setFieldsValue({
         ...data,
-        startTimestamp: "",
-        endTimestamp: "",
+        hypothecation: data.hypothecation.toLowerCase() === 'true',
+        ...data.registrationInfo,
+        rcAvailable: data.registrationInfo.rcAvailable,
+        registrationYear: data.registrationInfo.year,
+        ...data.vehicleInfo,
+        ...data.insuranceInfo,
+        insuranceType: data.insuranceInfo?.type,
+        insuranceExpiryDate: data.insuranceInfo?.expiryDate,
+        insuranceInfo_Availability: data.insuranceInfo?.availability,
+        ...data.taxInfo,
+        taxType: data.taxInfo?.type,
+        ...data.rtoInfo
       });
     } else {
-      history.replace("/app/dashboards/auction/auction-list");
+      history.replace(
+        '/app/dashboards/auction/auction-inventory/auction-inventory-list'
+      );
     }
   };
 
   const onFinish = async () => {
-    if (mode === ADD && sheet) {
-      const formData = new FormData();
-      formData.append("file", sheet.originFileObj);
-      setSubmitLoading(true);
+    if (mode === ADD) {
+      if (sheet) {
+        const formData = new FormData();
+        formData.append('file', sheet.originFileObj);
+        setSubmitLoading(true);
 
+        form
+          .validateFields()
+          .then(async (values) => {
+            const uploaded = await auctionInventoryService.uploadInventory(
+              values.auctionId,
+              formData
+            );
+            if (uploaded) {
+              message.success(`Uploaded Auction Inventory.`);
+              history.goBack();
+              setSubmitLoading(false);
+            }
+          })
+          .catch((info) => {
+            setSubmitLoading(false);
+            console.log('info', info);
+            message.error('Please enter all required field.');
+          });
+      } else message.error('Please upload file.');
+    }
+
+    if (mode === EDIT) {
+      setSubmitLoading(true);
       form
         .validateFields()
         .then(async (values) => {
-          const uploaded = await auctionInventoryService.uploadInventory(
-            values.auctionId,
-            formData
+          const newAuctionInventoryObj = {
+            registrationNumber: values.registrationNumber,
+            reservedPrice: values.reservedPrice,
+            registrationInfo: {
+              rcAvailable: values.rcAvailable,
+              registrationDate: values.rcAvailable,
+              registrationType: values.registrationType,
+              year: values.registrationYear
+            },
+            vehicleInfo: {
+              make: values.make,
+              model: values.model,
+              version: values.version,
+              chasisNumber: values.chasisNumber,
+              engineNumber: values.engineNumber,
+              color: values.color,
+              kmReading: values.kmReading,
+              keyStatus: values.keyStatus,
+              fuelType: values.fuelType,
+              shape: values.shape,
+              gearBox: values.gearBox,
+              doorCount: values.doorCount,
+              condition: values.condition,
+              mfgYear: values.mfgYear,
+              mfgMonth: values.mfgMonth
+            },
+            insuranceInfo: {
+              availability: true,
+              type: values.insuranceType,
+              expiryDate: values.insuranceExpiryDate,
+              noClaimBonus: values.noClaimBonus,
+              noClaimBonusPercentage: values.noClaimBonusPercentage
+            },
+            images: {
+              general: ['string'],
+              interior: ['string'],
+              exterior: ['string']
+            },
+            taxInfo: {
+              paid: values.paid,
+              rtoTaxDate: values.rtoTaxDate,
+              type: values.taxType,
+              validity: values.validity
+            },
+            rtoInfo: {
+              currentRTOlocation: values.currentRTOlocation,
+              lastRTODate: values.lastRTODate,
+              lastRTOLocation: values.lastRTOLocation
+            },
+            hypothecation: values.hypothecation,
+            repoDate: values.repoDate,
+            endorsementRCBook: values.endorsementRCBook,
+            octori: 'string',
+            area: values.area,
+            yardLocation: values.yardLocation,
+            parkingLocation: values.parkingLocation,
+            status: values.status
+          };
+          const edited = await auctionInventoryService.updateAuctionInventory(
+            param.id,
+            newAuctionInventoryObj
           );
-          if (uploaded) {
-            message.success(`Uploaded Auction Inventory.`);
-            history.goBack();
-            setSubmitLoading(false);
-          }
-        })
-        .catch((info) => {
-          setSubmitLoading(false);
-          console.log("info", info);
-          message.error("Please enter all required field.");
-        });
-    } else message.error("Please upload file.");
-    form
-      .validateFields()
-      .then(async (values) => {
-        console.log(values, "values");
-        values.bidLimit = Number(values.bidLimit);
-
-        values.startTimestamp = `${new Date(values.startTimestamp).getTime()}`;
-        values.endTimestamp = `${new Date(values.endTimestamp).getTime()}`;
-
-        if (mode === ADD) {
-          // Checking if image exists
-          console.log(values, "asasasqwertyuijhgv");
-          const created = await auctionService.createauction(values);
-          if (created) {
-            message.success(`Created ${values.name} to auction list`);
-            history.goBack();
-          }
-        }
-        if (mode === EDIT) {
-          console.log(param.id);
-          const edited = await auctionService.updateauction(param.id, values);
           if (edited) {
             message.success(`Edited ${values.name} to Auction list`);
             history.goBack();
           }
-        }
-        setSubmitLoading(false);
-      })
-      .catch((info) => {
-        setSubmitLoading(false);
-        console.log("info", info);
-        message.error("Please enter all required field ");
-      });
+          setSubmitLoading(false);
+        })
+        .catch((info) => {
+          setSubmitLoading(false);
+          console.log('info', info);
+          message.error('Please enter all required field ');
+        });
+    }
+    // form
+    //   .validateFields()
+    //   .then(async (values) => {
+    //     console.log(values, 'values');
+    //     values.bidLimit = Number(values.bidLimit);
+
+    //     values.startTimestamp = `${new Date(values.startTimestamp).getTime()}`;
+    //     values.endTimestamp = `${new Date(values.endTimestamp).getTime()}`;
+
+    //     if (mode === ADD) {
+    //       // Checking if image exists
+    //       console.log(values, 'asasasqwertyuijhgv');
+    //       const created = await auctionService.createauction(values);
+    //       if (created) {
+    //         message.success(`Created ${values.name} to auction list`);
+    //         history.goBack();
+    //       }
+    //     }
+    //     if (mode === EDIT) {
+    //       console.log(param.id);
+    //       const edited = await auctionService.updateauction(param.id, values);
+    //       if (edited) {
+    //         message.success(`Edited ${values.name} to Auction list`);
+    //         history.goBack();
+    //       }
+    //     }
+    //     setSubmitLoading(false);
+    //   })
+    //   .catch((info) => {
+    //     setSubmitLoading(false);
+    //     console.log('info', info);
+    //     message.error('Please enter all required field ');
+    //   });
   };
 
   return (
@@ -159,14 +297,14 @@ const AuctionInventoryForm = (props) => {
               alignItems="center"
             >
               <h2 className="mb-3">
-                {mode === "ADD" ? "Add New Auction Inventory" : `Edit Auction`}{" "}
+                {mode === 'ADD' ? 'Add New Auction Inventory' : `Edit Auction`}{' '}
               </h2>
               <div className="mb-3">
                 <Button
                   className="mr-2"
                   onClick={() =>
                     history.push(
-                      "/app/dashboards/auction-inventory/auction-inventory-list"
+                      '/app/dashboards/auction/auction-inventory/auction-inventory-list'
                     )
                   }
                 >
@@ -179,7 +317,7 @@ const AuctionInventoryForm = (props) => {
                   htmlType="submit"
                   loading={submitLoading}
                 >
-                  {mode === "ADD" ? "Add" : `Save`}
+                  {mode === 'ADD' ? 'Add' : `Save`}
                 </Button>
               </div>
             </Flex>
@@ -194,6 +332,10 @@ const AuctionInventoryForm = (props) => {
                 auctionId={auctionId}
                 mode={mode}
                 setAuctionId={setAuctionId}
+                cities={cities}
+                brands={brands}
+                brandVariants={brandVariants}
+                fuelTypes={fuelTypes}
               />
             </TabPane>
           </Tabs>

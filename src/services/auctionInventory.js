@@ -56,4 +56,17 @@ auctionInventoryService.updateauction = async function (id, data) {
   }
 };
 
+auctionInventoryService.updateAuctionInventory = async function (id, data) {
+  try {
+    const res = await fetch({
+      url: `${apiRoute}/${id}`,
+      method: 'PUT',
+      data: data
+    });
+    return res;
+  } catch (err) {
+    console.log(err, 'show-err');
+  }
+};
+
 export default auctionInventoryService;
