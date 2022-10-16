@@ -62,4 +62,20 @@ participantService.getAllParticipants = async function (query='') {
   }
 };
 
+participantService.uploadParticipant = async function (id, data) {
+  try {
+    const res = await fetch({
+      url: `${apiRoute}/${id}/document/update/admin`,
+      method: 'put',
+      data,
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+    return res;
+  } catch (err) {
+    console.log(err, 'show-err');
+  }
+};
+
 export default participantService;
