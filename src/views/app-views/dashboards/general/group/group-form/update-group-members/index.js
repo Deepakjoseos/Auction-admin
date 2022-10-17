@@ -4,8 +4,8 @@ import participantService from "services/Participant";
 import UpdateParticipantForm from "./UpdateParticipantForm";
 import groupService from "services/group";
 
-const UpdateParticipantsField = ({ param }) => {
-  const [participants, setParticipants] = useState([]);
+const UpdateParticipantsField = ({ param, participants }) => {
+
   const [members, setMembers] = useState([]);
   const [group, setGroup] = useState();
 
@@ -17,13 +17,10 @@ const UpdateParticipantsField = ({ param }) => {
     try {
       const { id } = param;
       const group = await groupService.getGroupById(id);
-      console.log(group, "group");
+      console.log(group, 'group');
       setGroup(group);
-      const data = await participantService.getAllParticipants();
-      console.log(data, "participants");
-      setParticipants(data);
     } catch (error) {
-      console.log(error, "err");
+      console.log(error, 'err');
     }
   };
 

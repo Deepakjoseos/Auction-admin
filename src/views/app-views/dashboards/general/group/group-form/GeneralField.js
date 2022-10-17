@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { Input, Row, Col, Card, Form, InputNumber, Select } from "antd";
-import vehicletypeService from "services/vehicleType";
-import participantService from "services/Participant";
-import regionService from "services/region";
-import cityService from "services/city";
+import React, { useEffect, useState } from 'react';
+import { Input, Row, Col, Card, Form, InputNumber, Select } from 'antd';
+import vehicletypeService from 'services/vehicleType';
+import participantService from 'services/Participant';
+import regionService from 'services/region';
+import cityService from 'services/city';
+import stateService from 'services/state';
 // const { Dragger } = Upload
 const { Option } = Select;
 
@@ -11,25 +12,26 @@ const rules = {
   name: [
     {
       required: true,
-      message: "Required",
-    },
+      message: 'Required'
+    }
   ],
   order: [
     {
       required: true,
-      message: "Required",
-    },
+      message: 'Required'
+    }
   ],
   status: [
     {
       required: true,
-      message: "Required",
-    },
-  ],
+      message: 'Required'
+    }
+  ]
 };
 
-const GeneralField = (props) => {
+const GeneralField = ({form}) => {
   const [citys, setCitys] = useState([]);
+  const [states, setStates] = useState([]);
   const [regions, setRegions] = useState([]);
   const [vehicleType, setVehicleType] = useState([]);
   const [participants, setParticipants] = useState([]);
@@ -40,22 +42,24 @@ const GeneralField = (props) => {
   const getData = async () => {
     try {
       const data = await cityService.getCities();
-      console.log(data, "city");
+      console.log(data, 'city');
       setCitys(data);
       const data1 = await vehicletypeService.getVehicleTypes();
-      console.log(data1, "city");
+      console.log(data1, 'city');
       setVehicleType(data1);
-      console.log(regions, "asas");
+      console.log(regions, 'asas');
       const data2 = await participantService.getAllParticipants();
-      console.log(data2, "city");
+      console.log(data2, 'city');
       setParticipants(data2);
       const data3 = await regionService.getRegions();
-      console.log(data3, "city");
+      console.log(data3, 'city');
       setRegions(data3);
+      const states = await stateService.getStates();
+      setStates(states);
 
       // console.log(vehicleType);
     } catch (error) {
-      console.log(error, "err");
+      console.log(error, 'err');
     }
   };
 
@@ -91,12 +95,25 @@ const GeneralField = (props) => {
               })}
             </Select>
           </Form.Item>
+          <Form.Item name="stateId" label="State" rules={rules.status}>
+            <Select placeholder="state">
+              {states.map((v, k) => {
+                return <Option value={v._id}>{v.name}</Option>;
+              })}
+            </Select>
+          </Form.Item>
           <Form.Item name="regionId" label="Region" rules={rules.status}>
             <Select placeholder="Region">
               {regions.map((v, k) => {
                 return <Option value={v._id}>{v.name}</Option>;
               })}
             </Select>
+          </Form.Item>
+          <Form.Item name="sellerName" label="Seller Name" >
+            <Input
+              placeholder="Seller Name"
+              disabled
+            />
           </Form.Item>
           <Form.Item name="status" label="Status" rules={rules.status}>
             <Select placeholder="Status">

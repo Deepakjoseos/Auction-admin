@@ -37,7 +37,7 @@ const UpdateParticipantForm = ({ participants, group }) => {
   const [usedMembers, setUsedMembers] = useState(group.participants);
   useEffect(() => {
     updateAvailableMembers();
-  }, []);
+  }, [participants]);
 
   const updateAvailableMembers = () => {
     const newMembers = participants.filter((participant) => {
