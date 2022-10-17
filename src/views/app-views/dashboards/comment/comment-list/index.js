@@ -52,6 +52,7 @@ const CommentList = () => {
 
   const [commentList, setCommentList] = useState([]);
   const [searchBackupList, setSearchBackupList] = useState([]);
+  const [selectedInventoryId, setSelectedInventoryId] = useState(null);
 
   const history = useHistory();
 
@@ -62,9 +63,10 @@ const CommentList = () => {
     }
   };
 
-  const getCommentList = async (id) => {
-    //TODO: fetch all comments
-    const data = await commentService.getComments(id);
+  const getCommentList = async (inventoryId = null) => {
+    const data = await commentService.getComments(
+      inventoryId ? `?auctionInventoryId=${inventoryId}` : ''
+    );
     if (data) {
       const mutatedComments = [];
 
@@ -81,6 +83,7 @@ const CommentList = () => {
       setCommentList(mutatedComments);
       setSearchBackupList(mutatedComments);
     }
+    setSelectedInventoryId(inventoryId);
   };
 
   useEffect(() => {
@@ -90,7 +93,7 @@ const CommentList = () => {
   useEffect(() => {
     if (auctionInventories.length > 0) {
       //TODO: fetch all comments
-      getCommentList('63452acbe505a181690d4cbd');
+      getCommentList();
     }
   }, [auctionInventories]);
 
@@ -99,7 +102,7 @@ const CommentList = () => {
     const resp = await commentService.deleteComment(row._id);
     if (resp) {
       //TODO: fetch all comments
-      getCommentList('63452acbe505a181690d4cbd');
+      getCommentList(selectedInventoryId);
     }
   };
   const dropdownMenu = (row) => {
@@ -196,7 +199,7 @@ const CommentList = () => {
     if (value !== 'All') {
       getCommentList(value);
     } else {
-      setCommentList(searchBackupList);
+      getCommentList();
     }
   };
 
@@ -209,7 +212,7 @@ const CommentList = () => {
           onChange={(e) => onSearch(e)}
         />
       </div>
-      <div className="mb-3">
+      {/* <div className="mb-3">
         <Select
           defaultValue="All"
           className="w-100"
@@ -221,18 +224,18 @@ const CommentList = () => {
           <Option value="Active">Active</Option>
           <Option value="Hold">Hold</Option>
         </Select>
-      </div>
+      </div> */}
       {auctionInventories.length > 0 && (
         <div className="mb-3 ml-3">
           <Select
-            //TODO: fetch all comments & default value = ALL
-            defaultValue={'63452acbe505a181690d4cbd'}
+            defaultValue={'All'}
             className="w-100"
             style={{ minWidth: 180 }}
             onChange={handleSelectInventory}
             placeholder="Auction Inventories"
+            showSearch
           >
-            {/* <Option value="All">All</Option> */}
+            <Option value="All">All</Option>
             {auctionInventories?.map((inventory) => (
               <Option
                 key={inventory._id}

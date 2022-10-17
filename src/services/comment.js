@@ -4,10 +4,10 @@ const commentService = {};
 const apiRoute = '/inventory_comment';
 
 
-commentService.getComments = async function (auctionInventoryId) {
+commentService.getComments = async function (query = '') {
   try {
     const res = await fetch({
-      url: `${apiRoute}/${auctionInventoryId}`,
+      url: `${apiRoute}/all/admin${query}`,
       method: 'get'
     });
     return res.data;

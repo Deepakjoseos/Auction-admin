@@ -65,7 +65,7 @@ const WinningList = () => {
           auctionName: win.auction.name,
           sellerEmail: win.seller.email,
           winnerEmail: win.winner.email,
-          winningBid: win.winningBid
+          winningBid: win.winningBid.amount
         });
       });
 

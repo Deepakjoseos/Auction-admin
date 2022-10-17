@@ -25,6 +25,7 @@ const GeneralField = ({ mode, inventories, participants }) => {
               style={{ minWidth: '120px', marginBottom: '10px' }}
               placeholder="Select Inventory"
               rules={rules.required}
+              showSearch
             >
               {inventories?.map((inventory) => (
                 <Option key={inventory._id} value={inventory._id}>
@@ -42,6 +43,7 @@ const GeneralField = ({ mode, inventories, participants }) => {
               style={{ minWidth: '120px', marginBottom: '10px' }}
               placeholder="Select Participant"
               rules={rules.required}
+              showSearch
             >
               {participants?.map((participant) => (
                 <Option key={participant._id} value={participant._id}>
