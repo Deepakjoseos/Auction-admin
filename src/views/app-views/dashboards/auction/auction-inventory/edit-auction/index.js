@@ -1,5 +1,5 @@
 import React from "react";
-import AuctionInventoryForm from "../add-auction/auction-inventory-form";
+import AuctionInventoryForm from "../auction-inventory-form";
 
 const EditAuctionInventory = (props) => {
   console.log(`Hello`);

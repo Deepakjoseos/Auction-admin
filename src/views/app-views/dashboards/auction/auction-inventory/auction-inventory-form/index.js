@@ -15,6 +15,7 @@ import cityService from 'services/city';
 import brandService from 'services/brand';
 import brandVariantService from 'services/brandVariant.service';
 import fuelTypeService from 'services/fuelType';
+import UploadImage from './upload-images';
 
 const { TabPane } = Tabs;
 
@@ -281,6 +282,11 @@ const AuctionInventoryForm = (props) => {
                 fuelTypes={fuelTypes}
               />
             </TabPane>
+            {mode === EDIT && (
+              <TabPane tab="Upload Images" key="2">
+                <UploadImage inventoryId={param.id} />
+              </TabPane>
+            )}
           </Tabs>
         </div>
       </Form>
