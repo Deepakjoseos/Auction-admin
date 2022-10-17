@@ -464,6 +464,14 @@ const dashBoardNavTree = [
             icon: NodeExpandOutlined,
             breadcrumb: false,
             submenu: []
+          },
+          {
+            key: 'dashboards-winning',
+            path: `${APP_PREFIX_PATH}/dashboards/winning`,
+            title: 'Winning',
+            icon: NodeExpandOutlined,
+            breadcrumb: false,
+            submenu: []
           }
         ]
       },

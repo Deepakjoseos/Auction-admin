@@ -40,8 +40,8 @@ const GeneralField = ({ setSheet, auctions, mode, setAuctionId }) => {
     if (fileList.length === 1) setSheet(fileList[0]);
   };
   return (
-    mode === "ADD" && (
-      <div style={{ margin: 100, marginTop: "20px" }}>
+    mode === 'ADD' && (
+      <div style={{ margin: 100, marginTop: '20px' }}>
         <Row gutter={16}>
           <Col xs={24} sm={24} md={17}>
             <Card title="Upload Auction Inventory">
@@ -51,13 +51,14 @@ const GeneralField = ({ setSheet, auctions, mode, setAuctionId }) => {
                 rules={rules.auctionId}
               >
                 <Select
-                  style={{ minWidth: "120px", marginBottom: "10px" }}
+                  style={{ minWidth: '120px', marginBottom: '10px' }}
                   placeholder="Select Auction"
                 >
                   {auctions?.map((auction) => (
                     <Option
+                      key={auction._id}
                       value={auction._id}
-                      disabled={auction.status === "Hold"}
+                      disabled={auction.status === 'Hold'}
                     >
                       {auction.name}
                     </Option>

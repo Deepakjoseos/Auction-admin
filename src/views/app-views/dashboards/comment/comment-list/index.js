@@ -235,6 +235,7 @@ const CommentList = () => {
             {/* <Option value="All">All</Option> */}
             {auctionInventories?.map((inventory) => (
               <Option
+                key={inventory._id}
                 value={inventory._id}
                 disabled={inventory.status === 'Hold'}
               >
