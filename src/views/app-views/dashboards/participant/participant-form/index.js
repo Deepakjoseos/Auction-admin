@@ -1,35 +1,35 @@
 /* eslint-disable no-unused-expressions */
-import React, { useState, useEffect } from "react";
-import PageHeaderAlt from "components/layout-components/PageHeaderAlt";
-import { Tabs, Form, Button, message } from "antd";
-import Flex from "components/shared-components/Flex";
+import React, { useState, useEffect } from 'react';
+import PageHeaderAlt from 'components/layout-components/PageHeaderAlt';
+import { Tabs, Form, Button, message } from 'antd';
+import Flex from 'components/shared-components/Flex';
 // import GeneralField from '../GeneralField'
-import GeneralField from "./GeneralField";
-import { useHistory } from "react-router-dom";
-import participantService from "services/Participant";
-import authAdminService from "services/auth/admin";
-import { useSelector } from "react-redux";
-import clientService from "services/client";
+import GeneralField from './GeneralField';
+import { useHistory } from 'react-router-dom';
+import participantService from 'services/Participant';
+import authAdminService from 'services/auth/admin';
+import { useSelector } from 'react-redux';
+import clientService from 'services/client';
 // import Registrations from '../../registration/list-registration/index'
-import feeTypeService from "services/FeeType";
-import RegistrationForm from "../registration/registrationForm/index";
-import DepositForm from "../make-Deposit";
-import WalletField from "../wallet/walletField";
-import WalletTransaction from "../../wallet-transaction";
-import WalletTransactionParticipant from "./wallet-transactions-list";
-import WalletFieldForm from "../wallet";
-import DocumentFieldForm from "../documentupload";
-import constantsService from 'services/constants'
-import { set } from "lodash";
+import feeTypeService from 'services/FeeType';
+import RegistrationForm from '../registration/registrationForm/index';
+import DepositForm from '../make-Deposit';
+import WalletField from '../wallet/walletField';
+import WalletTransaction from '../../wallet-transaction';
+import WalletTransactionParticipant from './wallet-transactions-list';
+import WalletFieldForm from '../wallet';
+import DocumentFieldForm from '../documentupload';
+import constantsService from 'services/constants';
+import { set } from 'lodash';
 
 const { TabPane } = Tabs;
 
-const ADD = "ADD";
-const EDIT = "EDIT";
+const ADD = 'ADD';
+const EDIT = 'EDIT';
 
 const ParticipantForm = (props) => {
   const { mode = ADD, param } = props;
-  const id = param?.id
+  const id = param?.id;
   const history = useHistory();
 
   const [form] = Form.useForm();
@@ -42,122 +42,105 @@ const ParticipantForm = (props) => {
   const [isBuyer, setIsBuyer] = useState(false);
   const { user } = useSelector((state) => state.auth);
   const [currentParticipant, setCurrentParticipant] = useState();
-  const [participant, setParticipant] = useState([])
-  const [usertype, setUsertype] = useState([])
-  const [buyerEligibleBuisness, setBuyerEligibleBuisness] = useState([])
+  const [participant, setParticipant] = useState([]);
+  const [usertype, setUsertype] = useState([]);
+  const [buyerEligibleBuisness, setBuyerEligibleBuisness] = useState([]);
 
   //   const [editorRender, setEditorRender] = useState(false)
-  const [feeTypes, setFeeType] = useState([]);
+  const getAllParticipants = async () => {
+    const data = await participantService.getAllParticipants();
+    if (data) {
+      setParticipants(data);
+    }
+  };
+
+  const getAllSubAdmins = async () => {
+    const data = await authAdminService.getAllSubAdmins();
+    if (data) {
+      setSubAdmins(data);
+      console.log(data, 'show-subadmins');
+    }
+  };
+  const getAllClients = async () => {
+    const data = await clientService.getClients();
+    if (data) {
+      setClients(data);
+    }
+  };
+
+  const getParticipant = async () => {
+    const data = await constantsService.getParticipant();
+    if (data) {
+      setParticipant(data);
+      setUsertype(data);
+      setBuyerEligibleBuisness(data);
+    }
+  };
+
+  const fetchParticipantById = async () => {
+    const { id } = param;
+    const data = await participantService.getParticipantById(id);
+
+    if (data) {
+      form.setFieldsValue({
+        name: data.name,
+        email: data.email,
+        password: data.password,
+        contact: data.contact,
+        gst: data.gst,
+        status: data.status,
+        clientId: data.client,
+
+        // parentId: data.parentId,
+        hdfcPanValidation: data.hdfcPanValidation,
+        pan: data.panNumber,
+        participantType: data.participantType,
+        pcc: data.pcc,
+        relationshipManagerId: data.relationshipManager,
+        UserType: data.UserType,
+        buyerEligibleBuisness: data.buyerEligibleBuisness,
+        participantClient: data.participantClient,
+
+        permanent_address: data.permanentAddress.address,
+        permanent_city: data.permanentAddress.city,
+        permanent_pincode: data.permanentAddress.pincode,
+        permanent_state: data.permanentAddress.state,
+
+        office_address: data.officeAddress.address,
+        office_city: data.officeAddress.city,
+        office_pincode: data.officeAddress.pincode,
+        office_state: data.officeAddress.state,
+
+        contact_person_name: data.contactPerson.phone,
+        contact_person_phone: data.contactPerson.phone
+      });
+      setCurrentParticipant(data);
+      setIsEmployee(data.userType === 'Employee' ? true : false);
+      setIsBuyer(data.participantType === 'Buyer' ? true : false);
+    } else {
+      history.replace('/app/dashboards/user/user-list');
+    }
+  };
   useEffect(() => {
-    const getAllSubAdmins = async () => {
-      const data = await authAdminService.getAllSubAdmins();
-      if (data) {
-        setSubAdmins(data);
-        console.log(data, "show-subadmins");
-      }
-    };
-
-    const getAllParticipants = async () => {
-      const data = await participantService.getAllParticipants();
-      if (data) {
-        setParticipants(data);
-      }
-    };
-
-    const getAllClients = async () => {
-      const data = await clientService.getClients();
-      if (data) {
-        setClients(data);
-      }
-    };
-    const getFeeTypes = async () => {
-      const data = await feeTypeService.getFeeTypes();
-      if (data) {
-        setFeeType(data);
-        console.log(data, "feetypes");
-      }
-    };
-    getFeeTypes();
-
-    if (window.localStorage.getItem("auth_type") === "Admin") {
+    if (window.localStorage.getItem('auth_type') === 'Admin') {
       getAllSubAdmins();
     }
+    getParticipant();
     getAllParticipants();
     getAllClients();
     if (mode === EDIT) {
-      const fetchParticipantById = async () => {
-        const { id } = param;
-        const data = await participantService.getParticipantById(id);
-        setCurrentParticipant(data);
-        if (data) {
-          form.setFieldsValue({
-            name: data.name,
-            email: data.email,
-            password: data.password,
-            contact: data.contact,
-            gst: data.gst,
-            status: data.status,
-            clientId: data.client,
-
-            // parentId: data.parentId,
-            hdfcPanValidation: data.hdfcPanValidation,
-            pan: data.panNumber,
-            participantType: data.participantType,
-            pcc: data.pcc,
-            relationshipManagerId: data.relationshipManager,
-            UserType: data.UserType,
-            buyerEligibleBuisness: data.buyerEligibleBuisness,
-            participantClient: data.participantClient,
-
-            permanent_address: data.permanentAddress.address,
-            permanent_city: data.permanentAddress.city,
-            permanent_pincode: data.permanentAddress.pincode,
-            permanent_state: data.permanentAddress.state,
-
-            office_address: data.officeAddress.address,
-            office_city: data.officeAddress.city,
-            office_pincode: data.officeAddress.pincode,
-            office_state: data.officeAddress.state,
-
-            contact_person_name: data.contactPerson.phone,
-            contact_person_phone: data.contactPerson.phone,
-          });
-
-          setIsEmployee(data.userType === "Employee" ? true : false);
-          setIsBuyer(data.participantType === "Buyer" ? true : false);
-        } else {
-          history.replace("/app/dashboards/user/user-list");
-        }
-      };
-
       fetchParticipantById();
     }
-  }, [form, mode, param, props]);
+  }, [mode]);
 
-
-  useEffect(() => {
-    getParticipant()
-  }, [])
-
-  const getParticipant = async () => {
-    const data = await constantsService.getParticipant()
-    if (data) {
-      setParticipant(data)
-      setUsertype(data)
-      setBuyerEligibleBuisness(data)
-    
-    }
-  }
-
-
-  console.log(user, "sendingValues");
+  console.log(user, 'sendingValues');
 
   const onFinish = async () => {
     setSubmitLoading(true);
     form
       .validateFields()
       .then(async (values) => {
-        console.log(values, "valuewewes");
+        console.log(values, 'valuewewes');
 
         const sendingValues = {
           name: values.name,
@@ -180,24 +163,24 @@ const ParticipantForm = (props) => {
             address: values.permanent_address,
             city: values.permanent_city,
             pincode: values.permanent_pincode,
-            state: values.permanent_state,
+            state: values.permanent_state
           },
           officeAddress: {
             address: values.office_address,
             city: values.office_city,
             pincode: values.office_pincode,
-            state: values.office_state,
+            state: values.office_state
           },
           contactPerson: {
             name: values.contact_person_name,
-            phone: values.contact_person_phone,
-          },
+            phone: values.contact_person_phone
+          }
         };
 
-        if (window.localStorage.getItem("auth_type") === "SubAdmin")
+        if (window.localStorage.getItem('auth_type') === 'SubAdmin')
           sendingValues.relationshipManagerId = user?._id;
         const body = { ...sendingValues, buyingLimit: 0, securityDeposit: 0 };
-        console.log(sendingValues, "sendingValues", user?._id);
+        console.log(sendingValues, 'sendingValues', user?._id);
 
         if (mode === ADD) {
           const created = await participantService.createParticipant(body);
@@ -220,8 +203,8 @@ const ParticipantForm = (props) => {
       })
       .catch((info) => {
         setSubmitLoading(false);
-        console.log("info", info);
-        message.error("Please enter all required field ");
+        console.log('info', info);
+        message.error('Please enter all required field ');
       });
   };
 
@@ -233,7 +216,7 @@ const ParticipantForm = (props) => {
         name="advanced_search"
         className="ant-advanced-search-form"
         initialValues={{
-          status: "Hold",
+          status: 'Hold'
         }}
       >
         <PageHeaderAlt className="border-bottom" overlap>
@@ -245,13 +228,13 @@ const ParticipantForm = (props) => {
               alignItems="center"
             >
               <h2 className="mb-3">
-                {mode === "ADD" ? "Add New Participant" : `Edit Participant`}{" "}
+                {mode === 'ADD' ? 'Add New Participant' : `Edit Participant`}{' '}
               </h2>
               <div className="mb-3">
                 <Button
                   className="mr-2"
                   onClick={() =>
-                    history.push("/app/dashboards/participant/participant-list")
+                    history.push('/app/dashboards/participant/participant-list')
                   }
                 >
                   Discard
@@ -263,7 +246,7 @@ const ParticipantForm = (props) => {
                   htmlType="submit"
                   loading={submitLoading}
                 >
-                  {mode === "ADD" ? "Add" : `Save`}
+                  {mode === 'ADD' ? 'Add' : `Save`}
                 </Button>
               </div>
             </Flex>
@@ -285,10 +268,9 @@ const ParticipantForm = (props) => {
                 participant={participant}
                 buyerEligibleBuisness={buyerEligibleBuisness}
                 usertype={usertype}
-
               />
             </TabPane>
-            {id  && (
+            {id && (
               <>
                 <TabPane tab="Registration" key="2">
                   <RegistrationForm participantId={param?.id} />
@@ -297,20 +279,16 @@ const ParticipantForm = (props) => {
                   <DepositForm participantId={param?.id} />
                 </TabPane>
                 <TabPane tab="Document Upload" key="4">
-                <DocumentFieldForm participantId={param?.id} />
+                  <DocumentFieldForm participantId={param?.id} />
                 </TabPane>
                 <TabPane tab="Wallet" key="5">
                   <WalletFieldForm participantId={param?.id} />
                 </TabPane>
                 <TabPane tab="Wallet Transactions" key="6">
-                
                   <WalletTransactionParticipant participantId={param?.id} />
                 </TabPane>
               </>
             )}
-
-
-
           </Tabs>
         </div>
       </Form>

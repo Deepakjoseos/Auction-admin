@@ -338,14 +338,14 @@ const dashBoardNavTree = [
         breadcrumb: false,
         submenu: []
       },
-      {
-        key: 'dashboards-fee-type',
-        path: `${APP_PREFIX_PATH}/dashboards/fee-type`,
-        title: 'FeeType',
-        icon: AppstoreOutlined,
-        breadcrumb: false,
-        submenu: []
-      },
+      // {
+      //   key: 'dashboards-fee-type',
+      //   path: `${APP_PREFIX_PATH}/dashboards/fee-type`,
+      //   title: 'FeeType',
+      //   icon: AppstoreOutlined,
+      //   breadcrumb: false,
+      //   submenu: []
+      // },
       // {
       //   key: "dashboards-auction-inventory",
       //   path: `${APP_PREFIX_PATH}/dashboards/auction-inventory`,

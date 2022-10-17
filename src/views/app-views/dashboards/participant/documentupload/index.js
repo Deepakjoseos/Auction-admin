@@ -6,7 +6,7 @@ import participantService from 'services/Participant';
 import DocumentField from './GeneralField';
 
 const DocumentForm = (props) => {
-  const { param } = props;
+  const { participantId } = props;
   const history = useHistory();
 
   const [form] = Form.useForm();
@@ -25,7 +25,7 @@ const DocumentForm = (props) => {
         .validateFields()
         .then(async (values) => {
           const uploaded = await participantService.uploadParticipant(
-            param.id,
+            participantId,
             formData
           );
           if (uploaded) {
