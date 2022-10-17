@@ -456,6 +456,14 @@ const dashBoardNavTree = [
             icon: NodeExpandOutlined,
             breadcrumb: false,
             submenu: []
+          },
+          {
+            key: 'dashboards-comment',
+            path: `${APP_PREFIX_PATH}/dashboards/comment`,
+            title: 'Comment',
+            icon: NodeExpandOutlined,
+            breadcrumb: false,
+            submenu: []
           }
         ]
       },

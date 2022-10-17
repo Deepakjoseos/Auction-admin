@@ -1,9 +1,20 @@
 import fetch from "auth/FetchInterceptor";
 
 const commentService = {};
-const apiRoute = "/comments";
+const apiRoute = '/inventory_comment';
 
 
+commentService.getComments = async function (auctionInventoryId) {
+  try {
+    const res = await fetch({
+      url: `${apiRoute}/${auctionInventoryId}`,
+      method: 'get'
+    });
+    return res.data;
+  } catch (err) {
+    console.log(err, 'show-err');
+  }
+};
 
 
 
@@ -19,10 +30,11 @@ commentService.createComment = async function (data) {
     console.log(err, "show-err");
   }
 };
+
 commentService.deleteComment = async function (id) {
   try {
     const res = await fetch({
-      url: `${apiRoute}/${id}`,
+      url: `${apiRoute}/${id}/admin`,
       method: 'delete',
     })
     //   const data = res.data.filter((cur) => cur.status !== 'Deleted')
