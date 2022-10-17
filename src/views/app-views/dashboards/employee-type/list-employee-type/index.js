@@ -109,7 +109,7 @@ const EmployeeTypeList = () => {
       render: (name) => {
         return <Flex alignItems="center">{name}</Flex>;
       },
-      sorter: (a, b) => a.name.localeCompare(b?.first)
+      sorter: (a, b) => a.name.localeCompare(b?.name)
     },
 
     {
