@@ -43,13 +43,13 @@ const GroupForm = (props) => {
     if (data) {
       form.setFieldsValue({
         name: data.name,
-        vehicleTypeId: data.vehicleType?._id,
-        cityId: data.city?._id,
+        vehicleTypeIds: data.vehicleTypes.map((vehicleType) => vehicleType._id),
+        cityIds: data.cities.map((city) => city._id),
         sellerId: data.seller?._id,
-        stateId: data.city?.state._id,
-        regionId: data.region?._id,
+        stateIds: data.states.map((state) => state._id),
+        regionIds: data.regions.map((region) => region._id),
         status: data.status,
-        business: data.business,
+        businessTypes: data.businessTypes,
         sellerName: participants.find(
           (participant) => participant._id === data.seller?._id
         )?.name
@@ -67,8 +67,9 @@ const GroupForm = (props) => {
         console.log(values, 'values');
         if (mode === ADD) {
           // Checking if image exists
-
-          const created = await groupService.createGroup(values);
+          const { sellerName, ...newValues } = values;
+          console.log(newValues, 'newValues');
+          const created = await groupService.createGroup(newValues);
           if (created) {
             message.success(`Created ${values.name} to group list`);
             history.goBack();
@@ -159,14 +160,16 @@ const GroupForm = (props) => {
               <GeneralField form={form} />
               {/* </div> */}
             </TabPane>
-            <TabPane tab="Update Participants" key="2">
-              <div onClick={() => setMode(EDIT)}>
-                <UpdateParticipantsField
-                  param={param}
-                  participants={participants}
-                />
-              </div>
-            </TabPane>
+            {mode === EDIT && (
+              <TabPane tab="Update Participants" key="2">
+                <div onClick={() => setMode(EDIT)}>
+                  <UpdateParticipantsField
+                    param={param}
+                    participants={participants}
+                  />
+                </div>
+              </TabPane>
+            )}
           </Tabs>
         </div>
       </Form>

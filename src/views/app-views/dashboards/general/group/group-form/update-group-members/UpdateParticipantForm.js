@@ -85,7 +85,6 @@ const UpdateParticipantForm = ({ participants, group }) => {
                     <Form.Item
                       name={[field.name, 'memberId']}
                       fieldKey={[field.fieldKey, 'memberId']}
-                      rules={rules.memberId}
                       style={{ minWidth: '120px' }}
                     >
                       <Select onChange={handleChange}>
@@ -110,7 +109,6 @@ const UpdateParticipantForm = ({ participants, group }) => {
                       {...field}
                       name={[field.name, 'remark']}
                       fieldKey={[field.fieldKey, 'remark']}
-                      rules={rules.remark}
                     >
                       <Input placeholder="Remark" />
                     </Form.Item>

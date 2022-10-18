@@ -29,7 +29,7 @@ const rules = {
   ]
 };
 
-const GeneralField = ({form}) => {
+const GeneralField = ({ form }) => {
   const [citys, setCitys] = useState([]);
   const [states, setStates] = useState([]);
   const [regions, setRegions] = useState([]);
@@ -70,50 +70,47 @@ const GeneralField = ({form}) => {
           <Form.Item name="name" label="Name" rules={rules.name}>
             <Input placeholder="Name" />
           </Form.Item>
-          <Form.Item name="business" label="Business Type" rules={rules.status}>
-            <Select placeholder="Business Type">
+          <Form.Item
+            name="businessTypes"
+            label="Business Type"
+            rules={rules.status}
+          >
+            <Select placeholder="Business Type" mode="multiple">
               <Option value="Bank">Bank</Option>
               <Option value="Insurance">Insuarance</Option>
               <Option value="Consumer Auction">Consumer Auction</Option>
             </Select>
           </Form.Item>
-          <Form.Item
-            name="vehicleTypeId"
-            label="Vehicle Type"
-            rules={rules.status}
-          >
-            <Select placeholder="Vehicle Type">
+          <Form.Item name="vehicleTypeIds" label="Vehicle Type">
+            <Select placeholder="Vehicle Type" mode="multiple">
               {vehicleType.map((v, k) => {
                 return <Option value={v._id}>{v.name}</Option>;
               })}
             </Select>
           </Form.Item>
-          <Form.Item name="cityId" label="City" rules={rules.status}>
-            <Select placeholder="city">
+          <Form.Item name="cityIds" label="City">
+            <Select placeholder="city" mode="multiple">
               {citys.map((v, k) => {
                 return <Option value={v._id}>{v.name}</Option>;
               })}
             </Select>
           </Form.Item>
-          <Form.Item name="stateId" label="State" rules={rules.status}>
-            <Select placeholder="state">
+          <Form.Item name="stateIds" label="State">
+            <Select placeholder="state" mode="multiple">
               {states.map((v, k) => {
                 return <Option value={v._id}>{v.name}</Option>;
               })}
             </Select>
           </Form.Item>
-          <Form.Item name="regionId" label="Region" rules={rules.status}>
-            <Select placeholder="Region">
+          <Form.Item name="regionIds" label="Region" rules={rules.status}>
+            <Select placeholder="Region" mode="multiple">
               {regions.map((v, k) => {
                 return <Option value={v._id}>{v.name}</Option>;
               })}
             </Select>
           </Form.Item>
-          <Form.Item name="sellerName" label="Seller Name" >
-            <Input
-              placeholder="Seller Name"
-              disabled
-            />
+          <Form.Item name="sellerName" label="Seller Name">
+            <Input placeholder="Seller Name" disabled />
           </Form.Item>
           <Form.Item name="status" label="Status" rules={rules.status}>
             <Select placeholder="Status">
