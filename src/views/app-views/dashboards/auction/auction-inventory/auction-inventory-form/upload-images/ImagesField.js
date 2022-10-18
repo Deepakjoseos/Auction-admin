@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Upload, Select, Form, Col, Row, Card, Modal } from 'antd';
+import { Button, Upload, Select, Form, Col, Row, Card, Modal, Input } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 
 const { Option } = Select;
@@ -71,6 +71,7 @@ const ImagesField = ({ setImages, images, setImageType, onSubmit }) => {
           </Form.Item>
 
           <Upload
+            openFileDialogOnClick={!previewVisible}
             type="file"
             listType="picture-card"
             fileList={images}

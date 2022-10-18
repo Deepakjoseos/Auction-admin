@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom';
 import { message } from 'antd';
 import auctionInventoryService from 'services/auctionInventory';
 
+
 const UploadImage = ({ inventoryId }) => {
   const history = useHistory();
   const [images, setImages] = useState([]);
@@ -15,7 +16,7 @@ const UploadImage = ({ inventoryId }) => {
     if (data) {
       const mutatedData = [];
       Object.keys(data).forEach((key) => {
-        data[key].forEach((image, index) => {
+        data[key].forEach(async (image, index) => {
           mutatedData.push({
             uid: key + index,
             name: 'image.png',
