@@ -76,9 +76,10 @@ const GroupForm = (props) => {
         }
         if (mode === EDIT) {
           console.log('paramfetchgroup', param);
+          console.log(values.items);
           const membersEdited = values.items.map((item) => {
             return {
-              memberId: item.member,
+              memberId: item.memberId,
               remark: item.remark
             };
           });
