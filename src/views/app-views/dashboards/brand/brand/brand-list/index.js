@@ -144,7 +144,7 @@ const BrandList = () => {
           <AvatarStatus
             size={60}
             type="square"
-            src={record.image}
+            src={record.logo}
             name={record.name}
           />
         </div>

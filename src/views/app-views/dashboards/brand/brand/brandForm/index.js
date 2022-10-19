@@ -1,18 +1,19 @@
-import React, { useState, useEffect } from "react";
-import PageHeaderAlt from "components/layout-components/PageHeaderAlt";
-import { Tabs, Form, Button, message } from "antd";
-import Flex from "components/shared-components/Flex";
-import GeneralField from "./GeneralField";
-import useUpload from "hooks/useUpload";
-import { singleImageUploader } from "utils/s3/s3ImageUploader";
-import brandService from "services/brand";
-import Utils from "utils";
-import { useHistory } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import PageHeaderAlt from 'components/layout-components/PageHeaderAlt';
+import { Tabs, Form, Button, message } from 'antd';
+import Flex from 'components/shared-components/Flex';
+import GeneralField from './GeneralField';
+import useUpload from 'hooks/useUpload';
+import { singleImageUploader } from 'utils/s3/s3ImageUploader';
+import brandService from 'services/brand';
+import Utils from 'utils';
+import { useHistory } from 'react-router-dom';
+import fileManagerService from 'services/FileManager';
 
 const { TabPane } = Tabs;
 
-const ADD = "ADD";
-const EDIT = "EDIT";
+const ADD = 'ADD';
+const EDIT = 'EDIT';
 
 const BrandForm = (props) => {
   const { mode = ADD, param } = props;
@@ -30,7 +31,7 @@ const BrandForm = (props) => {
     beforeUpload: beforeUploadImages,
     onChange: onChangeImages,
     onRemove: onRemoveImages,
-    setFileList: setFileListImages,
+    setFileList: setFileListImages
   } = useUpload(1); // useUpload(1, 'multiple') or useUpload(1)
 
   useEffect(() => {
@@ -47,8 +48,8 @@ const BrandForm = (props) => {
                 uid: Math.random() * 1000,
                 name: Utils.getBaseName(data.logo),
                 url: data.logo,
-                thumbUrl: data.logo,
-              },
+                thumbUrl: data.logo
+              }
             ];
 
             setImage(himg);
@@ -58,10 +59,10 @@ const BrandForm = (props) => {
           form.setFieldsValue({
             name: data.name,
             status: data.status,
-            url: data.url,
+            url: data.url
           });
         } else {
-          history.replace("/app/dashboards/brand/brand/brands-list");
+          history.replace('/app/dashboards/brand/brand/brands-list');
         }
       };
 
@@ -75,7 +76,7 @@ const BrandForm = (props) => {
     beforeUpload: beforeUploadImages,
     onRemove: onRemoveImages,
     onChange: onChangeImages,
-    fileList: fileListImages,
+    fileList: fileListImages
   };
 
   // Image Upload
@@ -92,13 +93,16 @@ const BrandForm = (props) => {
         if (mode === ADD) {
           // Checking if image exists
           if (uploadedImg.length !== 0 && uploadedImg !== null) {
-            console.log("uploadedImg", uploadedImg);
+            console.log('uploadedImg', uploadedImg);
             // We will upload image to S3 and get the image url
-            const imgValue = await singleImageUploader(
-              uploadedImg[0].originFileObj,
-              uploadedImg,
-              uploadedImg[0].url,
-              "brand"
+            // const imgValue = await singleImageUploader(
+            //   uploadedImg[0].originFileObj,
+            //   uploadedImg,
+            //   uploadedImg[0].url,
+            //   "brand"
+            // );
+            const imgValue = await fileManagerService.getImageUrl(
+              uploadedImg[uploadedImg.length - 1].originFileObj
             );
 
             //  append image url to values object
@@ -110,39 +114,42 @@ const BrandForm = (props) => {
               history.goBack();
             }
           } else {
-            message.error("Please upload image");
+            message.error('Please upload image');
           }
         }
         if (mode === EDIT) {
           // Checking if image exists
           if (uploadedImg.length !== 0 && uploadedImg !== null) {
-            console.log("uploadedImg", uploadedImg);
+            console.log('uploadedImg', uploadedImg);
             // We will upload image to S3 and get the image url
-            const imgValue = await singleImageUploader(
-              uploadedImg[0].originFileObj,
-              uploadedImg,
-              uploadedImg[0].url,
-              "brand"
+            // const imgValue = await singleImageUploader(
+            //   uploadedImg[0].originFileObj,
+            //   uploadedImg,
+            //   uploadedImg[0].url,
+            //   'brand'
+            // );
+            const imgValue = await fileManagerService.getImageUrl(
+              uploadedImg[uploadedImg.length - 1].originFileObj
             );
 
             //  append image url to values object
             values.logo = imgValue;
-            console.log("imgvalue", imgValue);
+            console.log('imgvalue', imgValue);
             const edited = await brandService.editBrand(param.id, values);
             if (edited) {
               message.success(`Edited ${values.name} to Brand list`);
               history.goBack();
             }
           } else {
-            message.error("Please upload image");
+            message.error('Please upload image');
           }
         }
         setSubmitLoading(false);
       })
       .catch((info) => {
         setSubmitLoading(false);
-        console.log("info", info);
-        message.error("Please enter all required field ");
+        console.log('info', info);
+        message.error('Please enter all required field ');
       });
   };
 
@@ -154,7 +161,7 @@ const BrandForm = (props) => {
         name="advanced_search"
         className="ant-advanced-search-form"
         initialValues={{
-          status: "Hold",
+          status: 'Hold'
         }}
       >
         <PageHeaderAlt className="border-bottom" overlap>
@@ -166,13 +173,13 @@ const BrandForm = (props) => {
               alignItems="center"
             >
               <h2 className="mb-3">
-                {mode === "ADD" ? "Add New Brand" : `Edit Brand`}{" "}
+                {mode === 'ADD' ? 'Add New Brand' : `Edit Brand`}{' '}
               </h2>
               <div className="mb-3">
                 <Button
                   className="mr-2"
                   onClick={() =>
-                    history.push("/app/dashboards/brand/brand/brands-list")
+                    history.push('/app/dashboards/brand/brand/brands-list')
                   }
                 >
                   Discard
@@ -183,7 +190,7 @@ const BrandForm = (props) => {
                   htmlType="submit"
                   loading={submitLoading}
                 >
-                  {mode === "ADD" ? "Add" : `Save`}
+                  {mode === 'ADD' ? 'Add' : `Save`}
                 </Button>
               </div>
             </Flex>
