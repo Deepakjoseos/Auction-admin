@@ -7,62 +7,62 @@ import auctionInventoryService from 'services/auctionInventory';
 
 const UploadImage = ({ inventoryId }) => {
   const history = useHistory();
-  const [images, setImages] = useState([]);
-  const [imageType, setImageType] = useState('');
+
   const [submitLoading, setSubmitLoading] = useState(false);
 
-  const fetchImages = async () => {
-    const data = await auctionInventoryService.getInventoryImages(inventoryId);
-    if (data) {
-      const mutatedData = [];
-      Object.keys(data).forEach((key) => {
-        data[key].forEach(async (image, index) => {
-          mutatedData.push({
-            uid: key + index,
-            name: 'image.png',
-            status: 'done',
-            url: image
-          });
-        });
-      });
-      setImages(mutatedData);
-      // console.log(`images`, mutatedData);
-    }
-  };
+  // const fetchImages = async () => {
+  //   const data = await auctionInventoryService.getInventoryImages(inventoryId);
+  //   if (data) {
+  //     const mutatedData = [];
+  //     Object.keys(data).forEach((key) => {
+  //       data[key].forEach(async (image, index) => {
+  //         mutatedData.push({
+  //           uid: key + index,
+  //           name: 'image.png',
+  //           status: 'done',
+  //           url: image
+  //         });
+  //       });
+  //     });
+  //     setImages(mutatedData);
+  //     // console.log(`images`, mutatedData);
+  //   }
+  // };
 
-  useEffect(() => {
-    fetchImages();
-  }, []);
+  // useEffect(() => {
+  //   fetchImages();
+  // }, []);
 
-  const onSubmit = async () => {
-    setSubmitLoading(true);
-    const formData = new FormData();
-    images.forEach((image) => {
-      if (image.originFileObj) {
-        formData.append('files', image.originFileObj);
-      }
-    });
+  // const onSubmit = async () => {
+  //   setSubmitLoading(true);
+  //   const formData = new FormData();
+  //   images.forEach((image) => {
+  //     if (image.originFileObj) {
+  //       formData.append('files', image.originFileObj);
+  //     }
+  //   });
 
-    formData.append('type', imageType);
+  //   formData.append('type', imageType);
 
-    const uploaded = await auctionInventoryService.updateAuctionInventoryImages(
-      inventoryId,
-      formData
-    );
-    if (uploaded) {
-      message.success(`Uploaded Auction Inventory Image.`);
-      history.goBack();
-      setSubmitLoading(false);
-    }
-  };
+  //   const uploaded = await auctionInventoryService.updateAuctionInventoryImages(
+  //     inventoryId,
+  //     formData
+  //   );
+  //   if (uploaded) {
+  //     message.success(`Uploaded Auction Inventory Image.`);
+  //     history.goBack();
+  //     setSubmitLoading(false);
+  //   }
+  // };
 
   return (
-    <ImagesField
-      setImages={setImages}
-      images={images}
-      setImageType={setImageType}
-      onSubmit={onSubmit}
-    />
+    <></>
+    // <ImagesField
+    //   setImages={setImages}
+    //   images={images}
+    //   setImageType={setImageType}
+    //   onSubmit={onSubmit}
+    // />
   );
 };
 

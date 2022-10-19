@@ -1,5 +1,15 @@
 import React, { useState } from 'react';
-import { Button, Upload, Select, Form, Col, Row, Card, Modal, Input } from 'antd';
+import {
+  Button,
+  Upload,
+  Select,
+  Form,
+  Col,
+  Row,
+  Card,
+  Modal,
+  Input
+} from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 
 const { Option } = Select;
@@ -22,7 +32,7 @@ function getBase64(file) {
   });
 }
 
-const ImagesField = ({ setImages, images, setImageType, onSubmit }) => {
+const ImagesField = ({ setImages, images }) => {
   const [previewVisible, setPreviewVisible] = useState(false);
   const [previewImage, setPreviewImage] = useState('');
 
@@ -46,37 +56,34 @@ const ImagesField = ({ setImages, images, setImageType, onSubmit }) => {
     setPreviewVisible(true);
   };
 
-  const handleChange = ({ fileList }) => {
-    setImages(fileList);
+  const handleChange = async (fileList, imageType) => {
+    setImages((prevImage) => {
+      const mutatedImages = structuredClone(prevImage);
+      // fileList[fileList.length - 1].httpUrl = await fileManagerService.getImageUrl(
+      //   fileList[fileList.length - 1].originFileObj
+      // );
+      console.log(mutatedImages);
+      mutatedImages[imageType] = fileList;
+      return mutatedImages;
+    });
   };
+
+  // const handleRemove = (file, imageType) => {
+  //   const mutatedImages = structuredClone(images);
+  // };
 
   return (
     <Row gutter={16}>
       <Col xs={24} sm={24} md={17}>
-        <Card title="Upload Auction Inventory Images">
-          <Form.Item
-            name="imageType"
-            label="Select image type"
-            rules={rules.required}
-          >
-            <Select
-              style={{ minWidth: '120px', marginBottom: '10px' }}
-              placeholder="Select image type"
-              onChange={(e) => setImageType(e)}
-            >
-              <Option value={'General'}>General</Option>
-              <Option value={'Interior'}>Interior</Option>
-              <Option value={'Exterior'}>Exterior</Option>
-            </Select>
-          </Form.Item>
-
+        <Card title="General Images">
           <Upload
             openFileDialogOnClick={!previewVisible}
             type="file"
             listType="picture-card"
-            fileList={images}
+            fileList={images.general}
             onPreview={handlePreview}
-            onChange={handleChange}
+            onChange={({ fileList, file }) => handleChange(fileList, 'general')}
+            // onRemove={(file) => handleRemove(file, 'general')}
             multiple
             accept="image/png, image/jpeg, image/jpg"
           >
@@ -89,14 +96,49 @@ const ImagesField = ({ setImages, images, setImageType, onSubmit }) => {
               <img alt="example" style={{ width: '100%' }} src={previewImage} />
             </Modal>
           </Upload>
-          <Button
-            type="primary"
-            htmlType="button"
-            style={{ float: 'right', marginTop: '20px' }}
-            onClick={onSubmit}
+        </Card>
+        <Card title="Interior Images">
+          <Upload
+            openFileDialogOnClick={!previewVisible}
+            type="file"
+            listType="picture-card"
+            fileList={images.interior}
+            onPreview={handlePreview}
+            onChange={({ fileList }) => handleChange(fileList, 'interior')}
+            multiple
+            accept="image/png, image/jpeg, image/jpg"
           >
-            Add
-          </Button>
+            {uploadButton}
+            <Modal
+              visible={previewVisible}
+              footer={null}
+              onCancel={handleCancel}
+            >
+              <img alt="example" style={{ width: '100%' }} src={previewImage} />
+            </Modal>
+          </Upload>
+        </Card>
+
+        <Card title="Exterior Images">
+          <Upload
+            openFileDialogOnClick={!previewVisible}
+            type="file"
+            listType="picture-card"
+            fileList={images.exterior}
+            onPreview={handlePreview}
+            onChange={({ fileList }) => handleChange(fileList, 'exterior')}
+            multiple
+            accept="image/png, image/jpeg, image/jpg"
+          >
+            {uploadButton}
+            <Modal
+              visible={previewVisible}
+              footer={null}
+              onCancel={handleCancel}
+            >
+              <img alt="example" style={{ width: '100%' }} src={previewImage} />
+            </Modal>
+          </Upload>
         </Card>
       </Col>
     </Row>

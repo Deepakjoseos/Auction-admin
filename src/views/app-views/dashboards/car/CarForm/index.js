@@ -1,176 +1,177 @@
-import React, { useState, useEffect } from 'react'
-import PageHeaderAlt from 'components/layout-components/PageHeaderAlt'
-import { Tabs, Form, Button, message } from 'antd'
-import Flex from 'components/shared-components/Flex'
-import GeneralField from './GeneralField'
-import useUpload from 'hooks/useUpload'
-import { multipleImageUpload } from 'utils/s3/s3ImageUploader'
-import carService from 'services/car'
-import { useHistory } from 'react-router-dom'
-import Variant from './variant'
-import ImageField from './ImageField'
-import vehicletypeService from 'services/vehicleType'
-import brandService from 'services/brand'
+import React, { useState, useEffect } from 'react';
+import PageHeaderAlt from 'components/layout-components/PageHeaderAlt';
+import { Tabs, Form, Button, message } from 'antd';
+import Flex from 'components/shared-components/Flex';
+import GeneralField from './GeneralField';
+import useUpload from 'hooks/useUpload';
+import { multipleImageUpload } from 'utils/s3/s3ImageUploader';
+import carService from 'services/car';
+import { useHistory } from 'react-router-dom';
+import Variant from './variant';
+import ImageField from './ImageField';
+import vehicletypeService from 'services/vehicleType';
+import brandService from 'services/brand';
 
-const { TabPane } = Tabs
+const { TabPane } = Tabs;
 
-const ADD = 'ADD'
-const EDIT = 'EDIT'
+const ADD = 'ADD';
+const EDIT = 'EDIT';
 
 const InformationForm = (props) => {
-  const { mode = ADD, param } = props
-  const id = param?.id
-  const history = useHistory()
+  const { mode = ADD, param } = props;
+  const id = param?.id;
+  const history = useHistory();
 
-  const [form] = Form.useForm()
-  const [uploadedImg, setImage] = useState(null)
+  const [form] = Form.useForm();
+  const [uploadedImg, setImage] = useState(null);
   //   const [uploadLoading, setUploadLoading] = useState(false)
-  const [submitLoading, setSubmitLoading] = useState(false)
-  const [editorRender, setEditorRender] = useState(false)
-  const [variantList, setVariantsList] = useState([])
-  const[vehicleTypes,setVehicleTypes] =useState([])
-  const [brands,setBrands] =useState([])
+  const [submitLoading, setSubmitLoading] = useState(false);
+  const [editorRender, setEditorRender] = useState(false);
+  const [variantList, setVariantsList] = useState([]);
+  const [vehicleTypes, setVehicleTypes] = useState([]);
+  const [brands, setBrands] = useState([]);
 
   const {
     fileList: fileListImages,
     beforeUpload: beforeUploadImages,
     onChange: onChangeImages,
     onRemove: onRemoveImages,
-    setFileList: setFileListImages,
-  } = useUpload(1, 'multiple')
+    setFileList: setFileListImages
+  } = useUpload(1, 'multiple');
 
-  console.log(uploadedImg, 'uploadedImg')
+  console.log(uploadedImg, 'uploadedImg');
 
   const fetchCarById = async () => {
-    const data = await carService.getCarById(id)
+    const data = await carService.getCarById(id);
+    console.log(data, 'datadata');
+
     if (data) {
       const images = data.images?.map((cur, i) => {
         return {
           uid: i + Math.random() * 10,
           url: cur?.image,
-          description: cur?.description,
-        }
-      })
+          description: cur?.description
+        };
+      });
 
-      setImage(images)
+      setImage(images);
 
-      setFileListImages(images)
+      setFileListImages(images);
 
       form.setFieldsValue({
         name: data.name,
         status: data.status,
         description: data.description,
         videos: data.videos,
-        brandId:data.brandId,
-        vehicleTypeId:data.vehicleTypeId,
-        priceRange:data.priceRange,
-      })
+        brandId: data.brand?._id,
+        vehicleTypeId: data.vehicleType?._id,
+        priceRange: data.priceRange
+      });
 
-      setEditorRender(true)
-      setVariantsList(data.variants)
+      setEditorRender(true);
+      setVariantsList(data.variants);
     } else {
-      history.replace('/app/dashboards/car/car-list')
+      history.replace('/app/dashboards/car/car-list');
     }
-  }
-  const getVehicleTypes = async ()=>{
-    const data = await vehicletypeService.getVehicleTypes()
-    if(data){
-      setVehicleTypes(data)
+  };
+  const getVehicleTypes = async () => {
+    const data = await vehicletypeService.getVehicleTypes();
+    if (data) {
+      setVehicleTypes(data);
     }
-  }
-  const getBrands = async () =>{
-    const data = await brandService.getBrands()
-    if(data){
-      setBrands(data)
+  };
+  const getBrands = async () => {
+    const data = await brandService.getBrands();
+    if (data) {
+      setBrands(data);
     }
-  }
+  };
 
   useEffect(() => {
     if (mode === EDIT) {
-      fetchCarById()
+      fetchCarById();
     }
-    getVehicleTypes()
-    getBrands()
-  }, [form, mode, param, props])
+    getVehicleTypes();
+    getBrands();
+  }, [form, mode, param, props]);
 
   const propsImages = {
     multiple: true,
     beforeUpload: beforeUploadImages,
     onRemove: onRemoveImages,
     onChange: onChangeImages,
-    fileList: fileListImages,
-  }
+    fileList: fileListImages
+  };
 
   useEffect(() => {
-    console.log(fileListImages, 'hey-me')
-    setImage(fileListImages)
-  }, [fileListImages])
+    console.log(fileListImages, 'hey-me');
+    setImage(fileListImages);
+  }, [fileListImages]);
 
   const onFinish = async () => {
-    setSubmitLoading(true)
+    setSubmitLoading(true);
     form
       .validateFields()
       .then(async (values) => {
         // values.vehicleTypeId = '922af3ff-434d-4ef8-99a2-93f5d66fe7d9'
         // values.brandId = '62ea0981d5859d8db41a4165'
-        const sendingValues={
+        const sendingValues = {
           name: values?.name,
           status: values?.status,
           description: values?.description,
           videos: values?.videos,
           brandId: values?.brandId,
           vehicleTypeId: values?.vehicleTypeId,
-          priceRange: values?.priceRange,
-        }
+          priceRange: values?.priceRange
+        };
+
         if (mode === ADD) {
-          // Checking if image exists
-          if (uploadedImg.length !== 0 && uploadedImg !== null) {
-            console.log('uploadedImg', uploadedImg)
-            const imgValues = await multipleImageUpload(
-              uploadedImg,
-              'productTemplate',
-              'descriptionRequired'
-            )
-
-            values.images = imgValues
-          } else {
-            values.images = []
-          }
-
-          const created = await carService.createCar(sendingValues)
+          const created = await carService.createCar(sendingValues);
           if (created) {
-            message.success(`Created ${values.name} to Car list`)
-            history.goBack()
+            message.success(`Created ${values.name} to Car list`);
+            history.goBack();
           }
+          // Checking if image exists
+          // if (uploadedImg.length !== 0 && uploadedImg !== null) {
+          //   console.log('uploadedImg', uploadedImg);
+          //   const imgValues = await multipleImageUpload(
+          //     uploadedImg,
+          //     'productTemplate',
+          //     'descriptionRequired'
+          //   );
+
+          //   values.images = imgValues;
+          // } else {
+          //   values.images = [];
+          // }
         }
         if (mode === EDIT) {
-          // Checking if image exists
-          if (uploadedImg.length !== 0 && uploadedImg !== null) {
-            console.log('uploadedImg', uploadedImg)
-            const imgValues = await multipleImageUpload(
-              uploadedImg,
-              'productTemplate',
-              'descriptionRequired'
-            )
-            values.images = imgValues
-          } else {
-            values.images = []
-          }
-
-          const edited = await carService.editCar(param.id, values)
+          const edited = await carService.editCar(param.id, values);
           if (edited) {
-            message.success(`Edited ${values.name} to Information list`)
-            history.goBack()
+            message.success(`Edited ${values.name} to Information list`);
+            history.goBack();
           }
+          // Checking if image exists
+          // if (uploadedImg.length !== 0 && uploadedImg !== null) {
+          //   console.log('uploadedImg', uploadedImg);
+          //   const imgValues = await multipleImageUpload(
+          //     uploadedImg,
+          //     'productTemplate',
+          //     'descriptionRequired'
+          //   );
+          //   values.images = imgValues;
+          // } else {
+          //   values.images = [];
+          // }
         }
-        setSubmitLoading(false)
+        setSubmitLoading(false);
       })
       .catch((info) => {
-        setSubmitLoading(false)
-        console.log('info', info)
-        message.error('Please enter all required field ')
-      })
-  }
+        setSubmitLoading(false);
+        console.log('info', info);
+        message.error('Please enter all required field ');
+      });
+  };
 
   return (
     <>
@@ -180,7 +181,7 @@ const InformationForm = (props) => {
         name="advanced_search"
         className="ant-advanced-search-form"
         initialValues={{
-          status: 'Hold',
+          status: 'Hold'
         }}
       >
         <PageHeaderAlt className="border-bottom" overlap>
@@ -217,7 +218,12 @@ const InformationForm = (props) => {
         <div className="container">
           <Tabs defaultActiveKey="1" style={{ marginTop: 30 }}>
             <TabPane tab="General" key="1">
-              <GeneralField uploadedImg={uploadedImg} form={form} vehicleTypes={vehicleTypes} brands={brands}/>
+              <GeneralField
+                uploadedImg={uploadedImg}
+                form={form}
+                vehicleTypes={vehicleTypes}
+                brands={brands}
+              />
             </TabPane>
             {id && (
               <TabPane tab="Variant" key="2">
@@ -239,7 +245,7 @@ const InformationForm = (props) => {
         </div>
       </Form>
     </>
-  )
-}
+  );
+};
 
-export default InformationForm
+export default InformationForm;

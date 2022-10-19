@@ -17,11 +17,19 @@ import brandVariantService from 'services/brandVariant.service';
 import fuelTypeService from 'services/fuelType';
 import UploadImage from './upload-images';
 import constantsService from 'services/constants';
+import ImagesField from './upload-images/ImagesField';
+import fileManagerService from 'services/FileManager';
 
 const { TabPane } = Tabs;
 
 const ADD = 'ADD';
 const EDIT = 'EDIT';
+
+const initImages = {
+  general: [],
+  exterior: [],
+  interior: []
+};
 
 const AuctionInventoryForm = (props) => {
   const { mode = ADD, param } = props;
@@ -39,6 +47,8 @@ const AuctionInventoryForm = (props) => {
   const [InsuranceType, setInsuranceType] = useState([]);
   const [fuelTypes, setFuelTypes] = useState([]);
 
+  const [images, setImages] = useState(initImages);
+
   const getCities = async () => {
     const data = await cityService.getCities();
     if (data) {
@@ -52,7 +62,6 @@ const AuctionInventoryForm = (props) => {
       setBrands(data);
     }
   };
-
 
   const getAuction = async () => {
     const data = await constantsService.getAuction();
@@ -99,26 +108,42 @@ const AuctionInventoryForm = (props) => {
 
   const fetchInventory = async () => {
     const { id } = param;
-    const data = await auctionInventoryService.getInventory(id);
+    const fetchedData = await auctionInventoryService.getInventory(id);
+    console.log(fetchedData);
+    const { images, ...data } = fetchedData;
+
     if (data) {
       form.setFieldsValue({
         ...data,
         hypothecation: data.hypothecation.toLowerCase() === 'true',
-        // ...data.registrationInfo,
-        // registrationDate: data.registrationInfo.registrationDate,
-        rcAvailable: data.registrationInfo.rcAvailable,
-       
-        registrationYear: data.registrationInfo.year,
+        rcAvailable: data.registrationInfo?.rcAvailable,
+        registrationYear: data.registrationInfo?.year,
         ...data.vehicleInfo,
         ...data.insuranceInfo,
-        insuranceType: data.insuranceInfo.type,
-        
-        // insuranceExpiryDate: data.insuranceInfo?.expiryDate,
+        insuranceType: data.insuranceInfo?.type,
         insuranceInfo_Availability: data.insuranceInfo?.availability,
         ...data.taxInfo,
         taxType: data.taxInfo?.type,
         ...data.rtoInfo
       });
+
+      if (images) {
+        const mutatedImages = {};
+        Object.keys(images).forEach((imageType) => {
+          mutatedImages[imageType] = [];
+          images[imageType].forEach((image, index) => {
+            mutatedImages[imageType].push({
+              uid: imageType + index,
+              name: 'image.png',
+              status: 'done',
+              url: image
+            });
+          });
+        });
+
+        console.log(mutatedImages);
+        setImages(mutatedImages);
+      }
     } else {
       history.replace(
         '/app/dashboards/auction/auction-inventory/auction-inventory-list'
@@ -159,6 +184,25 @@ const AuctionInventoryForm = (props) => {
       form
         .validateFields()
         .then(async (values) => {
+          //Handling Images
+          const mutateImages = initImages;
+
+          for (const imageType of Object.keys(images)) {
+            for (const img of images[imageType]) {
+              console.log(img);
+              let url = null;
+
+              if (!fileManagerService.validURL(img?.url)) {
+                url = await fileManagerService.getImageUrl(img.originFileObj);
+              }
+
+              mutateImages[imageType].push(url);
+            }
+          }
+
+          console.log(mutateImages, 'mutateImages');
+
+          // handling inv values
           const newAuctionInventoryObj = {
             registrationNumber: values.registrationNumber,
             reservedPrice: values.reservedPrice,
@@ -192,11 +236,7 @@ const AuctionInventoryForm = (props) => {
               noClaimBonus: values.noClaimBonus,
               noClaimBonusPercentage: values.noClaimBonusPercentage
             },
-            images: {
-              general: ['string'],
-              interior: ['string'],
-              exterior: ['string']
-            },
+            images: mutateImages,
             taxInfo: {
               paid: values.paid,
               rtoTaxDate: values.rtoTaxDate,
@@ -298,7 +338,7 @@ const AuctionInventoryForm = (props) => {
             </TabPane>
             {mode === EDIT && (
               <TabPane tab="Upload Images" key="2">
-                <UploadImage inventoryId={param.id} />
+                <ImagesField images={images} setImages={setImages} />
               </TabPane>
             )}
           </Tabs>

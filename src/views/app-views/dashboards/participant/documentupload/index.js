@@ -174,7 +174,7 @@ const DocumentForm = (props) => {
     setPreviewVisible(true);
   };
 
-  const handleChange = async ({ fileList }) => {
+  const handleChange = ({ fileList }) => {
     const mutatedFileList = [];
 
     for (const file of fileList) {
