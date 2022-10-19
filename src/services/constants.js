@@ -25,10 +25,12 @@ constantsService.getRegistrationConstant = async function () {
       method: 'get'
     });
     const paymentModes = Object.values(res.data.PaymentMode).map((val) => val);
+    const FeeType = Object.values(res.data.FeeType).map((val) => val);
+    
     const paymentStatus = Object.values(res.data.PaymentStatus).map(
       (val) => val
     );
-    return { paymentModes, paymentStatus };
+    return { paymentModes, paymentStatus,FeeType };
   } catch (err) {
     console.log(err, 'show-err');
   }
@@ -72,6 +74,29 @@ constantsService.getParticipant = async function () {
     console.log(err, 'show-err');
   }
 };
+
+constantsService.getAuction = async function () {
+  try {
+    const res = await fetch({
+      url: '/constants/auction',
+      method: 'get'
+    });
+
+    // For coverting array
+    const InsuranceType = Object.values(res.data.InsuranceType).map(
+      (val) => val
+    );
+    return {InsuranceType};
+  } catch (err) {
+    console.log(err, 'show-err');
+  }
+};
+
+
+
+
+
+
 
 constantsService.getFeeTypes = async function () {
   try {

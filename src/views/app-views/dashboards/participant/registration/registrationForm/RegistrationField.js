@@ -259,17 +259,24 @@ const RegistrationField = ({ onFinish, feeTypes }) => {
             </Form.Item>
 
             <Form.Item
-              name="feeTypeId"
+              name="FeeType"
               label="Fee Type"
               rules={rules.feeTypeId}
               placeholder="Fee Type"
             >
               <Select>
-                {feeTypes.map((feeType) => (
+                {feeTypes?.FeeType?.map((feeType) => (
                   <Option value={feeType}>{feeType}</Option>
                 ))}
               </Select>
             </Form.Item>
+              {/* <Form.Item name="FeeType" label="FeeType" >
+              <Select placeholder="FeeType">
+                {feeTypes?.FeeType?.map((item, index) => ( 
+                  <Option key={index} value={item}> {item} </Option>
+                ))}
+              </Select>
+            </Form.Item> */}
             {/* <Form.Item
             name="participantId"
             label="Participant"

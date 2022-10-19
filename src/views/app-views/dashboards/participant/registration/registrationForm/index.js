@@ -38,27 +38,33 @@ const RegistrationForm = (props) => {
   const [feeTypes, setFeeType] = useState([]);
 
   useEffect(() => {
-    getAllRegistrations();
-    getFeeTypes();
+    // getAllRegistrations();
+    getRegistration();
   }, []);
 
   console.log(feeTypes);
 
-  const getFeeTypes = async () => {
-    const data = await constantsService.getFeeTypes();
+  // const getFeeTypes = async () => {
+  //   const data = await constantsService.getFeeTypes();
+  //   if (data) {
+  //     setFeeType(Object.values(data));
+  //     console.log(data, 'feetypes');
+  //   }
+  // };
+  const getRegistration =async () => {
+    const data =await constantsService.getRegistrationConstant();
     if (data) {
-      setFeeType(Object.values(data));
-      console.log(data, 'feetypes');
+      setFeeType(data)
     }
-  };
+  }
 
-  const getAllRegistrations = async () => {
-    const data = await registrationService.getRegistrations();
-    if (data) {
-      setRegistrationsList(data);
-      setSearchBackupList(data);
-    }
-  };
+  // const getAllRegistrations = async () => {
+  //   const data = await registrationService.getRegistrations();
+  //   if (data) {
+  //     setRegistrationsList(data);
+  //     setSearchBackupList(data);
+  //   }
+  // };
 
   const onFinish = async () => {
     console.log('submited');
@@ -76,7 +82,7 @@ const RegistrationForm = (props) => {
           expiry: moment(values?.expiry).format('x'),
           fee: values?.fee,
           feeRemark: values?.feeRemark,
-          feeTypeId: values?.feeTypeId,
+          FeeType: values.FeeType,
           mode: values?.mode,
           note: values?.note,
           participantId: participantId,

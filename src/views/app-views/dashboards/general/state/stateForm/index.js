@@ -21,35 +21,29 @@ const ClientForm = (props) => {
   const [regions, setRegions] = useState([]);
 
   useEffect(() => {
-    const getRegions = async () => {
-      const data = await regionService.getRegions();
-      if (data) {
-        setRegions(data);
-      }
-    };
+    if (mode === EDIT) fetchState();
     getRegions();
-  }, []);
-
-  useEffect(() => {
-    if (mode === EDIT) {
-      const fetchState = async () => {
-        const { id } = param;
-        const data = await stateService.getState(id);
-        if (data) {
-          form.setFieldsValue({
-            name: data.name,
-            status: data.status,
-            abbreviation: data.abbreviation,
-            regionId: data.regionId
-          });
-        } else {
-          history.replace('/app/dashboards/general/state/state-list');
-        }
-      };
-
-      fetchState();
-    }
   }, [form, mode, param, props]);
+
+  const fetchState = async () => {
+    const { id } = param;
+    const data = await stateService.getState(id);
+    if (data) {
+      form.setFieldsValue({
+        name: data.name,
+        status: data.status,
+        regionId: data.regionid,
+        abbreviation:data.abbreviation
+      });
+    } else {
+      history.replace("/app/dashboards/general/state/state-list");
+    }
+  };
+
+  const getRegions = async () => {
+    const data = await regionService.getRegions();
+    if (data) setRegions(data);
+  };
 
   const onFinish = async () => {
     setSubmitLoading(true);
@@ -57,7 +51,6 @@ const ClientForm = (props) => {
       .validateFields()
       .then(async (values) => {
         if (mode === ADD) {
-          // Checking if image exists
           console.log(values);
           const created = await stateService.createState(values);
           if (created) {
@@ -76,8 +69,8 @@ const ClientForm = (props) => {
       })
       .catch((info) => {
         setSubmitLoading(false);
-        console.log('info', info);
-        message.error('Please enter all required field ');
+        console.log("info", info);
+        message.error("Please enter all required field ");
       });
   };
 

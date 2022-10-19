@@ -151,13 +151,13 @@ const ParticipantForm = (props) => {
           gst: values.gst,
           hdfcPanValidation: values.hdfcPanValidation,
           panNumber: values.pan,
-          ParticipantType: values.ParticipantType,
+          
           participantClient: values.participantClient,
           pcc: values.pcc,
           clientId: values.clientId,
           //   parentId: values.parentId,
           relationshipManagerId: values.relationshipManagerId,
-          userType: values.userType,
+          UserType: values?.UserType,
           buyerEligibleBuisness: values.buyerEligibleBuisness,
           permanentAddress: {
             address: values.permanent_address,

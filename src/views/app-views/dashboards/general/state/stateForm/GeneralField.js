@@ -42,7 +42,7 @@ const GeneralField = ({ images, propsImages, regions }) => (
           >
             <Select style={{ width: '150px' }}>
               {regions.map((region) => (
-                <Option value={region._id}>{region.name}</Option>
+                <Option  value={region._id}>{region.name}</Option>
               ))}
             </Select>
           </Form.Item>

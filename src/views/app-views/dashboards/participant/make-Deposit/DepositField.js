@@ -193,7 +193,7 @@ const DepositField = ({
               }}
             >
 
-              
+{/*               
               <Form.Item
                 name="participantId"
                 label="Participant Id"
@@ -201,7 +201,24 @@ const DepositField = ({
               >
                 <Input placeholder={params?.id} value={params?.id} disabled />
               </Form.Item>
+ */}
 
+<Form.Item
+            name="participantId"
+            label="Participant"
+            rules={rules.participantId}
+          >
+            <Select placeholder="Participant">
+              {participants.map((participant) => (
+                <Option
+                  disabled={participant.status === "Hold"}
+                  value={participant._id}
+                >
+                  {participant.name}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
 
 
               <Form.Item

@@ -16,6 +16,7 @@ import brandService from 'services/brand';
 import brandVariantService from 'services/brandVariant.service';
 import fuelTypeService from 'services/fuelType';
 import UploadImage from './upload-images';
+import constantsService from 'services/constants';
 
 const { TabPane } = Tabs;
 
@@ -35,6 +36,7 @@ const AuctionInventoryForm = (props) => {
   const [cities, setCities] = useState([]);
   const [brands, setBrands] = useState([]);
   const [brandVariants, setBrandVariants] = useState([]);
+  const [InsuranceType, setInsuranceType] = useState([]);
   const [fuelTypes, setFuelTypes] = useState([]);
 
   const getCities = async () => {
@@ -48,6 +50,14 @@ const AuctionInventoryForm = (props) => {
     const data = await brandService.getBrands();
     if (data) {
       setBrands(data);
+    }
+  };
+
+
+  const getAuction = async () => {
+    const data = await constantsService.getAuction();
+    if (data) {
+      setInsuranceType(data);
     }
   };
 
@@ -70,6 +80,7 @@ const AuctionInventoryForm = (props) => {
     getBrands();
     getBrandVariants();
     getFuelTypes();
+    getAuction();
   }, []);
 
   useEffect(() => {
@@ -96,10 +107,12 @@ const AuctionInventoryForm = (props) => {
         // ...data.registrationInfo,
         // registrationDate: data.registrationInfo.registrationDate,
         rcAvailable: data.registrationInfo.rcAvailable,
+       
         registrationYear: data.registrationInfo.year,
         ...data.vehicleInfo,
         ...data.insuranceInfo,
-        insuranceType: data.insuranceInfo?.type,
+        insuranceType: data.insuranceInfo.type,
+        
         // insuranceExpiryDate: data.insuranceInfo?.expiryDate,
         insuranceInfo_Availability: data.insuranceInfo?.availability,
         ...data.taxInfo,
@@ -280,6 +293,7 @@ const AuctionInventoryForm = (props) => {
                 brands={brands}
                 brandVariants={brandVariants}
                 fuelTypes={fuelTypes}
+                InsuranceType={InsuranceType}
               />
             </TabPane>
             {mode === EDIT && (

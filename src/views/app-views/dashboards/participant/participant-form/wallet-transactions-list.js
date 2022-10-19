@@ -29,7 +29,7 @@ const getStockStatus = (status) => {
 
 const WalletTransactionParticipant = ({participantId}) => {
   const [list, setList] = useState([]);
-  console.log('particiapntid',participantId)
+  
   const [participants, setParticipants] = useState([]);
   const [searchBackupList, setSearchBackupList] = useState([]);
   const [participantIdTransaction,setparticipantIdTransaction] = useState('null')
@@ -37,9 +37,26 @@ const WalletTransactionParticipant = ({participantId}) => {
   const [transactions,setTransaction] =useState([])
   useEffect(() => {
     getWalletTransaction();
-    getParticipants();
+  
   }, []);
   useEffect(()=>{
+
+
+
+
+    const getParticipants = async () => {
+      const data = await participantService.getAllParticipants();
+      setParticipants(data);
+    };
+    const getTransactionsofParticipant = ()=>{
+     
+      
+          const transactions= list.filter(e => e.participant._id  === participantId);
+          console.log('transactions',transactions)
+      setTransaction(transactions)        
+      
+    }
+    getParticipants();
     getTransactionsofParticipant()
 
   },[participantId,list])
@@ -48,26 +65,14 @@ const WalletTransactionParticipant = ({participantId}) => {
     const data = await walletTransactionService.getTransactions(query);
     if (data) {
       setList(data);
-      setparticipantIdTransaction(data.participant._id)
+      setparticipantIdTransaction(data.participantId)
     
       setSearchBackupList(data);
       console.log(data, "show-data");
     }
   };
 
-  const getParticipants = async () => {
-    const data = await participantService.getAllParticipants();
-    setParticipants(data);
-  };
-  const getTransactionsofParticipant = ()=>{
-   
-    
-        const transactions= list.filter(e => e.participant._id  === participantId);
-        console.log('transactions',transactions)
-    setTransaction(transactions)        
-    
-  }
-
+ 
   const tableColumns = [
     {
       title: "Transaction Type",
@@ -180,7 +185,7 @@ const WalletTransactionParticipant = ({participantId}) => {
           {filters()}
         </Flex>
         <div className="table-responsive">
-          <Table columns={tableColumns} dataSource={transactions} rowKey="id" />
+          <Table columns={tableColumns} participantIdTransaction={participantIdTransaction} dataSource={transactions} rowKey="id" />
         </div>
       </Card>
     </>

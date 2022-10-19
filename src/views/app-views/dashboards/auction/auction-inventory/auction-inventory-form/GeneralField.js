@@ -67,7 +67,8 @@ const GeneralField = ({
   cities,
   brands,
   brandVariants,
-  fuelTypes
+  fuelTypes,
+  InsuranceType
 }) => {
   const onImportExcel = ({ fileList }) => {
     if (fileList.length === 1) setSheet(fileList[0]);
@@ -301,10 +302,20 @@ const GeneralField = ({
                   max={new Date().getFullYear()}
                 />
               </Form.Item>
-              {/* insuranceInfo */}
-              <Form.Item name="insuranceType" label="Insurance Type">
-                <Input placeholder="Insurance Type" />
-              </Form.Item>
+
+
+
+
+              <Form.Item name="insuranceType" label="insuranceType" >
+              <Select placeholder="insuranceType">
+                {InsuranceType?.InsuranceType?.map((item, index) => ( 
+                  <Option key={index} value={item}> {item} </Option>
+                ))}
+              </Select>
+            </Form.Item>
+
+
+
               <Form.Item
                 name={'insuranceExpiryDate'}
                 label="Insurance Expiry Date"
