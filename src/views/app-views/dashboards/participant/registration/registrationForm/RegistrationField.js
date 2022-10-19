@@ -259,7 +259,7 @@ const RegistrationField = ({ onFinish, feeTypes }) => {
             </Form.Item>
 
             <Form.Item
-              name="FeeType"
+              name="feeType"
               label="Fee Type"
               rules={rules.feeTypeId}
               placeholder="Fee Type"
@@ -270,7 +270,7 @@ const RegistrationField = ({ onFinish, feeTypes }) => {
                 ))}
               </Select>
             </Form.Item>
-              {/* <Form.Item name="FeeType" label="FeeType" >
+            {/* <Form.Item name="FeeType" label="FeeType" >
               <Select placeholder="FeeType">
                 {feeTypes?.FeeType?.map((item, index) => ( 
                   <Option key={index} value={item}> {item} </Option>

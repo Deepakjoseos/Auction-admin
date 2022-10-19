@@ -82,7 +82,7 @@ const RegistrationForm = (props) => {
           expiry: moment(values?.expiry).format('x'),
           fee: values?.fee,
           feeRemark: values?.feeRemark,
-          FeeType: values.FeeType,
+          feeType: values.feeType,
           mode: values?.mode,
           note: values?.note,
           participantId: participantId,

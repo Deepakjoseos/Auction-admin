@@ -44,20 +44,6 @@ const rules = {
   ]
 };
 
-const getImageUrl = async (file) => {
-  const formData = new FormData();
-  formData.append('files', file.originFileObj);
-  formData.append('imageFor', 'general');
-
-  const urls = await fileManagerService.uploadImages(formData);
-
-  if (urls) {
-    return urls[0];
-  }
-
-  return '';
-};
-
 const GeneralField = ({
   vehicleTypes,
   regions,
@@ -72,7 +58,7 @@ const GeneralField = ({
   // const [vehicleType, setVehicleType] = useState([]);
   // const [clients, setClients] = useState([]);\
   const [images, setImages] = useState([]);
-  
+
   useEffect(() => {
     setImages([
       {
@@ -86,7 +72,9 @@ const GeneralField = ({
 
   const onImportImage = async ({ fileList }) => {
     if (fileList.length > 0) {
-      const imageUrl = await getImageUrl(fileList[fileList.length - 1]);
+      const imageUrl = await fileManagerService.getImageUrl(
+        fileList[fileList.length - 1].originFileObj
+      );
       setImageUrl(imageUrl);
     }
   };

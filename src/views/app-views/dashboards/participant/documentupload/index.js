@@ -36,20 +36,6 @@ function getBase64(file) {
   });
 }
 
-const getImageUrl = async (file) => {
-  const formData = new FormData();
-  formData.append('files', file);
-  formData.append('imageFor', 'general');
-
-  const urls = await fileManagerService.uploadImages(formData);
-
-  if (urls) {
-    return urls[0];
-  }
-
-  return '';
-};
-
 function validURL(str) {
   var pattern = new RegExp(
     '^(https?:\\/\\/)?' + // protocol
@@ -64,41 +50,6 @@ function validURL(str) {
 }
 
 const DocumentForm = (props) => {
-  // const history = useHistory();
-
-  // const [form] = Form.useForm();
-  // const [submitLoading, setSubmitLoading] = useState(false);
-  // const [sheet, setSheet] = useState();
-
-  // const onFinish = async (e) => {
-  //   e.preventDefault();
-  //   setSubmitLoading(true);
-  //   if (sheet) {
-  //     const formData = new FormData();
-  //     formData.append('file', sheet.originFileObj);
-  //     setSubmitLoading(true);
-
-  //     form
-  //       .validateFields()
-  //       .then(async (values) => {
-  //         const uploaded = await participantService.uploadParticipant(
-  //           participantId,
-  //           formData
-  //         );
-  //         if (uploaded) {
-  //           message.success(`Uploaded Participant.`);
-  //           history.goBack();
-  //           setSubmitLoading(false);
-  //         }
-  //       })
-  //       .catch((info) => {
-  //         setSubmitLoading(false);
-  //         console.log('info', info);
-  //         message.error('Please enter all required field.');
-  //       });
-  //   } else message.error('Please upload file.');
-  // };
-
   const { participantId } = props;
   const history = useHistory();
   const [docs, setDocs] = useState([]);
@@ -144,8 +95,14 @@ const DocumentForm = (props) => {
 
     for (const doc of docs) {
       let url = null;
+
+      if (!doc.title || !doc.description) {
+        message.error('Please fill all the documents required fields');
+        return;
+      }
+
       if (!validURL(doc.url)) {
-        url = await getImageUrl(doc.originFileObj);
+        url = await fileManagerService.getImageUrl(doc.originFileObj);
       }
 
       const data = {
