@@ -2,6 +2,7 @@ import fetch from 'auth/FetchInterceptor'
 
 const carService = {}
 const apiRoute = '/car'
+const apiRouteVariant = '/car_variant';
 
 carService.getCars = async function () {
   try {
@@ -70,23 +71,23 @@ carService.editCar = async function (id, data) {
 carService.createCarVariant = async function (carId, data) {
   try {
     const res = await fetch({
-      url: `${apiRoute}/variant/${carId}`,
+      url: `${apiRouteVariant}/add/${carId}`,
       method: 'post',
-      data: data,
-    })
+      data: data
+    });
     return res
   } catch (err) {
     console.log(err, 'show-err')
   }
 }
 
-carService.updateCarVariant = async function (carId, carVariantId, data) {
+carService.updateCarVariant = async function (carId, data) {
   try {
     const res = await fetch({
-      url: `${apiRoute}/variant/${carId}/${carVariantId}`,
+      url: `${apiRouteVariant}/update/${carId}`,
       method: 'put',
-      data: data,
-    })
+      data: data
+    });
     return res
   } catch (err) {
     console.log(err, 'show-err')

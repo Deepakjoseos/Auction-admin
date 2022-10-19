@@ -10,18 +10,19 @@ import {
   Select,
   Space,
   Tabs,
-  Upload,
-} from 'antd'
-import { ImageSvg } from 'assets/svg/icon'
-import CustomIcon from 'components/util-components/CustomIcon'
-import useUpload from 'hooks/useUpload'
-import React, { useEffect, useState } from 'react'
-import { multipleImageUpload } from 'utils/s3/s3ImageUploader'
+  Upload
+} from 'antd';
+import { ImageSvg } from 'assets/svg/icon';
+import CustomIcon from 'components/util-components/CustomIcon';
+import useUpload from 'hooks/useUpload';
+import React, { useEffect, useState } from 'react';
+import { multipleImageUpload } from 'utils/s3/s3ImageUploader';
 // import productTemplateService from 'services/productTemplate'
-import { useHistory, useParams } from 'react-router-dom'
-import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
-import ImageDescription from '../../../../../../components/shared-components/ImageDescription'
-import carService from 'services/car'
+import { useHistory, useParams } from 'react-router-dom';
+import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import ImageDescription from '../../../../../../components/shared-components/ImageDescription';
+import carService from 'services/car';
+import fileManagerService from 'services/FileManager';
 //   import attributeService from 'services/attribute'
 
 const VariantsForm = ({
@@ -30,51 +31,51 @@ const VariantsForm = ({
   setOpenVariantsForm,
   selectedVariant,
   setSelectedVariant,
-  refreshData,
+  refreshData
 }) => {
-  const { Option } = Select
-  const history = useHistory()
-  const [submitLoading, setSubmitLoading] = useState(false)
-  const [images, setImages] = useState([])
-  const [attributes, setAttributes] = useState([])
-  const [selectedAttributeValues, setSelectedAttributeValues] = useState([])
+  const { Option } = Select;
+  const history = useHistory();
+  const [submitLoading, setSubmitLoading] = useState(false);
+  const [images, setImages] = useState([]);
+  const [attributes, setAttributes] = useState([]);
+  const [selectedAttributeValues, setSelectedAttributeValues] = useState([]);
 
-  const { id } = useParams()
+  const { id } = useParams();
 
   const {
     fileList: fileListImages,
     beforeUpload: beforeUploadImages,
     onChange: onChangeImages,
     onRemove: onRemoveImages,
-    setFileList: setFileListImages,
-  } = useUpload(1, 'multiple')
+    setFileList: setFileListImages
+  } = useUpload(1, 'multiple');
 
   const rules = {
     name: [
       {
         required: 'yes',
-        message: 'Required',
-      },
+        message: 'Required'
+      }
     ],
     price: [
       {
         required: 'yes',
-        message: 'Required',
-      },
+        message: 'Required'
+      }
     ],
     quantity: [
       {
         required: 'yes',
-        message: 'Required',
-      },
-    ],
-  }
+        message: 'Required'
+      }
+    ]
+  };
 
   useEffect(() => {
     if (selectedVariant) {
-      console.log(selectedVariant.description, 'desc')
+      console.log(selectedVariant.description, 'desc');
       form.setFieldsValue({
-        ...selectedVariant,
+        ...selectedVariant
         //   description: selectedVariant.description,
         // name: selectedVariant.name,
         // price: selectedVariant.price,
@@ -82,7 +83,7 @@ const VariantsForm = ({
         //   attributes: selectedVariant.attributes.map((attr) => {
         //     return { attributeId: attr.id, valueId: attr.value.id }
         //   }),
-      })
+      });
 
       //   onAttributeChange()
 
@@ -100,98 +101,102 @@ const VariantsForm = ({
         return {
           uid: i + Math.random() * 10,
           url: cur?.image,
-          description: cur?.description,
-        }
-      })
+          description: cur?.description
+        };
+      });
 
-      setImages(images)
+      setImages(images);
 
-      setFileListImages(images)
+      setFileListImages(images);
     }
-  }, [selectedVariant])
+  }, [selectedVariant]);
 
   useEffect(() => {
-    console.log(form.getFieldValue('attributes'), 'plss')
-  }, [form])
+    console.log(form.getFieldValue('attributes'), 'plss');
+  }, [form]);
 
   const propsImages = {
     multiple: true,
     beforeUpload: beforeUploadImages,
     onRemove: onRemoveImages,
     onChange: onChangeImages,
-    fileList: fileListImages,
-  }
+    fileList: fileListImages
+  };
 
   useEffect(() => {
-    console.log(fileListImages, 'hey-me')
-    setImages(fileListImages)
-  }, [fileListImages])
+    console.log(fileListImages, 'hey-me');
+    setImages(fileListImages);
+  }, [fileListImages]);
 
   const onFinish = async () => {
-    setSubmitLoading(true)
+    setSubmitLoading(true);
     form
       .validateFields()
       .then(async (values) => {
-        console.log(values, 'values')
+        console.log(values, 'values');
 
         if (selectedVariant === null) {
           // Checking if image exists
           if (images.length !== 0 && images !== null) {
-            const imgValues = await multipleImageUpload(
-              images,
-              'car-variant',
-              'descriptionRequired'
-            )
+            // const imgValues = await multipleImageUpload(
+            //   images,
+            //   'car-variant',
+            //   'descriptionRequired'
+            // );
+            const mutatedImage = images.map((img) => img.originFileObj);
+            const imgValues = await fileManagerService.getImagesUrl(
+              mutatedImage
+            );
 
-            values.images = imgValues
+            values.images = imgValues;
 
-            const created = await carService.createCarVariant(id, values)
+            const created = await carService.createCarVariant(id, values);
             if (created) {
-              message.success(`Created Variant Success`)
-              setOpenVariantsForm(false)
-              setSelectedVariant(null)
-              refreshData()
-              onFormModalClose()
+              message.success(`Created Variant Success`);
+              setOpenVariantsForm(false);
+              setSelectedVariant(null);
+              refreshData();
+              onFormModalClose();
             }
           } else {
-            message.error('Please upload image')
+            message.error('Please upload image');
           }
         }
         if (selectedVariant) {
           // Checking if image exists
           if (images.length !== 0 && images !== null) {
-            console.log('images', images)
-            const imgValues = await multipleImageUpload(
-              images,
-              'car-variant',
-              'descriptionRequired'
-            )
-            values.images = imgValues
+            // console.log('images', images);
+            // const imgValues = await multipleImageUpload(
+            //   images,
+            //   'car-variant',
+            //   'descriptionRequired'
+            // );
+            const mutatedImage = images.map((img) => img.originFileObj);
+            const imgValues = await fileManagerService.getImagesUrl(
+              mutatedImage
+            );
+            values.images = imgValues;
 
-            const edited = await carService.updateCarVariant(
-              id,
-              selectedVariant.id,
-              values
-            )
+            const edited = await carService.updateCarVariant(id, values);
             if (edited) {
-              message.success(`Edited Variant Success`)
-              setOpenVariantsForm(false)
-              setSelectedVariant(null)
-              refreshData()
-              onFormModalClose()
+              message.success(`Edited Variant Success`);
+              setOpenVariantsForm(false);
+              setSelectedVariant(null);
+              refreshData();
+              onFormModalClose();
             }
           } else {
-            message.error('Please upload image')
+            message.error('Please upload image');
           }
         }
-        setSubmitLoading(false)
+        setSubmitLoading(false);
       })
       .catch((info) => {
-        setSubmitLoading(false)
-        console.log('info', info)
-        message.error('Please enter all required field')
-      })
-  }
+        setSubmitLoading(false);
+        console.log('info', info);
+        message.error('Please enter all required field');
+      });
+  };
 
   // useEffect(() => {
   //   onAttributeChange()
@@ -237,15 +242,15 @@ const VariantsForm = ({
   //   }
 
   const onFormModalClose = () => {
-    setOpenVariantsForm(false)
+    setOpenVariantsForm(false);
     // window.location.reload()
-    setImages([])
-    setAttributes([])
-    setSelectedAttributeValues([])
-    form.resetFields()
-    setFileListImages([])
-    setSelectedVariant(null)
-  }
+    setImages([]);
+    setAttributes([]);
+    setSelectedAttributeValues([]);
+    form.resetFields();
+    setFileListImages([]);
+    setSelectedVariant(null);
+  };
 
   return (
     <Drawer
@@ -259,7 +264,7 @@ const VariantsForm = ({
       footer={
         <div
           style={{
-            textAlign: 'right',
+            textAlign: 'right'
           }}
         >
           <Button
@@ -907,7 +912,7 @@ const VariantsForm = ({
         </Tabs>
       </Form>
     </Drawer>
-  )
-}
+  );
+};
 
-export default VariantsForm
+export default VariantsForm;
