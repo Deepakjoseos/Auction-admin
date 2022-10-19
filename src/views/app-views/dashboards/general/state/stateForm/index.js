@@ -28,15 +28,16 @@ const ClientForm = (props) => {
   const fetchState = async () => {
     const { id } = param;
     const data = await stateService.getState(id);
+    console.log(data);
     if (data) {
       form.setFieldsValue({
         name: data.name,
         status: data.status,
-        regionId: data.regionid,
-        abbreviation:data.abbreviation
+        regionId: data.regionId,
+        abbreviation: data.abbreviation
       });
     } else {
-      history.replace("/app/dashboards/general/state/state-list");
+      history.replace('/app/dashboards/general/state/state-list');
     }
   };
 
@@ -51,7 +52,6 @@ const ClientForm = (props) => {
       .validateFields()
       .then(async (values) => {
         if (mode === ADD) {
-          console.log(values);
           const created = await stateService.createState(values);
           if (created) {
             message.success(`Created ${values.name} to State list`);
@@ -69,8 +69,8 @@ const ClientForm = (props) => {
       })
       .catch((info) => {
         setSubmitLoading(false);
-        console.log("info", info);
-        message.error("Please enter all required field ");
+        console.log('info', info);
+        message.error('Please enter all required field ');
       });
   };
 
