@@ -66,9 +66,15 @@ const GeneralField = ({ mode, employeeTypes }) => (
             <Form.Item name="email" label="Email" rules={rules.email}>
               <Input placeholder="Email" type="email" />
             </Form.Item>
-            <Form.Item name="password" label="Password" rules={rules.password}>
-              <Input.Password />
-            </Form.Item>
+            {mode === 'ADD' && (
+              <Form.Item
+                name="password"
+                label="Password"
+                rules={rules.password}
+              >
+                <Input.Password />
+              </Form.Item>
+            )}
             <Form.Item name="employeeTypeId" label="Employee Type">
               <Select placeholder="Employee Type">
                 {employeeTypes.map((employeeType) => (
@@ -76,6 +82,12 @@ const GeneralField = ({ mode, employeeTypes }) => (
                     {employeeType.name}
                   </Option>
                 ))}
+              </Select>
+            </Form.Item>
+            <Form.Item name="status" label="Status" rules={rules.required}>
+              <Select placeholder="Status">
+                <Option value="Active">Active</Option>
+                <Option value="Hold">Hold</Option>
               </Select>
             </Form.Item>
             {/* <Form.Item

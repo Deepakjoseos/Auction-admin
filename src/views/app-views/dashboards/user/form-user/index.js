@@ -28,7 +28,25 @@ const UserForm = (props) => {
     }
   };
 
+  const fetchUser = async () => {
+    const data = await authAdminService.getSubAdminById(param.id);
+    if (data) {
+      form.setFieldsValue({
+        name: data.name,
+        contact: data.contact,
+        email: data.email,
+        employeeTypeId: data.employeeTypeId,
+        status: data.status
+      });
+    } else {
+      history.goBack();
+    }
+  };
+
   useEffect(() => {
+    if (mode === EDIT) {
+      fetchUser();
+    }
     getEmployeeTypes();
   }, []);
 
@@ -38,26 +56,13 @@ const UserForm = (props) => {
     form
       .validateFields()
       .then(async (values) => {
-        const sendingValues =
-          mode === ADD
-            ? {
-                // firstName: values?.firstName,
-                // middleName: values?.middleName,
-                // lastName: values?.lastName,
-                // contact: values?.contact,
-                // type: values?.type,
-                // email: values?.email,
-                // password: values?.password,
-                name: values?.name,
-                email: values?.email,
-                password: values?.password,
-                contact: values?.contact,
-                employeeTypeId: values?.employeeTypeId
-              }
-            : {
-                price: Math.round(parseFloat(values.price) * 100) / 100,
-                status: values.status
-              };
+        const sendingValues = {
+          name: values?.name,
+          email: values?.email,
+          password: values?.password,
+          contact: values?.contact,
+          employeeTypeId: values?.employeeTypeId
+        };
 
         console.log(sendingValues, 'values=====');
 
@@ -70,14 +75,15 @@ const UserForm = (props) => {
           }
         }
         if (mode === EDIT) {
-          //   const edited = await lotteryTypeService.editLotteryType(
-          //     param.id,
-          //     sendingValues
-          //   );
-          //   if (edited) {
-          //     message.success(`Edited Lottery Group`);
-          //     history.goBack();
-          //   }
+          const created = await authAdminService.editUser(
+            sendingValues,
+            param.id
+          );
+          if (created) {
+            console.log(created);
+            message.success(`Edites user ${values?.name}`);
+            history.goBack();
+          }
         }
         setSubmitLoading(false);
       })

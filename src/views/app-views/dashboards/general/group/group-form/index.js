@@ -89,9 +89,9 @@ const GroupForm = (props) => {
             param?.id,
             membersEdited
           );
-          const { items, ...newValues } = values;
+          const { items, sellerName, ...newValues } = values;
 
-          console.log(newValues);
+          console.log(newValues, 'newValues EDIT');
 
           edited = await groupService.updateGroup(param?.id, newValues);
           if (edited) {

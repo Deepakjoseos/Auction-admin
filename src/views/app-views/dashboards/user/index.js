@@ -10,7 +10,7 @@ const User = (props) => {
     <Switch>
       <Redirect exact from={`${match.url}`} to={`${match.url}/user-list`} />
       <Route path={`${match.url}/add-user`} component={AddUser} />
-      <Route path={`${match.url}/edit-user`} component={EditUser} />
+      <Route path={`${match.url}/edit-user/:id`} component={EditUser} />
       <Route path={`${match.url}/user-list`} component={UserList} />
     </Switch>
   );

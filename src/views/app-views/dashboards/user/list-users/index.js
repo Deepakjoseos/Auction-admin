@@ -86,7 +86,7 @@ const UserList = () => {
           <span className="ml-2">View Details</span>
         </Flex>
       </Menu.Item>
-      {/* <Menu.Item
+      <Menu.Item
         onClick={() => {
           setIsEditRoleFormOpen(true);
           setSelectedUserId(row._id);
@@ -96,7 +96,7 @@ const UserList = () => {
           <EyeOutlined />
           <span className="ml-2">Edit Role</span>
         </Flex>
-      </Menu.Item> */}
+      </Menu.Item>
     </Menu>
   );
 
