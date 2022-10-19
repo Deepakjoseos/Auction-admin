@@ -15,6 +15,8 @@ import { useHistory } from 'react-router-dom';
 import participantService from 'services/Participant';
 import { PlusOutlined } from '@ant-design/icons';
 import fileManagerService from 'services/FileManager';
+import { ImageSvg } from 'assets/svg/icon';
+import CustomIcon from 'components/util-components/CustomIcon';
 
 const { Option } = Select;
 
@@ -216,8 +218,9 @@ const DocumentForm = (props) => {
             onChange={handleChange}
             multiple
             accept="image/png, image/jpeg, image/jpg"
+            beforeUpload={() => false}
           >
-            {uploadButton}
+            <CustomIcon className="display-3" svg={ImageSvg} />
             {previewVisible && (
               <Modal
                 visible={previewVisible}

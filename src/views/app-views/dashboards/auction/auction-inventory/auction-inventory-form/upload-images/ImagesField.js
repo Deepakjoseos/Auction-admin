@@ -86,6 +86,7 @@ const ImagesField = ({ setImages, images }) => {
             // onRemove={(file) => handleRemove(file, 'general')}
             multiple
             accept="image/png, image/jpeg, image/jpg"
+            beforeUpload={() => false}
           >
             {uploadButton}
             <Modal
@@ -107,6 +108,7 @@ const ImagesField = ({ setImages, images }) => {
             onChange={({ fileList }) => handleChange(fileList, 'interior')}
             multiple
             accept="image/png, image/jpeg, image/jpg"
+            beforeUpload={() => false}
           >
             {uploadButton}
             <Modal
@@ -129,6 +131,7 @@ const ImagesField = ({ setImages, images }) => {
             onChange={({ fileList }) => handleChange(fileList, 'exterior')}
             multiple
             accept="image/png, image/jpeg, image/jpg"
+            beforeUpload={() => false}
           >
             {uploadButton}
             <Modal

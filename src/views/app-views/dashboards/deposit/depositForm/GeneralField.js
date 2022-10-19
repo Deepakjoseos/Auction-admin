@@ -125,7 +125,7 @@ const GeneralField = ({ participants, paymentModes }) => (
             <InputNumber min={0} defaultValue={0.0} />
           </Form.Item>
           <Form.Item name="remark" label="Remark" rules={rules.remark}>
-            <Input placeholder="Remark" defaultValue="No Remark" />
+            <Input placeholder="Remark" />
           </Form.Item>
           <Form.Item
             name="businessType"

@@ -83,7 +83,8 @@ const DepositForm = (props) => {
         name="advanced_search"
         className="ant-advanced-search-form"
         initialValues={{
-          status: "Hold",
+          status: 'Hold',
+          remark: 'No Remark'
         }}
       >
         <PageHeaderAlt className="border-bottom" overlap>
@@ -95,12 +96,12 @@ const DepositForm = (props) => {
               alignItems="center"
             >
               <h2 className="mb-3">
-                {mode === "MAKE" ? "Make Deposit" : `Edit City`}{" "}
+                {mode === 'MAKE' ? 'Make Deposit' : `Edit City`}{' '}
               </h2>
               <div className="mb-3">
                 <Button
                   className="mr-2"
-                  onClick={() => history.push("/app/dashboards/city/city-list")}
+                  onClick={() => history.push('/app/dashboards/city/city-list')}
                 >
                   Discard
                 </Button>
@@ -110,7 +111,7 @@ const DepositForm = (props) => {
                   htmlType="submit"
                   loading={submitLoading}
                 >
-                  {mode === "MAKE" ? "Make" : `Save`}
+                  {mode === 'MAKE' ? 'Make' : `Save`}
                 </Button>
               </div>
             </Flex>
