@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import {
   Input,
   Row,
@@ -12,138 +12,142 @@ import {
   Space,
   Button,
   Image,
-  Tag,
-} from 'antd'
-import { ImageSvg } from 'assets/svg/icon'
-import CustomIcon from 'components/util-components/CustomIcon'
-import Editor from 'components/shared-components/Editor'
-import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
-import { TweenOneGroup } from 'rc-tween-one'
+  Tag
+} from 'antd';
+import { ImageSvg } from 'assets/svg/icon';
+import CustomIcon from 'components/util-components/CustomIcon';
+import Editor from 'components/shared-components/Editor';
+import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import { TweenOneGroup } from 'rc-tween-one';
 
 // const { Dragger } = Upload
-const { Option } = Select
+const { Option } = Select;
 
-const SITE_NAME = process.env.REACT_APP_SITE_NAME
+const SITE_NAME = process.env.REACT_APP_SITE_NAME;
 
 const rules = {
   name: [
     {
       required: true,
-      message: 'Required',
-    },
+      message: 'Required'
+    }
   ],
   email: [
     {
       required: true,
-      message: 'Required',
-    },
+      message: 'Required'
+    }
   ],
   password: [
     {
       required: true,
-      message: 'Required',
-    },
+      message: 'Required'
+    }
   ],
   contact: [
     {
       required: true,
       message: 'Required',
-    },
+      min: 10,
+      max: 10
+    }
   ],
 
   acquiredById: [
     {
       required: true,
-      message: 'Required',
-    },
+      message: 'Required'
+    }
   ],
   contactPerson: [
     {
       required: true,
-      message: 'Required',
-    },
+      message: 'Required'
+    }
   ],
   gst: [
     {
       required: true,
-      message: 'Required',
-    },
+      message: 'Required'
+    }
   ],
 
   hdfcPanValidation: [
     {
       required: true,
-      message: 'Required',
-    },
+      message: 'Required'
+    }
   ],
   pan: [
     {
       required: true,
-      message: 'Required',
-    },
+      message: 'Required'
+    }
   ],
 
   parentId: [
     {
       required: true,
-      message: 'Required',
-    },
+      message: 'Required'
+    }
   ],
   participantType: [
     {
       required: true,
-      message: 'Required',
-    },
+      message: 'Required'
+    }
   ],
   pcc: [
     {
       required: true,
-      message: 'Required',
-    },
+      message: 'Required'
+    }
   ],
   phone: [
     {
       required: true,
       message: 'Required',
-    },
+      min: 10,
+      max: 10
+    }
   ],
 
   address: [
     {
       required: true,
-      message: 'Required',
-    },
+      message: 'Required'
+    }
   ],
   city: [
     {
       required: true,
-      message: 'Required',
-    },
+      message: 'Required'
+    }
   ],
   pincode: [
     {
       required: true,
-      message: 'Required',
-    },
+      message: 'Required'
+    }
   ],
   state: [
     {
       required: true,
-      message: 'Required',
-    },
+      message: 'Required'
+    }
   ],
   relationshipManagerId: [
     {
       required: true,
-      message: 'Required',
-    },
+      message: 'Required'
+    }
   ],
- 
+
   status: [
     {
       required: true,
-      message: 'Required',
-    },
+      message: 'Required'
+    }
   ],
   //   buyerEligibleBuisness: [
   //     {
@@ -154,10 +158,10 @@ const rules = {
   participantClient: [
     {
       required: true,
-      message: 'Required',
-    },
-  ],
-}
+      message: 'Required'
+    }
+  ]
+};
 
 const GeneralField = ({
   subAdmins,
@@ -168,9 +172,10 @@ const GeneralField = ({
   isBuyer,
   clients,
   buyerEligibleBuisness,
-  usertype
+  usertype,
+  states
 }) => {
-  const [image, setImage] = useState(false)
+  const [image, setImage] = useState(false);
 
   return (
     <Row gutter={16}>
@@ -241,36 +246,40 @@ const GeneralField = ({
               <Option value={true}>Yes</Option>
             </Select>
           </Form.Item>
-           <Form.Item name="UserType" label="userType" >
-              <Select placeholder="userType">
-                {usertype?.UserType?.map((item, index) => ( 
-                  <Option key={index} value={item}> {item} </Option>
-                ))}
-              </Select>
-            </Form.Item>
+          <Form.Item name="UserType" label="userType">
+            <Select placeholder="userType">
+              {usertype?.UserType?.map((item, index) => (
+                <Option key={index} value={item}>
+                  {' '}
+                  {item}{' '}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
 
+          <Form.Item name="ParticipantType" label="ParticipantType">
+            <Select placeholder="ParticipantType">
+              {participant?.ParticipantType?.map((item, index) => (
+                <Option key={index} value={item}>
+                  {' '}
+                  {item}{' '}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
 
-          <Form.Item name="ParticipantType" label="ParticipantType" >
-              <Select placeholder="ParticipantType">
-                {participant?.ParticipantType?.map((item, index) => ( 
-                  <Option key={index} value={item}> {item} </Option>
-                ))}
-              </Select>
-            </Form.Item>
-
-
-           
-            
-            <Form.Item name="BuyerEligibleBuisness" label="buyerEligibleBuisness" >
-              <Select placeholder="buyerEligibleBuisness">
-                {buyerEligibleBuisness?.BuyerEligibleBuisness?.map((item, index) => ( 
-                  <Option key={index} value={item}> {item} </Option>
-                ))}
-              </Select>
-            </Form.Item>
-            
-         
-       
+          <Form.Item name="BuyerEligibleBuisness" label="buyerEligibleBuisness">
+            <Select placeholder="buyerEligibleBuisness">
+              {buyerEligibleBuisness?.BuyerEligibleBuisness?.map(
+                (item, index) => (
+                  <Option key={index} value={item}>
+                    {' '}
+                    {item}{' '}
+                  </Option>
+                )
+              )}
+            </Select>
+          </Form.Item>
 
           {mode === 'EDIT' && (
             <Form.Item name="status" label="Status" rules={rules.status}>
@@ -312,7 +321,14 @@ const GeneralField = ({
             <Input placeholder="Pincode" />
           </Form.Item>
           <Form.Item name="permanent_state" label="State" rules={rules.state}>
-            <Input placeholder="State" />
+            <Select placeholder="State">
+              {states.map((item, index) => (
+                <Option key={index} value={item.name}>
+                  {' '}
+                  {item.name}{' '}
+                </Option>
+              ))}
+            </Select>
           </Form.Item>
         </Card>
         <Card title="Office Address">
@@ -334,12 +350,19 @@ const GeneralField = ({
             <Input placeholder="Pincode" />
           </Form.Item>
           <Form.Item name="office_state" label="State" rules={rules.state}>
-            <Input placeholder="State" />
+            <Select placeholder="State">
+              {states.map((item, index) => (
+                <Option key={index} value={item.name}>
+                  {' '}
+                  {item.name}{' '}
+                </Option>
+              ))}
+            </Select>
           </Form.Item>
         </Card>
       </Col>
     </Row>
-  )
-}
+  );
+};
 
-export default GeneralField
+export default GeneralField;

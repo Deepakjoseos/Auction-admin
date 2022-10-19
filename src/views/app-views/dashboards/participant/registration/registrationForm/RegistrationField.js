@@ -143,7 +143,7 @@ const rules = {
 //   return null
 // }
 
-const RegistrationField = ({ onFinish, feeTypes }) => {
+const RegistrationField = ({ onFinish, feeTypes, status }) => {
   // const initialValues = {
   //     participantId: currentParticipant._id,
 
@@ -211,8 +211,9 @@ const RegistrationField = ({ onFinish, feeTypes }) => {
               placeholder="Status"
             >
               <Select>
-                <Option value="Verified">Verified</Option>
-                <Option value="Evaluating">Evaluating</Option>
+                {status.map((status) => (
+                  <Option value={status}>{status}</Option>
+                ))}
               </Select>
             </Form.Item>
             <Form.Item
@@ -265,7 +266,7 @@ const RegistrationField = ({ onFinish, feeTypes }) => {
               placeholder="Fee Type"
             >
               <Select>
-                {feeTypes?.FeeType?.map((feeType) => (
+                {feeTypes.map((feeType) => (
                   <Option value={feeType}>{feeType}</Option>
                 ))}
               </Select>

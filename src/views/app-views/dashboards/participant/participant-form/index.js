@@ -21,6 +21,7 @@ import WalletFieldForm from '../wallet';
 import DocumentFieldForm from '../documentupload';
 import constantsService from 'services/constants';
 import { set } from 'lodash';
+import stateService from 'services/state';
 
 const { TabPane } = Tabs;
 
@@ -45,6 +46,7 @@ const ParticipantForm = (props) => {
   const [participant, setParticipant] = useState([]);
   const [usertype, setUsertype] = useState([]);
   const [buyerEligibleBuisness, setBuyerEligibleBuisness] = useState([]);
+  const [states, setStates] = useState([]);
 
   //   const [editorRender, setEditorRender] = useState(false)
   const getAllParticipants = async () => {
@@ -77,6 +79,13 @@ const ParticipantForm = (props) => {
     }
   };
 
+  const getAllStates = async () => {
+    const data = await stateService.getStates();
+    if (data) {
+      setStates(data);
+    }
+  };
+
   const fetchParticipantById = async () => {
     const { id } = param;
     const data = await participantService.getParticipantById(id);
@@ -94,12 +103,12 @@ const ParticipantForm = (props) => {
         // parentId: data.parentId,
         hdfcPanValidation: data.hdfcPanValidation,
         pan: data.panNumber,
-        participantType: data.participantType,
+        ParticipantType: data.participantType,
         pcc: data.pcc,
         relationshipManagerId: data.relationshipManager,
-        UserType: data.UserType,
-        buyerEligibleBuisness: data.buyerEligibleBuisness,
-        participantClient: data.participantClient,
+        UserType: data.userType,
+        BuyerEligibleBuisness: data.buyerEligibleBuisness,
+        ParticipantClient: data.participantClient,
 
         permanent_address: data.permanentAddress.address,
         permanent_city: data.permanentAddress.city,
@@ -128,12 +137,11 @@ const ParticipantForm = (props) => {
     getParticipant();
     getAllParticipants();
     getAllClients();
+    getAllStates();
     if (mode === EDIT) {
       fetchParticipantById();
     }
   }, [mode]);
-
-  console.log(user, 'sendingValues');
 
   const onFinish = async () => {
     setSubmitLoading(true);
@@ -151,14 +159,14 @@ const ParticipantForm = (props) => {
           gst: values.gst,
           hdfcPanValidation: values.hdfcPanValidation,
           panNumber: values.pan,
-          
+          participantType: values.ParticipantType,
           participantClient: values.participantClient,
           pcc: values.pcc,
           clientId: values.clientId,
           //   parentId: values.parentId,
           relationshipManagerId: values.relationshipManagerId,
-          UserType: values?.UserType,
-          buyerEligibleBuisness: values.buyerEligibleBuisness,
+          userType: values?.UserType,
+          buyerEligibleBuisness: values.BuyerEligibleBuisness,
           permanentAddress: {
             address: values.permanent_address,
             city: values.permanent_city,
@@ -268,6 +276,7 @@ const ParticipantForm = (props) => {
                 participant={participant}
                 buyerEligibleBuisness={buyerEligibleBuisness}
                 usertype={usertype}
+                states={states}
               />
             </TabPane>
             {id && (

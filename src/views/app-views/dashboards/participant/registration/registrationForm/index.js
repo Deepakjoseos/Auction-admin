@@ -36,6 +36,7 @@ const RegistrationForm = (props) => {
   const [registrationsList, setRegistrationsList] = useState([]);
   const [searchBackupList, setSearchBackupList] = useState([]);
   const [feeTypes, setFeeType] = useState([]);
+  const [status, setStatus] = useState([]);
 
   useEffect(() => {
     // getAllRegistrations();
@@ -51,12 +52,13 @@ const RegistrationForm = (props) => {
   //     console.log(data, 'feetypes');
   //   }
   // };
-  const getRegistration =async () => {
-    const data =await constantsService.getRegistrationConstant();
+  const getRegistration = async () => {
+    const data = await constantsService.getRegistrationConstant();
     if (data) {
-      setFeeType(data)
+      setFeeType(data.FeeType);
+      setStatus(data.paymentStatus);
     }
-  }
+  };
 
   // const getAllRegistrations = async () => {
   //   const data = await registrationService.getRegistrations();
@@ -87,7 +89,7 @@ const RegistrationForm = (props) => {
           note: values?.note,
           participantId: participantId,
 
-          paymentDate: moment(values?.paymentDate).format(),
+          paymentDate: moment(values?.paymentDate).format('x'),
 
           payment: {
             bankName: values.bankName,
@@ -268,9 +270,6 @@ const RegistrationForm = (props) => {
         form={form}
         name="advanced_search"
         className="ant-advanced-search-form"
-        initialValues={{
-          status: 'Hold'
-        }}
       >
         {/* <PageHeaderAlt className="border-bottom" overlap>
           <div className="container">
@@ -304,7 +303,7 @@ const RegistrationForm = (props) => {
         <div className="container">
           {/* <Tabs defaultActiveKey="1" style={{ marginTop: 30 }}> */}
           {/* <TabPane tab="Generalfaefaef" key="1"> */}
-          <RegistrationField feeTypes={feeTypes} onFinish={onFinish} />
+          <RegistrationField feeTypes={feeTypes} status={status} onFinish={onFinish} />
           {/* </TabPane> */}
           {/* </Tabs> */}
         </div>

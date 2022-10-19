@@ -26,11 +26,11 @@ constantsService.getRegistrationConstant = async function () {
     });
     const paymentModes = Object.values(res.data.PaymentMode).map((val) => val);
     const FeeType = Object.values(res.data.FeeType).map((val) => val);
-    
+
     const paymentStatus = Object.values(res.data.PaymentStatus).map(
       (val) => val
     );
-    return { paymentModes, paymentStatus,FeeType };
+    return { paymentModes, paymentStatus, FeeType };
   } catch (err) {
     console.log(err, 'show-err');
   }
@@ -86,17 +86,11 @@ constantsService.getAuction = async function () {
     const InsuranceType = Object.values(res.data.InsuranceType).map(
       (val) => val
     );
-    return {InsuranceType};
+    return { InsuranceType };
   } catch (err) {
     console.log(err, 'show-err');
   }
 };
-
-
-
-
-
-
 
 constantsService.getFeeTypes = async function () {
   try {
