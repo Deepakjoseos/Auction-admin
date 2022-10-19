@@ -32,26 +32,38 @@ const rules = {
   ]
 };
 
-const UpdateParticipantForm = ({ participants, group }) => {
-  const [availableMembers, setAvailableMembers] = useState(group.participants);
-  const [usedMembers, setUsedMembers] = useState(group.participants);
+let addSection = null;
 
-  const itemInputs = useMemo(
-    () =>
-      group.participants.map((participant) => {
-        return {
-          memberName: participant.member.name,
-          memberId: participant.member._id,
-          addedBy: participant.addedBy.name,
-          remark: participant.remark,
-          date: new Date(Number(participant.timestamp)).toDateString()
-        };
-      }),
-    []
-  );
+const UpdateParticipantForm = ({ participants, group }) => {
+  console.log(participants, 'participants');
+  let groupParticipants = [];
+  if (group?.participants) {
+    groupParticipants = group.participants;
+  }
+  const [availableMembers, setAvailableMembers] = useState(participants);
+  const [usedMembers, setUsedMembers] = useState(groupParticipants);
+
+  const itemInputs = useMemo(() => {
+    if (!group?.participants) {
+      return [];
+    }
+    group?.participants.map((participant) => {
+      return {
+        memberName: participant.member.name,
+        memberId: participant.member._id,
+        addedBy: participant.addedBy.name,
+        remark: participant.remark,
+        date: new Date(Number(participant.timestamp)).toDateString()
+      };
+    });
+  }, []);
 
   useEffect(() => {
-    setUsedMembers(itemInputs.map((item) => item.memberId));
+    setAvailableMembers(participants);
+  }, [participants]);
+
+  useEffect(() => {
+    setUsedMembers(itemInputs?.map((item) => item.memberId));
   }, [itemInputs]);
 
   const { user } = useSelector((state) => state.auth);
@@ -71,7 +83,7 @@ const UpdateParticipantForm = ({ participants, group }) => {
     // <Row gutter={16}>
     //   <Col xs={24} sm={24} md={17}>
     <Card title={`Update ${group?.name} Members`}>
-      {availableMembers.length > 0 && (
+      {
         <Form.List name="items" initialValue={itemInputs}>
           {(fields, { add, remove }) => (
             <>
@@ -90,17 +102,16 @@ const UpdateParticipantForm = ({ participants, group }) => {
                       <Select onChange={handleChange}>
                         {availableMembers?.map((participant) => (
                           <Option
-                            value={participant.member._id}
-                            key={participant.member._id}
+                            value={participant._id}
+                            key={participant._id}
                             disabled={
                               participant.status === 'Hold' ||
                               usedMembers.find(
-                                (memberId) =>
-                                  memberId === participant.member._id
+                                (memberId) => memberId === participant._id
                               )
                             }
                           >
-                            {participant.member.name}
+                            {participant.name}
                           </Option>
                         ))}
                       </Select>
@@ -156,7 +167,7 @@ const UpdateParticipantForm = ({ participants, group }) => {
             </>
           )}
         </Form.List>
-      )}
+      }
     </Card>
     //   </Col>
     // </Row>

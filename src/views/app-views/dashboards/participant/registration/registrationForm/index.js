@@ -47,7 +47,7 @@ const RegistrationForm = (props) => {
   const getFeeTypes = async () => {
     const data = await constantsService.getFeeTypes();
     if (data) {
-      setFeeType(Object.keys(data));
+      setFeeType(Object.values(data));
       console.log(data, 'feetypes');
     }
   };

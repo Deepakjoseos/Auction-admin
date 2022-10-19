@@ -1,24 +1,24 @@
-import React, { useState, useEffect } from "react";
-import PageHeaderAlt from "components/layout-components/PageHeaderAlt";
-import { Tabs, Form, Button, message } from "antd";
-import Flex from "components/shared-components/Flex";
-import GeneralField from "./GeneralField";
-import useUpload from "hooks/useUpload";
-import { singleImageUploader } from "utils/s3/s3ImageUploader";
-import informationService from "services/information";
-import Utils from "utils";
-import { useHistory } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import PageHeaderAlt from 'components/layout-components/PageHeaderAlt';
+import { Tabs, Form, Button, message } from 'antd';
+import Flex from 'components/shared-components/Flex';
+import GeneralField from './GeneralField';
+import useUpload from 'hooks/useUpload';
+import { singleImageUploader } from 'utils/s3/s3ImageUploader';
+import informationService from 'services/information';
+import Utils from 'utils';
+import { useHistory } from 'react-router-dom';
 // import groupService from "services/group";
-import auctionService from "services/auction";
-import vehicletypeService from "services/vehicleType";
-import cityService from "services/city";
-import regionService from "services/region";
-import clientService from "services/client";
-import participantService from "services/Participant";
+import auctionService from 'services/auction';
+import vehicletypeService from 'services/vehicleType';
+import cityService from 'services/city';
+import regionService from 'services/region';
+import clientService from 'services/client';
+import participantService from 'services/Participant';
 const { TabPane } = Tabs;
 
-const ADD = "ADD";
-const EDIT = "EDIT";
+const ADD = 'ADD';
+const EDIT = 'EDIT';
 
 const FeeTypeForm = (props) => {
   const { mode = ADD, param } = props;
@@ -27,50 +27,52 @@ const FeeTypeForm = (props) => {
   const [form] = Form.useForm();
   //   const [uploadLoading, setUploadLoading] = useState(false)
   const [submitLoading, setSubmitLoading] = useState(false);
-  const[vehicleTypes,setVehicleTypes] = useState([])
-  const [cities,setCities] = useState([])
-  const [regions,setRegions] = useState([])
-  const [clients,setClients] = useState([])
-  const [participant,setParticipants] = useState([])
-  const getVehicleTypes = async ()=>{
-    const data = await vehicletypeService.getVehicleTypes()
-    if(data){
-      setVehicleTypes(data)
+  const [vehicleTypes, setVehicleTypes] = useState([]);
+  const [cities, setCities] = useState([]);
+  const [regions, setRegions] = useState([]);
+  const [clients, setClients] = useState([]);
+  const [participant, setParticipants] = useState([]);
+  const [imageUrl, setImageUrl] = useState('');
+  const getVehicleTypes = async () => {
+    const data = await vehicletypeService.getVehicleTypes();
+    if (data) {
+      setVehicleTypes(data);
     }
-  }
-  const getCities = async ()=>{
-    const data = await cityService.getCities()
-    if(data){
-      setCities(data)
+  };
+  const getCities = async () => {
+    const data = await cityService.getCities();
+    if (data) {
+      setCities(data);
     }
-  }
-  const getRegions = async ()=>{
-    const data = await regionService.getRegions()
-    if(data){
-      setRegions(data)
+  };
+  const getRegions = async () => {
+    const data = await regionService.getRegions();
+    if (data) {
+      setRegions(data);
     }
-  }
-  const getClients = async ()=>{
-    const data = await clientService.getClients()
-    if(data){
-      setClients(data)
+  };
+  const getClients = async () => {
+    const data = await clientService.getClients();
+    if (data) {
+      setClients(data);
     }
-      }
-  const getAllParticipants = async ()=>{
-    const data = await participantService.getAllParticipants(`participantType=Seller`)
-    console.log(data, 'heetgevt')
-    if(data){
-      setParticipants(data)
+  };
+  const getAllParticipants = async () => {
+    const data = await participantService.getAllParticipants(
+      `participantType=Seller`
+    );
+    console.log(data, 'heetgevt');
+    if (data) {
+      setParticipants(data);
     }
-  }
-  useEffect(()=>{
-  getVehicleTypes()
-  getCities()
-  getRegions()
-  getClients()
-  getAllParticipants()
-  },[])
-  
+  };
+  useEffect(() => {
+    getVehicleTypes();
+    getCities();
+    getRegions();
+    getClients();
+    getAllParticipants();
+  }, []);
 
   useEffect(() => {
     if (mode === EDIT) {
@@ -78,42 +80,44 @@ const FeeTypeForm = (props) => {
         const { id } = param;
         const data = await auctionService.getauctionById(id);
         if (data) {
-           form.setFieldsValue({
-             name: data.name,
-             incrementAmount:data.incrementAmount,
-             businessType: data.businessType,
-             type: data.type,
-             cityId: data.city,
-             regionId: data.region,
-             clientId: data.client,
-             vehicleTypeId: data.vehicleType,
+          form.setFieldsValue({
+            name: data.name,
+            incrementAmount: data.incrementAmount,
+            businessType: data.businessType,
+            type: data.type,
+            cityId: data.city,
+            regionId: data.region,
+            clientId: data.client,
+            vehicleTypeId: data.vehicleType,
             //  data.manufacturer?.id
-             format: data.format,
-             sellerId:data.seller,
-             status: data.status,
-             closeType: data.closeType,
-             bidLimit: data.bidLimit,
-             termsAndConditions: data.termsAndConditions,
-              // startTimestamp: data.startTimestamp,
-              // endTimestamp: data.endTimestamp,
-             showRegNumber: data.showRegNumber,
-             showChasisNumber: data.showChasisNumber,
-             showEngineNumber: data.showEngineNumber,
-             showGST: data.showGST,
-             extendAuctionForLessBid: data.extendAuctionForLessBid,
-             showVehiclesWithoutLogin: data.showVehiclesWithoutLogin,
-             auctionViewOnly: data.auctionViewOnly,
-             onlyPCCBuyersAllowed: data.onlyPCCBuyersAllowed,
-             showTNC: data.showTNC,
-             showVehicleDownload: data.showVehicleDownload,
-           });
+            format: data.format,
+            sellerId: data.seller,
+            status: data.status,
+            closeType: data.closeType,
+            bidLimit: data.bidLimit,
+            termsAndConditions: data.termsAndConditions,
+            // startTimestamp: data.startTimestamp,
+            // endTimestamp: data.endTimestamp,
+            showRegNumber: data.showRegNumber,
+            showChasisNumber: data.showChasisNumber,
+            showEngineNumber: data.showEngineNumber,
+            showGST: data.showGST,
+            extendAuctionForLessBid: data.extendAuctionForLessBid,
+            showVehiclesWithoutLogin: data.showVehiclesWithoutLogin,
+            auctionViewOnly: data.auctionViewOnly,
+            onlyPCCBuyersAllowed: data.onlyPCCBuyersAllowed,
+            showTNC: data.showTNC,
+            showVehicleDownload: data.showVehicleDownload
+          });
           form.setFieldsValue({
             // ...data,
-            startTimestamp: "",
-            endTimestamp: "",
+            startTimestamp: '',
+            endTimestamp: ''
           });
+
+          setImageUrl(data.image);
         } else {
-          history.replace("/app/dashboards/auction/auction-list");
+          history.replace('/app/dashboards/auction/auction-list');
         }
       };
 
@@ -126,7 +130,7 @@ const FeeTypeForm = (props) => {
     form
       .validateFields()
       .then(async (values) => {
-        console.log(values, "values");
+        console.log(values, 'values');
         values.bidLimit = Number(values.bidLimit);
 
         values.startTimestamp = `${new Date(values.startTimestamp).getTime()}`;
@@ -134,8 +138,15 @@ const FeeTypeForm = (props) => {
 
         if (mode === ADD) {
           // Checking if image exists
-          console.log(values, "asasasqwertyuijhgv");
-          const created = await auctionService.createauction(values);
+          console.log(values, 'asasasqwertyuijhgv');
+          if (!imageUrl) {
+            message.error('Please enter all required field ');
+          }
+
+          const created = await auctionService.createauction({
+            ...values,
+            image: imageUrl
+          });
           if (created) {
             message.success(`Created ${values.name} to auction list`);
             history.goBack();
@@ -153,8 +164,8 @@ const FeeTypeForm = (props) => {
       })
       .catch((info) => {
         setSubmitLoading(false);
-        console.log("info", info);
-        message.error("Please enter all required field ");
+        console.log('info', info);
+        message.error('Please enter all required field ');
       });
   };
 
@@ -177,7 +188,7 @@ const FeeTypeForm = (props) => {
           showVehiclesWithoutLogin: false,
           auctionViewOnly: false,
           onlyPCCBuyersAllowed: false,
-          status: "Hold",
+          status: 'Hold'
         }}
       >
         <PageHeaderAlt className="border-bottom" overlap>
@@ -189,13 +200,13 @@ const FeeTypeForm = (props) => {
               alignItems="center"
             >
               <h2 className="mb-3">
-                {mode === "ADD" ? "Add New Auction" : `Edit Auction`}{" "}
+                {mode === 'ADD' ? 'Add New Auction' : `Edit Auction`}{' '}
               </h2>
               <div className="mb-3">
                 <Button
                   className="mr-2"
                   onClick={() =>
-                    history.push("/app/dashboards/auction/auction/auction-list")
+                    history.push('/app/dashboards/auction/auction/auction-list')
                   }
                 >
                   Discard
@@ -207,7 +218,7 @@ const FeeTypeForm = (props) => {
                   htmlType="submit"
                   loading={submitLoading}
                 >
-                  {mode === "ADD" ? "Add" : `Save`}
+                  {mode === 'ADD' ? 'Add' : `Save`}
                 </Button>
               </div>
             </Flex>
@@ -221,7 +232,14 @@ const FeeTypeForm = (props) => {
                 // uploadLoading={uploadLoading}
                 // handleUploadChange={handleUploadChange}
                 // propsImages={propsImages}
-                form={form} vehicleTypes={vehicleTypes} regions={regions} cities={cities} clients={clients} participant={participant}
+                form={form}
+                vehicleTypes={vehicleTypes}
+                regions={regions}
+                cities={cities}
+                clients={clients}
+                participant={participant}
+                setImageUrl={setImageUrl}
+                imageUrl={imageUrl}
               />
             </TabPane>
           </Tabs>

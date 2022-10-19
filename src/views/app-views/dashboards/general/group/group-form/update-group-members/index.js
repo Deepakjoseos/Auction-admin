@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { Row } from "antd";
-import participantService from "services/Participant";
-import UpdateParticipantForm from "./UpdateParticipantForm";
-import groupService from "services/group";
+import React, { useEffect, useState } from 'react';
+import { Row } from 'antd';
+import participantService from 'services/Participant';
+import UpdateParticipantForm from './UpdateParticipantForm';
+import groupService from 'services/group';
 
 const UpdateParticipantsField = ({ param, participants }) => {
-
   const [members, setMembers] = useState([]);
   const [group, setGroup] = useState();
 
@@ -26,9 +25,7 @@ const UpdateParticipantsField = ({ param, participants }) => {
 
   return (
     <Row gutter={16}>
-      {group && (
-        <UpdateParticipantForm participants={participants} group={group} />
-      )}
+      <UpdateParticipantForm participants={participants} group={group} />
     </Row>
   );
 };

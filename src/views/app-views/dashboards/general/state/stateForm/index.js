@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from "react";
-import PageHeaderAlt from "components/layout-components/PageHeaderAlt";
-import { Tabs, Form, Button, message } from "antd";
-import Flex from "components/shared-components/Flex";
-import GeneralField from "./GeneralField";
-import { useHistory } from "react-router-dom";
-import regionService from "services/region";
-import stateService from "services/state";
+import React, { useState, useEffect } from 'react';
+import PageHeaderAlt from 'components/layout-components/PageHeaderAlt';
+import { Tabs, Form, Button, message } from 'antd';
+import Flex from 'components/shared-components/Flex';
+import GeneralField from './GeneralField';
+import { useHistory } from 'react-router-dom';
+import regionService from 'services/region';
+import stateService from 'services/state';
 
 const { TabPane } = Tabs;
 
-const ADD = "ADD";
-const EDIT = "EDIT";
+const ADD = 'ADD';
+const EDIT = 'EDIT';
 
 const ClientForm = (props) => {
   const { mode = ADD, param } = props;
@@ -18,6 +18,17 @@ const ClientForm = (props) => {
 
   const [form] = Form.useForm();
   const [submitLoading, setSubmitLoading] = useState(false);
+  const [regions, setRegions] = useState([]);
+
+  useEffect(() => {
+    const getRegions = async () => {
+      const data = await regionService.getRegions();
+      if (data) {
+        setRegions(data);
+      }
+    };
+    getRegions();
+  }, []);
 
   useEffect(() => {
     if (mode === EDIT) {
@@ -29,9 +40,10 @@ const ClientForm = (props) => {
             name: data.name,
             status: data.status,
             abbreviation: data.abbreviation,
+            regionId: data.regionId
           });
         } else {
-          history.replace("/app/dashboards/general/state/state-list");
+          history.replace('/app/dashboards/general/state/state-list');
         }
       };
 
@@ -64,8 +76,8 @@ const ClientForm = (props) => {
       })
       .catch((info) => {
         setSubmitLoading(false);
-        console.log("info", info);
-        message.error("Please enter all required field ");
+        console.log('info', info);
+        message.error('Please enter all required field ');
       });
   };
 
@@ -77,7 +89,7 @@ const ClientForm = (props) => {
         name="advanced_search"
         className="ant-advanced-search-form"
         initialValues={{
-          status: "Hold",
+          status: 'Hold'
         }}
       >
         <PageHeaderAlt className="border-bottom" overlap>
@@ -89,13 +101,13 @@ const ClientForm = (props) => {
               alignItems="center"
             >
               <h2 className="mb-3">
-                {mode === "ADD" ? "Add New State" : `Edit State`}{" "}
+                {mode === 'ADD' ? 'Add New State' : `Edit State`}{' '}
               </h2>
               <div className="mb-3">
                 <Button
                   className="mr-2"
                   onClick={() =>
-                    history.push("/app/dashboards/general/state/state-list")
+                    history.push('/app/dashboards/general/state/state-list')
                   }
                 >
                   Discard
@@ -106,7 +118,7 @@ const ClientForm = (props) => {
                   htmlType="submit"
                   loading={submitLoading}
                 >
-                  {mode === "ADD" ? "Add" : `Save`}
+                  {mode === 'ADD' ? 'Add' : `Save`}
                 </Button>
               </div>
             </Flex>
@@ -115,7 +127,7 @@ const ClientForm = (props) => {
         <div className="container">
           <Tabs defaultActiveKey="1" style={{ marginTop: 30 }}>
             <TabPane tab="General" key="1">
-              <GeneralField />
+              <GeneralField regions={regions} />
             </TabPane>
           </Tabs>
         </div>
