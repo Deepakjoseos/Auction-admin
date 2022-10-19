@@ -1,26 +1,26 @@
-import React, { useState, useEffect } from 'react'
-import PageHeaderAlt from 'components/layout-components/PageHeaderAlt'
-import { Tabs, Form, Button, message } from 'antd'
-import Flex from 'components/shared-components/Flex'
-import GeneralField from './GeneralField'
-import useUpload from 'hooks/useUpload'
-import { singleImageUploader } from 'utils/s3/s3ImageUploader'
-import BannerService from 'services/banner'
-import Utils from 'utils'
-import { useHistory } from 'react-router-dom'
+import React, { useState, useEffect } from 'react';
+import PageHeaderAlt from 'components/layout-components/PageHeaderAlt';
+import { Tabs, Form, Button, message } from 'antd';
+import Flex from 'components/shared-components/Flex';
+import GeneralField from './GeneralField';
+import useUpload from 'hooks/useUpload';
+import BannerService from 'services/banner';
+import Utils from 'utils';
+import { useHistory } from 'react-router-dom';
+import fileManagerService from 'services/FileManager';
 
-const { TabPane } = Tabs
+const { TabPane } = Tabs;
 
-const ADD = 'ADD'
-const EDIT = 'EDIT'
+const ADD = 'ADD';
+const EDIT = 'EDIT';
 
 const BannerForm = (props) => {
-  const { mode = ADD, param } = props
-  const history = useHistory()
+  const { mode = ADD, param } = props;
+  const history = useHistory();
 
-  const [form] = Form.useForm()
-  const [uploadedImg, setImage] = useState(null)
-  const [submitLoading, setSubmitLoading] = useState(false)
+  const [form] = Form.useForm();
+  const [uploadedImg, setImage] = useState(null);
+  const [submitLoading, setSubmitLoading] = useState(false);
 
   // Normal Image
   const {
@@ -28,119 +28,128 @@ const BannerForm = (props) => {
     beforeUpload: beforeUploadImages,
     onChange: onChangeImages,
     onRemove: onRemoveImages,
-    setFileList: setFileListImages,
-  } = useUpload(1)
+    setFileList: setFileListImages
+  } = useUpload(1);
 
   useEffect(() => {
     if (mode === EDIT) {
       const fetchBannerById = async () => {
-        const { id } = param
-        const data = await BannerService.getBannerById(id)
+        const { id } = param;
+        const data = await BannerService.getBannerById(id);
         if (data) {
-          let himg = []
+          let himg = [];
           if (data.image) {
             himg = [
               {
                 uid: Math.random() * 1000,
                 title: Utils.getBaseName(data.image),
                 url: data.image,
-                thumbUrl: data.image,
-              },
-            ]
+                thumbUrl: data.image
+              }
+            ];
 
-            setImage(himg)
-            setFileListImages(himg)
+            setImage(himg);
+            setFileListImages(himg);
           }
 
           form.setFieldsValue({
             title: data.title,
             status: data.status,
             priority: data.priority,
-            url: data.url,
-          })
+            url: data.url
+          });
         } else {
-          history.replace('/app/dashboards/banner/banner-list')
+          history.replace('/app/dashboards/banner/banner-list');
         }
-      }
+      };
 
-      fetchBannerById()
+      fetchBannerById();
     }
-  }, [form, mode, param, props])
+  }, [form, mode, param, props]);
 
   const propsImages = {
     multiple: false,
     beforeUpload: beforeUploadImages,
     onRemove: onRemoveImages,
     onChange: onChangeImages,
-    fileList: fileListImages,
-  }
+    fileList: fileListImages
+  };
 
   useEffect(() => {
-    console.log(fileListImages, 'hey-me')
-    setImage(fileListImages)
-  }, [fileListImages])
+    console.log(fileListImages, 'hey-me');
+    setImage(fileListImages);
+  }, [fileListImages]);
 
   const onFinish = async () => {
-    setSubmitLoading(true)
+    setSubmitLoading(true);
     form
       .validateFields()
       .then(async (values) => {
+        const imageUrl = await fileManagerService.getImageUrl(
+          uploadedImg[uploadedImg.length - 1].originFileObj
+        );
         if (mode === ADD) {
           // Checking if image exists
           if (uploadedImg.length !== 0 && uploadedImg !== null) {
-            console.log('uploadedImg', uploadedImg)
-            const imgValue = await singleImageUploader(
-              uploadedImg[0].originFileObj,
-              uploadedImg,
-              uploadedImg[0].url,
-              'banner'
-            )
+            // console.log('uploadedImg', uploadedImg);
+            // const imgValue = await singleImageUploader(
+            //   uploadedImg[0].originFileObj,
+            //   uploadedImg,
+            //   uploadedImg[0].url,
+            //   'banner'
+            // );
 
-            console.log('imgValue', imgValue)
+            // console.log('imgValue', imgValue);
 
-            values.imageURL = imgValue
+            // values.imageURL = imgValue;
 
-            const created = await BannerService.createBanner(values)
+            const created = await BannerService.createBanner({
+              ...values,
+              imageURL: imageUrl
+            });
             if (created) {
-              message.success(`Created ${values.title} to Banner list`)
-              history.goBack()
+              message.success(`Created ${values.title} to Banner list`);
+              history.goBack();
             }
           } else {
-            message.error('Please upload image')
+            message.error('Please upload image');
           }
         }
         if (mode === EDIT) {
           // Checking if image exists
           if (uploadedImg.length !== 0 && uploadedImg !== null) {
-            console.log('uploadedImg', uploadedImg)
-            const imgValue = await singleImageUploader(
-              uploadedImg[0].originFileObj,
-              uploadedImg,
-              uploadedImg[0].url,
-              'banner'
-            )
+            // console.log('uploadedImg', uploadedImg);
+            // const imgValue = await singleImageUploader(
+            //   uploadedImg[0].originFileObj,
+            //   uploadedImg,
+            //   uploadedImg[0].url,
+            //   'banner'
+            // );
 
-            values.imageURL = imgValue
+            // values.imageURL = imgValue;
             // values.mobileImage = mobileImgValue
 
-            const edited = await BannerService.editBanner(param.id, values)
+            const edited = await BannerService.editBanner(param.id, {
+              ...values,
+              imageURL: imageUrl
+            });
             if (edited) {
-              message.success(`Edited ${values.title} to Banner list`)
-              history.goBack()
+              message.success(`Edited ${values.title} to Banner list`);
+              history.goBack();
             }
-            setSubmitLoading(false)
+            setSubmitLoading(false);
           } else {
-            message.error('Please upload image')
+            message.error('Please upload image');
           }
         }
-        setSubmitLoading(false)
+        setSubmitLoading(false);
       })
       .catch((info) => {
-        setSubmitLoading(false)
-        console.log('info', info)
-        message.error('Please enter all required field ')
-      })
-  }
+        setSubmitLoading(false);
+        console.log('info', info);
+        message.error('Please enter all required field ');
+      });
+  };
 
   return (
     <>
@@ -150,7 +159,7 @@ const BannerForm = (props) => {
         name="advanced_search"
         className="ant-advanced-search-form"
         initialValues={{
-          status: 'Hold',
+          status: 'Hold'
         }}
       >
         <PageHeaderAlt className="border-bottom" overlap>
@@ -200,7 +209,7 @@ const BannerForm = (props) => {
         </div>
       </Form>
     </>
-  )
-}
+  );
+};
 
-export default BannerForm
+export default BannerForm;

@@ -60,14 +60,16 @@ const GeneralField = ({
   const [images, setImages] = useState([]);
 
   useEffect(() => {
-    setImages([
-      {
-        uid: 1,
-        name: 'image.png',
-        status: 'done',
-        url: imageUrl
-      }
-    ]);
+    if (imageUrl) {
+      setImages([
+        {
+          uid: 1,
+          name: 'image.png',
+          status: 'done',
+          url: imageUrl
+        }
+      ]);
+    }
   }, [imageUrl, setImages]);
 
   const onImportImage = async ({ fileList }) => {

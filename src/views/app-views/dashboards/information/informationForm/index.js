@@ -89,7 +89,6 @@ const InformationForm = (props) => {
     form
       .validateFields()
       .then(async (values) => {
-        console.log('uploadedImg', uploadedImg);
         const imageUrl = await fileManagerService.getImageUrl(
           uploadedImg[uploadedImg.length - 1].originFileObj
         );

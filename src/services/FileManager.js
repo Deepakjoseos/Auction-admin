@@ -22,7 +22,6 @@ const uploadImages = async (data) => {
 fileManagerService.uploadImages = uploadImages;
 
 fileManagerService.getImageUrl = async (file) => {
-  console.log(file, 'fileeeee');
   const formData = new FormData();
   formData.append('files', file);
   formData.append('imageFor', 'general');
