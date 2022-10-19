@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
-import PageHeaderAlt from "components/layout-components/PageHeaderAlt";
-import { Tabs, Form, Button, message } from "antd";
-import Flex from "components/shared-components/Flex";
-import { useHistory } from "react-router-dom";
-import participantService from "services/Participant";
-import BuyingLimitField from "./BuyingLimitField";
-import buyinglLimitService from "services/buyingLimit";
+import React, { useState, useEffect } from 'react';
+import PageHeaderAlt from 'components/layout-components/PageHeaderAlt';
+import { Tabs, Form, Button, message } from 'antd';
+import Flex from 'components/shared-components/Flex';
+import { useHistory } from 'react-router-dom';
+import participantService from 'services/Participant';
+import BuyingLimitField from './BuyingLimitField';
+import buyinglLimitService from 'services/buyingLimit';
 
 const { TabPane } = Tabs;
 
@@ -27,16 +27,16 @@ const BuyingLimitForm = (props) => {
       form.setFieldsValue({
         amount: data.wallet.currentBuyingLimit,
         remark: data.wallet.remark,
-        participant: data.name,
+        participant: data.name
       });
       setParticipantId(data._id);
     } else {
-      history.replace("/app/dashboards/wallet/wallet-list");
+      history.replace('/app/dashboards/wallet/wallet-list');
     }
   };
 
   const onFinish = async () => {
-    console.log('walletYupdates')
+    console.log('walletYupdates');
     setSubmitLoading(true);
     form
       .validateFields()
@@ -44,21 +44,21 @@ const BuyingLimitForm = (props) => {
         const data = {
           amount: values.amount,
           remark: values.remark,
-          participantId,
+          participantId
         };
         const updated = await buyinglLimitService.update(data);
         if (updated) {
           message.success(
             `Updated buying limit to ${values.amount} for ${values.participant}`
           );
-          history.goBack();
+          history.replace('/app/dashboards/wallet/wallet-list');
         }
         setSubmitLoading(false);
       })
       .catch((info) => {
         setSubmitLoading(false);
-        console.log("info", info);
-        message.error("Please enter all required field ");
+        console.log('info', info);
+        message.error('Please enter all required field ');
       });
   };
 
@@ -70,7 +70,7 @@ const BuyingLimitForm = (props) => {
         name="advanced_search"
         className="ant-advanced-search-form"
         initialValues={{
-          status: "Hold",
+          status: 'Hold'
         }}
       >
         <PageHeaderAlt className="border-bottom" overlap>
@@ -86,7 +86,7 @@ const BuyingLimitForm = (props) => {
                 <Button
                   className="mr-2"
                   onClick={() =>
-                    history.push("/app/dashboards/wallet/wallet-list")
+                    history.push('/app/dashboards/wallet/wallet-list')
                   }
                 >
                   Discard
