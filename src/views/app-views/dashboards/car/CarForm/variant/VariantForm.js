@@ -10,7 +10,8 @@ import {
   Select,
   Space,
   Tabs,
-  Upload
+  Upload,
+  InputNumber
 } from 'antd';
 import { ImageSvg } from 'assets/svg/icon';
 import CustomIcon from 'components/util-components/CustomIcon';
@@ -23,7 +24,35 @@ import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import ImageDescription from '../../../../../../components/shared-components/ImageDescription';
 import carService from 'services/car';
 import fileManagerService from 'services/FileManager';
+import fuelTypeService from 'services/fuelType';
 //   import attributeService from 'services/attribute'
+
+const rules = {
+  required: [
+    {
+      required: true,
+      message: 'Required'
+    }
+  ],
+  name: [
+    {
+      required: 'yes',
+      message: 'Required'
+    }
+  ],
+  price: [
+    {
+      required: 'yes',
+      message: 'Required'
+    }
+  ],
+  quantity: [
+    {
+      required: 'yes',
+      message: 'Required'
+    }
+  ]
+};
 
 const VariantsForm = ({
   form,
@@ -39,8 +68,17 @@ const VariantsForm = ({
   const [images, setImages] = useState([]);
   const [attributes, setAttributes] = useState([]);
   const [selectedAttributeValues, setSelectedAttributeValues] = useState([]);
+  const [fuelTypes, setFuelTypes] = useState([]);
 
   const { id } = useParams();
+
+  const getFuelTypes = async () => {
+    const data = await fuelTypeService.getFuelTypes();
+
+    if (data) {
+      setFuelTypes(data);
+    }
+  };
 
   const {
     fileList: fileListImages,
@@ -49,27 +87,6 @@ const VariantsForm = ({
     onRemove: onRemoveImages,
     setFileList: setFileListImages
   } = useUpload(1, 'multiple');
-
-  const rules = {
-    name: [
-      {
-        required: 'yes',
-        message: 'Required'
-      }
-    ],
-    price: [
-      {
-        required: 'yes',
-        message: 'Required'
-      }
-    ],
-    quantity: [
-      {
-        required: 'yes',
-        message: 'Required'
-      }
-    ]
-  };
 
   useEffect(() => {
     if (selectedVariant) {
@@ -106,14 +123,13 @@ const VariantsForm = ({
       });
 
       setImages(images);
-
       setFileListImages(images);
     }
   }, [selectedVariant]);
 
   useEffect(() => {
-    console.log(form.getFieldValue('attributes'), 'plss');
-  }, [form]);
+    getFuelTypes();
+  }, []);
 
   const propsImages = {
     multiple: true,
@@ -133,7 +149,143 @@ const VariantsForm = ({
     form
       .validateFields()
       .then(async (values) => {
-        console.log(values, 'values');
+        const sendingValues = {
+          name: values.name,
+          bootSpace: +values.bootSpace,
+          price: values.price,
+          doors: +values.noOfDoors,
+          fueltypeId: values.fueltype,
+          fuelTankCapacity: +values.petrolFuelTankCapacity,
+          frontSuspension: values.frontSuspension,
+          rearSuspension: values.rearSuspension,
+          seatingCapacity: +values.seatingCapacity,
+          groundClearanceUnladen: +values.groundClearanceUnladen,
+          videos: values?.videos,
+          brakeType: {
+            frontType: values.frontBrakeType,
+            rearType: values.rearBrakeType
+            // braking: [
+            //   {
+            //     distance: 'string',
+            //     result: 'string',
+            //     tested: true
+            //   }
+            // ]
+          },
+          color: values.color,
+          comfortAndConvenience: {
+            powerSteering: values.powerSteering === 'yes',
+            powerWindowsFront: values.powerWindowsFront === 'yes',
+            powerWindowsRear: values.powerWindowsRear === 'yes',
+            airConditioner: values.airConditioner === 'yes',
+            heater: values.heater === 'yes',
+            lowFuelWarningLight: values.lowFuelWarningLight === 'yes',
+            accessoryPowerOutlet: values.accessoryPowerOutlet === 'yes',
+            rearSeatHeadrest: values.rearSeatHeadrest === 'yes',
+            seatLumbarSupport: values.seatLumbarSupport === 'yes',
+            parkingSensors: values.parkingSensors,
+            foldableRearSeat: values.foldableRearSeat,
+            keyLessEntry: values.keyLessEntry === 'yes',
+            voiceControl: values.voiceControl === 'yes',
+            usbCharger: values.usbCharger === 'yes',
+            laneChangeIndicator: values.laneChangeIndicator === 'yes',
+            additionalFeatures: values.additionalFeatures === 'yes'
+          },
+          dimension: {
+            length: values.length,
+            width: values.width,
+            height: values.height
+          },
+          engine: {
+            name: values.engineName,
+            displacement: values.displacement,
+            maxPower: values.maxPower,
+            maxTorque: values.maxTorque,
+            cylinders: values.cylinderCount,
+            valvesPerCylinder: values.cylinderValvesCount,
+            fuelSupplySystem: values.fuelSupplySystem
+          },
+          entertainmentAndCommunication: {
+            speakersFront: values.speakersFront === 'yes',
+            speakersRear: values.speakersRear === 'yes',
+            integrated2dinAudio: values.integrated2dinAudio === 'yes',
+            touchScreen: values.touchScreen === 'yes',
+            androidAuto: values.androidAuto === 'yes',
+            appleCarPlay: values.appleCarPlay === 'yes'
+          },
+          interiorFeatures: {
+            tachometer: values.tachometer === 'yes',
+            electronicMultiTripmeter: values.electronicMultiTripmeter === 'yes',
+            fabricUpholstery: values.fabricUpholstery === 'yes',
+            leatherSteeringWheel: values.leatherSteeringWheel === 'yes',
+            gloveCompartment: values.gloveCompartment === 'yes',
+            digitalClock: values.digitalClock === 'yes',
+            digitalOdometer: values.digitalOdometer === 'yes',
+            additionalFeatures: values.additionalInteriorFeatures
+          },
+          exteriorFeatures: {
+            adjustableHeadlights: values.adjustableHeadlights === 'yes',
+            powerAdjustableExteriorRearViewMirror:
+              values.powerAdjustableExteriorRearViewMirror === 'yes',
+            manuallyAdjustableExtRearViewMirror:
+              values.manuallyAdjustableExtRearViewMirror === 'yes',
+            wheelCovers: values.wheelCovers === 'yes',
+            powerAntenna: values.powerAntenna === 'yes',
+            rearSpoiler: values.rearSpoiler === 'yes',
+            chromeGrille: values.chromeGrille === 'yes',
+            halogenHeadlamps: values.halogenHeadlamps === 'yes',
+            roofRail: values.roofRail === 'yes',
+            tyreSize: values.tyreSize,
+            tyreTypes: [values.tyreType],
+            ledDrls: values.ledDrls === 'yes',
+            ledTailLights: values.ledTaillights === 'yes',
+            additionalExteriorFeatures: values.additionalExteriorFeatures
+          },
+          steering: {
+            type: values.steeringType,
+            column: values.steeringColumn
+          },
+          performance: {
+            mileage: values.petrolMileage,
+            emissionNormCompliance: values.emissionNormCompliance,
+            topSpeed: values.topSpeed
+          },
+          safetyFeatures: {
+            antiLocBrakingSystem: values.antiLocBrakingSystem === 'yes',
+            centralLocking: values.centralLocking === 'yes',
+            powerDoorLocks: values.powerDoorLocks === 'yes',
+            childSafetyLocks: values.childSafetyLocks === 'yes',
+            noOfAirbags: values.noOfAirbags,
+            driverAirbag: values.driverAirbag === 'yes',
+            passengerAirbag: values.passengerAirbag === 'yes',
+            dayAndNightRearViewMirror:
+              values.dayAndNightRearViewMirror === 'yes',
+            passengerSideRearViewMirror:
+              values.passengerSideRearViewMirror === 'yes',
+            rearSeatBelts: values.rearSeatBelts === 'yes',
+            seatBeltWarning: values.seatBeltWarning === 'yes',
+            adjustableSeats: values.adjustableSeats === 'yes',
+            engineImmobilizer: values.engineImmobilizer === 'yes',
+            crashSensor: values.crashSensor === 'yes',
+            centrallyMountedFuelTank: values.centrallyMountedFuelTank === 'yes',
+            engineCheckWarning: values.engineCheckWarning === 'yes',
+            ebd: values.ebd === 'yes',
+            rearCamera: values.rearCamera === 'yes',
+            speedAlert: values.speedAlert === 'yes',
+            speedSensingAutoDoorLock: values.speedSensingAutoDoorLock === 'yes',
+            pretensionersAndForceLimiterSeatbelts:
+              values.pretensionersAndForceLimiterSeatbelts === 'yes',
+            advancedSafetyFeatures: values.advanceSafetyFeatures
+          },
+          transmissionType: {
+            turboCharger: true,
+            type: values.transmissionType,
+            gearBox: values.gearBox,
+            driveType: values.driveType
+          }
+        };
+
+        console.log(sendingValues, 'sendingValues');
 
         if (selectedVariant === null) {
           // Checking if image exists
@@ -148,9 +300,12 @@ const VariantsForm = ({
               mutatedImage
             );
 
-            values.images = imgValues;
+            sendingValues.images = imgValues;
 
-            const created = await carService.createCarVariant(id, values);
+            const created = await carService.createCarVariant(
+              id,
+              sendingValues
+            );
             if (created) {
               message.success(`Created Variant Success`);
               setOpenVariantsForm(false);
@@ -175,9 +330,9 @@ const VariantsForm = ({
             const imgValues = await fileManagerService.getImagesUrl(
               mutatedImage
             );
-            values.images = imgValues;
+            sendingValues.images = imgValues;
 
-            const edited = await carService.updateCarVariant(id, values);
+            const edited = await carService.updateCarVariant(id, sendingValues);
             if (edited) {
               message.success(`Edited Variant Success`);
               setOpenVariantsForm(false);
@@ -294,70 +449,136 @@ const VariantsForm = ({
       >
         <Tabs defaultActiveKey="1" style={{ marginTop: 30 }}>
           <Tabs.TabPane tab="General" key="1">
-            <Form.Item name="name" label="Name">
+            <Form.Item name="name" label="Name" rules={rules.required}>
               <Input placeholder="Name" />
             </Form.Item>
+            <Form.Item name="price" label="Price" rules={rules.required}>
+              <InputNumber placeholder="Price" min={0} />
+            </Form.Item>
             <Card title="Engine and Transmission">
-              <Form.Item name="color" label="Color">
+              <Form.Item name="color" label="Color" rules={rules.required}>
                 <Input placeholder="Color" />
               </Form.Item>
-              <Form.Item name="engineType" label="Engine Type">
-                <Input placeholder="Engine Type" />
+              <Form.Item
+                name="engineName"
+                label="Engine Name"
+                rules={rules.required}
+              >
+                <Input placeholder="Engine Name" />
               </Form.Item>
-              <Form.Item name="displacement" label="Displacement(cc)">
+              <Form.Item
+                name="displacement"
+                label="Displacement(cc)"
+                rules={rules.required}
+              >
                 <Input placeholder="Displacement(cc)" />
               </Form.Item>
-              <Form.Item name="maxPower" label="Max Power">
+              <Form.Item
+                name="maxPower"
+                label="Max Power"
+                rules={rules.required}
+              >
                 <Input placeholder="Max Power" />
               </Form.Item>
-              <Form.Item name="maxTorque" label="Max Torque">
+              <Form.Item
+                name="maxTorque"
+                label="Max Torque"
+                rules={rules.required}
+              >
                 <Input placeholder="Max Torque" />
               </Form.Item>
-              <Form.Item name="cylinderCount" label="No. of cylinder">
-                <Input placeholder="No. of cylinder" />
+              <Form.Item
+                name="cylinderCount"
+                label="No. of cylinder"
+                rules={rules.required}
+              >
+                <InputNumber placeholder="No. of cylinder" min={0} />
               </Form.Item>
               <Form.Item
                 name="cylinderValvesCount"
                 label="Cylinder Valves Count"
+                rules={rules.required}
               >
-                <Input placeholder="cylinderValvesCount" />
+                <InputNumber placeholder="cylinderValvesCount" min={0} />
               </Form.Item>
-              <Form.Item name="transmissionType" label="Transmission Type">
+              <Form.Item
+                name="fuelSupplySystem"
+                label="Fuel Supply System"
+                rules={rules.required}
+              >
+                <Input placeholder="Fuel Supply System" />
+              </Form.Item>
+              <Form.Item
+                name="transmissionType"
+                label="Transmission Type"
+                rules={rules.required}
+              >
                 <Input placeholder="transmissionType" />
               </Form.Item>
-              <Form.Item name="gearBox" label="Gear Box">
-                <Input placeholder="Gear Box" />
+              <Form.Item
+                name="driveType"
+                label="Drive Type"
+                rules={rules.required}
+              >
+                <Select placeholder="Drive Type">
+                  <Option value="Automatic">Automatic</Option>
+                  <Option value="Manual">Manual</Option>
+                </Select>
+              </Form.Item>
+              <Form.Item name="gearBox" label="Gear Box" rules={rules.required}>
+                <InputNumber placeholder="Gear Box" />
               </Form.Item>
             </Card>
 
             <Card title="Fuel & Performance">
-              <Form.Item name="fueltype" label="Fuel Type">
+              <Form.Item
+                name="fueltype"
+                label="Fuel Type"
+                rules={rules.required}
+              >
                 <Select placeholder="Fuel Type">
-                  <Option value="Petrol">Petrol</Option>
-                  <Option value="Diesel">Diesel</Option>
+                  {fuelTypes.map((type) => (
+                    <Option value={type._id}>{type.name}</Option>
+                  ))}
                 </Select>
               </Form.Item>
-              <Form.Item name="petrolMileage" label="Petrol Mileage (ARAI)">
-                <Input placeholder="Petrol Mileage (ARAI)" />
+              <Form.Item
+                name="petrolMileage"
+                label="Petrol Mileage (ARAI)"
+                rules={rules.required}
+              >
+                <InputNumber placeholder="Petrol Mileage (ARAI)" min={0} />
               </Form.Item>
               <Form.Item
                 name="petrolFuelTankCapacity"
                 label="Petrol Fuel Tank Capacity (Litres)"
+                rules={rules.required}
               >
-                <Input placeholder="Petrol Fuel Tank Capacity (Litres)" />
+                <Input
+                  placeholder="Petrol Fuel Tank Capacity (Litres)"
+                  min={0}
+                />
               </Form.Item>
               {/* <Form.Item
                 name="Petrol Highway Mileage"
                 label="Petrol Highway Mileage"
               >
                 <Input placeholder="Petrol Highway Mileage" />
-              </Form.Item>
+              </Form.Item> */}
               <Form.Item
-                name="Emission Norm Compliance"
+                name="emissionNormCompliance"
                 label="Emission Norm Compliance"
+                rules={rules.required}
               >
                 <Input placeholder="Emission Norm Compliance" />
-              </Form.Item> */}
+              </Form.Item>
+              <Form.Item
+                name="topSpeed"
+                label="Top Speed"
+                rules={rules.required}
+              >
+                <InputNumber placeholder="Top Speed" />
+              </Form.Item>
             </Card>
 
             <Card title="Suspension, Steering & Brakes">
@@ -367,56 +588,101 @@ const VariantsForm = ({
                   <Option value="Diesel">Diesel</Option>
                 </Select>
               </Form.Item> */}
-              <Form.Item name="frontSuspension" label="Front Suspension">
+              <Form.Item
+                name="frontSuspension"
+                label="Front Suspension"
+                rules={rules.required}
+              >
                 <Input placeholder="Front Suspension" />
               </Form.Item>
-              <Form.Item name="rearSuspension" label="Rear Suspension">
+              <Form.Item
+                name="rearSuspension"
+                label="Rear Suspension"
+                rules={rules.required}
+              >
                 <Input placeholder="Rear Suspension" />
               </Form.Item>
-              <Form.Item name="steeringType" label="Steering Type">
+              <Form.Item
+                name="steeringType"
+                label="Steering Type"
+                rules={rules.required}
+              >
                 <Input placeholder="Steering Type" />
               </Form.Item>
-              <Form.Item name="frontBrakeType" label="Front Brake Type">
+              <Form.Item
+                name="steeringColumn"
+                label="Steering Column"
+                rules={rules.required}
+              >
+                <Input placeholder="Steering Column" />
+              </Form.Item>
+              <Form.Item
+                name="frontBrakeType"
+                label="Front Brake Type"
+                rules={rules.required}
+              >
                 <Input placeholder="Front Brake Type" />
               </Form.Item>
-              <Form.Item name="rearBrakeType" label="Rear Brake Type">
+              <Form.Item
+                name="rearBrakeType"
+                label="Rear Brake Type"
+                rules={rules.required}
+              >
                 <Input placeholder="Rear Brake Type" />
               </Form.Item>
             </Card>
 
-            <Card
-              title="Dimensions & Capacity
-"
-            >
+            <Card title="Dimensions & Capacity">
               {/* <Form.Item name="Front Suspension" label="Front Suspension">
                 <Select placeholder="Front Suspension">
                   <Option value="Petrol">Petrol</Option>
                   <Option value="Diesel">Diesel</Option>
                 </Select>
               </Form.Item> */}
-              <Form.Item name="length" label="Length (mm)">
-                <Input placeholder="Length (mm)" />
+              <Form.Item
+                name="length"
+                label="Length (mm)"
+                rules={rules.required}
+              >
+                <InputNumber placeholder="Length (mm)" min={1} />
               </Form.Item>
-              <Form.Item name="width" label="Width (mm)">
-                <Input placeholder="Width (mm)" />
+              <Form.Item name="width" label="Width (mm)" rules={rules.required}>
+                <InputNumber placeholder="Width (mm)" min={1} />
               </Form.Item>
-              <Form.Item name="height" label="Height (mm)">
-                <Input placeholder="Height (mm)" />
+              <Form.Item
+                name="height"
+                label="Height (mm)"
+                rules={rules.required}
+              >
+                <InputNumber placeholder="Height (mm)" min={1} />
               </Form.Item>
-              <Form.Item name="bootSpace" label="Boot Space (Litres)">
-                <Input placeholder="Boot Space (Litres)" />
+              <Form.Item
+                name="bootSpace"
+                label="Boot Space (Litres)"
+                rules={rules.required}
+              >
+                <InputNumber placeholder="Boot Space (Litres)" min={0} />
               </Form.Item>
-              <Form.Item name="seatingCapacity" label="Seating Capacity">
-                <Input placeholder="Seating Capacity" />
+              <Form.Item
+                name="seatingCapacity"
+                label="Seating Capacity"
+                rules={rules.required}
+              >
+                <Input placeholder="Seating Capacity" min={1} />
               </Form.Item>
               <Form.Item
                 name="groundClearanceUnladen"
                 label="Ground Clearance Unladen (mm)"
+                rules={rules.required}
               >
-                <Input placeholder="Ground Clearance Unladen (mm)" />
+                <Input placeholder="Ground Clearance Unladen (mm)" min={0} />
               </Form.Item>
-              <Form.Item name="noOfDoors" label="No of Doors">
-                <Input placeholder="No of Doors" />
+              <Form.Item
+                name="noOfDoors"
+                label="No of Doors"
+                rules={rules.required}
+              >
+                <InputNumber placeholder="No of Doors" min={1} />
               </Form.Item>
             </Card>
 
@@ -484,10 +750,18 @@ const VariantsForm = ({
                   <Option value={'no'}>No</Option>
                 </Select>
               </Form.Item>
-              <Form.Item name="parkingSensors" label="Parking Sensors">
+              <Form.Item
+                name="parkingSensors"
+                label="Parking Sensors"
+                rules={rules.required}
+              >
                 <Input placeholder="Parking Sensors" />
               </Form.Item>
-              <Form.Item name="foldableRearSeat" label="Foldable Rear Seat">
+              <Form.Item
+                name="foldableRearSeat"
+                label="Foldable Rear Seat"
+                rules={rules.required}
+              >
                 <Input placeholder="Foldable Rear Seat" />
               </Form.Item>
               <Form.Item name="keyLessEntry" label="KeyLess Entry">
@@ -525,12 +799,71 @@ const VariantsForm = ({
               </Form.Item>
             </Card>
 
-            <Card
-              title="Interior
-"
-            >
+            <Card title="Interior">
               <Form.Item name="tachometer" label="Tachometer">
                 <Select placeholder="Tachometer">
+                  <Option value={'yes'}>Yes</Option>
+                  <Option value={'no'}>No</Option>
+                </Select>
+              </Form.Item>
+
+              <Form.Item
+                name="electronicMultiTripmeter"
+                label="Electronic Multi-Tripmeter"
+              >
+                <Select placeholder="Electronic Multi-Tripmeter">
+                  <Option value={'yes'}>Yes</Option>
+                  <Option value={'no'}>No</Option>
+                </Select>
+              </Form.Item>
+              <Form.Item name="fabricUpholstery" label="Fabric Upholstery">
+                <Select placeholder="Fabric Upholstery">
+                  <Option value={'yes'}>Yes</Option>
+                  <Option value={'no'}>No</Option>
+                </Select>
+              </Form.Item>
+              <Form.Item
+                name="leatherSteeringWheel"
+                label="Leather Steering Wheel"
+              >
+                <Select placeholder="Leather Steering Wheel">
+                  <Option value={'yes'}>Yes</Option>
+                  <Option value={'no'}>No</Option>
+                </Select>
+              </Form.Item>
+              <Form.Item name="gloveCompartment" label="Glove Compartment">
+                <Select placeholder="Glove Compartment">
+                  <Option value={'yes'}>Yes</Option>
+                  <Option value={'no'}>No</Option>
+                </Select>
+              </Form.Item>
+              <Form.Item name="digitalClock" label="Digital Clock">
+                <Select placeholder="Digital Clock">
+                  <Option value={'yes'}>Yes</Option>
+                  <Option value={'no'}>No</Option>
+                </Select>
+              </Form.Item>
+              <Form.Item name="digitalOdometer" label="Digital Odometer">
+                <Select placeholder="Digital Odometer">
+                  <Option value={'yes'}>Yes</Option>
+                  <Option value={'no'}>No</Option>
+                </Select>
+              </Form.Item>
+
+              <Form.Item
+                name="additionalInteriorFeatures"
+                label="Additional Features"
+              >
+                <Input placeholder="Additional Features" />
+              </Form.Item>
+            </Card>
+
+            <Card title="Exterior">
+              <Form.Item
+                name="adjustableHeadlights"
+                label="Adjustable Headlights"
+              >
+                <Select placeholder="Adjustable Headlights">
                   <Option value={'yes'}>Yes</Option>
                   <Option value={'no'}>No</Option>
                 </Select>
@@ -590,10 +923,18 @@ const VariantsForm = ({
                   <Option value={'no'}>No</Option>
                 </Select>
               </Form.Item>
-              <Form.Item name="tyreSize" label="Tyre Size">
+              <Form.Item
+                name="tyreSize"
+                label="Tyre Size"
+                rules={rules.required}
+              >
                 <Input placeholder="Tyre Size" />
               </Form.Item>
-              <Form.Item name="tyreType" label="Tyre Type">
+              <Form.Item
+                name="tyreType"
+                label="Tyre Type"
+                rules={rules.required}
+              >
                 <Input placeholder="Tyre Type" />
               </Form.Item>
 
@@ -611,69 +952,9 @@ const VariantsForm = ({
               </Form.Item>
 
               <Form.Item
-                name="additionalInteriorFeatures"
-                label="Additional Features"
-              >
-                <Input placeholder="Additional Features" />
-              </Form.Item>
-            </Card>
-
-            <Card title="Exterior">
-              <Form.Item
-                name="adjustableHeadlights"
-                label="Adjustable Headlights"
-              >
-                <Select placeholder="Adjustable Headlights">
-                  <Option value={'yes'}>Yes</Option>
-                  <Option value={'no'}>No</Option>
-                </Select>
-              </Form.Item>
-              <Form.Item
-                name="electronicMultiTripmeter"
-                label="Electronic Multi-Tripmeter"
-              >
-                <Select placeholder="Electronic Multi-Tripmeter">
-                  <Option value={'yes'}>Yes</Option>
-                  <Option value={'no'}>No</Option>
-                </Select>
-              </Form.Item>
-              <Form.Item name="fabricUpholstery" label="Fabric Upholstery">
-                <Select placeholder="Fabric Upholstery">
-                  <Option value={'yes'}>Yes</Option>
-                  <Option value={'no'}>No</Option>
-                </Select>
-              </Form.Item>
-              <Form.Item
-                name="leatherSteeringWheel"
-                label="Leather Steering Wheel"
-              >
-                <Select placeholder="Leather Steering Wheel">
-                  <Option value={'yes'}>Yes</Option>
-                  <Option value={'no'}>No</Option>
-                </Select>
-              </Form.Item>
-              <Form.Item name="gloveCompartment" label="Glove Compartment">
-                <Select placeholder="Glove Compartment">
-                  <Option value={'yes'}>Yes</Option>
-                  <Option value={'no'}>No</Option>
-                </Select>
-              </Form.Item>
-              <Form.Item name="digitalClock" label="Digital Clock">
-                <Select placeholder="Digital Clock">
-                  <Option value={'yes'}>Yes</Option>
-                  <Option value={'no'}>No</Option>
-                </Select>
-              </Form.Item>
-              <Form.Item name="digitalOdometer" label="Digital Odometer">
-                <Select placeholder="Digital Odometer">
-                  <Option value={'yes'}>Yes</Option>
-                  <Option value={'no'}>No</Option>
-                </Select>
-              </Form.Item>
-
-              <Form.Item
                 name="additionalExteriorFeatures"
                 label="Additional Features"
+                rules={rules.required}
               >
                 <Input placeholder="Additional Features" />
               </Form.Item>

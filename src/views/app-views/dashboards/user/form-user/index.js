@@ -30,12 +30,13 @@ const UserForm = (props) => {
 
   const fetchUser = async () => {
     const data = await authAdminService.getSubAdminById(param.id);
+    console.log(data);
     if (data) {
       form.setFieldsValue({
         name: data.name,
         contact: data.contact,
         email: data.email,
-        employeeTypeId: data.employeeTypeId,
+        employeeTypeId: data.employeeType._id,
         status: data.status
       });
     } else {
