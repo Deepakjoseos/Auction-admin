@@ -1,26 +1,27 @@
-import React, { useState, useEffect } from 'react'
-import PageHeaderAlt from 'components/layout-components/PageHeaderAlt'
-import { Tabs, Form, Button, message } from 'antd'
-import Flex from 'components/shared-components/Flex'
-import GeneralField from './GeneralField'
-import useUpload from 'hooks/useUpload'
-import { singleImageUploader } from 'utils/s3/s3ImageUploader'
-import clientService from 'services/client'
-import Utils from 'utils'
-import { useHistory } from 'react-router-dom'
+import React, { useState, useEffect } from 'react';
+import PageHeaderAlt from 'components/layout-components/PageHeaderAlt';
+import { Tabs, Form, Button, message } from 'antd';
+import Flex from 'components/shared-components/Flex';
+import GeneralField from './GeneralField';
+import useUpload from 'hooks/useUpload';
+import { singleImageUploader } from 'utils/s3/s3ImageUploader';
+import clientService from 'services/client';
+import Utils from 'utils';
+import { useHistory } from 'react-router-dom';
+import fileManagerService from 'services/FileManager';
 
-const { TabPane } = Tabs
+const { TabPane } = Tabs;
 
-const ADD = 'ADD'
-const EDIT = 'EDIT'
+const ADD = 'ADD';
+const EDIT = 'EDIT';
 
 const ClientForm = (props) => {
-  const { mode = ADD, param } = props
-  const history = useHistory()
+  const { mode = ADD, param } = props;
+  const history = useHistory();
 
-  const [form] = Form.useForm()
-  const [uploadedImg, setImage] = useState(null)
-  const [submitLoading, setSubmitLoading] = useState(false)
+  const [form] = Form.useForm();
+  const [uploadedImg, setImage] = useState(null);
+  const [submitLoading, setSubmitLoading] = useState(false);
 
   // Normal Image
   const {
@@ -28,118 +29,125 @@ const ClientForm = (props) => {
     beforeUpload: beforeUploadImages,
     onChange: onChangeImages,
     onRemove: onRemoveImages,
-    setFileList: setFileListImages,
-  } = useUpload(1)
+    setFileList: setFileListImages
+  } = useUpload(1);
 
   useEffect(() => {
     if (mode === EDIT) {
       const fetchClientById = async () => {
-        const { id } = param
-        const data = await clientService.getClientById(id)
+        const { id } = param;
+        const data = await clientService.getClientById(id);
         if (data) {
-          let himg = []
+          let himg = [];
           if (data.image) {
             himg = [
               {
                 uid: Math.random() * 1000,
                 title: Utils.getBaseName(data.image),
                 url: data.image,
-                thumbUrl: data.image,
-              },
-            ]
+                thumbUrl: data.image
+              }
+            ];
 
-            setImage(himg)
-            setFileListImages(himg)
+            setImage(himg);
+            setFileListImages(himg);
           }
 
           form.setFieldsValue({
             title: data.title,
             status: data.status,
-            order: data.order,
-          })
+            order: data.order
+          });
         } else {
-          history.replace('/app/dashboards/client/client-list')
+          history.replace('/app/dashboards/client/client-list');
         }
-      }
+      };
 
-      fetchClientById()
+      fetchClientById();
     }
-  }, [form, mode, param, props])
+  }, [form, mode, param, props]);
 
   const propsImages = {
     multiple: false,
     beforeUpload: beforeUploadImages,
     onRemove: onRemoveImages,
     onChange: onChangeImages,
-    fileList: fileListImages,
-  }
+    fileList: fileListImages
+  };
 
   useEffect(() => {
-    console.log(fileListImages, 'hey-me')
-    setImage(fileListImages)
-  }, [fileListImages])
+    console.log(fileListImages, 'hey-me');
+    setImage(fileListImages);
+  }, [fileListImages]);
 
   const onFinish = async () => {
-    setSubmitLoading(true)
+    setSubmitLoading(true);
     form
       .validateFields()
       .then(async (values) => {
         if (mode === ADD) {
           // Checking if image exists
           if (uploadedImg.length !== 0 && uploadedImg !== null) {
-            console.log('uploadedImg', uploadedImg)
-            const imgValue = await singleImageUploader(
-              uploadedImg[0].originFileObj,
-              uploadedImg,
-              uploadedImg[0].url,
-              'client'
-            )
+            console.log('uploadedImg', uploadedImg);
+            // const imgValue = await singleImageUploader(
+            //   uploadedImg[0].originFileObj,
+            //   uploadedImg,
+            //   uploadedImg[0].url,
+            //   'client'
+            // )
+            const imgValue = await fileManagerService.getImageUrl(
+              uploadedImg[uploadedImg.length - 1].originFileObj
+            );
 
-            console.log('imgValue', imgValue)
+            console.log('imgValue', imgValue);
 
-            values.image = imgValue
+            values.image = imgValue;
 
-            const created = await clientService.createClient(values)
+            const created = await clientService.createClient(values);
             if (created) {
-              message.success(`Created ${values.title} to Client list`)
-              history.goBack()
+              message.success(`Created ${values.title} to Client list`);
+              history.goBack();
             }
           } else {
-            message.error('Please upload image')
+            message.error('Please upload image');
           }
         }
         if (mode === EDIT) {
           // Checking if image exists
           if (uploadedImg.length !== 0 && uploadedImg !== null) {
-            console.log('uploadedImg', uploadedImg)
-            const imgValue = await singleImageUploader(
-              uploadedImg[0].originFileObj,
-              uploadedImg,
-              uploadedImg[0].url,
-              'client'
-            )
+            console.log('uploadedImg', uploadedImg);
+            // const imgValue = await singleImageUploader(
+            //   uploadedImg[0].originFileObj,
+            //   uploadedImg,
+            //   uploadedImg[0].url,
+            //   'client'
+            // );
 
-            values.image = imgValue
+            const imgValue = await fileManagerService.getImageUrl(
+              uploadedImg[uploadedImg.length - 1].originFileObj
+            );
+
+            values.image = imgValue;
             // values.mobileImage = mobileImgValue
 
-            const edited = await clientService.editClient(param.id, values)
+            const edited = await clientService.editClient(param.id, values);
             if (edited) {
-              message.success(`Edited ${values.title} to Client list`)
-              history.goBack()
+              message.success(`Edited ${values.title} to Client list`);
+              history.goBack();
             }
-            setSubmitLoading(false)
+            setSubmitLoading(false);
           } else {
-            message.error('Please upload image')
+            message.error('Please upload image');
           }
         }
-        setSubmitLoading(false)
+        setSubmitLoading(false);
       })
       .catch((info) => {
-        setSubmitLoading(false)
-        console.log('info', info)
-        message.error('Please enter all required field ')
-      })
-  }
+        setSubmitLoading(false);
+        console.log('info', info);
+        message.error('Please enter all required field ');
+      });
+  };
 
   return (
     <>
@@ -149,7 +157,7 @@ const ClientForm = (props) => {
         name="advanced_search"
         className="ant-advanced-search-form"
         initialValues={{
-          status: 'Hold',
+          status: 'Hold'
         }}
       >
         <PageHeaderAlt className="border-bottom" overlap>
@@ -201,7 +209,7 @@ const ClientForm = (props) => {
         </div>
       </Form>
     </>
-  )
-}
+  );
+};
 
-export default ClientForm
+export default ClientForm;
