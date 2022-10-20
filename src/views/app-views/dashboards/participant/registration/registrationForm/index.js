@@ -38,11 +38,6 @@ const RegistrationForm = (props) => {
   const [feeTypes, setFeeType] = useState([]);
   const [status, setStatus] = useState([]);
 
-  useEffect(() => {
-    // getAllRegistrations();
-    getRegistration();
-  }, []);
-
   console.log(feeTypes);
 
   // const getFeeTypes = async () => {
@@ -60,13 +55,20 @@ const RegistrationForm = (props) => {
     }
   };
 
-  // const getAllRegistrations = async () => {
-  //   const data = await registrationService.getRegistrations();
-  //   if (data) {
-  //     setRegistrationsList(data);
-  //     setSearchBackupList(data);
-  //   }
-  // };
+  const getAllRegistrations = async () => {
+    const data = await registrationService.getRegistrations();
+    if (data) {
+      setRegistrationsList(data);
+      setSearchBackupList(data);
+    }
+  };
+
+  useEffect(() => {
+    getAllRegistrations();
+    getRegistration();
+  }, []);
+
+  console.log(registrationsList)
 
   const onFinish = async () => {
     console.log('submited');
@@ -186,13 +188,18 @@ const RegistrationForm = (props) => {
         return moment(parseInt(paymentDate)).format('L');
       }
     },
-    // {
-    //   title: 'Fee Type',
-    //   dataIndex: 'feeTypeId',
-    //   key: 'feeTypeId',
-    //   // render: (row) => {console},
-    //   render: (_, row) => findFeeTypeName(row.feeTypeId)
-    // },
+    {
+      title: 'Fee Type',
+      dataIndex: 'feeType',
+      key: 'feeType'
+      // render: (row) => {console},
+    },
+    {
+      title: 'Status',
+      dataIndex: 'status',
+      key: 'status'
+      // render: (row) => {console},
+    },
     // {
     //   title: 'Bank Name',
     //   dataIndex: 'payment',
@@ -303,7 +310,11 @@ const RegistrationForm = (props) => {
         <div className="container">
           {/* <Tabs defaultActiveKey="1" style={{ marginTop: 30 }}> */}
           {/* <TabPane tab="Generalfaefaef" key="1"> */}
-          <RegistrationField feeTypes={feeTypes} status={status} onFinish={onFinish} />
+          <RegistrationField
+            feeTypes={feeTypes}
+            status={status}
+            onFinish={onFinish}
+          />
           {/* </TabPane> */}
           {/* </Tabs> */}
         </div>

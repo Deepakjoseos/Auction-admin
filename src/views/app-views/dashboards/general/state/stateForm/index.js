@@ -33,7 +33,7 @@ const ClientForm = (props) => {
       form.setFieldsValue({
         name: data.name,
         status: data.status,
-        regionId: data.regionId,
+        regionId: data.region,
         abbreviation: data.abbreviation
       });
     } else {
