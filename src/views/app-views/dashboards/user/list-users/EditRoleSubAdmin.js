@@ -20,6 +20,25 @@ import constantsService from 'services/constants';
 
 const { Option } = Select;
 
+const valuess = [
+  'User',
+  'General',
+  'Car',
+  'Brand',
+  'Location',
+  'Vehicle Type',
+  'Participant',
+  'Wallet',
+  'Buying Limits',
+  'Group Members',
+  'Templates',
+  'Auctions',
+  'Deposits',
+  'Wallet Transactions',
+  'Client',
+  'Settings'
+];
+
 const EditRoleSubAdmin = ({ isFormOpen, setIsFormOpen, userId }) => {
   const [submitLoading, setSubmitLoading] = useState(false);
   const [roles, setRoles] = useState([]);
@@ -27,7 +46,7 @@ const EditRoleSubAdmin = ({ isFormOpen, setIsFormOpen, userId }) => {
   const getRoles = async () => {
     const data = await constantsService.getConstantsRole();
     if (data) {
-      const curRoles = data?.map((item) => {
+      const curRoles = valuess?.map((item) => {
         return {
           module: item,
           add: false,

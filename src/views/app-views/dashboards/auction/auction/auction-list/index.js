@@ -178,6 +178,11 @@ const GroupList = () => {
       sorter: (a, b) => utils.antdTableSorter(a, b, 'business')
     },
     {
+      title: 'Vehicle count',
+      dataIndex: 'inventoryCount',
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'business')
+    },
+    {
       title: 'Format',
       dataIndex: 'format',
       sorter: (a, b) => utils.antdTableSorter(a, b, 'business')
