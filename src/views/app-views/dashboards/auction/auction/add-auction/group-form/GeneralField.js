@@ -85,7 +85,7 @@ const GeneralField = ({
     <Row gutter={16}>
       <Col xs={24} sm={24} md={17}>
         <Card title="Basic Info">
-          <Form.Item name="image" label="Upload image" rules={rules.required}>
+          <Form.Item label="Upload image" rules={rules.required}>
             <Upload.Dragger
               multiple={false}
               type="file"

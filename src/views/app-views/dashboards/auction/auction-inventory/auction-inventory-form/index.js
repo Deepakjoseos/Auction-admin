@@ -19,6 +19,7 @@ import UploadImage from './upload-images';
 import constantsService from 'services/constants';
 import ImagesField from './upload-images/ImagesField';
 import fileManagerService from 'services/FileManager';
+import moment from 'moment';
 
 const { TabPane } = Tabs;
 
@@ -117,14 +118,20 @@ const AuctionInventoryForm = (props) => {
         ...data,
         hypothecation: data.hypothecation.toLowerCase() === 'true',
         rcAvailable: data.registrationInfo?.rcAvailable,
+        registrationType: data.registrationInfo?.registrationType,
         registrationYear: data.registrationInfo?.year,
+        registrationDate: moment(data.registrationInfo?.registrationDate),
         ...data.vehicleInfo,
         ...data.insuranceInfo,
         insuranceType: data.insuranceInfo?.type,
+        insuranceExpiryDate: moment(data.insuranceInfo?.expiryDate),
         insuranceInfo_Availability: data.insuranceInfo?.availability,
         ...data.taxInfo,
+        rtoTaxDate: moment(data.taxInfo?.rtoTaxDate),
         taxType: data.taxInfo?.type,
-        ...data.rtoInfo
+        ...data.rtoInfo,
+        lastRTODate: moment(data.rtoInfo?.lastRTODate),
+        repoDate: moment(data.repoDate)
       });
 
       if (images) {

@@ -164,7 +164,7 @@ const GeneralField = ({
                   ))}
                 </Select>
               </Form.Item>
-              <Form.Item name="repoDatee" label="Repo Date">
+              <Form.Item name="repoDate" label="Repo Date">
                 <DatePicker />
               </Form.Item>
               <Form.Item name="endorsementRCBook" label="Endorsement RCBook">
@@ -175,7 +175,7 @@ const GeneralField = ({
               </Form.Item>
               {/* registrationInfo */}
               <Form.Item
-                name='registrationDatee'
+                name='registrationDate'
                 label="Registration Date"
                 rules={rules.required}
               >
@@ -317,7 +317,7 @@ const GeneralField = ({
 
 
               <Form.Item
-                name={'insuranceExpiryDatee'}
+                name={'insuranceExpiryDate'}
                 label="Insurance Expiry Date"
               >
                 <DatePicker />
@@ -340,7 +340,7 @@ const GeneralField = ({
               <Form.Item name="paid" label="Tax Paid">
                 <Input placeholder="Tax Paid" />
               </Form.Item>
-              <Form.Item name="rtoTaxDatee" label="Tax Date">
+              <Form.Item name="rtoTaxDate" label="Tax Date">
                 <DatePicker />
               </Form.Item>
               <Form.Item name="taxType" label="Tax Type">
@@ -353,7 +353,7 @@ const GeneralField = ({
               <Form.Item name="currentRTOlocation" label="Current RTO location">
                 <Input placeholder="current RTO location" />
               </Form.Item>
-              <Form.Item name="lastRTODatee" label="Last RTO Date">
+              <Form.Item name="lastRTODate" label="Last RTO Date">
                 <DatePicker />
               </Form.Item>
               <Form.Item name="lastRTOLocation" label="Last RTO location">

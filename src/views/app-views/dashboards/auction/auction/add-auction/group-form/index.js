@@ -15,6 +15,7 @@ import cityService from 'services/city';
 import regionService from 'services/region';
 import clientService from 'services/client';
 import participantService from 'services/Participant';
+import moment from 'moment';
 const { TabPane } = Tabs;
 
 const ADD = 'ADD';
@@ -79,6 +80,7 @@ const FeeTypeForm = (props) => {
       const fetchfeeTypeById = async () => {
         const { id } = param;
         const data = await auctionService.getauctionById(id);
+        console.log(data);
         if (data) {
           form.setFieldsValue({
             name: data.name,
@@ -96,8 +98,8 @@ const FeeTypeForm = (props) => {
             closeType: data.closeType,
             bidLimit: data.bidLimit,
             termsAndConditions: data.termsAndConditions,
-            // startTimestamp: data.startTimestamp,
-            // endTimestamp: data.endTimestamp,
+            startTimestamp: moment(new Date(+data.startTimestamp).toDateString()),
+            endTimestamp: moment(new Date(+data.endTimestamp).toDateString()),
             showRegNumber: data.showRegNumber,
             showChasisNumber: data.showChasisNumber,
             showEngineNumber: data.showEngineNumber,
@@ -109,11 +111,11 @@ const FeeTypeForm = (props) => {
             showTNC: data.showTNC,
             showVehicleDownload: data.showVehicleDownload
           });
-          form.setFieldsValue({
-            // ...data,
-            startTimestamp: '',
-            endTimestamp: ''
-          });
+          // form.setFieldsValue({
+          //   // ...data,
+          //   startTimestamp: '',
+          //   endTimestamp: ''
+          // });
 
           setImageUrl(data.image);
         } else {
@@ -135,18 +137,17 @@ const FeeTypeForm = (props) => {
 
         values.startTimestamp = `${new Date(values.startTimestamp).getTime()}`;
         values.endTimestamp = `${new Date(values.endTimestamp).getTime()}`;
+        if (!imageUrl) {
+          message.error('Please enter all required field ');
+        }
+
+        values.image = imageUrl;
 
         if (mode === ADD) {
           // Checking if image exists
           console.log(values, 'asasasqwertyuijhgv');
-          if (!imageUrl) {
-            message.error('Please enter all required field ');
-          }
 
-          const created = await auctionService.createauction({
-            ...values,
-            image: imageUrl
-          });
+          const created = await auctionService.createauction(values);
           if (created) {
             message.success(`Created ${values.name} to auction list`);
             history.goBack();
