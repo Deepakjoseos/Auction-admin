@@ -16,6 +16,10 @@ import {
   DatePicker
 } from 'antd';
 
+import { ImageSvg } from 'assets/svg/icon';
+import CustomIcon from 'components/util-components/CustomIcon';
+
+
 // const { Dragger } = Upload
 const { Option } = Select;
 
@@ -143,7 +147,13 @@ const rules = {
 //   return null
 // }
 
-const RegistrationField = ({ onFinish, feeTypes, status }) => {
+const RegistrationField = ({
+  onFinish,
+  feeTypes,
+  status,
+  propsImages,
+  participantId
+}) => {
   // const initialValues = {
   //     participantId: currentParticipant._id,
 
@@ -314,15 +324,22 @@ const RegistrationField = ({ onFinish, feeTypes, status }) => {
             >
               <Input />
             </Form.Item>
-            <Form.Item
+            {/* <Form.Item
               name="receipt"
               label="Reciept"
               rules={rules.state}
               placeholder="Receipt image URL"
             >
               <Input />
-            </Form.Item>
+            </Form.Item> */}
           </Card>
+          <Col xs={24} sm={24} md={7}>
+            <Card title="Receipt">
+              <Upload listType="picture-card" name="logo" {...propsImages}>
+                <CustomIcon className="display-3" svg={ImageSvg} />
+              </Upload>
+            </Card>
+          </Col>
           <Button
             type="primary"
             htmlType="button"

@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   Input,
   Row,
@@ -8,7 +8,11 @@ import {
   Select,
   InputNumber,
   DatePicker,
-} from "antd";
+  Upload
+} from 'antd';
+
+import { ImageSvg } from 'assets/svg/icon';
+import CustomIcon from 'components/util-components/CustomIcon';
 
 const { Option } = Select;
 
@@ -16,82 +20,88 @@ const rules = {
   participantId: [
     {
       required: true,
-      message: "Required",
-    },
+      message: 'Required'
+    }
   ],
 
   paymentMode: [
     {
       required: true,
-      message: "Required",
-    },
+      message: 'Required'
+    }
   ],
   amount: [
     {
       required: true,
-      message: "Required",
-    },
+      message: 'Required'
+    }
   ],
   remark: [
     {
       required: true,
-      message: "Required",
-    },
+      message: 'Required'
+    }
   ],
   date: [
     {
       required: true,
-      message: "Required",
-    },
+      message: 'Required'
+    }
   ],
   countedIn: [
     {
       required: true,
-      message: "Required",
-    },
+      message: 'Required'
+    }
   ],
   bankName: [
     {
       required: true,
-      message: "Required",
-    },
+      message: 'Required'
+    }
   ],
   bankBranch: [
     {
       required: true,
-      message: "Required",
-    },
+      message: 'Required'
+    }
   ],
   receiptNumber: [
     {
       required: true,
-      message: "Required",
-    },
+      message: 'Required'
+    }
   ],
   businessType: [
     {
       required: true,
-      message: "Required",
-    },
+      message: 'Required'
+    }
   ],
   recieptUrl: [
     {
       required: true,
-      message: "Required",
-    },
-  ],
+      message: 'Required'
+    }
+  ]
 };
 
-const GeneralField = ({ participants, paymentModes }) => (
+const GeneralField = ({
+  participants,
+  paymentModes,
+  buyerEligibleBuisness,
+  uploadedImg,
+  propsImages
+}) => (
   <Row gutter={16}>
     <Col xs={24} sm={24} md={17}>
       <Card title="Basic Info">
         <div
           style={{
-            display: "flex",
-            flexDirection: "row",
-            gap: "1rem",
-            flexWrap: "wrap",
+            display: 'flex',
+            flexDirection: 'row',
+            gap: '1rem',
+            flexWrap: 'wrap'
           }}
         >
           <Form.Item
@@ -102,7 +112,7 @@ const GeneralField = ({ participants, paymentModes }) => (
             <Select placeholder="Participant">
               {participants.map((participant) => (
                 <Option
-                  disabled={participant.status === "Hold"}
+                  disabled={participant.status === 'Hold'}
                   value={participant._id}
                 >
                   {participant.name}
@@ -122,7 +132,7 @@ const GeneralField = ({ participants, paymentModes }) => (
             </Select>
           </Form.Item>
           <Form.Item name="amount" label="Amount" rules={rules.amount}>
-            <InputNumber min={0} defaultValue={0.0} />
+            <InputNumber />
           </Form.Item>
           <Form.Item name="remark" label="Remark" rules={rules.remark}>
             <Input placeholder="Remark" />
@@ -133,9 +143,9 @@ const GeneralField = ({ participants, paymentModes }) => (
             rules={rules.businessType}
           >
             <Select placeholder="Business Type">
-              <Option value="Bank">Bank</Option>
-              <Option value="Insurance">Insuarance</Option>
-              <Option value="Consumer Auction">Consumer Auction</Option>
+              {buyerEligibleBuisness.map((type) => (
+                <Option value={type}>{type}</Option>
+              ))}
             </Select>
           </Form.Item>
           <Form.Item name="date" label="Date" rules={rules.date}>
@@ -165,10 +175,17 @@ const GeneralField = ({ participants, paymentModes }) => (
           >
             <Input placeholder="Receipt Number" />
           </Form.Item>
-          <Form.Item name="recieptUrl" label="Reciept" rules={rules.recieptUrl}>
+          {/* <Form.Item name="recieptUrl" label="Reciept" rules={rules.recieptUrl}>
             <Input placeholder="Reciept" />
-          </Form.Item>
+          </Form.Item> */}
         </div>
+      </Card>
+    </Col>
+    <Col xs={24} sm={24} md={7}>
+      <Card title="Receipt">
+        <Upload listType="picture-card" name="logo" {...propsImages}>
+          <CustomIcon className="display-3" svg={ImageSvg} />
+        </Upload>
       </Card>
     </Col>
   </Row>

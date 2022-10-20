@@ -17,6 +17,8 @@ import EllipsisDropdown from 'components/shared-components/EllipsisDropdown';
 import Flex from 'components/shared-components/Flex';
 import constantsService from 'services/constants';
 import registrationService from 'services/registration';
+import useUpload from 'hooks/useUpload';
+import fileManagerService from 'services/FileManager';
 
 const { TabPane } = Tabs;
 
@@ -37,6 +39,7 @@ const RegistrationForm = (props) => {
   const [searchBackupList, setSearchBackupList] = useState([]);
   const [feeTypes, setFeeType] = useState([]);
   const [status, setStatus] = useState([]);
+  const [uploadedImg, setImage] = useState(null);
 
   console.log(feeTypes);
 
@@ -68,7 +71,25 @@ const RegistrationForm = (props) => {
     getRegistration();
   }, []);
 
-  console.log(registrationsList)
+  const {
+    fileList: fileListImages,
+    beforeUpload: beforeUploadImages,
+    onChange: onChangeImages,
+    onRemove: onRemoveImages,
+    setFileList: setFileListImages
+  } = useUpload(1);
+
+  const propsImages = {
+    multiple: false,
+    beforeUpload: beforeUploadImages,
+    onRemove: onRemoveImages,
+    onChange: onChangeImages,
+    fileList: fileListImages
+  };
+
+  useEffect(() => {
+    setImage(fileListImages);
+  }, [fileListImages]);
 
   const onFinish = async () => {
     console.log('submited');
@@ -78,6 +99,14 @@ const RegistrationForm = (props) => {
       .then(async (values) => {
         // if (mode === ADD) {
         // Checking if image exists
+        if (uploadedImg.length === 0 && uploadedImg === null) {
+          message.error('Please upload image');
+          return;
+        }
+
+        const imgValue = await fileManagerService.getImageUrl(
+          uploadedImg[uploadedImg.length - 1].originFileObj
+        );
 
         const sendingValues = {
           status: values?.status,
@@ -97,7 +126,7 @@ const RegistrationForm = (props) => {
             bankName: values.bankName,
             branchName: values.branchName,
             number: values.number,
-            receipt: values.receipt
+            receipt: imgValue
           }
         };
 
@@ -314,6 +343,8 @@ const RegistrationForm = (props) => {
             feeTypes={feeTypes}
             status={status}
             onFinish={onFinish}
+            propsImages={propsImages}
+            participantId={participantId}
           />
           {/* </TabPane> */}
           {/* </Tabs> */}
