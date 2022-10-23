@@ -42,17 +42,12 @@ const GeneralField = ({ form }) => {
   const getData = async () => {
     try {
       const data = await cityService.getCities();
-      console.log(data, 'city');
       setCitys(data);
       const data1 = await vehicletypeService.getVehicleTypes();
-      console.log(data1, 'city');
       setVehicleType(data1);
-      console.log(regions, 'asas');
-      const data2 = await participantService.getAllParticipants();
-      console.log(data2, 'city');
+      const data2 = await participantService.getAllParticipants('participantType=Seller');
       setParticipants(data2);
       const data3 = await regionService.getRegions();
-      console.log(data3, 'city');
       setRegions(data3);
       const states = await stateService.getStates();
       setStates(states);
@@ -109,8 +104,12 @@ const GeneralField = ({ form }) => {
               })}
             </Select>
           </Form.Item>
-          <Form.Item name="sellerName" label="Seller Name">
-            <Input placeholder="Seller Name" disabled />
+          <Form.Item name="sellerId" label="Seller Name">
+            <Select placeholder="Seller Name">
+              {participants.map((participant) => (
+                <Option value={participant._id}>{participant.name}</Option>
+              ))}
+            </Select>
           </Form.Item>
           <Form.Item name="status" label="Status" rules={rules.status}>
             <Select placeholder="Status">

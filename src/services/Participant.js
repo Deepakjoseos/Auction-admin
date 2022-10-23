@@ -79,4 +79,22 @@ participantService.uploadParticipant = async function (id, data) {
   }
 };
 
+participantService.updateParticipantPassword = async (id, newPassword) => {
+  const data = {
+    id: id,
+    password: newPassword
+  };
+  
+  try {
+    const res = await fetch({
+      url: `${apiRoute}/password/reset`,
+      method: 'put',
+      data: data
+    });
+    return res;
+  } catch (err) {
+    console.log(err, 'show-error');
+  }
+};
+
 export default participantService;

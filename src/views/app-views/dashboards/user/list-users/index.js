@@ -57,6 +57,7 @@ const UserList = () => {
 
   const getUsers = async () => {
     const data = await authAdminService.getAllSubAdmins();
+    console.log(data)
     if (data) {
       setList(data);
       setSearchBackupList(data);

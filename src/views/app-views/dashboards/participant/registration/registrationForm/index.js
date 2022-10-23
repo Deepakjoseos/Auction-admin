@@ -59,7 +59,9 @@ const RegistrationForm = (props) => {
   };
 
   const getAllRegistrations = async () => {
-    const data = await registrationService.getRegistrations();
+    const data = await registrationService.getParticipantRegistrations(
+      participantId
+    );
     if (data) {
       setRegistrationsList(data);
       setSearchBackupList(data);

@@ -22,6 +22,7 @@ import DocumentFieldForm from '../documentupload';
 import constantsService from 'services/constants';
 import { set } from 'lodash';
 import stateService from 'services/state';
+import ResetPassword from '../reset-password';
 
 const { TabPane } = Tabs;
 
@@ -295,6 +296,9 @@ const ParticipantForm = (props) => {
                 </TabPane>
                 <TabPane tab="Wallet Transactions" key="6">
                   <WalletTransactionParticipant participantId={param?.id} />
+                </TabPane>
+                <TabPane tab="Reset Password" key="7">
+                  <ResetPassword participantId={param?.id} />
                 </TabPane>
               </>
             )}

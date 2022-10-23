@@ -31,7 +31,6 @@ const GroupForm = (props) => {
     }
   }, [param?.id]);
 
-  console.log(mode);
   const fetchGroup = async () => {
     console.log('fetchgroupid', param);
     const { id } = param;
@@ -49,10 +48,7 @@ const GroupForm = (props) => {
         stateIds: data.states.map((state) => state._id),
         regionIds: data.regions.map((region) => region._id),
         status: data.status,
-        businessTypes: data.businessTypes,
-        sellerName: participants.find(
-          (participant) => participant._id === data.seller?._id
-        )?.name
+        businessTypes: data.businessTypes
       });
     } else {
       history.replace('/app/dashboards/general/group/group-list');
@@ -77,23 +73,25 @@ const GroupForm = (props) => {
         }
         if (mode === EDIT) {
           console.log('paramfetchgroup', param);
-          console.log(values.items);
-          const membersEdited = values.items.map((item) => {
-            return {
-              memberId: item.memberId,
-              remark: item.remark
-            };
-          });
+          if (values.items) {
+            const membersEdited = values.items.map((item) => {
+              return {
+                memberId: item.memberId,
+                remark: item.remark
+              };
+            });
 
-          let edited = await groupService.updateGroupMembers(
-            param?.id,
-            membersEdited
-          );
-          const { items, sellerName, ...newValues } = values;
+            const edited = await groupService.updateGroupMembers(
+              param?.id,
+              membersEdited
+            );
+          }
+          const { items,...newValues } = values;
+          console.log(newValues);
 
           console.log(newValues, 'newValues EDIT');
 
-          edited = await groupService.updateGroup(param?.id, newValues);
+         const edited = await groupService.updateGroup(param?.id, newValues);
           if (edited) {
             message.success(`Edited ${values.name} to group list`);
             history.goBack();
