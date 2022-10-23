@@ -527,8 +527,8 @@ class Utils {
       } else if (role.module === 'BUYING_LIMIT') {
         if (role.fetch) {
           navItems[0].submenu.push({
-            key: 'dashboards-buying-limit',
-            path: `${APP_PREFIX_PATH}/dashboards/buying-limit`,
+            key: 'dashboards-wallet',
+            path: `${APP_PREFIX_PATH}/dashboards/wallet`,
             title: 'Buying Limits',
             icon: AppstoreOutlined,
             breadcrumb: false,

@@ -28,10 +28,12 @@ const Groups = (props) => {
           component={UploadGroupMember}
         />
       )}
-      <Route
-        path={`${match.url}/group-list`}
-        render={(props) => <GroupList {...props} {...privileges} />}
-      />
+      {privileges.fetchPrivilege && (
+        <Route
+          path={`${match.url}/group-list`}
+          render={(props) => <GroupList {...props} {...privileges} />}
+        />
+      )}
     </Switch>
   );
 };

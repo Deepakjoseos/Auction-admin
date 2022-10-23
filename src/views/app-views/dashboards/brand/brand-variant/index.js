@@ -23,10 +23,12 @@ const BrandVariant = (props) => {
       {privileges.editPrivilege && (
         <Route path={`${match.url}/edit/:id`} component={EditBrandVariant} />
       )}
-      <Route
-        path={`${match.url}/brand-variant-list`}
-        render={(props) => <BrandVariantList {...props} {...privileges} />}
-      />
+      {privileges.fetchPrivilege && (
+        <Route
+          path={`${match.url}/brand-variant-list`}
+          render={(props) => <BrandVariantList {...props} {...privileges} />}
+        />
+      )}
     </Switch>
   );
 };

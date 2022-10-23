@@ -19,10 +19,12 @@ const Auction = (props) => {
       {privileges.editPrivilege && (
         <Route path={`${match.url}/edit-auction/:id`} component={EditAuction} />
       )}
-      <Route
-        path={`${match.url}/auction-list`}
-        render={(props) => <AuctionList {...props} {...privileges} />}
-      />
+      {privileges.fetchPrivilege && (
+        <Route
+          path={`${match.url}/auction-list`}
+          render={(props) => <AuctionList {...props} {...privileges} />}
+        />
+      )}
     </Switch>
   );
 };

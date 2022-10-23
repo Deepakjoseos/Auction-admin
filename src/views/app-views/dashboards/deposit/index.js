@@ -13,10 +13,12 @@ const Deposit = (props) => {
       {privileges.addPrivilege && (
         <Route path={`${match.url}/make-deposit`} component={MakeDeposit} />
       )}
-      <Route
-        path={`${match.url}/deposit-list`}
-        render={(props) => <DepositList {...props} {...privileges} />}
-      />
+      {privileges.fetchPrivilege && (
+        <Route
+          path={`${match.url}/deposit-list`}
+          render={(props) => <DepositList {...props} {...privileges} />}
+        />
+      )}
     </Switch>
   );
 };

@@ -28,10 +28,14 @@ const AuctionInventory = (props) => {
           component={EditAuctionInventory}
         />
       )}
-      <Route
-        path={`${match.url}/auction-inventory-list`}
-        render={(props) => <AuctionInventoryList {...props} {...privileges} />}
-      />
+      {privileges.fetchPrivilege && (
+        <Route
+          path={`${match.url}/auction-inventory-list`}
+          render={(props) => (
+            <AuctionInventoryList {...props} {...privileges} />
+          )}
+        />
+      )}
     </Switch>
   );
 };

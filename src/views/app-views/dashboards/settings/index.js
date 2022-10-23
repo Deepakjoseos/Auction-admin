@@ -22,10 +22,12 @@ const Settings = (props) => {
       {privileges.editPrivilege && (
         <Route path={`${match.url}/edit-settings`} component={EditSettings} />
       )}
-      <Route
-        path={`${match.url}/settings-list`}
-        render={(props) => <SettingsList {...props} {...privileges} />}
-      />
+      {privileges.fetchPrivilege && (
+        <Route
+          path={`${match.url}/settings-list`}
+          render={(props) => <SettingsList {...props} {...privileges} />}
+        />
+      )}
     </Switch>
   );
 };

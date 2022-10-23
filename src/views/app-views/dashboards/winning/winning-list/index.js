@@ -47,9 +47,11 @@ const getStockStatus = (status) => {
   return null;
 };
 
-const WinningList = () => {
+const WinningList = (props) => {
   const [winningList, setWinningList] = useState([]);
   const [searchBackupList, setSearchBackupList] = useState([]);
+
+  const { addPrivilege, editPrivilege, deletePrivilege } = props;
 
   const history = useHistory();
 
@@ -137,9 +139,7 @@ const WinningList = () => {
   // When Search is used
   const onSearch = (e) => {
     const value = e.currentTarget.value;
-    const searchArray = e.currentTarget.value
-      ? winningList
-      : searchBackupList;
+    const searchArray = e.currentTarget.value ? winningList : searchBackupList;
     const data = utils.wildCardSearch(searchArray, value);
     setWinningList(data);
   };
@@ -185,14 +185,16 @@ const WinningList = () => {
       <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
         {filters()}
         <div>
-          <Button
-            onClick={addLottery}
-            type="primary"
-            icon={<PlusCircleOutlined />}
-            block
-          >
-            Add Winning
-          </Button>
+          {addPrivilege && (
+            <Button
+              onClick={addLottery}
+              type="primary"
+              icon={<PlusCircleOutlined />}
+              block
+            >
+              Add Winning
+            </Button>
+          )}
         </div>
       </Flex>
       <div className="table-responsive">

@@ -17,10 +17,12 @@ const City = (props) => {
       {privileges.editPrivilege && (
         <Route path={`${match.url}/edit-city/:id`} component={EditCity} />
       )}
-      <Route
-        path={`${match.url}/city-list`}
-        render={(props) => <CityList {...props} {...privileges} />}
-      />
+      {privileges.fetchPrivilege && (
+        <Route
+          path={`${match.url}/city-list`}
+          render={(props) => <CityList {...props} {...privileges} />}
+        />
+      )}
     </Switch>
   );
 };

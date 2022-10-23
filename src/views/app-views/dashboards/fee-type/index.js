@@ -22,10 +22,12 @@ const FeeType = (props) => {
           component={EditFeeType}
         />
       )}
-      <Route
-        path={`${match.url}/fee-type-list`}
-        render={(props) => <FeeTypeList {...props} {...privileges} />}
-      />
+      {privileges.fetchPrivilege && (
+        <Route
+          path={`${match.url}/fee-type-list`}
+          render={(props) => <FeeTypeList {...props} {...privileges} />}
+        />
+      )}
     </Switch>
   );
 };

@@ -27,10 +27,12 @@ const EmployeeType = (props) => {
           component={EditEmployeeType}
         />
       )}
-      <Route
-        path={`${match.url}/employee-type-list`}
-        render={(props) => <EmployeeTypeList {...props} {...privileges} />}
-      />
+      {privileges.fetchPrivilege && (
+        <Route
+          path={`${match.url}/employee-type-list`}
+          render={(props) => <EmployeeTypeList {...props} {...privileges} />}
+        />
+      )}
     </Switch>
   );
 };

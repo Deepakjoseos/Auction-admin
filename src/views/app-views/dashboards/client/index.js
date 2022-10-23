@@ -20,10 +20,12 @@ const Banner = (props) => {
       {privileges.editPrivilege && (
         <Route path={`${match.url}/edit-client/:id`} component={EditClient} />
       )}
-      <Route
-        path={`${match.url}/client-list`}
-        render={(props) => <ClientList {...props} {...privileges} />}
-      />
+      {privileges.fetchPrivilege && (
+        <Route
+          path={`${match.url}/client-list`}
+          render={(props) => <ClientList {...props} {...privileges} />}
+        />
+      )}
     </Switch>
   );
 };

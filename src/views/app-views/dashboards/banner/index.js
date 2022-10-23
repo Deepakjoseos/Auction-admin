@@ -16,12 +16,18 @@ const Banner = (props) => {
   return (
     <Switch>
       <Redirect exact from={`${match.url}`} to={`${match.url}/banner-list`} />
-      {privileges.addPrivilege && <Route path={`${match.url}/add-banner`} component={AddBanner} />}
-      {privileges.editPrivilege && <Route path={`${match.url}/edit-banner/:id`} component={EditBanner} />}
-      <Route
-        path={`${match.url}/banner-list`}
-        render={(props) => <BannerList {...props} {...privileges} />}
-      />
+      {privileges.addPrivilege && (
+        <Route path={`${match.url}/add-banner`} component={AddBanner} />
+      )}
+      {privileges.editPrivilege && (
+        <Route path={`${match.url}/edit-banner/:id`} component={EditBanner} />
+      )}
+      {privileges.fetchPrivilege && (
+        <Route
+          path={`${match.url}/banner-list`}
+          render={(props) => <BannerList {...props} {...privileges} />}
+        />
+      )}
     </Switch>
   );
 };

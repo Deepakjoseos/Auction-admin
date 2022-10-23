@@ -30,10 +30,12 @@ const Participant = (props) => {
           component={AddParticipant}
         />
       )}
-      <Route
-        path={`${match.url}/participant-list`}
-        render={(props) => <ParticipantList {...props} {...privileges} />}
-      />
+      {privileges.fetchPrivilege && (
+        <Route
+          path={`${match.url}/participant-list`}
+          render={(props) => <ParticipantList {...props} {...privileges} />}
+        />
+      )}
     </Switch>
   );
 };

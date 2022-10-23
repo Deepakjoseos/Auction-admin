@@ -1,10 +1,10 @@
-import React from "react";
-import { Route, Switch, Redirect } from "react-router-dom";
-import Addregion from "./add-region";
+import React from 'react';
+import { Route, Switch, Redirect } from 'react-router-dom';
+import Addregion from './add-region';
 
-import RegionList from "./region-list";
-import Editregion from "./edit-region";
-import useUserPrivilege from "hooks/useUserPrivilege";
+import RegionList from './region-list';
+import Editregion from './edit-region';
+import useUserPrivilege from 'hooks/useUserPrivilege';
 
 // import Orders from './orders'
 
@@ -21,10 +21,12 @@ const Region = (props) => {
       {privileges.editPrivilege && (
         <Route path={`${match.url}/edit-region/:id`} component={Editregion} />
       )}
-      <Route
-        path={`${match.url}/region-list`}
-        render={(props) => <RegionList {...props} {...privileges} />}
-      />
+      {privileges.fetchPrivilege && (
+        <Route
+          path={`${match.url}/region-list`}
+          render={(props) => <RegionList {...props} {...privileges} />}
+        />
+      )}
     </Switch>
   );
 };

@@ -30,10 +30,12 @@ const Information = (props) => {
           render={(props) => <EditInformation {...props} />}
         />
       )}
-      <Route
-        path={`${match.url}/information-list`}
-        render={(props) => <InformationList {...props} {...privileges} />}
-      />
+      {privileges.fetchPrivilege && (
+        <Route
+          path={`${match.url}/information-list`}
+          render={(props) => <InformationList {...props} {...privileges} />}
+        />
+      )}
     </Switch>
   );
 };

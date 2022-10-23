@@ -18,10 +18,12 @@ const States = (props) => {
       {privileges.editPrivilege && (
         <Route path={`${match.url}/edit-state/:id`} component={EditState} />
       )}
-      <Route
-        path={`${match.url}/state-list`}
-        render={(props) => <StateList {...props} {...privileges} />}
-      />
+      {privileges.fetchPrivilege && (
+        <Route
+          path={`${match.url}/state-list`}
+          render={(props) => <StateList {...props} {...privileges} />}
+        />
+      )}
     </Switch>
   );
 };

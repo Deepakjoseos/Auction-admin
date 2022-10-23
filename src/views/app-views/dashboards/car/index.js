@@ -19,10 +19,12 @@ const Car = (props) => {
       {privileges.editPrivilege && (
         <Route path={`${match.url}/edit-car/:id`} component={EditCar} />
       )}
-      <Route
-        path={`${match.url}/car-list`}
-        render={(props) => <CarList {...props} {...privileges} />}
-      />
+      {privileges.fetchPrivilege && (
+        <Route
+          path={`${match.url}/car-list`}
+          render={(props) => <CarList {...props} {...privileges} />}
+        />
+      )}
     </Switch>
   );
 };

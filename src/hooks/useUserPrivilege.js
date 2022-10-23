@@ -8,11 +8,18 @@ const useUserPrivilege = (moduleName) => {
   );
 
   const isUserAdmin = user.auth === 'Admin';
+  const fetchPrivilege = isUserAdmin || userRoles.fetch;
   const addPrivilege = isUserAdmin || userRoles.add;
   const editPrivilege = isUserAdmin || userRoles.edit;
   const deletePrivilege = isUserAdmin || userRoles.delete;
 
-  return { addPrivilege, editPrivilege, deletePrivilege };
+  return {
+    fetchPrivilege,
+    addPrivilege,
+    editPrivilege,
+    deletePrivilege,
+    isUserAdmin
+  };
 };
 
 export default useUserPrivilege;
