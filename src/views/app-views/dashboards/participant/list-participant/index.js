@@ -1,29 +1,29 @@
-import React, { useEffect, useState } from "react";
-import { Card, Table, Select, Input, Button, Menu, Tag } from "antd";
+import React, { useEffect, useState } from 'react';
+import { Card, Table, Select, Input, Button, Menu, Tag } from 'antd';
 // import InformationListData from 'assets/data/product-list.data.json'
 import {
   EyeOutlined,
   SearchOutlined,
-  PlusCircleOutlined,
-} from "@ant-design/icons";
-import EllipsisDropdown from "components/shared-components/EllipsisDropdown";
-import Flex from "components/shared-components/Flex";
-import { useHistory } from "react-router-dom";
-import utils from "utils";
-import participantService from "services/Participant";
-import { useSelector } from "react-redux";
+  PlusCircleOutlined
+} from '@ant-design/icons';
+import EllipsisDropdown from 'components/shared-components/EllipsisDropdown';
+import Flex from 'components/shared-components/Flex';
+import { useHistory } from 'react-router-dom';
+import utils from 'utils';
+import participantService from 'services/Participant';
+import { useSelector } from 'react-redux';
 
 const { Option } = Select;
 
 const getStockStatus = (status) => {
-  if (status === "Active") {
+  if (status === 'Active') {
     return (
       <>
         <Tag color="green">Active</Tag>
       </>
     );
   }
-  if (status === "Hold") {
+  if (status === 'Hold') {
     return (
       <>
         <Tag color="red">Hold</Tag>
@@ -32,8 +32,10 @@ const getStockStatus = (status) => {
   }
   return null;
 };
-const ParticipantList = () => {
+const ParticipantList = (props) => {
   let history = useHistory();
+
+  const { addPrivilege, editPrivilege, deletePrivilege } = props;
 
   const [list, setList] = useState([]);
   const [searchBackupList, setSearchBackupList] = useState([]);
@@ -44,9 +46,9 @@ const ParticipantList = () => {
   useEffect(() => {
     if (user) {
       const paricipantRole = user.roles.find(
-        (role) => role.module === "PARTICIPANT"
+        (role) => role.module === 'PARTICIPANT'
       );
-      console.log("paricipantRole", paricipantRole);
+      console.log('paricipantRole', paricipantRole);
       setCurrentSubAdminRole(paricipantRole);
     }
   }, [user]);
@@ -59,38 +61,25 @@ const ParticipantList = () => {
       if (data) {
         setList(data);
         setSearchBackupList(data);
-        console.log(data, "show-data");
+        console.log(data, 'show-data');
       }
     };
     getAllParticipants();
   }, []);
 
   const dropdownMenu = (row) => {
-    if (window.localStorage.getItem("auth_type") === "Admin") {
-      return (
-        <Menu>
+    return (
+      <Menu>
+        {editPrivilege && (
           <Menu.Item onClick={() => viewDetails(row)}>
             <Flex alignItems="center">
               <EyeOutlined />
               <span className="ml-2">View Details</span>
             </Flex>
           </Menu.Item>
-        </Menu>
-      );
-    } else {
-      if (currentSubAdminRole?.edit) {
-        return (
-          <Menu>
-            <Menu.Item onClick={() => viewDetails(row)}>
-              <Flex alignItems="center">
-                <EyeOutlined />
-                <span className="ml-2">View Details</span>
-              </Flex>
-            </Menu.Item>
-          </Menu>
-        );
-      }
-    }
+        )}
+      </Menu>
+    );
   };
 
   const addProduct = () => {
@@ -119,58 +108,51 @@ const ParticipantList = () => {
   //       }
   //     }
   //   }
- 
 
   const tableColumns = [
     {
-      title: "id",
-      dataIndex: "_id",
-      sorter: (a, b) => utils.antdTableSorter(a, b, "_id"),
+      title: 'id',
+      dataIndex: '_id',
+      sorter: (a, b) => utils.antdTableSorter(a, b, '_id')
     },
     {
-      title: "Name",
-      dataIndex: "name",
-      sorter: (a, b) => utils.antdTableSorter(a, b, "name"),
+      title: 'Name',
+      dataIndex: 'name',
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'name')
     },
     {
-      title: "Email",
-      dataIndex: "email",
+      title: 'Email',
+      dataIndex: 'email'
     },
     {
-      title: "Contact Number",
-      dataIndex: "contact",
+      title: 'Contact Number',
+      dataIndex: 'contact'
     },
     {
-      title: "Contact Number",
-      dataIndex: "contact",
+      title: 'Contact Number',
+      dataIndex: 'contact'
     },
     {
-      title: "Participant Type",
-      dataIndex: "participantType",
+      title: 'Participant Type',
+      dataIndex: 'participantType'
     },
     {
-      title: "GST",
-      dataIndex: "gst",
+      title: 'GST',
+      dataIndex: 'gst',
       render: (text, row) => {
-        return <span>{row.gst ? "Yes" : "No"}</span>;
-      },
+        return <span>{row.gst ? 'Yes' : 'No'}</span>;
+      }
     },
- 
+
     {
-      title: "",
-      dataIndex: "actions",
+      title: '',
+      dataIndex: 'actions',
       render: (_, elm) => (
         <div className="text-right">
-          {window.localStorage.getItem("auth_type") === "Admin" ? (
-            <EllipsisDropdown menu={dropdownMenu(elm)} />
-          ) : (
-            currentSubAdminRole?.edit && (
-              <EllipsisDropdown menu={dropdownMenu(elm)} />
-            )
-          )}
+          {editPrivilege && <EllipsisDropdown menu={dropdownMenu(elm)} />}
         </div>
-      ),
-    },
+      )
+    }
   ];
 
   const onSearch = (e) => {
@@ -181,8 +163,8 @@ const ParticipantList = () => {
   };
 
   const handleShowStatus = (value) => {
-    if (value !== "All") {
-      const key = "status";
+    if (value !== 'All') {
+      const key = 'status';
       const data = utils.filterArray(searchBackupList, key, value);
       setList(data);
     } else {
@@ -220,20 +202,7 @@ const ParticipantList = () => {
       <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
         {filters()}
         <div>
-          {window.localStorage.getItem("auth_type") === "SubAdmin" ? (
-            <>
-              {currentSubAdminRole?.add && (
-                <Button
-                  onClick={addProduct}
-                  type="primary"
-                  icon={<PlusCircleOutlined />}
-                  block
-                >
-                  Add Participant
-                </Button>
-              )}
-            </>
-          ) : (
+          {addPrivilege && (
             <Button
               onClick={addProduct}
               type="primary"

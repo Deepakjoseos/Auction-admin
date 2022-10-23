@@ -47,7 +47,7 @@ const getStockStatus = (status) => {
   return null;
 };
 
-const CommentList = () => {
+const CommentList = (props) => {
   const [auctionInventories, setAuctionInventories] = useState([]);
 
   const [commentList, setCommentList] = useState([]);
@@ -55,6 +55,8 @@ const CommentList = () => {
   const [selectedInventoryId, setSelectedInventoryId] = useState(null);
 
   const history = useHistory();
+
+  const { addPrivilege, editPrivilege, deletePrivilege } = props;
 
   const getAuctionInventories = async () => {
     const data = await auctionInventoryService.getInventories();
@@ -106,7 +108,7 @@ const CommentList = () => {
     }
   };
   const dropdownMenu = (row) => {
-    if (window.localStorage.getItem('auth_type') === 'Admin') {
+    if (deletePrivilege) {
       return (
         <Menu>
           <Menu.Item onClick={() => deleteRow(row)}>
@@ -169,7 +171,7 @@ const CommentList = () => {
       dataIndex: 'actions',
       render: (_, elm) => (
         <div className="text-right">
-          <EllipsisDropdown menu={dropdownMenu(elm)} />
+          {deletePrivilege && <EllipsisDropdown menu={dropdownMenu(elm)} />}
         </div>
       )
     }

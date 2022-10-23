@@ -1,21 +1,21 @@
-import React, { useEffect, useState } from 'react'
-import { Card, Table, Select, Input, Button, Menu, Tag } from 'antd'
+import React, { useEffect, useState } from 'react';
+import { Card, Table, Select, Input, Button, Menu, Tag } from 'antd';
 // import BrandListData from 'assets/data/product-list.data.json'
 import {
   EyeOutlined,
   DeleteOutlined,
   SearchOutlined,
-  PlusCircleOutlined,
-} from '@ant-design/icons'
-import AvatarStatus from 'components/shared-components/AvatarStatus'
-import EllipsisDropdown from 'components/shared-components/EllipsisDropdown'
-import Flex from 'components/shared-components/Flex'
-import { useHistory } from 'react-router-dom'
-import utils from 'utils'
-import clientService from 'services/client'
-import { useSelector } from 'react-redux'
+  PlusCircleOutlined
+} from '@ant-design/icons';
+import AvatarStatus from 'components/shared-components/AvatarStatus';
+import EllipsisDropdown from 'components/shared-components/EllipsisDropdown';
+import Flex from 'components/shared-components/Flex';
+import { useHistory } from 'react-router-dom';
+import utils from 'utils';
+import clientService from 'services/client';
+import { useSelector } from 'react-redux';
 
-const { Option } = Select
+const { Option } = Select;
 
 const getStockStatus = (status) => {
   if (status === 'Active') {
@@ -23,14 +23,14 @@ const getStockStatus = (status) => {
       <>
         <Tag color="green">Active</Tag>
       </>
-    )
+    );
   }
   if (status === 'Hold') {
     return (
       <>
         <Tag color="red">Hold</Tag>
       </>
-    )
+    );
   }
 
   if (status === 'Deleted') {
@@ -38,79 +38,66 @@ const getStockStatus = (status) => {
       <>
         <Tag color="red">Deleted</Tag>
       </>
-    )
+    );
   }
-  return null
-}
-const ClientList = () => {
-  let history = useHistory()
+  return null;
+};
+const ClientList = (props) => {
+  let history = useHistory();
 
-  const [list, setList] = useState([])
-  const [searchBackupList, setSearchBackupList] = useState([])
-  const [selectedRows, setSelectedRows] = useState([])
-  const [selectedRowKeys, setSelectedRowKeys] = useState([])
-  const [currentSubAdminRole, setCurrentSubAdminRole] = useState({})
+  const { addPrivilege, editPrivilege, deletePrivilege } = props;
+
+  const [list, setList] = useState([]);
+  const [searchBackupList, setSearchBackupList] = useState([]);
+  const [selectedRows, setSelectedRows] = useState([]);
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [currentSubAdminRole, setCurrentSubAdminRole] = useState({});
 
   useEffect(() => {
     // Getting Lotteries List to display in the table
     const getClients = async () => {
-      const data = await clientService.getClients()
+      const data = await clientService.getClients();
       if (data) {
-        setList(data)
-        setSearchBackupList(data)
-        console.log(data, 'show-data')
+        setList(data);
+        setSearchBackupList(data);
+        console.log(data, 'show-data');
       }
-    }
-    getClients()
-  }, [])
+    };
+    getClients();
+  }, []);
 
-  const { user } = useSelector((state) => state.auth)
+  const { user } = useSelector((state) => state.auth);
 
   useEffect(() => {
     if (user) {
-      const clientRole = user.roles.find((role) => role.module === 'CLIENT')
-      console.log('clientRole', clientRole)
-      setCurrentSubAdminRole(clientRole)
+      const clientRole = user.roles.find((role) => role.module === 'CLIENT');
+      console.log('clientRole', clientRole);
+      setCurrentSubAdminRole(clientRole);
     }
-  }, [user])
+  }, [user]);
 
   // Dropdown menu for each row
   const dropdownMenu = (row) => {
-    if (window.localStorage.getItem('auth_type') === 'Admin') {
-      return (
-        <Menu>
-          <Menu.Item onClick={() => viewDetails(row)}>
-            <Flex alignItems="center">
-              <EyeOutlined />
-              <span className="ml-2">View Details</span>
-            </Flex>
-          </Menu.Item>
-        </Menu>
-      )
-    } else {
-      return (
-        <Menu>
-          {currentSubAdminRole?.edit && (
-            <Menu.Item onClick={() => viewDetails(row)}>
-              <Flex alignItems="center">
-                <EyeOutlined />
-                <span className="ml-2">View Details</span>
-              </Flex>
-            </Menu.Item>
-          )}
-        </Menu>
-      )
-    }
-  }
+    return (
+      <Menu>
+        <Menu.Item onClick={() => viewDetails(row)}>
+          <Flex alignItems="center">
+            <EyeOutlined />
+            <span className="ml-2">View Details</span>
+          </Flex>
+        </Menu.Item>
+      </Menu>
+    );
+  };
 
   const addClient = () => {
-    history.push(`/app/dashboards/client/add-client`)
-  }
+    history.push(`/app/dashboards/client/add-client`);
+  };
 
   const viewDetails = (row) => {
-    console.log('row', row)
-    history.push(`/app/dashboards/client/edit-client/${row._id}`)
-  }
+    console.log('row', row);
+    history.push(`/app/dashboards/client/edit-client/${row._id}`);
+  };
 
   // For deleting a row
   // const deleteRow = async (row) => {
@@ -137,13 +124,13 @@ const ClientList = () => {
     {
       title: 'Title',
       dataIndex: 'title',
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'title'),
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'title')
     },
 
     {
       title: 'Order',
       dataIndex: 'order',
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'order'),
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'order')
     },
 
     {
@@ -152,44 +139,38 @@ const ClientList = () => {
       render: (status) => (
         <Flex alignItems="center">{getStockStatus(status)}</Flex>
       ),
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'status'),
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'status')
     },
     {
       title: '',
       dataIndex: 'actions',
       render: (_, elm) => (
         <div className="text-right">
-          {window.localStorage.getItem('auth_type') === 'Admin' ? (
-            <EllipsisDropdown menu={dropdownMenu(elm)} />
-          ) : (
-            currentSubAdminRole?.edit && (
-              <EllipsisDropdown menu={dropdownMenu(elm)} />
-            )
-          )}
+          {editPrivilege && <EllipsisDropdown menu={dropdownMenu(elm)} />}
         </div>
-      ),
-    },
-  ]
+      )
+    }
+  ];
 
   // When Search is used
   const onSearch = (e) => {
-    const value = e.currentTarget.value
-    const searchArray = e.currentTarget.value ? list : searchBackupList
-    const data = utils.wildCardSearch(searchArray, value)
-    setList(data)
-    setSelectedRowKeys([])
-  }
+    const value = e.currentTarget.value;
+    const searchArray = e.currentTarget.value ? list : searchBackupList;
+    const data = utils.wildCardSearch(searchArray, value);
+    setList(data);
+    setSelectedRowKeys([]);
+  };
 
   // Filter Status Handler
   const handleShowStatus = (value) => {
     if (value !== 'All') {
-      const key = 'status'
-      const data = utils.filterArray(searchBackupList, key, value)
-      setList(data)
+      const key = 'status';
+      const data = utils.filterArray(searchBackupList, key, value);
+      setList(data);
     } else {
-      setList(searchBackupList)
+      setList(searchBackupList);
     }
-  }
+  };
 
   // Table Filters JSX Elements
   const filters = () => (
@@ -215,27 +196,14 @@ const ClientList = () => {
         </Select>
       </div>
     </Flex>
-  )
+  );
 
   return (
     <Card>
       <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
         {filters()}
         <div>
-          {window.localStorage.getItem('auth_type') === 'SubAdmin' ? (
-            <>
-              {currentSubAdminRole?.add && (
-                <Button
-                  onClick={addClient}
-                  type="primary"
-                  icon={<PlusCircleOutlined />}
-                  block
-                >
-                  Add Client
-                </Button>
-              )}
-            </>
-          ) : (
+          {addPrivilege && (
             <Button
               onClick={addClient}
               type="primary"
@@ -251,7 +219,7 @@ const ClientList = () => {
         <Table columns={tableColumns} dataSource={list} rowKey="id" />
       </div>
     </Card>
-  )
-}
+  );
+};
 
-export default ClientList
+export default ClientList;

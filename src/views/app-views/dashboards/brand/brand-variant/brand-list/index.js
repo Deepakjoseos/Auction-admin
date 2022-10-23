@@ -1,30 +1,30 @@
-import React, { useEffect, useState } from "react";
-import { Card, Table, Select, Input, Button, Menu, Tag } from "antd";
+import React, { useEffect, useState } from 'react';
+import { Card, Table, Select, Input, Button, Menu, Tag } from 'antd';
 import {
   EyeOutlined,
   DeleteOutlined,
   SearchOutlined,
-  PlusCircleOutlined,
-} from "@ant-design/icons";
-import AvatarStatus from "components/shared-components/AvatarStatus";
-import EllipsisDropdown from "components/shared-components/EllipsisDropdown";
-import Flex from "components/shared-components/Flex";
-import { useHistory } from "react-router-dom";
-import utils from "utils";
-import { useSelector } from "react-redux";
-import brandVariantService from "services/brandVariant.service";
+  PlusCircleOutlined
+} from '@ant-design/icons';
+import AvatarStatus from 'components/shared-components/AvatarStatus';
+import EllipsisDropdown from 'components/shared-components/EllipsisDropdown';
+import Flex from 'components/shared-components/Flex';
+import { useHistory } from 'react-router-dom';
+import utils from 'utils';
+import { useSelector } from 'react-redux';
+import brandVariantService from 'services/brandVariant.service';
 
 const { Option } = Select;
 
 const getStockStatus = (status) => {
-  if (status === "Active") {
+  if (status === 'Active') {
     return (
       <>
         <Tag color="green">Active</Tag>
       </>
     );
   }
-  if (status === "Hold") {
+  if (status === 'Hold') {
     return (
       <>
         <Tag color="red">Hold</Tag>
@@ -34,7 +34,7 @@ const getStockStatus = (status) => {
 
   return null;
 };
-const BrandVariantList = () => {
+const BrandVariantList = (props) => {
   let history = useHistory();
 
   const [list, setList] = useState([]);
@@ -44,14 +44,16 @@ const BrandVariantList = () => {
 
   const { user } = useSelector((state) => state.auth);
 
+  const { addPrivilege, editPrivilege, deletePrivilege } = props;
+
   useEffect(() => {
     if (user) {
-      const brandRole = user.roles.find((role) => role.module === "BRAND");
-      console.log("brandRole", brandRole);
+      const brandRole = user.roles.find((role) => role.module === 'BRAND');
+      console.log('brandRole', brandRole);
       setCurrentSubAdminRole(brandRole);
     }
   }, [user]);
-  console.log(user, "jhbjkbuser");
+  console.log(user, 'jhbjkbuser');
 
   useEffect(() => {
     getBrandVariants();
@@ -62,43 +64,32 @@ const BrandVariantList = () => {
     if (data) {
       setList(data);
       setSearchBackupList(data);
-      console.log(data, "show-data");
+      console.log(data, 'show-data');
     }
   };
 
   // Dropdown menu for each row
   const dropdownMenu = (row) => {
-    if (window.localStorage.getItem("auth_type") === "Admin") {
-      return (
-        <Menu>
+    return (
+      <Menu>
+        {editPrivilege && (
           <Menu.Item onClick={() => viewDetails(row)}>
             <Flex alignItems="center">
               <EyeOutlined />
               <span className="ml-2">View Details</span>
             </Flex>
           </Menu.Item>
+        )}
+        {deletePrivilege && (
           <Menu.Item onClick={() => deleteRow(row)}>
             <Flex alignItems="center">
               <DeleteOutlined />
               <span className="ml-2">Delete</span>
             </Flex>
           </Menu.Item>
-        </Menu>
-      );
-    } else {
-      if (currentSubAdminRole?.edit) {
-        return (
-          <Menu>
-            <Menu.Item onClick={() => viewDetails(row)}>
-              <Flex alignItems="center">
-                <EyeOutlined />
-                <span className="ml-2">View Details</span>
-              </Flex>
-            </Menu.Item>
-          </Menu>
-        );
-      }
-    }
+        )}
+      </Menu>
+    );
   };
 
   const addProduct = () => {
@@ -113,9 +104,8 @@ const BrandVariantList = () => {
     console.log(row);
     const resp = await brandVariantService.delete(row._id);
     if (resp) {
-      getBrandVariants()
+      getBrandVariants();
     }
-     
 
     // if (resp) {
     //   const objKey = "id";
@@ -135,8 +125,8 @@ const BrandVariantList = () => {
   // Antd Table Columns
   const tableColumns = [
     {
-      title: "Variant",
-      dataIndex: "name",
+      title: 'Variant',
+      dataIndex: 'name',
       render: (_, record) => (
         <div className="d-flex">
           <AvatarStatus
@@ -147,37 +137,33 @@ const BrandVariantList = () => {
           />
         </div>
       ),
-      sorter: (a, b) => utils.antdTableSorter(a, b, "name"),
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'name')
     },
     {
-      title: "Brand",
-      dataIndex: "brand",
+      title: 'Brand',
+      dataIndex: 'brand',
       render: (brand) => <Flex alignItems="center">{brand.name}</Flex>,
-      sorter: (a, b) => utils.antdTableSorter(a, b, "name"),
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'name')
     },
     {
-      title: "Status",
-      dataIndex: "status",
+      title: 'Status',
+      dataIndex: 'status',
       render: (status) => (
         <Flex alignItems="center">{getStockStatus(status)}</Flex>
       ),
-      sorter: (a, b) => utils.antdTableSorter(a, b, "status"),
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'status')
     },
     {
-      title: "",
-      dataIndex: "actions",
+      title: '',
+      dataIndex: 'actions',
       render: (_, elm) => (
         <div className="text-right">
-          {window.localStorage.getItem("auth_type") === "Admin" ? (
+          {(editPrivilege || deletePrivilege) && (
             <EllipsisDropdown menu={dropdownMenu(elm)} />
-          ) : (
-            currentSubAdminRole?.edit && (
-              <EllipsisDropdown menu={dropdownMenu(elm)} />
-            )
           )}
         </div>
-      ),
-    },
+      )
+    }
   ];
 
   // When Search is used
@@ -190,8 +176,8 @@ const BrandVariantList = () => {
 
   // Filter Status Handler
   const handleShowStatus = (value) => {
-    if (value !== "All") {
-      const key = "status";
+    if (value !== 'All') {
+      const key = 'status';
       const data = utils.filterArray(searchBackupList, key, value);
       setList(data);
     } else {
@@ -230,20 +216,7 @@ const BrandVariantList = () => {
       <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
         {filters()}
         <div>
-          {window.localStorage.getItem("auth_type") === "SubAdmin" ? (
-            <>
-              {currentSubAdminRole?.add && (
-                <Button
-                  onClick={addProduct}
-                  type="primary"
-                  icon={<PlusCircleOutlined />}
-                  block
-                >
-                  Add Brand Variant
-                </Button>
-              )}
-            </>
-          ) : (
+          {addPrivilege && (
             <Button
               onClick={addProduct}
               type="primary"

@@ -9,6 +9,7 @@ import informationService from 'services/information';
 import Utils from 'utils';
 import { useHistory } from 'react-router-dom';
 import fileManagerService from 'services/FileManager';
+import useUserPrivilege from 'hooks/useUserPrivilege';
 
 const { TabPane } = Tabs;
 

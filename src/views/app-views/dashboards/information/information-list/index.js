@@ -1,22 +1,22 @@
-import React, { useEffect, useState } from 'react'
-import { Card, Table, Select, Input, Button, Menu, Tag } from 'antd'
+import React, { useEffect, useState, useMemo } from 'react';
+import { Card, Table, Select, Input, Button, Menu, Tag } from 'antd';
 // import InformationListData from 'assets/data/product-list.data.json'
 import {
   EyeOutlined,
   DeleteOutlined,
   SearchOutlined,
-  PlusCircleOutlined,
-} from '@ant-design/icons'
-import AvatarStatus from 'components/shared-components/AvatarStatus'
-import EllipsisDropdown from 'components/shared-components/EllipsisDropdown'
-import Flex from 'components/shared-components/Flex'
-import { useHistory } from 'react-router-dom'
-import utils from 'utils'
-import informationService from 'services/information'
-import { useSelector } from 'react-redux'
-import { TruncateLines } from "react-truncate-lines";
+  PlusCircleOutlined
+} from '@ant-design/icons';
+import AvatarStatus from 'components/shared-components/AvatarStatus';
+import EllipsisDropdown from 'components/shared-components/EllipsisDropdown';
+import Flex from 'components/shared-components/Flex';
+import { useHistory } from 'react-router-dom';
+import utils from 'utils';
+import informationService from 'services/information';
+import { TruncateLines } from 'react-truncate-lines';
+import useUserPrivilege from 'hooks/useUserPrivilege';
 
-const { Option } = Select
+const { Option } = Select;
 
 const getStockStatus = (status) => {
   if (status === 'Active') {
@@ -24,74 +24,80 @@ const getStockStatus = (status) => {
       <>
         <Tag color="green">Active</Tag>
       </>
-    )
+    );
   }
   if (status === 'Hold') {
     return (
       <>
         <Tag color="red">Hold</Tag>
       </>
-    )
+    );
   }
-  return null
-}
-const InformationList = () => {
-  let history = useHistory()
+  return null;
+};
+const InformationList = (props) => {
+  let history = useHistory();
 
-  const [list, setList] = useState([])
-  const [searchBackupList, setSearchBackupList] = useState([])
-  const [selectedRows, setSelectedRows] = useState([])
-  const [selectedRowKeys, setSelectedRowKeys] = useState([])
-  const [currentSubAdminRole, setCurrentSubAdminRole] = useState({})
+  const { addPrivilege, editPrivilege, deletePrivilege } = props;
+  
+  const [list, setList] = useState([]);
+  const [searchBackupList, setSearchBackupList] = useState([]);
+  const [selectedRows, setSelectedRows] = useState([]);
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [currentSubAdminRole, setCurrentSubAdminRole] = useState({});
 
   const getInformations = async () => {
-    const data = await informationService.getInformations()
+    const data = await informationService.getInformations();
     if (data) {
-      setList(data)
-      setSearchBackupList(data)
-      console.log(data, 'show-data')
+      setList(data);
+      setSearchBackupList(data);
+      console.log(data, 'show-data');
     }
-  }
+  };
   useEffect(() => {
-
-    getInformations()
+    getInformations();
     // fetchConstants()
-  }, [])
+  }, []);
 
   const dropdownMenu = (row) => (
     <Menu>
-      <Menu.Item onClick={() => viewDetails(row)}>
-        <Flex alignItems="center">
-          <EyeOutlined />
-          <span className="ml-2">View Details</span>
-        </Flex>
-      </Menu.Item>
-      <Menu.Item onClick={() => deleteRow(row)}>
-        <Flex alignItems="center">
-          <DeleteOutlined />
-          <span className="ml-2">
-            {selectedRows.length > 0
-              ? `Delete (${selectedRows.length})`
-              : 'Delete'}
-          </span>
-        </Flex>
-      </Menu.Item>
+      {editPrivilege && (
+        <Menu.Item onClick={() => viewDetails(row)}>
+          <Flex alignItems="center">
+            <EyeOutlined />
+            <span className="ml-2">View Details</span>
+          </Flex>
+        </Menu.Item>
+      )}
+
+      {deletePrivilege && (
+        <Menu.Item onClick={() => deleteRow(row)}>
+          <Flex alignItems="center">
+            <DeleteOutlined />
+            <span className="ml-2">
+              {selectedRows.length > 0
+                ? `Delete (${selectedRows.length})`
+                : 'Delete'}
+            </span>
+          </Flex>
+        </Menu.Item>
+      )}
     </Menu>
-  )
+  );
 
   const addProduct = () => {
-    history.push(`/app/dashboards/information/add-information`)
-  }
+    history.push(`/app/dashboards/information/add-information`);
+  };
 
   const viewDetails = (row) => {
-    history.push(`/app/dashboards/information/edit-information/${row._id}`)
-  }
+    history.push(`/app/dashboards/information/edit-information/${row._id}`);
+  };
   const deleteRow = async (row) => {
-    const resp = await informationService.deleteInformation(row._id)
+    const resp = await informationService.deleteInformation(row._id);
     if (resp) {
-      getInformations()
+      getInformations();
     }
-  }
+  };
 
   const tableColumns = [
     {
@@ -107,18 +113,19 @@ const InformationList = () => {
           />
         </div>
       ),
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'name'),
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'name')
     },
     {
       title: 'Description',
       dataIndex: 'description',
-      render:	(description)	=>			<div dangerouslySetInnerHTML={{ __html: description}} />
-
+      render: (description) => (
+        <div dangerouslySetInnerHTML={{ __html: description }} />
+      )
     },
     {
       title: 'Priority',
       dataIndex: 'priority',
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'priority'),
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'priority')
     },
     {
       title: 'Status',
@@ -126,42 +133,36 @@ const InformationList = () => {
       render: (status) => (
         <Flex alignItems="center">{getStockStatus(status)}</Flex>
       ),
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'status'),
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'status')
     },
     {
       title: '',
       dataIndex: 'actions',
       render: (_, elm) => (
         <div className="text-right">
-          {window.localStorage.getItem('auth_type') === 'Admin' ? (
-            <EllipsisDropdown menu={dropdownMenu(elm)} />
-          ) : (
-            (currentSubAdminRole?.edit || currentSubAdminRole?.delete) && (
-              <EllipsisDropdown menu={dropdownMenu(elm)} />
-            )
-          )}
+          <EllipsisDropdown menu={dropdownMenu(elm)} />
         </div>
-      ),
-    },
-  ]
+      )
+    }
+  ];
 
   const onSearch = (e) => {
-    const value = e.currentTarget.value
-    const searchArray = e.currentTarget.value ? list : searchBackupList
-    const data = utils.wildCardSearch(searchArray, value)
-    setList(data)
-    setSelectedRowKeys([])
-  }
+    const value = e.currentTarget.value;
+    const searchArray = e.currentTarget.value ? list : searchBackupList;
+    const data = utils.wildCardSearch(searchArray, value);
+    setList(data);
+    setSelectedRowKeys([]);
+  };
 
   const handleShowStatus = (value) => {
     if (value !== 'All') {
-      const key = 'status'
-      const data = utils.filterArray(searchBackupList, key, value)
-      setList(data)
+      const key = 'status';
+      const data = utils.filterArray(searchBackupList, key, value);
+      setList(data);
     } else {
-      setList(searchBackupList)
+      setList(searchBackupList);
     }
-  }
+  };
 
   const filters = () => (
     <Flex className="mb-1" mobileFlex={false}>
@@ -186,14 +187,14 @@ const InformationList = () => {
         </Select>
       </div>
     </Flex>
-  )
+  );
 
   return (
     <Card>
       <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
         {filters()}
         <div>
-          {window.localStorage.getItem('auth_type') === 'SubAdmin' ? (
+          {/* {window.localStorage.getItem('auth_type') === 'SubAdmin' ? (
             <>
               {currentSubAdminRole?.add && (
                 <Button
@@ -215,6 +216,16 @@ const InformationList = () => {
             >
               Add Information
             </Button>
+          )} */}
+          {addPrivilege && (
+            <Button
+              onClick={addProduct}
+              type="primary"
+              icon={<PlusCircleOutlined />}
+              block
+            >
+              Add Information
+            </Button>
           )}
         </div>
       </Flex>
@@ -222,7 +233,7 @@ const InformationList = () => {
         <Table columns={tableColumns} dataSource={list} rowKey="id" />
       </div>
     </Card>
-  )
-}
+  );
+};
 
-export default InformationList
+export default InformationList;

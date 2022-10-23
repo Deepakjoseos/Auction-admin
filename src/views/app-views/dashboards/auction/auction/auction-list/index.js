@@ -49,8 +49,10 @@ const getStockStatus = (status) => {
   }
   return null;
 };
-const GroupList = () => {
+const GroupList = (props) => {
   let history = useHistory();
+
+  const { addPrivilege, editPrivilege, deletePrivilege } = props;
 
   const [list, setList] = useState([]);
   const [searchBackupList, setSearchBackupList] = useState([]);
@@ -120,31 +122,16 @@ const GroupList = () => {
   }, []);
 
   const dropdownMenu = (row) => {
-    if (window.localStorage.getItem('auth_type') === 'Admin') {
-      return (
+    return (
         <Menu>
-          <Menu.Item onClick={() => viewDetails(row)}>
+          {editPrivilege && <Menu.Item onClick={() => viewDetails(row)}>
             <Flex alignItems="center">
               <EyeOutlined />
               <span className="ml-2">View Details</span>
             </Flex>
-          </Menu.Item>
+          </Menu.Item>}
         </Menu>
-      );
-    } else {
-      if (currentSubAdminRole?.edit) {
-        return (
-          <Menu>
-            <Menu.Item onClick={() => viewDetails(row)}>
-              <Flex alignItems="center">
-                <EyeOutlined />
-                <span className="ml-2">View Details</span>
-              </Flex>
-            </Menu.Item>
-          </Menu>
-        );
-      }
-    }
+      )
   };
 
   const addGroup = () => {
@@ -219,13 +206,7 @@ const GroupList = () => {
       dataIndex: 'actions',
       render: (_, elm) => (
         <div className="text-right">
-          {window.localStorage.getItem('auth_type') === 'Admin' ? (
-            <EllipsisDropdown menu={dropdownMenu(elm)} />
-          ) : (
-            currentSubAdminRole?.edit && (
-              <EllipsisDropdown menu={dropdownMenu(elm)} />
-            )
-          )}
+          {editPrivilege && <EllipsisDropdown menu={dropdownMenu(elm)} />}
         </div>
       )
     }
@@ -542,20 +523,7 @@ const GroupList = () => {
           <br></br>
           <br></br>
           <br></br>
-          {window.localStorage.getItem('auth_type') === 'SubAdmin' ? (
-            <>
-              {currentSubAdminRole?.add && (
-                <Button
-                  onClick={addGroup}
-                  type="primary"
-                  icon={<PlusCircleOutlined />}
-                  block
-                >
-                  Add Auction
-                </Button>
-              )}
-            </>
-          ) : (
+          {addPrivilege && (
             <Button
               onClick={addGroup}
               type="primary"

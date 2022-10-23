@@ -47,9 +47,11 @@ const getStockStatus = (status) => {
   return null;
 };
 
-const EmployeeTypeList = () => {
+const EmployeeTypeList = (props) => {
   const [employeeTypeList, setEmployeeTypeList] = useState([]);
   const [searchBackupList, setSearchBackupList] = useState([]);
+
+  const { addPrivilege, editPrivilege, deletePrivilege } = props;
 
   const history = useHistory();
 
@@ -81,24 +83,26 @@ const EmployeeTypeList = () => {
   };
 
   const dropdownMenu = (row) => {
-    if (window.localStorage.getItem('auth_type') === 'Admin') {
-      return (
-        <Menu>
+    return (
+      <Menu>
+        {editPrivilege && (
           <Menu.Item onClick={() => viewDetails(row)}>
             <Flex alignItems="center">
               <EyeOutlined />
               <span className="ml-2">View Details</span>
             </Flex>
           </Menu.Item>
+        )}
+        {deletePrivilege && (
           <Menu.Item onClick={() => deleteRow(row)}>
             <Flex alignItems="center">
               <DeleteOutlined />
               <span className="ml-2">Delete</span>
             </Flex>
           </Menu.Item>
-        </Menu>
-      );
-    }
+        )}
+      </Menu>
+    );
   };
 
   // Antd Table Columns
@@ -144,7 +148,9 @@ const EmployeeTypeList = () => {
       dataIndex: 'actions',
       render: (_, elm) => (
         <div className="text-right">
-          <EllipsisDropdown menu={dropdownMenu(elm)} />
+          {(editPrivilege || deletePrivilege) && (
+            <EllipsisDropdown menu={dropdownMenu(elm)} />
+          )}
         </div>
       )
     }
@@ -202,14 +208,16 @@ const EmployeeTypeList = () => {
       <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
         {filters()}
         <div>
-          <Button
-            onClick={addLottery}
-            type="primary"
-            icon={<PlusCircleOutlined />}
-            block
-          >
-            Add Employee Type
-          </Button>
+          {addPrivilege && (
+            <Button
+              onClick={addLottery}
+              type="primary"
+              icon={<PlusCircleOutlined />}
+              block
+            >
+              Add Employee Type
+            </Button>
+          )}
         </div>
       </Flex>
       <div className="table-responsive">

@@ -1,22 +1,22 @@
-import React, { useEffect, useState } from 'react'
-import { Card, Table, Select, Input, Button, Menu, Tag } from 'antd'
+import React, { useEffect, useState } from 'react';
+import { Card, Table, Select, Input, Button, Menu, Tag } from 'antd';
 // import InformationListData from 'assets/data/product-list.data.json'
 import {
   EyeOutlined,
   DeleteOutlined,
   SearchOutlined,
-  PlusCircleOutlined,
-} from '@ant-design/icons'
-import AvatarStatus from 'components/shared-components/AvatarStatus'
-import EllipsisDropdown from 'components/shared-components/EllipsisDropdown'
-import Flex from 'components/shared-components/Flex'
-import { useHistory } from 'react-router-dom'
-import utils from 'utils'
+  PlusCircleOutlined
+} from '@ant-design/icons';
+import AvatarStatus from 'components/shared-components/AvatarStatus';
+import EllipsisDropdown from 'components/shared-components/EllipsisDropdown';
+import Flex from 'components/shared-components/Flex';
+import { useHistory } from 'react-router-dom';
+import utils from 'utils';
 
-import feeTypeService from 'services/FeeType'
-import { useSelector } from 'react-redux'
+import feeTypeService from 'services/FeeType';
+import { useSelector } from 'react-redux';
 
-const { Option } = Select
+const { Option } = Select;
 
 const getStockStatus = (status) => {
   if (status === 'Active') {
@@ -24,86 +24,75 @@ const getStockStatus = (status) => {
       <>
         <Tag color="green">Active</Tag>
       </>
-    )
+    );
   }
   if (status === 'Hold') {
     return (
       <>
         <Tag color="red">Hold</Tag>
       </>
-    )
+    );
   }
-  return null
-}
-const FeeTypeList = () => {
-  let history = useHistory()
+  return null;
+};
+const FeeTypeList = (props) => {
+  let history = useHistory();
 
-  const [list, setList] = useState([])
-  const [searchBackupList, setSearchBackupList] = useState([])
-  const [selectedRows, setSelectedRows] = useState([])
-  const [selectedRowKeys, setSelectedRowKeys] = useState([])
-  const [currentSubAdminRole, setCurrentSubAdminRole] = useState({})
+  const { addPrivilege, editPrivilege, deletePrivilege } = props;
 
-  const AUTH_TYPE = window.localStorage.getItem('auth_type')
+  const [list, setList] = useState([]);
+  const [searchBackupList, setSearchBackupList] = useState([]);
+  const [selectedRows, setSelectedRows] = useState([]);
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [currentSubAdminRole, setCurrentSubAdminRole] = useState({});
 
-  const { user } = useSelector((state) => state.auth)
+  const AUTH_TYPE = window.localStorage.getItem('auth_type');
+
+  const { user } = useSelector((state) => state.auth);
 
   // This wull only work for subadmin
   useEffect(() => {
     if (user) {
-      const feeTypeRole = user.roles.find((role) => role.module === 'FEE_TYPE')
-      setCurrentSubAdminRole(feeTypeRole)
+      const feeTypeRole = user.roles.find((role) => role.module === 'FEE_TYPE');
+      setCurrentSubAdminRole(feeTypeRole);
     }
-  }, [user])
-  console.log(user, 'jhbjkbuser')
+  }, [user]);
+  console.log(user, 'jhbjkbuser');
 
   useEffect(() => {
     const getFeeTypes = async () => {
-      const data = await feeTypeService.getFeeTypes()
+      const data = await feeTypeService.getFeeTypes();
       if (data) {
-        setList(data)
-        setSearchBackupList(data)
-        console.log(data, 'show-data')
+        setList(data);
+        setSearchBackupList(data);
+        console.log(data, 'show-data');
       }
-    }
-    getFeeTypes()
-  }, [])
+    };
+    getFeeTypes();
+  }, []);
 
   const dropdownMenu = (row) => {
-    if (AUTH_TYPE === 'Admin') {
-      return (
-        <Menu>
+    return (
+      <Menu>
+        {editPrivilege && (
           <Menu.Item onClick={() => viewDetails(row)}>
             <Flex alignItems="center">
               <EyeOutlined />
               <span className="ml-2">View Details</span>
             </Flex>
           </Menu.Item>
-        </Menu>
-      )
-    } else {
-      if (currentSubAdminRole?.edit) {
-        return (
-          <Menu>
-            <Menu.Item onClick={() => viewDetails(row)}>
-              <Flex alignItems="center">
-                <EyeOutlined />
-                <span className="ml-2">View Details</span>
-              </Flex>
-            </Menu.Item>
-          </Menu>
-        )
-      }
-    }
-  }
+        )}
+      </Menu>
+    );
+  };
 
   const addFeeType = () => {
-    history.push(`/app/dashboards/fee-type/add-fee-type`)
-  }
+    history.push(`/app/dashboards/fee-type/add-fee-type`);
+  };
 
   const viewDetails = (row) => {
-    history.push(`/app/dashboards/fee-type/edit-fee-type/${row._id}`)
-  }
+    history.push(`/app/dashboards/fee-type/edit-fee-type/${row._id}`);
+  };
 
   //   const deleteRow = async (row) => {
   //     const resp = await informationService.deleteInformation(row.id)
@@ -143,12 +132,12 @@ const FeeTypeList = () => {
     {
       title: 'Name',
       dataIndex: 'name',
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'name'),
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'name')
     },
     {
       title: 'Order',
       dataIndex: 'order',
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'order'),
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'order')
     },
     {
       title: 'Status',
@@ -156,42 +145,36 @@ const FeeTypeList = () => {
       render: (status) => (
         <Flex alignItems="center">{getStockStatus(status)}</Flex>
       ),
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'status'),
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'status')
     },
     {
       title: '',
       dataIndex: 'actions',
       render: (_, elm) => (
         <div className="text-right">
-          {AUTH_TYPE === 'Admin' ? (
-            <EllipsisDropdown menu={dropdownMenu(elm)} />
-          ) : (
-            currentSubAdminRole?.edit && (
-              <EllipsisDropdown menu={dropdownMenu(elm)} />
-            )
-          )}
+          {editPrivilege && <EllipsisDropdown menu={dropdownMenu(elm)} />}
         </div>
-      ),
-    },
-  ]
+      )
+    }
+  ];
 
   const onSearch = (e) => {
-    const value = e.currentTarget.value
-    const searchArray = e.currentTarget.value ? list : searchBackupList
-    const data = utils.wildCardSearch(searchArray, value)
-    setList(data)
-    setSelectedRowKeys([])
-  }
+    const value = e.currentTarget.value;
+    const searchArray = e.currentTarget.value ? list : searchBackupList;
+    const data = utils.wildCardSearch(searchArray, value);
+    setList(data);
+    setSelectedRowKeys([]);
+  };
 
   const handleShowStatus = (value) => {
     if (value !== 'All') {
-      const key = 'status'
-      const data = utils.filterArray(searchBackupList, key, value)
-      setList(data)
+      const key = 'status';
+      const data = utils.filterArray(searchBackupList, key, value);
+      setList(data);
     } else {
-      setList(searchBackupList)
+      setList(searchBackupList);
     }
-  }
+  };
 
   const filters = () => (
     <Flex className="mb-1" mobileFlex={false}>
@@ -216,27 +199,14 @@ const FeeTypeList = () => {
         </Select>
       </div>
     </Flex>
-  )
+  );
 
   return (
     <Card>
       <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
         {filters()}
         <div>
-          {AUTH_TYPE === 'SubAdmin' ? (
-            <>
-              {currentSubAdminRole?.add && (
-                <Button
-                  onClick={addFeeType}
-                  type="primary"
-                  icon={<PlusCircleOutlined />}
-                  block
-                >
-                  Add FeeType
-                </Button>
-              )}
-            </>
-          ) : (
+          {addPrivilege && (
             <Button
               onClick={addFeeType}
               type="primary"
@@ -252,7 +222,7 @@ const FeeTypeList = () => {
         <Table columns={tableColumns} dataSource={list} rowKey="id" />
       </div>
     </Card>
-  )
-}
+  );
+};
 
-export default FeeTypeList
+export default FeeTypeList;
