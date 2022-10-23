@@ -258,7 +258,7 @@ const GeneralField = ({
           </Form.Item>
 
           <Form.Item name="ParticipantType" label="ParticipantType">
-            <Select placeholder="ParticipantType">
+            <Select placeholder="ParticipantType" disabled={mode === 'EDIT'}>
               {participant?.ParticipantType?.map((item, index) => (
                 <Option key={index} value={item}>
                   {' '}

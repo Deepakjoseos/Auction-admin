@@ -19,10 +19,10 @@ auctionInventoryService.uploadInventory = async function (id, data) {
   }
 };
 
-auctionInventoryService.getInventories = async function () {
+auctionInventoryService.getInventories = async function (query = '') {
   try {
     const res = await fetch({
-      url: `${apiRoute}/get/all/admin`,
+      url: `${apiRoute}/get/all/admin?${query}`,
       method: 'get'
     });
     return res.data;

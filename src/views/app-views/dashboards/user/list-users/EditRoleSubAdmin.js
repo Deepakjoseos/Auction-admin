@@ -52,7 +52,7 @@ const EditRoleSubAdmin = ({ isFormOpen, setIsFormOpen, userId }) => {
           add: false,
           delete: false,
           edit: false,
-          fetch: false
+          fetch: true
         };
       });
       setRoles(curRoles);

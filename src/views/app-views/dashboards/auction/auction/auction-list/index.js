@@ -123,15 +123,23 @@ const GroupList = (props) => {
 
   const dropdownMenu = (row) => {
     return (
-        <Menu>
-          {editPrivilege && <Menu.Item onClick={() => viewDetails(row)}>
+      <Menu>
+        {editPrivilege && (
+          <Menu.Item onClick={() => viewDetails(row)}>
             <Flex alignItems="center">
               <EyeOutlined />
               <span className="ml-2">View Details</span>
             </Flex>
-          </Menu.Item>}
-        </Menu>
-      )
+          </Menu.Item>
+        )}
+        <Menu.Item onClick={() => viewInventory(row)}>
+          <Flex alignItems="center">
+            <EyeOutlined />
+            <span className="ml-2">View Inventory</span>
+          </Flex>
+        </Menu.Item>
+      </Menu>
+    );
   };
 
   const addGroup = () => {
@@ -140,6 +148,12 @@ const GroupList = (props) => {
 
   const viewDetails = (row) => {
     history.push(`/app/dashboards/auction/auction/edit-auction/${row._id}`);
+  };
+
+  const viewInventory = (row) => {
+    history.push(
+      `/app/dashboards/auction/auction-inventory/auction-inventory-list?auctionId=${row._id}`
+    );
   };
 
   const tableColumns = [
@@ -206,7 +220,7 @@ const GroupList = (props) => {
       dataIndex: 'actions',
       render: (_, elm) => (
         <div className="text-right">
-          {editPrivilege && <EllipsisDropdown menu={dropdownMenu(elm)} />}
+          {<EllipsisDropdown menu={dropdownMenu(elm)} />}
         </div>
       )
     }

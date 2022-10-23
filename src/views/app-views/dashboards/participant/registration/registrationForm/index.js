@@ -54,7 +54,7 @@ const RegistrationForm = (props) => {
     const data = await constantsService.getRegistrationConstant();
     if (data) {
       setFeeType(data.FeeType);
-      setStatus(data.paymentStatus);
+      // setStatus(data.paymentStatus);
     }
   };
 
@@ -111,7 +111,7 @@ const RegistrationForm = (props) => {
         );
 
         const sendingValues = {
-          status: values?.status,
+          status: 'Evaluating',
           countedIn: moment(values?.countedIn).format('x'),
           date: moment(values?.date).format('x'),
           expiry: moment(values?.expiry).format('x'),

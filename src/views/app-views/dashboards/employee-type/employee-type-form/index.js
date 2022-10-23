@@ -32,7 +32,7 @@ const EmployeeTypeForm = (props) => {
           add: false,
           delete: false,
           edit: false,
-          fetch: false
+          fetch: true
         };
       });
       setPermissions(curPermissions);

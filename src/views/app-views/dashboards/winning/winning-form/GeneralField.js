@@ -11,7 +11,10 @@ const rules = {
   ]
 };
 
+
+
 const GeneralField = ({ mode, inventories, participants }) => {
+  console.log(inventories);
   return (
     <Row gutter={16}>
       <Col xs={24} sm={24} md={17}>
@@ -29,7 +32,7 @@ const GeneralField = ({ mode, inventories, participants }) => {
             >
               {inventories?.map((inventory) => (
                 <Option key={inventory._id} value={inventory._id}>
-                  {inventory._id}
+                  {`${inventory.registrationNumber} (${inventory.auction.name})`}
                 </Option>
               ))}
             </Select>

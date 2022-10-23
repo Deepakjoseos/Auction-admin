@@ -14,6 +14,8 @@ import auctionInventoryService from 'services/auctionInventory';
 
 const AuctionInventoryList = (props) => {
   let history = useHistory();
+  const params = new URLSearchParams(props.location.search);
+  const auctionId = params.get('auctionId');
 
   const { addPrivilege, editPrivilege, deletePrivilege } = props;
 
@@ -25,7 +27,9 @@ const AuctionInventoryList = (props) => {
 
   useEffect(() => {
     const getGroups = async () => {
-      const data = await auctionInventoryService.getInventories();
+      const data = await auctionInventoryService.getInventories(
+        auctionId ? `auctionId=${auctionId}` : ''
+      );
       if (data) {
         setList(data);
         setSearchBackupList(data);
@@ -38,10 +42,18 @@ const AuctionInventoryList = (props) => {
   const dropdownMenu = (row) => {
     return (
       <Menu>
-        <Menu.Item onClick={() => viewDetails(row)}>
+        {editPrivilege && (
+          <Menu.Item onClick={() => viewDetails(row)}>
+            <Flex alignItems="center">
+              <EyeOutlined />
+              <span className="ml-2">View Details</span>
+            </Flex>
+          </Menu.Item>
+        )}
+        <Menu.Item onClick={() => viewBiddings(row)}>
           <Flex alignItems="center">
             <EyeOutlined />
-            <span className="ml-2">View Details</span>
+            <span className="ml-2">View Biddings</span>
           </Flex>
         </Menu.Item>
       </Menu>
@@ -55,9 +67,14 @@ const AuctionInventoryList = (props) => {
   };
 
   const viewDetails = (row) => {
-    // auction-inventory/edit-auction-inventory/6321b3d6e2dbb9f6ae8dfd1f
     history.push(
       `/app/dashboards/auction/auction-inventory/edit-auction-inventory/${row._id}`
+    );
+  };
+
+  const viewBiddings = (row) => {
+    history.push(
+      `/app/dashboards/auction/bidding/bidding-list?inventoryId=${row._id}`
     );
   };
 
@@ -118,7 +135,7 @@ const AuctionInventoryList = (props) => {
       dataIndex: 'actions',
       render: (_, elm) => (
         <div className="text-right">
-          {editPrivilege && <EllipsisDropdown menu={dropdownMenu(elm)} />}
+          {<EllipsisDropdown menu={dropdownMenu(elm)} />}
         </div>
       )
     }

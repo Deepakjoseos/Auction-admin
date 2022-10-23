@@ -3,10 +3,10 @@ import fetch from 'auth/FetchInterceptor';
 const winningService = {};
 const apiRoute = '/winning';
 
-winningService.getWinnings = async function () {
+winningService.getWinnings = async function (query = '') {
   try {
     const res = await fetch({
-      url: `${apiRoute}/get/all/admin`,
+      url: `${apiRoute}/get/all/admin?${query}`,
       method: 'get'
     });
     return res.data;
@@ -39,7 +39,5 @@ winningService.addWinning = async function (data) {
     console.log(err, 'show-err');
   }
 };
-
-
 
 export default winningService;

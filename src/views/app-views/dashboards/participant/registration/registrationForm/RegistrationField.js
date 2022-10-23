@@ -214,7 +214,7 @@ const RegistrationField = ({
             >
               <DatePicker className="board-card-modal date-picker w-100" />
             </Form.Item>
-            <Form.Item
+            {/* <Form.Item
               name="status"
               label="Status"
               rules={rules.status}
@@ -225,7 +225,7 @@ const RegistrationField = ({
                   <Option value={status}>{status}</Option>
                 ))}
               </Select>
-            </Form.Item>
+            </Form.Item> */}
             <Form.Item
               name="mode"
               label="Mode"

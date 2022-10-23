@@ -53,10 +53,15 @@ const WinningList = (props) => {
 
   const { addPrivilege, editPrivilege, deletePrivilege } = props;
 
+  const params = new URLSearchParams(props.location.search);
+  const inventoryId = params.get('inventoryId');
+
   const history = useHistory();
 
   const getWinnings = async () => {
-    const data = await winningService.getWinnings();
+    const data = await winningService.getWinnings(
+      inventoryId ? `auctionInventoryId=${inventoryId}` : ''
+    );
     if (data) {
       const mutatedData = [];
 
