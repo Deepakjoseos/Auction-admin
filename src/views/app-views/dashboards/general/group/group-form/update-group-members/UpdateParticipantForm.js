@@ -56,7 +56,13 @@ const UpdateParticipantForm = ({ participants, group }) => {
         date: new Date(Number(participant.timestamp)).toDateString()
       };
     });
-  }, []);
+  }, [group]);
+
+  useEffect(() => {
+    setAvailableMembers(participants);
+  }, [participants]);
+
+  console.log(itemInputs);
 
   useEffect(() => {
     setAvailableMembers(participants);

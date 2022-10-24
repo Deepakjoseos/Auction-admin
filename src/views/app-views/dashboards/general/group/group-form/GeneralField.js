@@ -104,8 +104,8 @@ const GeneralField = ({ form }) => {
               })}
             </Select>
           </Form.Item>
-          <Form.Item name="sellerId" label="Seller Name">
-            <Select placeholder="Seller Name">
+          <Form.Item name="sellerIds" label="Seller Name">
+            <Select placeholder="Seller Name" mode="multiple">
               {participants.map((participant) => (
                 <Option value={participant._id}>{participant.name}</Option>
               ))}

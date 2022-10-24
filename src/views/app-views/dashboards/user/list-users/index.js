@@ -112,50 +112,51 @@ const UserList = () => {
   // Antd Table Columns
   const tableColumns = [
     {
-      title: "Name",
-      dataIndex: "name",
+      title: 'Name',
+      dataIndex: 'name',
       render: (name) => {
         return <Flex alignItems="center">{name}</Flex>;
       },
-      sorter: (a, b) => a.name?.first?.localeCompare(b?.name?.first),
+      sorter: (a, b) => a.name?.first?.localeCompare(b?.name?.first)
     },
 
     {
-      title: "Email",
-      dataIndex: "email",
-      sorter: (a, b) => utils.antdTableSorter(a, b, "email"),
+      title: 'Email',
+      dataIndex: 'email',
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'email')
     },
 
     {
-      title: "Contact",
-      dataIndex: "contact",
-      sorter: (a, b) => utils.antdTableSorter(a, b, "contact"),
+      title: 'Contact',
+      dataIndex: 'contact',
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'contact')
     },
 
     {
-      title: "Role",
-      dataIndex: "auth",
-      sorter: (a, b) => utils.antdTableSorter(a, b, "auth"),
+      title: 'Employee Type',
+      dataIndex: 'employeeType',
+      render: (employeeType) => <Flex alignItems="center">{employeeType.name}</Flex>
+      // sorter: (a, b) => utils.antdTableSorter(a, b, 'employeeType')
     },
 
     {
-      title: "Status",
-      dataIndex: "status",
+      title: 'Status',
+      dataIndex: 'status',
       render: (status) => (
         <Flex alignItems="center">{getStockStatus(status)}</Flex>
       ),
-      sorter: (a, b) => utils.antdTableSorter(a, b, "status"),
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'status')
     },
 
     {
-      title: "",
-      dataIndex: "actions",
+      title: '',
+      dataIndex: 'actions',
       render: (_, elm) => (
         <div className="text-right">
           <EllipsisDropdown menu={dropdownMenu(elm)} />
         </div>
-      ),
-    },
+      )
+    }
   ];
 
   // When Search is used

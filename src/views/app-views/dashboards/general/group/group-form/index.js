@@ -44,7 +44,7 @@ const GroupForm = (props) => {
         name: data.name,
         vehicleTypeIds: data.vehicleTypes.map((vehicleType) => vehicleType._id),
         cityIds: data.cities.map((city) => city._id),
-        sellerId: data.seller?._id,
+        sellerIds: data.sellers.map((seller) => seller._id),
         stateIds: data.states.map((state) => state._id),
         regionIds: data.regions.map((region) => region._id),
         status: data.status,
@@ -63,9 +63,8 @@ const GroupForm = (props) => {
         console.log(values, 'values');
         if (mode === ADD) {
           // Checking if image exists
-          const { sellerName, ...newValues } = values;
-          console.log(newValues, 'newValues');
-          const created = await groupService.createGroup(newValues);
+          console.log(values, 'newValues');
+          const created = await groupService.createGroup(values);
           if (created) {
             message.success(`Created ${values.name} to group list`);
             history.goBack();
@@ -86,12 +85,12 @@ const GroupForm = (props) => {
               membersEdited
             );
           }
-          const { items,...newValues } = values;
+          const { items, ...newValues } = values;
           console.log(newValues);
 
           console.log(newValues, 'newValues EDIT');
 
-         const edited = await groupService.updateGroup(param?.id, newValues);
+          const edited = await groupService.updateGroup(param?.id, newValues);
           if (edited) {
             message.success(`Edited ${values.name} to group list`);
             history.goBack();

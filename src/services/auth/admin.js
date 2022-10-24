@@ -122,7 +122,7 @@ authAdminService.getUser = async function (query) {
 authAdminService.getAllSubAdmins = async function (query) {
   try {
     const res = await fetch({
-      url: '/user/get/all/headadmin?authType=SubAdmin',
+      url: 'https://auction.riolabz.com/v1/sub_admin/get/all',
       method: 'get'
     });
     return res.data;
