@@ -14,8 +14,9 @@ import {
 } from 'redux/actions/Auth';
 import { AUTH_TOKEN } from 'redux/constants/Auth';
 import authSubAdminService from 'services/auth/subAdmin';
-import navigationConfig from 'configs/NavigationConfig';
+import navigationConfig, { sellerDashboard } from 'configs/NavigationConfig';
 import Utils from 'utils';
+import sellerService from 'services/auth/seller';
 
 const themes = {
   dark: `${process.env.PUBLIC_URL}/css/dark-theme.css`,
@@ -28,6 +29,7 @@ function App() {
   console.log(user);
 
   const getProfile = async () => {
+    console.log(localStorage.getItem('auth_type'), 'AUTH TYPE');
     if (localStorage.getItem('auth_type') === 'Admin') {
       const data = await authAdminService.getProfile();
       if (data) {
@@ -44,6 +46,16 @@ function App() {
         const subAdminNavigation = Utils.getSubAdminNavs(data?.roles);
 
         dispatch(setDashBoardNavTree(subAdminNavigation));
+
+        dispatch(showLoading(false));
+      }
+      dispatch(showLoading(false));
+    } else if (localStorage.getItem('auth_type') === 'Participant') {
+      const data = await sellerService.getProfile();
+      if (data) {
+        dispatch(authenticated({ user: data }));
+
+        dispatch(setDashBoardNavTree(sellerDashboard));
 
         dispatch(showLoading(false));
       }

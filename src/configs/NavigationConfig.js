@@ -1278,6 +1278,57 @@ const dashBoardNavTree = [
 //   },
 // ]
 
+export const sellerDashboard = [
+  {
+    key: 'dashboards-auction-auction',
+    path: `${APP_PREFIX_PATH}/dashboards/auction/auction/auction-list`,
+    title: 'Auction',
+    icon: NodeExpandOutlined,
+    breadcrumb: false,
+    submenu: []
+  },
+  {
+    key: 'dashboards-auction-auction-inventory',
+    path: `${APP_PREFIX_PATH}/dashboards/auction/auction-inventory/auction-inventory-list`,
+    title: 'Auction Inventory',
+    icon: NodeExpandOutlined,
+    breadcrumb: false,
+    submenu: []
+  },
+  {
+    key: 'dashboards-auction-bidding',
+    path: `${APP_PREFIX_PATH}/dashboards/auction/bidding/bidding-list`,
+    title: 'Bidding',
+    icon: NodeExpandOutlined,
+    breadcrumb: false,
+    submenu: []
+  },
+  {
+    key: 'dashboards-watchlist',
+    path: `${APP_PREFIX_PATH}/dashboards/watchlist`,
+    title: 'Watchlist',
+    icon: NodeExpandOutlined,
+    breadcrumb: false,
+    submenu: []
+  },
+  {
+    key: 'dashboards-comment',
+    path: `${APP_PREFIX_PATH}/dashboards/comment`,
+    title: 'Comment',
+    icon: NodeExpandOutlined,
+    breadcrumb: false,
+    submenu: []
+  },
+  {
+    key: 'dashboards-winning',
+    path: `${APP_PREFIX_PATH}/dashboards/winning`,
+    title: 'Winning',
+    icon: NodeExpandOutlined,
+    breadcrumb: false,
+    submenu: []
+  }
+];
+
 const navigationConfig = [
   ...dashBoardNavTree
   // ...appsNavTree,

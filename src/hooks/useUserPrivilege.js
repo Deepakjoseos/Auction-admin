@@ -8,10 +8,13 @@ const useUserPrivilege = (moduleName) => {
   );
 
   const isUserAdmin = user.auth === 'Admin';
-  const fetchPrivilege = isUserAdmin || userRoles.fetch;
-  const addPrivilege = isUserAdmin || userRoles.add;
-  const editPrivilege = isUserAdmin || userRoles.edit;
-  const deletePrivilege = isUserAdmin || userRoles.delete;
+  const isUserSeller =
+    user.auth === 'Participant' && user?.participantType === 'Seller';
+
+  const fetchPrivilege = isUserAdmin || userRoles?.fetch || isUserSeller;
+  const addPrivilege = (isUserAdmin || userRoles?.add) && !isUserSeller;
+  const editPrivilege = (isUserAdmin || userRoles?.edit) && !isUserSeller;
+  const deletePrivilege = (isUserAdmin || userRoles?.delete) && !isUserSeller;
 
   return {
     fetchPrivilege,
