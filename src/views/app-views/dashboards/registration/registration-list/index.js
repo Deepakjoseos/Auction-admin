@@ -51,9 +51,7 @@ const RegistrationList = (props) => {
   //   history.push(`/app/dashboards/registration/edit-registration/${row._id}`);
   // };
 
-  const changeRegistrationStatus = (row, newStatus) => {
-
-  }
+  const changeRegistrationStatus = (row, newStatus) => {};
 
   const dropdownMenu = (row) => {
     return (
@@ -67,14 +65,20 @@ const RegistrationList = (props) => {
           </Menu.Item>
         )} */}
         {editPrivilege &&
-          paymentStatus.map((status) => (
-            <Menu.Item onClick={() => changeRegistrationStatus(row, status)}>
-              <Flex alignItems="center">
-                <EditOutlined />
-                <span className="ml-2">{status}</span>
-              </Flex>
-            </Menu.Item>
-          ))}
+          paymentStatus.map((status) => {
+            if (status !== row.status) {
+              return (
+                <Menu.Item
+                  onClick={() => changeRegistrationStatus(row, status)}
+                >
+                  <Flex alignItems="center">
+                    <EditOutlined />
+                    <span className="ml-2">{status}</span>
+                  </Flex>
+                </Menu.Item>
+              );
+            }
+          })}
       </Menu>
     );
   };
