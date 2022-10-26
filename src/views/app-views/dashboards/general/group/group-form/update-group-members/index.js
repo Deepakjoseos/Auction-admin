@@ -6,7 +6,7 @@ import groupService from 'services/group';
 
 const UpdateParticipantsField = ({ param, participants }) => {
   const [members, setMembers] = useState([]);
-  const [group, setGroup] = useState();
+  const [group, setGroup] = useState(null);
 
   useEffect(() => {
     getData();
@@ -25,7 +25,9 @@ const UpdateParticipantsField = ({ param, participants }) => {
 
   return (
     <Row gutter={16}>
-      <UpdateParticipantForm participants={participants} group={group} />
+      {group && (
+        <UpdateParticipantForm participants={participants} group={group} />
+      )}
     </Row>
   );
 };

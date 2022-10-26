@@ -31,23 +31,16 @@ const rules = {
     }
   ]
 };
-
-let addSection = null;
-
 const UpdateParticipantForm = ({ participants, group }) => {
-  console.log(participants, 'participants');
-  let groupParticipants = [];
-  if (group?.participants) {
-    groupParticipants = group.participants;
-  }
   const [availableMembers, setAvailableMembers] = useState(participants);
-  const [usedMembers, setUsedMembers] = useState(groupParticipants);
+  const [usedMembers, setUsedMembers] = useState([]);
+  console.log(group);
 
   const itemInputs = useMemo(() => {
     if (!group?.participants) {
       return [];
     }
-    group?.participants.map((participant) => {
+    return group.participants.map((participant) => {
       return {
         memberName: participant.member.name,
         memberId: participant.member._id,
@@ -56,21 +49,17 @@ const UpdateParticipantForm = ({ participants, group }) => {
         date: new Date(Number(participant.timestamp)).toDateString()
       };
     });
-  }, [group]);
+  }, []);
 
   useEffect(() => {
-    setAvailableMembers(participants);
-  }, [participants]);
-
-  console.log(itemInputs);
-
-  useEffect(() => {
-    setAvailableMembers(participants);
-  }, [participants]);
-
-  useEffect(() => {
-    setUsedMembers(itemInputs?.map((item) => item.memberId));
+    setUsedMembers(itemInputs.map((item) => item.memberId));
   }, [itemInputs]);
+
+  useEffect(() => {
+    setAvailableMembers(participants);
+  }, [participants]);
+
+  console.log(itemInputs, 'itemInputs');
 
   const { user } = useSelector((state) => state.auth);
 
@@ -88,6 +77,7 @@ const UpdateParticipantForm = ({ participants, group }) => {
   return (
     // <Row gutter={16}>
     //   <Col xs={24} sm={24} md={17}>
+
     <Card title={`Update ${group?.name} Members`}>
       {
         <Form.List name="items" initialValue={itemInputs}>
@@ -175,6 +165,7 @@ const UpdateParticipantForm = ({ participants, group }) => {
         </Form.List>
       }
     </Card>
+
     //   </Col>
     // </Row>
   );
