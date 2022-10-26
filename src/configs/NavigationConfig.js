@@ -500,6 +500,14 @@ const dashBoardNavTree = [
         submenu: []
       },
       {
+        key: 'dashboards-registrations',
+        path: `${APP_PREFIX_PATH}/dashboards/registration`,
+        title: 'Registrations',
+        icon: AppstoreOutlined,
+        breadcrumb: false,
+        submenu: []
+      },
+      {
         key: 'dashboards-wallet-transactions',
         path: `${APP_PREFIX_PATH}/dashboards/wallet-transaction`,
         title: 'Wallet Transactions',

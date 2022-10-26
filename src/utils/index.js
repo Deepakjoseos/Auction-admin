@@ -389,7 +389,16 @@ class Utils {
           });
         }
       } else if (role.module === 'REGISTRATION') {
-        // Add Register Later
+        if (role.fetch) {
+          navItems[0].submenu.push({
+            key: 'dashboards-registrations',
+            path: `${APP_PREFIX_PATH}/dashboards/registration`,
+            title: 'Registrations',
+            icon: AppstoreOutlined,
+            breadcrumb: false,
+            submenu: []
+          });
+        }
       } else if (role.module === 'CLIENT') {
         if (role.fetch) {
           navItems[0].submenu.push({
