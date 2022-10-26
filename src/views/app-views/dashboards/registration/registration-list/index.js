@@ -9,12 +9,14 @@ import {
   EyeOutlined,
   DeleteOutlined,
   SearchOutlined,
-  PlusCircleOutlined
+  PlusCircleOutlined,
+  EditOutlined
 } from '@ant-design/icons';
 import utils from 'utils';
 import EllipsisDropdown from 'components/shared-components/EllipsisDropdown';
 import Flex from 'components/shared-components/Flex';
 import registrationService from 'services/registration';
+import constantsService from 'services/constants';
 
 const RegistrationList = (props) => {
   const history = useHistory();
@@ -22,35 +24,57 @@ const RegistrationList = (props) => {
 
   const [list, setList] = useState([]);
   const [searchBackupList, setSearchBackupList] = useState([]);
+  const [paymentStatus, setPaymentStatus] = useState([]);
 
   useEffect(() => {
     const getRegistration = async () => {
       const data = await registrationService.getRegistrations();
       if (data) {
-        console.log(data);
         setList(data);
         setSearchBackupList(data);
         console.log(data, 'show-data');
       }
     };
+
+    const getPaymentStatus = async () => {
+      const data = await constantsService.getRegistrationConstant();
+      if (data) {
+        setPaymentStatus(Object.values(data.paymentStatus));
+        console.log(data, 'show-data');
+      }
+    };
     getRegistration();
+    getPaymentStatus();
   }, []);
 
-  const viewDetails = (row) => {
-    history.push(`/app/dashboards/registration/edit-registration/${row._id}`);
-  };
+  // const viewDetails = (row) => {
+  //   history.push(`/app/dashboards/registration/edit-registration/${row._id}`);
+  // };
+
+  const changeRegistrationStatus = (row, newStatus) => {
+
+  }
 
   const dropdownMenu = (row) => {
     return (
       <Menu>
-        {editPrivilege && (
+        {/* {editPrivilege && (
           <Menu.Item onClick={() => viewDetails(row)}>
             <Flex alignItems="center">
               <EyeOutlined />
               <span className="ml-2">View Details</span>
             </Flex>
           </Menu.Item>
-        )}
+        )} */}
+        {editPrivilege &&
+          paymentStatus.map((status) => (
+            <Menu.Item onClick={() => changeRegistrationStatus(row, status)}>
+              <Flex alignItems="center">
+                <EditOutlined />
+                <span className="ml-2">{status}</span>
+              </Flex>
+            </Menu.Item>
+          ))}
       </Menu>
     );
   };
