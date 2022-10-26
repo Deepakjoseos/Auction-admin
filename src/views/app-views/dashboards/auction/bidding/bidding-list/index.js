@@ -20,6 +20,7 @@ import auctionService from 'services/auction';
 import auctionInventoryService from 'services/auctionInventory';
 import participantService from 'services/Participant';
 import winningService from 'services/winning';
+import useUserPrivilege from 'hooks/useUserPrivilege';
 
 const { Option } = Select;
 
@@ -53,6 +54,8 @@ const BiddingList = (props) => {
 
   const params = new URLSearchParams(props.location.search);
   const inventoryId = params.get('inventoryId');
+
+  const winningPrivileges = useUserPrivilege('WINNING');
 
   const [list, setList] = useState([]);
   const [searchBackupList, setSearchBackupList] = useState([]);
@@ -145,12 +148,14 @@ const BiddingList = (props) => {
             <span className="ml-2">View Winnings</span>
           </Flex>
         </Menu.Item>
-        <Menu.Item onClick={() => addToWinnings(row)}>
-          <Flex alignItems="center">
-            <EyeOutlined />
-            <span className="ml-2">Add to Winnings</span>
-          </Flex>
-        </Menu.Item>
+        {winningPrivileges.addPrivilege && (
+          <Menu.Item onClick={() => addToWinnings(row)}>
+            <Flex alignItems="center">
+              <EyeOutlined />
+              <span className="ml-2">Add to Winnings</span>
+            </Flex>
+          </Menu.Item>
+        )}
       </Menu>
     );
   };

@@ -30,6 +30,7 @@ import clientService from 'services/client';
 import cityService from 'services/city';
 import regionService from 'services/region';
 import _ from 'lodash';
+import useUserPrivilege from 'hooks/useUserPrivilege';
 const { Option } = Select;
 
 const getStockStatus = (status) => {
@@ -53,7 +54,7 @@ const GroupList = (props) => {
   let history = useHistory();
 
   const { addPrivilege, editPrivilege, deletePrivilege } = props;
-
+  
   const [list, setList] = useState([]);
   const [searchBackupList, setSearchBackupList] = useState([]);
   const [selectedRows, setSelectedRows] = useState([]);

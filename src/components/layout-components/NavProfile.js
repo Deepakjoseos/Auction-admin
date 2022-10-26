@@ -9,7 +9,7 @@ const menuItem = [
   {
     title: 'Edit Profile',
     icon: EditOutlined,
-    path: '/app/dashboards/profile',
+    path: '/app/pages/profile',
   },
 ]
 
