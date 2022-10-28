@@ -7,11 +7,16 @@ const passwordRegex = new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{7,})');
 
 const ResetPassword = ({ participantId }) => {
   const [newPasswordValue, setNewPasswordValue] = useState('');
+  const [confirmPasswordValue, setConfirmPasswordValue] = useState('');
 
   const history = useHistory();
 
-  const onChangeValueHandler = (event) => {
+  const onChangePasswordValueHandler = (event) => {
     setNewPasswordValue(event.target.value);
+  };
+
+  const onChangeConfirmValueHandler = (event) => {
+    setConfirmPasswordValue(event.target.value);
   };
 
   const onResetPassword = () => {
@@ -19,6 +24,11 @@ const ResetPassword = ({ participantId }) => {
       message.error(
         'Password is too weak. Password must have atleast:- 1 Upper & 1 Lower Character, 1 Special Character, 1 Number. Min Length 8.'
       );
+      return;
+    }
+
+    if (confirmPasswordValue !== newPasswordValue) {
+      message.error('Confirm Password not matching!');
       return;
     }
 
@@ -43,7 +53,17 @@ const ResetPassword = ({ participantId }) => {
           >
             <Input.Password
               value={newPasswordValue}
-              onChange={onChangeValueHandler}
+              onChange={onChangePasswordValueHandler}
+            />
+          </Form.Item>
+          <Form.Item
+            name="confirmPassword"
+            label="Confirm Password"
+            placeholder="Confirm Password"
+          >
+            <Input.Password
+              value={confirmPasswordValue}
+              onChange={onChangeConfirmValueHandler}
             />
           </Form.Item>
           <Button
