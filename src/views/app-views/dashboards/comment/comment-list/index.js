@@ -48,6 +48,9 @@ const getStockStatus = (status) => {
 };
 
 const CommentList = (props) => {
+  const params = new URLSearchParams(props.location.search);
+  const inventoryId = params.get('inventoryId');
+
   const [auctionInventories, setAuctionInventories] = useState([]);
 
   const [commentList, setCommentList] = useState([]);
@@ -95,7 +98,7 @@ const CommentList = (props) => {
   useEffect(() => {
     if (auctionInventories.length > 0) {
       //TODO: fetch all comments
-      getCommentList();
+      getCommentList(inventoryId);
     }
   }, [auctionInventories]);
 
@@ -236,6 +239,7 @@ const CommentList = (props) => {
             onChange={handleSelectInventory}
             placeholder="Auction Inventories"
             showSearch
+            value={selectedInventoryId}
           >
             <Option value="All">All</Option>
             {auctionInventories?.map((inventory) => (

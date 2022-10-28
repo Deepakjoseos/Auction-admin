@@ -56,6 +56,12 @@ const AuctionInventoryList = (props) => {
             <span className="ml-2">View Biddings</span>
           </Flex>
         </Menu.Item>
+        <Menu.Item onClick={() => viewComments(row)}>
+          <Flex alignItems="center">
+            <EyeOutlined />
+            <span className="ml-2">View Comments</span>
+          </Flex>
+        </Menu.Item>
       </Menu>
     );
   };
@@ -75,6 +81,12 @@ const AuctionInventoryList = (props) => {
   const viewBiddings = (row) => {
     history.push(
       `/app/dashboards/auction/bidding/bidding-list?inventoryId=${row._id}`
+    );
+  };
+
+  const viewComments = (row) => {
+    history.push(
+      `/app/dashboards/comment/comment-list?inventoryId=${row._id}`
     );
   };
 
