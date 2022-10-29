@@ -128,7 +128,7 @@ const InformationList = (props) => {
           <AvatarStatus
             size={60}
             type="square"
-            src={record?.images?.image}
+            src={record.image}
             name={record.name}
           />
         </div>
@@ -146,12 +146,12 @@ const InformationList = (props) => {
       title: 'Vechile Type',
       dataIndex: 'vehicleType',
       render: (vehicleType) => vehicleType?.name,
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'color')
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'vehicleType')
     },
     {
       title: 'Price Range',
       dataIndex: 'priceRange',
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'color')
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'priceRange')
     },
     {
       title: 'Brand',

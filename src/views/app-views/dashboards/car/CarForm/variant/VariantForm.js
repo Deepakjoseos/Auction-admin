@@ -326,10 +326,25 @@ const VariantsForm = ({
             //   'car-variant',
             //   'descriptionRequired'
             // );
-            const mutatedImage = images.map((img) => img.originFileObj);
-            const imgValues = await fileManagerService.getImagesUrl(
-              mutatedImage
-            );
+            const mutatedImage = images.map((img) => {
+              if (img.originFileObj) {
+                return img.originFileObj;
+              }
+            });
+
+            const imgValues = images.map((img) => {
+              if (img.url) {
+                return img.url;
+              }
+            });
+
+            if (mutatedImage.length > 0) {
+              const imagesUrl = await fileManagerService.getImagesUrl(
+                mutatedImage
+              );
+              imgValues.concat(imagesUrl);
+            }
+
             sendingValues.images = imgValues;
 
             const edited = await carService.updateCarVariant(id, sendingValues);

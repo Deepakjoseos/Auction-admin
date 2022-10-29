@@ -90,9 +90,19 @@ const InformationForm = (props) => {
     form
       .validateFields()
       .then(async (values) => {
-        const imageUrl = await fileManagerService.getImageUrl(
-          uploadedImg[uploadedImg.length - 1].originFileObj
-        );
+        if (uploadedImg.length < 1) {
+          message.error('Please upload atleast one image');
+          return;
+        }
+
+        let imageUrl = uploadedImg[uploadedImg.length - 1]?.url;
+
+        if (uploadedImg[uploadedImg.length - 1].originFileObj) {
+          imageUrl = await fileManagerService.getImageUrl(
+            uploadedImg[uploadedImg.length - 1].originFileObj
+          );
+        }
+
         if (mode === ADD) {
           // Checking if image exists
 

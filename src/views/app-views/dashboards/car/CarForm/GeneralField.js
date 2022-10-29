@@ -55,7 +55,7 @@ const GeneralField = ({ form, vehicleTypes, brands }) => (
             name="description"
           />
         </Form.Item>
-        <Form.Item name="priceRange" label="PriceRange">
+        <Form.Item name="priceRange" label="PriceRange" rules={rules.name}>
           <Input placeholder="priceRange" />
         </Form.Item>
         <Form.Item

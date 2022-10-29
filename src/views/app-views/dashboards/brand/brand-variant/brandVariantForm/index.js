@@ -97,61 +97,33 @@ const BrandVariantForm = (props) => {
     form
       .validateFields()
       .then(async (values) => {
+        if (uploadedImg.length < 1) {
+          message.error('Please upload atleast one image');
+          return;
+        }
+
+        let imgValue = uploadedImg[uploadedImg.length - 1]?.url;
+
+        if (uploadedImg[uploadedImg.length - 1].originFileObj) {
+          imgValue = await fileManagerService.getImageUrl(
+            uploadedImg[uploadedImg.length - 1].originFileObj
+          );
+        }
+
+        values.logo = imgValue;
+
         if (mode === ADD) {
-          // Checking if image exists
-          if (uploadedImg.length !== 0 && uploadedImg !== null) {
-            console.log('uploadedImg', uploadedImg);
-            // We will upload image to S3 and get the image url
-            // const imgValue = await singleImageUploader(
-            //   uploadedImg[0].originFileObj,
-            //   uploadedImg,
-            //   uploadedImg[0].url,
-            //   "brand"
-            // );
-
-            const imgValue = await fileManagerService.getImageUrl(
-              uploadedImg[uploadedImg.length - 1].originFileObj
-            );
-
-            //  append image url to values object
-            // values.logo = imgValue;
-            values.logo = imgValue;
-
-            const created = await brandVariantService.create(values);
-            if (created) {
-              message.success(`Add ${values.name} to Brand Variant List`);
-              history.goBack();
-            }
-          } else {
-            message.error('Please upload image');
+          const created = await brandVariantService.create(values);
+          if (created) {
+            message.success(`Add ${values.name} to Brand Variant List`);
+            history.goBack();
           }
         }
         if (mode === EDIT) {
-          // Checking if image exists
-          if (uploadedImg.length !== 0 && uploadedImg !== null) {
-            console.log('uploadedImg', uploadedImg);
-            // We will upload image to S3 and get the image url
-            // const imgValue = await singleImageUploader(
-            //   uploadedImg[0].originFileObj,
-            //   uploadedImg,
-            //   uploadedImg[0].url,
-            //   'brand'
-            // );
-            const imgValue = await fileManagerService.getImageUrl(
-              uploadedImg[uploadedImg.length - 1].originFileObj
-            );
-
-            //  append image url to values object
-            // values.logo = imgValue;
-            values.logo = imgValue;
-            console.log('imgvalue', values);
-            const edited = await brandVariantService.edit(param.id, values);
-            if (edited) {
-              message.success(`Edited ${values.name} to Brand Variant list`);
-              history.goBack();
-            }
-          } else {
-            message.error('Please upload image');
+          const edited = await brandVariantService.edit(param.id, values);
+          if (edited) {
+            message.success(`Edited ${values.name} to Brand Variant list`);
+            history.goBack();
           }
         }
         setSubmitLoading(false);

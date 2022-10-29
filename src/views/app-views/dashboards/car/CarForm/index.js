@@ -11,6 +11,8 @@ import Variant from './variant';
 import ImageField from './ImageField';
 import vehicletypeService from 'services/vehicleType';
 import brandService from 'services/brand';
+import fileManagerService from 'services/FileManager';
+import Utils from 'utils';
 
 const { TabPane } = Tabs;
 
@@ -37,7 +39,7 @@ const InformationForm = (props) => {
     onChange: onChangeImages,
     onRemove: onRemoveImages,
     setFileList: setFileListImages
-  } = useUpload(1, 'multiple');
+  } = useUpload(1);
 
   console.log(uploadedImg, 'uploadedImg');
 
@@ -46,17 +48,20 @@ const InformationForm = (props) => {
     console.log(data, 'datadata');
 
     if (data) {
-      const images = data.images?.map((cur, i) => {
-        return {
-          uid: i + Math.random() * 10,
-          url: cur?.image,
-          description: cur?.description
-        };
-      });
+      let himg = [];
+      if (data.image) {
+        himg = [
+          {
+            uid: Math.random() * 1000,
+            title: Utils.getBaseName(data.image),
+            url: data.image,
+            thumbUrl: data.image
+          }
+        ];
 
-      setImage(images);
-
-      setFileListImages(images);
+        setImage(himg);
+        setFileListImages(himg);
+      }
 
       form.setFieldsValue({
         name: data.name,
@@ -96,7 +101,6 @@ const InformationForm = (props) => {
   }, [form, mode, param, props]);
 
   const propsImages = {
-    multiple: true,
     beforeUpload: beforeUploadImages,
     onRemove: onRemoveImages,
     onChange: onChangeImages,
@@ -119,13 +123,28 @@ const InformationForm = (props) => {
           name: values?.name,
           status: values?.status,
           description: values?.description,
-          videos: values?.videos,
+          // videos: values?.videos,
           brandId: values?.brandId,
           vehicleTypeId: values?.vehicleTypeId,
           priceRange: values?.priceRange
         };
 
+        if (uploadedImg.length < 1) {
+          message.error('Please upload atleast one image');
+          return;
+        }
+
+        let imageUrl = uploadedImg[uploadedImg.length - 1]?.url;
+
+        if (uploadedImg[uploadedImg.length - 1].originFileObj) {
+          imageUrl = await fileManagerService.getImageUrl(
+            uploadedImg[uploadedImg.length - 1].originFileObj
+          );
+        }
+
         if (mode === ADD) {
+          sendingValues.image = imageUrl;
+
           const created = await carService.createCar(sendingValues);
           if (created) {
             message.success(`Created ${values.name} to Car list`);
@@ -146,6 +165,7 @@ const InformationForm = (props) => {
           // }
         }
         if (mode === EDIT) {
+          values.image = imageUrl;
           const edited = await carService.editCar(param.id, values);
           if (edited) {
             message.success(`Edited ${values.name} to Information list`);
