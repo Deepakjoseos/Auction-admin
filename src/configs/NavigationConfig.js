@@ -472,6 +472,14 @@ const dashBoardNavTree = [
             icon: NodeExpandOutlined,
             breadcrumb: false,
             submenu: []
+          },
+          {
+            key: 'dashboards-approve-bid',
+            path: `${APP_PREFIX_PATH}/dashboards/approve-bid`,
+            title: 'Approve Bid',
+            icon: NodeExpandOutlined,
+            breadcrumb: false,
+            submenu: []
           }
         ]
       },
@@ -1331,6 +1339,14 @@ export const sellerDashboard = [
     key: 'dashboards-winning',
     path: `${APP_PREFIX_PATH}/dashboards/winning`,
     title: 'Winning',
+    icon: NodeExpandOutlined,
+    breadcrumb: false,
+    submenu: []
+  },
+  {
+    key: 'dashboards-approve-bid',
+    path: `${APP_PREFIX_PATH}/dashboards/approve-bid`,
+    title: 'Approve Bid',
     icon: NodeExpandOutlined,
     breadcrumb: false,
     submenu: []

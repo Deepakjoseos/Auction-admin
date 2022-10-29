@@ -511,6 +511,17 @@ class Utils {
             submenu: []
           });
         }
+      } else if (role.module === 'APPROVE_BID') {
+        if (role.fetch) {
+          navItems[0].submenu.push({
+            key: 'dashboards-approve-bid',
+            path: `${APP_PREFIX_PATH}/dashboards/approve-bid`,
+            title: 'Approve Bid',
+            icon: AppstoreOutlined,
+            breadcrumb: false,
+            submenu: []
+          });
+        }
       } else if (role.module === 'DEPOSIT') {
         if (role.fetch) {
           navItems[0].submenu.push({

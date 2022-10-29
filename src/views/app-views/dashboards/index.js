@@ -1,7 +1,7 @@
-import React, { lazy, Suspense } from "react";
-import { Redirect, Route, Switch } from "react-router-dom";
-import Loading from "components/shared-components/Loading";
-import { useSelector } from "react-redux";
+import React, { lazy, Suspense } from 'react';
+import { Redirect, Route, Switch } from 'react-router-dom';
+import Loading from 'components/shared-components/Loading';
+import { useSelector } from 'react-redux';
 
 const Dashboards = ({ match }) => {
   const { user } = useSelector((state) => state.auth);
@@ -42,6 +42,11 @@ const Dashboards = ({ match }) => {
         <Route
           path={`${match.url}/winning`}
           component={lazy(() => import(`./winning`))}
+        />
+
+        <Route
+          path={`${match.url}/approve-bid`}
+          component={lazy(() => import(`./approve-bid`))}
         />
 
         <Route

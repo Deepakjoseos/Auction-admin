@@ -5,46 +5,34 @@ import { Tabs, Form, Button, message } from 'antd';
 import Flex from 'components/shared-components/Flex';
 import GeneralField from './GeneralField';
 import { useHistory } from 'react-router-dom';
-
-import winningService from 'services/winning';
 import auctionInventoryService from 'services/auctionInventory';
-import participantService from 'services/Participant';
+
+import approveBidService from 'services/approveBid';
+import biddingService from 'services/Bidding';
 
 const { TabPane } = Tabs;
 
 const ADD = 'ADD';
 const EDIT = 'EDIT';
 
-const WinningForm = (props) => {
+const ApproveBidForm = (props) => {
   const { mode = ADD, param } = props;
   const history = useHistory();
 
   const [form] = Form.useForm();
   const [submitLoading, setSubmitLoading] = useState(false);
 
-  const [inventories, setInventories] = useState([]);
-  const [participants, setParticipants] = useState([]);
+  const [biddings, setBiddings] = useState([]);
 
-  const getParticipants = async () => {
-    const data = await participantService.getAllParticipants();
-    console.log(data);
+  const getBiddings = async () => {
+    const data = await biddingService.getBiddings();
     if (data) {
-      setParticipants(
-        data.filter((participant) => participant.participantType !== 'Seller')
-      );
-    }
-  };
-
-  const getInventories = async () => {
-    const data = await auctionInventoryService.getInventories();
-    if (data) {
-      setInventories(data);
+      setBiddings(data);
     }
   };
 
   useEffect(() => {
-    getParticipants();
-    getInventories();
+    getBiddings();
   }, []);
 
   const onFinish = async () => {
@@ -52,12 +40,9 @@ const WinningForm = (props) => {
     form
       .validateFields()
       .then(async (values) => {
-        const added = await winningService.addWinning({
-          auctionInventoryId: values.auctionInventoryId,
-          winnerId: values.winnerId
-        });
+        const added = await approveBidService.addApproveBid(values);
         if (added) {
-          message.success(`Added ${values.auctionInventoryId} to Winnings`);
+          message.success(`Added ${values.bidId} to approve bids`);
           setSubmitLoading(false);
           history.goBack();
         }
@@ -69,6 +54,7 @@ const WinningForm = (props) => {
       });
     setSubmitLoading(false);
   };
+
   return (
     <Form
       layout="vertical"
@@ -85,13 +71,13 @@ const WinningForm = (props) => {
             alignItems="center"
           >
             <h2 className="mb-3">
-              {mode === 'ADD' ? 'Add Winning' : `Edit Employee Type`}
+              {mode === 'ADD' ? 'Add Approve Bid' : `Edit Approve Bid`}
             </h2>
             <div className="mb-3">
               <Button
                 className="mr-2"
                 onClick={() =>
-                  history.push('/app/dashboards/winning/winning-list')
+                  history.push('/app/dashboards/approve-bid/approveBid-list')
                 }
               >
                 Discard
@@ -112,11 +98,7 @@ const WinningForm = (props) => {
       <div className="container">
         <Tabs defaultActiveKey="1" style={{ marginTop: 30 }}>
           <TabPane tab="General" key="1">
-            <GeneralField
-              mode={mode}
-              inventories={inventories}
-              participants={participants}
-            />
+            <GeneralField mode={mode} biddings={biddings} />
           </TabPane>
         </Tabs>
       </div>
@@ -124,4 +106,4 @@ const WinningForm = (props) => {
   );
 };
 
-export default WinningForm;
+export default ApproveBidForm;
