@@ -91,7 +91,6 @@ const DepositForm = (props) => {
         const deposited = await depositService.makeDeposit(data);
         if (deposited) {
           message.success(`Deposit ${values.amount}`);
-          history.goBack();
         }
         setSubmitLoading(false);
       })

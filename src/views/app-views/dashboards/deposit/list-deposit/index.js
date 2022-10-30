@@ -1,10 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { Card, Table, Input, Tag, Button } from 'antd';
-import { SearchOutlined, PlusCircleOutlined } from '@ant-design/icons';
+import { Card, Table, Input, Tag, Button, Menu } from 'antd';
+import {
+  SearchOutlined,
+  PlusCircleOutlined,
+  EditOutlined
+} from '@ant-design/icons';
 import Flex from 'components/shared-components/Flex';
 import { useHistory } from 'react-router-dom';
 import utils from 'utils';
 import depositService from 'services/deposit';
+import constantsService from 'services/constants';
+import EllipsisDropdown from 'components/shared-components/EllipsisDropdown';
 
 const getStockStatus = (status) => {
   if (status === 'Active') {
@@ -33,8 +39,11 @@ const DepositList = (props) => {
   const [list, setList] = useState([]);
   const [searchBackupList, setSearchBackupList] = useState([]);
   const [currentSubAdminRole, setCurrentSubAdminRole] = useState({});
+  const [paymentStatus, setPaymentStatus] = useState([]);
+
   useEffect(() => {
     getDeposits();
+    getPaymentStatus();
   }, []);
 
   const getDeposits = async () => {
@@ -46,8 +55,46 @@ const DepositList = (props) => {
     }
   };
 
+  const getPaymentStatus = async () => {
+    const data = await constantsService.getRegistrationConstant();
+    if (data) {
+      setPaymentStatus(Object.values(data.paymentStatus));
+      console.log(data, 'show-data');
+    }
+  };
+
   const makeDeposit = () => {
     history.push(`/app/dashboards/deposit/make-deposit`);
+  };
+
+  const changeStatus = (row, newStatus) => {};
+
+  const dropdownMenu = (row) => {
+    return (
+      <Menu>
+        {/* {editPrivilege && (
+          <Menu.Item onClick={() => viewDetails(row)}>
+            <Flex alignItems="center">
+              <EyeOutlined />
+              <span className="ml-2">View Details</span>
+            </Flex>
+          </Menu.Item>
+        )} */}
+        {editPrivilege &&
+          paymentStatus.map((status) => {
+            if (status !== row.status) {
+              return (
+                <Menu.Item onClick={() => changeStatus(row, status)}>
+                  <Flex alignItems="center">
+                    <EditOutlined />
+                    <span className="ml-2">{status}</span>
+                  </Flex>
+                </Menu.Item>
+              );
+            }
+          })}
+      </Menu>
+    );
   };
 
   // Antd Table Columns
@@ -114,6 +161,15 @@ const DepositList = (props) => {
         <Flex alignItems="center">{getStockStatus(status)}</Flex>
       ),
       sorter: (a, b) => utils.antdTableSorter(a, b, 'status')
+    },
+    {
+      title: '',
+      dataIndex: 'actions',
+      render: (_, elm) => (
+        <div className="text-right">
+          <EllipsisDropdown menu={dropdownMenu(elm)} />
+        </div>
+      )
     }
 
     // {

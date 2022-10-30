@@ -1,8 +1,8 @@
-import { Card, Col, Row, Upload } from 'antd'
-import { ImageSvg } from 'assets/svg/icon'
-import CustomIcon from 'components/util-components/CustomIcon'
-import React from 'react'
-import ImageDescription from '../../../../../../components/shared-components/ImageDescription'
+import { Card, Col, Row, Upload } from 'antd';
+import { ImageSvg } from 'assets/svg/icon';
+import CustomIcon from 'components/util-components/CustomIcon';
+import React from 'react';
+import ImageDescription from '../../../../../../components/shared-components/ImageDescription';
 
 const ImageField = ({ propsImages, images, setImages }) => {
   return (
@@ -43,7 +43,7 @@ const ImageField = ({ propsImages, images, setImages }) => {
       {/* </Col>
       </Row> */}
     </Card>
-  )
-}
+  );
+};
 
-export default ImageField
+export default ImageField;

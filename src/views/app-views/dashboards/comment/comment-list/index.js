@@ -55,7 +55,7 @@ const CommentList = (props) => {
 
   const [commentList, setCommentList] = useState([]);
   const [searchBackupList, setSearchBackupList] = useState([]);
-  const [selectedInventoryId, setSelectedInventoryId] = useState(null);
+  const [selectedInventoryId, setSelectedInventoryId] = useState('All');
 
   const history = useHistory();
 
@@ -87,8 +87,10 @@ const CommentList = (props) => {
 
       setCommentList(mutatedComments);
       setSearchBackupList(mutatedComments);
+      setSelectedInventoryId(inventoryId);
+      return;
     }
-    setSelectedInventoryId(inventoryId);
+    setSelectedInventoryId('All');
   };
 
   useEffect(() => {
@@ -248,7 +250,7 @@ const CommentList = (props) => {
                 value={inventory._id}
                 disabled={inventory.status === 'Hold'}
               >
-                {inventory._id}
+                {`${inventory.registrationNumber} (${inventory.auction.name})`}
               </Option>
             ))}
           </Select>

@@ -394,14 +394,14 @@ const dashBoardNavTree = [
       //   breadcrumb: false,
       //   submenu: [],
       // },
-      {
-        key: 'dashboards-group-members',
-        path: `${APP_PREFIX_PATH}/dashboards/group-members`,
-        title: 'Group Members',
-        icon: AppstoreOutlined,
-        breadcrumb: false,
-        submenu: []
-      },
+      // {
+      //   key: 'dashboards-group-members',
+      //   path: `${APP_PREFIX_PATH}/dashboards/group-members`,
+      //   title: 'Group Members',
+      //   icon: AppstoreOutlined,
+      //   breadcrumb: false,
+      //   submenu: []
+      // },
       {
         key: 'dashboards-templates',
         path: `${APP_PREFIX_PATH}/dashboards/template`,

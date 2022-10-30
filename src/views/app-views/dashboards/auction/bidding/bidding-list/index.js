@@ -158,14 +158,14 @@ const BiddingList = (props) => {
             </Flex>
           </Menu.Item>
         )}
-        {approveBiddingPrivileges.addPrivilege && (
+        {/* {approveBiddingPrivileges.addPrivilege && (
           <Menu.Item onClick={() => approveBid(row)}>
             <Flex alignItems="center">
               <EyeOutlined />
               <span className="ml-2">Approve Bid</span>
             </Flex>
           </Menu.Item>
-        )}
+        )} */}
       </Menu>
     );
   };

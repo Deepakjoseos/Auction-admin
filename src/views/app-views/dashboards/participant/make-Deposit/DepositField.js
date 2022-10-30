@@ -207,9 +207,9 @@ const DepositField = ({
               </Form.Item>
  */}
 
-              <Form.Item name="participantId" label="Participant">
+              {/* <Form.Item name="participantId" label="Participant">
                 <Input placeholder={participantId} disabled />
-              </Form.Item>
+              </Form.Item> */}
 
               <Form.Item
                 name="paymentMode"

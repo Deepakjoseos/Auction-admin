@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { Tabs, Form, message, Table, Menu, Modal, Input } from 'antd';
+import { Tabs, Form, message, Table, Menu, Modal, Input, Row, Col } from 'antd';
 import { useHistory } from 'react-router-dom';
 
 import RegistrationField from './RegistrationField';
@@ -41,7 +41,7 @@ const RegistrationForm = (props) => {
   const [status, setStatus] = useState([]);
   const [uploadedImg, setImage] = useState(null);
 
-  console.log(feeTypes);
+  const [selectedRegistration, setSelectedRegistration] = useState(null);
 
   // const getFeeTypes = async () => {
   //   const data = await constantsService.getFeeTypes();
@@ -62,6 +62,7 @@ const RegistrationForm = (props) => {
     const data = await registrationService.getParticipantRegistrations(
       participantId
     );
+    console.log(data);
     if (data) {
       setRegistrationsList(data);
       setSearchBackupList(data);
@@ -139,7 +140,6 @@ const RegistrationForm = (props) => {
         );
         if (created) {
           message.success(`Created  registration`);
-          history.goBack();
         }
 
         setSubmitLoading(false);
@@ -169,7 +169,8 @@ const RegistrationForm = (props) => {
   // const addBanner = () => {
   //   history.push(`/app/dashboards/banner/add-banner`)
   // }
-  const showModal = () => {
+  const showModal = (row) => {
+    setSelectedRegistration(row);
     setIsModalVisible(true);
   };
 
@@ -297,12 +298,48 @@ const RegistrationForm = (props) => {
 
   return (
     <>
-      <Table
-        className="table-responsive"
-        columns={tableColumns}
-        dataSource={registrationsList}
-        rowKey="id"
-      />
+      {registrationsList.length > 0 && (
+        <Table
+          className="table-responsive"
+          columns={tableColumns}
+          dataSource={registrationsList}
+          rowKey="id"
+        />
+      )}
+      {selectedRegistration && (
+        <Modal
+          title="Registration details"
+          visible={isModalVisible}
+          onOk={handleOk}
+          onCancel={handleCancel}
+        >
+          <Row gutter={[16, 16]}>
+            <Col>
+              <Col></Col>
+              <h4>Fee: {selectedRegistration.fee}</h4>
+              <h4>Fee remark: {selectedRegistration.feeRemark}</h4>
+              <h4>Fee type: {selectedRegistration.feeType}</h4>
+              <h4>Mode: {selectedRegistration.mode}</h4>
+              <h4>Note: {selectedRegistration.note}</h4>
+              <h4>Participant name: {selectedRegistration.participant.name}</h4>
+              <h4>Bank name: {selectedRegistration.payment.bankName}</h4>
+              <h4>Branch name: {selectedRegistration.payment.branchName}</h4>
+              <h4>
+                Payment date:{' '}
+                {moment(parseInt(selectedRegistration.paymentDate)).format('L')}
+              </h4>
+              <h4>Status: {selectedRegistration.status}</h4>
+              <br />
+              <h4>Receipt:</h4>
+              <img
+                src={selectedRegistration.payment.receipt}
+                width={200}
+                height={200}
+              />
+            </Col>
+          </Row>
+        </Modal>
+      )}
       <Form
         layout="vertical"
         form={form}

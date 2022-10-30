@@ -3,10 +3,10 @@ import fetch from 'auth/FetchInterceptor';
 const groupService = {};
 const apiRoute = '/group';
 
-groupService.getGroups = async function () {
+groupService.getGroups = async function (query = '') {
   try {
     const res = await fetch({
-      url: `${apiRoute}/get/all/admin`,
+      url: `${apiRoute}/get/all/admin${query}`,
       method: 'get'
     });
     const data = res.data.filter((cur) => cur.status !== 'Deleted');

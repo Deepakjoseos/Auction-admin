@@ -23,6 +23,7 @@ import constantsService from 'services/constants';
 import { set } from 'lodash';
 import stateService from 'services/state';
 import ResetPassword from '../reset-password';
+import GroupMemberList from '../list-group-members';
 
 const { TabPane } = Tabs;
 
@@ -299,6 +300,9 @@ const ParticipantForm = (props) => {
                 </TabPane>
                 <TabPane tab="Reset Password" key="7">
                   <ResetPassword participantId={param?.id} />
+                </TabPane>
+                <TabPane tab="Groups memberships" key="8">
+                  <GroupMemberList participantId={param?.id} />
                 </TabPane>
               </>
             )}

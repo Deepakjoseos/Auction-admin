@@ -49,10 +49,11 @@ const Dashboards = ({ match }) => {
           component={lazy(() => import(`./approve-bid`))}
         />
 
-        <Route
+        {/* <Route
           path={`${match.url}/group-members`}
           component={lazy(() => import(`./group-members`))}
-        />
+        /> */}
+        
         <Route
           path={`${match.url}/information`}
           component={lazy(() => import(`./information`))}

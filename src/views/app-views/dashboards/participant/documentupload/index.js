@@ -17,6 +17,9 @@ import { PlusOutlined } from '@ant-design/icons';
 import fileManagerService from 'services/FileManager';
 import { ImageSvg } from 'assets/svg/icon';
 import CustomIcon from 'components/util-components/CustomIcon';
+import useUpload from 'hooks/useUpload';
+import ImageDescription from 'components/shared-components/ImageDescription';
+import Utils from 'utils';
 
 const { Option } = Select;
 
@@ -61,6 +64,28 @@ const DocumentForm = (props) => {
   const [titleValue, setTitleValue] = useState(null);
   const [descriptionValue, setDescriptionValue] = useState(null);
 
+  const {
+    fileList: fileListImages,
+    beforeUpload: beforeUploadImages,
+    onChange: onChangeImages,
+    onRemove: onRemoveImages,
+    setFileList
+  } = useUpload(1, 'multiple');
+
+  const propsImages = {
+    beforeUpload: beforeUploadImages,
+    onRemove: onRemoveImages,
+    onChange: onChangeImages,
+    fileList: fileListImages
+  };
+
+  useEffect(() => {
+    console.log(fileListImages, 'hey-me');
+    setDocs(fileListImages);
+  }, [fileListImages]);
+
+  console.log(docs)
+
   const uploadButton = (
     <div>
       <PlusOutlined />
@@ -74,15 +99,17 @@ const DocumentForm = (props) => {
       const mutatedData = [];
       data.documents.forEach((doc, index) => {
         mutatedData.push({
-          uid: doc.title + index,
-          name: 'image.png',
+          uid: Math.random() * 1000,
+          name: Utils.getBaseName(doc.url),
           status: 'done',
           url: doc.url,
-          title: doc.title,
+          thumbUrl: doc.url,
+          title: doc.title ? doc.title : '',
           description: doc.description
         });
       });
       setDocs(mutatedData);
+      setFileList(mutatedData);
     }
   };
 
@@ -108,7 +135,7 @@ const DocumentForm = (props) => {
       }
 
       const data = {
-        documentNumber: doc.uid,
+        documentNumber: doc.uid.toString(),
         url: url ? url : doc.url,
         title: doc.title,
         description: doc.description
@@ -123,8 +150,7 @@ const DocumentForm = (props) => {
 
     console.log(uploaded);
     if (uploaded) {
-      message.success(`Uploaded Auction Inventory Image.`);
-      history.goBack();
+      message.success(`Uploaded Document.`);
       setSubmitLoading(false);
     }
 
@@ -139,67 +165,67 @@ const DocumentForm = (props) => {
     // }
   };
 
-  const handleCancel = () => {
-    const previewDocMutated = structuredClone(previewDoc);
-    if (titleValue) {
-      previewDocMutated.title = titleValue;
-    }
-    if (descriptionValue) {
-      previewDocMutated.description = descriptionValue;
-    }
+  // const handleCancel = () => {
+  //   const previewDocMutated = structuredClone(previewDoc);
+  //   if (titleValue) {
+  //     previewDocMutated.title = titleValue;
+  //   }
+  //   if (descriptionValue) {
+  //     previewDocMutated.description = descriptionValue;
+  //   }
 
-    const docsMutated = structuredClone(docs);
-    console.log('before', docsMutated);
-    const docIndex = docsMutated.findIndex(
-      (doc) => doc.uid === previewDocMutated.uid
-    );
+  //   const docsMutated = structuredClone(docs);
+  //   console.log('before', docsMutated);
+  //   const docIndex = docsMutated.findIndex(
+  //     (doc) => doc.uid === previewDocMutated.uid
+  //   );
 
-    docsMutated[docIndex] = previewDocMutated;
+  //   docsMutated[docIndex] = previewDocMutated;
 
-    console.log('after', docsMutated);
+  //   console.log('after', docsMutated);
 
-    setDocs(docsMutated);
-    setTitleValue(null);
-    setDescriptionValue(null);
-    setPreviewDoc({});
-    setPreviewVisible(false);
-  };
+  //   setDocs(docsMutated);
+  //   setTitleValue(null);
+  //   setDescriptionValue(null);
+  //   setPreviewDoc({});
+  //   setPreviewVisible(false);
+  // };
 
-  const handlePreview = async (file) => {
-    if (!file.url) {
-      file.url = await getBase64(file.originFileObj);
-    }
+  // const handlePreview = async (file) => {
+  //   if (!file.url) {
+  //     file.url = await getBase64(file.originFileObj);
+  //   }
 
-    console.log('file', file);
+  //   console.log('file', file);
 
-    setPreviewDoc(file);
-    setPreviewVisible(true);
-  };
+  //   setPreviewDoc(file);
+  //   setPreviewVisible(true);
+  // };
 
-  const handleChange = ({ fileList }) => {
-    const mutatedFileList = [];
+  // const handleChange = ({ fileList }) => {
+  //   const mutatedFileList = [];
 
-    for (const file of fileList) {
-      const mutatedFile = structuredClone(file);
-      // if (!mutatedFile.url) {
-      //   mutatedFile.url = await getImageUrl(mutatedFile.originFileObj);
-      // }
+  //   for (const file of fileList) {
+  //     const mutatedFile = structuredClone(file);
+  //     // if (!mutatedFile.url) {
+  //     //   mutatedFile.url = await getImageUrl(mutatedFile.originFileObj);
+  //     // }
 
-      if (!mutatedFile.title) {
-        mutatedFile.title = '';
-      }
+  //     if (!mutatedFile.title) {
+  //       mutatedFile.title = '';
+  //     }
 
-      if (!mutatedFile.description) {
-        mutatedFile.description = '';
-      }
+  //     if (!mutatedFile.description) {
+  //       mutatedFile.description = '';
+  //     }
 
-      mutatedFileList.push(mutatedFile);
-    }
+  //     mutatedFileList.push(mutatedFile);
+  //   }
 
-    console.log(mutatedFileList);
+  //   console.log(mutatedFileList);
 
-    setDocs(mutatedFileList);
-  };
+  //   setDocs(mutatedFileList);
+  // };
 
   console.log(docs);
 
@@ -210,6 +236,47 @@ const DocumentForm = (props) => {
       <Col xs={24} sm={24} md={17}>
         <Card title="Upload Participants documents">
           <Upload
+            listType="picture-card"
+            name="image"
+            {...propsImages}
+            accept="image/png, image/jpeg, image/jpg"
+          >
+            <CustomIcon className="display-3" svg={ImageSvg} />
+          </Upload>
+
+          <h4> Title, Description Note </h4>
+          {docs?.map((cur) => (
+            <>
+              {cur?.url ? (
+                <>
+                  <ImageDescription
+                    url={cur?.url}
+                    description={cur?.description}
+                    title={cur?.title}
+                    file={null}
+                    setImages={setDocs}
+                    images={docs}
+                    hasTitle={true}
+                    id={cur?.uid}
+                  />
+                </>
+              ) : (
+                <>
+                  <ImageDescription
+                    url={null}
+                    description={cur?.description}
+                    title={cur?.title}
+                    file={cur?.originFileObj}
+                    setImages={setDocs}
+                    images={docs}
+                    hasTitle={true}
+                    id={cur?.uid}
+                  />
+                </>
+              )}
+            </>
+          ))}
+          {/* <Upload
             openFileDialogOnClick={!previewVisible}
             type="file"
             listType="picture-card"
@@ -247,7 +314,7 @@ const DocumentForm = (props) => {
                 </Form.Item>
               </Modal>
             )}
-          </Upload>
+          </Upload> */}
           <Button
             type="primary"
             htmlType="button"

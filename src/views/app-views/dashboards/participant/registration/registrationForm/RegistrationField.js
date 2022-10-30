@@ -19,7 +19,6 @@ import {
 import { ImageSvg } from 'assets/svg/icon';
 import CustomIcon from 'components/util-components/CustomIcon';
 
-
 // const { Dragger } = Upload
 const { Option } = Select;
 
@@ -277,7 +276,9 @@ const RegistrationField = ({
             >
               <Select>
                 {feeTypes.map((feeType) => (
-                  <Option value={feeType}>{feeType}</Option>
+                  <Option value={feeType}>
+                    {feeType.split('_').join(' ')}
+                  </Option>
                 ))}
               </Select>
             </Form.Item>
@@ -352,11 +353,6 @@ const RegistrationField = ({
           {/* </Form>  */}
         </Col>
       </Row>
-      {/* <Modal title="Basic Modal" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-      </Modal> */}
     </>
   );
 };
