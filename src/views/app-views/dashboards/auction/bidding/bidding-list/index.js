@@ -21,6 +21,7 @@ import auctionInventoryService from 'services/auctionInventory';
 import participantService from 'services/Participant';
 import winningService from 'services/winning';
 import useUserPrivilege from 'hooks/useUserPrivilege';
+import approveBidService from 'services/approveBid';
 
 const { Option } = Select;
 
@@ -56,6 +57,7 @@ const BiddingList = (props) => {
   const inventoryId = params.get('inventoryId');
 
   const winningPrivileges = useUserPrivilege('WINNING');
+  const approveBiddingPrivileges = useUserPrivilege('BIDDING');
 
   const [list, setList] = useState([]);
   const [searchBackupList, setSearchBackupList] = useState([]);
@@ -156,6 +158,14 @@ const BiddingList = (props) => {
             </Flex>
           </Menu.Item>
         )}
+        {approveBiddingPrivileges.addPrivilege && (
+          <Menu.Item onClick={() => approveBid(row)}>
+            <Flex alignItems="center">
+              <EyeOutlined />
+              <span className="ml-2">Approve Bid</span>
+            </Flex>
+          </Menu.Item>
+        )}
       </Menu>
     );
   };
@@ -177,6 +187,17 @@ const BiddingList = (props) => {
     });
     if (added) {
       message.success(`Added ${row.auctionInventory._id} to Winnings`);
+    }
+  };
+
+  const approveBid = async (row) => {
+    const added = await approveBidService.addApproveBid({
+      bidId: row._id,
+      finalAmount: 0
+    });
+
+    if (added) {
+      message.success(`Approved ${row._id} Bid`);
     }
   };
 

@@ -11,15 +11,14 @@ const rules = {
   ]
 };
 
-const GeneralField = ({ mode, biddings }) => {
+const GeneralField = ({ mode, biddings, setValues }) => {
   const [selectedBidId, setSelectedBidId] = useState(null);
 
-  let bidAmount = null;
   if (biddings && selectedBidId) {
     const selectedBid = biddings.find((bid) => bid._id === selectedBidId);
-    console.log(selectedBid);
-    bidAmount = selectedBid.amount;
-    console.log(bidAmount);
+    setValues({
+      finalAmount: selectedBid.amount
+    });
   }
 
   return (
@@ -36,7 +35,7 @@ const GeneralField = ({ mode, biddings }) => {
             >
               {biddings?.map((bid) => (
                 <Option key={bid._id} value={bid._id}>
-                  {`${bid.auctionInventory.registrationNumber} (${bid.auction.name})`}
+                  {`${bid.auctionInventory.registrationNumber} (${bid.auction.name}) - ${bid.amount}`}
                 </Option>
               ))}
             </Select>
@@ -46,11 +45,7 @@ const GeneralField = ({ mode, biddings }) => {
             label="Enter final amount"
             rules={rules.required}
           >
-            <InputNumber
-              disabled={!bidAmount}
-              placeholder={+bidAmount}
-              min={0}
-            />
+            <InputNumber disabled={!selectedBidId} min={0} />
           </Form.Item>
         </Card>
       </Col>

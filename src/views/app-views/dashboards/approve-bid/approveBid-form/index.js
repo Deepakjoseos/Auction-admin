@@ -98,7 +98,7 @@ const ApproveBidForm = (props) => {
       <div className="container">
         <Tabs defaultActiveKey="1" style={{ marginTop: 30 }}>
           <TabPane tab="General" key="1">
-            <GeneralField mode={mode} biddings={biddings} />
+            <GeneralField mode={mode} biddings={biddings} setValues={form.setFieldsValue} />
           </TabPane>
         </Tabs>
       </div>

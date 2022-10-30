@@ -282,10 +282,10 @@ export const Profile = () => {
           }}
         />
         <Row gutter="16">
-          <Col xs={24} sm={24} md={8}>
+          {/* <Col xs={24} sm={24} md={8}>
             <Connection />
             <Group />
-          </Col>
+          </Col> */}
           <Col xs={24} sm={24} md={16}>
             {user.auth !== 'Admin' && <Roles roles={user.roles} />}
             {/* <Experiences />
