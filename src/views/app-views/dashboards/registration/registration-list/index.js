@@ -26,16 +26,16 @@ const RegistrationList = (props) => {
   const [searchBackupList, setSearchBackupList] = useState([]);
   const [paymentStatus, setPaymentStatus] = useState([]);
 
-  useEffect(() => {
-    const getRegistration = async () => {
-      const data = await registrationService.getRegistrations();
-      if (data) {
-        setList(data);
-        setSearchBackupList(data);
-        console.log(data, 'show-data');
-      }
-    };
+  const getRegistration = async () => {
+    const data = await registrationService.getRegistrations();
+    if (data) {
+      setList(data);
+      setSearchBackupList(data);
+      console.log(data, 'show-data');
+    }
+  };
 
+  useEffect(() => {
     const getPaymentStatus = async () => {
       const data = await constantsService.getRegistrationConstant();
       if (data) {
@@ -51,7 +51,21 @@ const RegistrationList = (props) => {
   //   history.push(`/app/dashboards/registration/edit-registration/${row._id}`);
   // };
 
-  const changeRegistrationStatus = (row, newStatus) => {};
+  const changeRegistrationStatus = async (row, newStatus) => {
+    const data = await registrationService.updateRegistration(row._id, {
+      status: newStatus,
+      countedIn: row.countedIn,
+      date: row.date,
+      expiry: row.expiry,
+      feeRemark: row.feeRemark,
+      note: row.note,
+      paymentDate: row.paymentDate
+    });
+    if (data) {
+      getRegistration();
+      message.success('Status changed!');
+    }
+  };
 
   const dropdownMenu = (row) => {
     return (

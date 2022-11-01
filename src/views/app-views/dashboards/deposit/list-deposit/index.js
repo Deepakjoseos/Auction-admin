@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Card, Table, Input, Tag, Button, Menu } from 'antd';
+import { Card, Table, Input, Tag, Button, Menu, message } from 'antd';
 import {
   SearchOutlined,
   PlusCircleOutlined,
@@ -67,7 +67,26 @@ const DepositList = (props) => {
     history.push(`/app/dashboards/deposit/make-deposit`);
   };
 
-  const changeStatus = (row, newStatus) => {};
+  const changeStatus = async (row, newStatus) => {
+    const data = await depositService.updateDeposit(row._id, {
+      paymentStatus: newStatus,
+      remark: row.remark,
+      date: row.date,
+      countedIn: row.countedIn,
+      paymentMode: row.paymentMode,
+      bank: {
+        name: row.bank.name,
+        branch: row.bank.branch,
+        receiptNumber: row.bank.receiptNumber
+      },
+      businessType: row.businessType,
+      recieptUrl: row.recieptUrl
+    });
+    if (data) {
+      getDeposits();
+      message.success('Status changed!');
+    }
+  };
 
   const dropdownMenu = (row) => {
     return (
@@ -161,6 +180,14 @@ const DepositList = (props) => {
         <Flex alignItems="center">{getStockStatus(status)}</Flex>
       ),
       sorter: (a, b) => utils.antdTableSorter(a, b, 'status')
+    },
+    {
+      title: 'Payment status',
+      dataIndex: 'paymentStatus',
+      render: (paymentStatus) => (
+        <Flex alignItems="paymentStatus">{paymentStatus}</Flex>
+      ),
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'paymentStatus')
     },
     {
       title: '',

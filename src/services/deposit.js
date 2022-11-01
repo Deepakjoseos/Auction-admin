@@ -1,7 +1,7 @@
-import fetch from "auth/FetchInterceptor";
+import fetch from 'auth/FetchInterceptor';
 
 const depositService = {};
-const apiRoute = "/deposit";
+const apiRoute = '/deposit';
 
 depositService.getDeposits = async function (query) {
   try {
@@ -10,11 +10,11 @@ depositService.getDeposits = async function (query) {
       url = `${url}&participantId=${query.participantId}`;
     const res = await fetch({
       url,
-      method: "get",
+      method: 'get'
     });
     return res.data;
   } catch (err) {
-    console.log(err, "show-err");
+    console.log(err, 'show-err');
   }
 };
 
@@ -22,12 +22,12 @@ depositService.makeDeposit = async function (data) {
   try {
     const res = await fetch({
       url: `${apiRoute}/make`,
-      method: "post",
-      data: data,
+      method: 'post',
+      data: data
     });
     return res.data;
   } catch (err) {
-    console.log(err, "show-err");
+    console.log(err, 'show-err');
   }
 };
 
@@ -35,11 +35,24 @@ depositService.getDeposit = async function (id) {
   try {
     const res = await fetch({
       url: `${apiRoute}/${id}`,
-      method: "get",
+      method: 'get'
     });
     return res.data;
   } catch (err) {
-    console.log(err, "show-err");
+    console.log(err, 'show-err');
+  }
+};
+
+depositService.updateDeposit = async function (id, data) {
+  try {
+    const res = await fetch({
+      url: `${apiRoute}/update/${id}`,
+      method: 'put',
+      data: data
+    });
+    return res.data;
+  } catch (err) {
+    console.log(err, 'show-err');
   }
 };
 

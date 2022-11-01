@@ -6,6 +6,7 @@ import GeneralField from './GeneralField';
 import { useHistory } from 'react-router-dom';
 import authAdminService from 'services/auth/admin';
 import employeeTypeService from 'services/employeeType';
+import ResetPassword from '../reset-password';
 
 const { TabPane } = Tabs;
 
@@ -139,6 +140,9 @@ const UserForm = (props) => {
           <Tabs defaultActiveKey="1" style={{ marginTop: 30 }}>
             <TabPane tab="General" key="1">
               <GeneralField mode={mode} employeeTypes={employeeTypes} />
+            </TabPane>
+            <TabPane tab="Reset password" key="2">
+              <ResetPassword userId={param.id} />
             </TabPane>
           </Tabs>
         </div>

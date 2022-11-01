@@ -28,6 +28,20 @@ registrationService.createRegistration = async function (data) {
     console.log(err, 'show-err');
   }
 };
+
+registrationService.updateRegistration = async function (id, data) {
+  try {
+    const res = await fetch({
+      url: `${apiRoute}/update/${id}`,
+      method: 'put',
+      data: data
+    });
+    return res;
+  } catch (err) {
+    console.log(err, 'show-err');
+  }
+};
+
 registrationService.getRegistrationById = async function (id, data) {
   try {
     const res = await fetch({
@@ -41,8 +55,9 @@ registrationService.getRegistrationById = async function (id, data) {
   }
 };
 
-
-registrationService.getParticipantRegistrations = async function (participantId) {
+registrationService.getParticipantRegistrations = async function (
+  participantId
+) {
   try {
     const res = await fetch({
       url: `${apiRoute}/get/all/admin?participantId=${participantId}`,
@@ -54,6 +69,5 @@ registrationService.getParticipantRegistrations = async function (participantId)
     console.log(err, 'show-err');
   }
 };
-
 
 export default registrationService;
