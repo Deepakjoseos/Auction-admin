@@ -37,7 +37,7 @@ const UserForm = (props) => {
         name: data.name,
         contact: data.contact,
         email: data.email,
-        employeeTypeId: data.employeeType._id,
+        employeeTypeId: data.employeeType?._id,
         status: data.status
       });
     } else {

@@ -135,7 +135,7 @@ const UserList = () => {
     {
       title: 'Employee Type',
       dataIndex: 'employeeType',
-      render: (employeeType) => <Flex alignItems="center">{employeeType.name}</Flex>
+      render: (employeeType) => <Flex alignItems="center">{employeeType?.name}</Flex>
       // sorter: (a, b) => utils.antdTableSorter(a, b, 'employeeType')
     },
 
