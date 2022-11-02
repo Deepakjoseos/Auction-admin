@@ -123,9 +123,13 @@ const EmployeeTypeList = (props) => {
       render: (permissions) => (
         <span>
           {permissions.map((permission) => {
-            if (Object.values(permission).includes(true)) {
+            if (permission.add || permission.edit || permission.delete) {
               return (
-                <Tag color={'geekblue'} key={permission.module}>
+                <Tag
+                  style={{ marginBottom: '1rem' }}
+                  color={'geekblue'}
+                  key={permission.module}
+                >
                   {permission.module.toUpperCase()}
                 </Tag>
               );
