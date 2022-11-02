@@ -141,9 +141,11 @@ const UserForm = (props) => {
             <TabPane tab="General" key="1">
               <GeneralField mode={mode} employeeTypes={employeeTypes} />
             </TabPane>
-            <TabPane tab="Reset password" key="2">
-              <ResetPassword userId={param.id} />
-            </TabPane>
+            {mode === 'EDIT' && (
+              <TabPane tab="Reset password" key="2">
+                <ResetPassword userId={param?.id} />
+              </TabPane>
+            )}
           </Tabs>
         </div>
       </Form>
