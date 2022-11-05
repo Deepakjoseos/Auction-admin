@@ -38,6 +38,7 @@ const UserForm = (props) => {
         contact: data.contact,
         email: data.email,
         employeeTypeId: data.employeeType?._id,
+        employeeCode: data?.employeeCode,
         status: data.status
       });
     } else {
@@ -63,7 +64,8 @@ const UserForm = (props) => {
           email: values?.email,
           password: values?.password,
           contact: values?.contact,
-          employeeTypeId: values?.employeeTypeId
+          employeeTypeId: values?.employeeTypeId,
+          employeeCode: values?.employeeCode
         };
 
         console.log(sendingValues, 'values=====');

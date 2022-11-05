@@ -24,7 +24,7 @@ export function* signIn() {
       //   password
       // )
 
-      const user = yield call(authAdminService.login, { email, password });
+      const user = yield call(authAdminService.login, { username: email, password });
 
       if (user?.sessionToken) {
         notification.success({ message: 'Login success' });

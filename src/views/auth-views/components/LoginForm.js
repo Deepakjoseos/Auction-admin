@@ -122,15 +122,15 @@ export const LoginForm = (props) => {
       >
         <Form.Item
           name="email"
-          label="Email"
+          label="Username"
           rules={[
             {
               required: true,
-              message: 'Please input your email'
+              message: 'Please input your username'
             },
             {
               type: 'email',
-              message: 'Please enter a validate email!'
+              message: 'Please enter a valid username!'
             }
           ]}
         >

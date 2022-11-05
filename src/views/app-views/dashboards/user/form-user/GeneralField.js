@@ -90,6 +90,13 @@ const GeneralField = ({ mode, employeeTypes }) => (
                 <Option value="Hold">Hold</Option>
               </Select>
             </Form.Item>
+            <Form.Item
+              name="employeeCode"
+              label="Employee code"
+              rules={rules.required}
+            >
+              <Input placeholder="Employee code" type="text" />
+            </Form.Item>
             {/* <Form.Item
                 name="middleName"
                 label="Middle Name"
