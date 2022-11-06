@@ -15,7 +15,7 @@ import {
 import {
   EyeOutlined,
   SearchOutlined,
-  PlusCircleOutlined,
+  PlusCircleOutlined
 } from "@ant-design/icons";
 import EllipsisDropdown from "components/shared-components/EllipsisDropdown";
 import Flex from "components/shared-components/Flex";
@@ -119,6 +119,14 @@ const UserList = () => {
       },
       sorter: (a, b) => a.name?.first?.localeCompare(b?.name?.first)
     },
+    {
+      title: 'Username',
+      dataIndex: 'username',
+      render: (username) => {
+        return <Flex alignItems="center">{username}</Flex>;
+      },
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'username')
+    },
 
     {
       title: 'Email',
@@ -135,7 +143,9 @@ const UserList = () => {
     {
       title: 'Employee Type',
       dataIndex: 'employeeType',
-      render: (employeeType) => <Flex alignItems="center">{employeeType?.name}</Flex>
+      render: (employeeType) => (
+        <Flex alignItems="center">{employeeType?.name}</Flex>
+      )
       // sorter: (a, b) => utils.antdTableSorter(a, b, 'employeeType')
     },
 

@@ -43,6 +43,12 @@ const rules = {
       required: true,
       message: 'Required'
     }
+  ],
+  required: [
+    {
+      required: true,
+      message: 'Required'
+    }
   ]
 };
 

@@ -28,6 +28,7 @@ import AvatarStatus from 'components/shared-components/AvatarStatus';
 import PageHeaderAlt from 'components/layout-components/PageHeaderAlt';
 import Flex from 'components/shared-components/Flex';
 import { useSelector } from 'react-redux';
+import ChangePassword from '../setting/ChangePassword';
 
 const ProfileInfo = ({ avatarSize, userInfo }) => (
   <Card>
@@ -287,7 +288,10 @@ export const Profile = () => {
             <Group />
           </Col> */}
           <Col xs={24} sm={24} md={16}>
-            {user.auth !== 'Admin' && <Roles roles={user.roles} />}
+            <Card>
+              {user.auth !== 'Admin' && <Roles roles={user.roles} />}
+              {user.auth === 'Admin' && <ChangePassword />}
+            </Card>
             {/* <Experiences />
             <Interested /> */}
           </Col>

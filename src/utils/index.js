@@ -322,18 +322,7 @@ class Utils {
       }
     ];
     subAdminRoles.forEach((role) => {
-      if (role.module === 'FEE_TYPE') {
-        if (role.fetch) {
-          navItems[0].submenu.push({
-            key: 'dashboards-fee-type',
-            path: `${APP_PREFIX_PATH}/dashboards/fee-type`,
-            title: 'FeeType',
-            icon: AppstoreOutlined,
-            breadcrumb: false,
-            submenu: []
-          });
-        }
-      } else if (role.module === 'BANNER') {
+      if (role.module === 'BANNER') {
         if (role.fetch) {
           navItems[0].submenu.push({
             key: 'dashboards-banner',

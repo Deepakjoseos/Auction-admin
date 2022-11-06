@@ -121,6 +121,11 @@ const ParticipantList = (props) => {
       sorter: (a, b) => utils.antdTableSorter(a, b, 'name')
     },
     {
+      title: 'Username',
+      dataIndex: 'username',
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'username')
+    },
+    {
       title: 'Email',
       dataIndex: 'email'
     },

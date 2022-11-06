@@ -84,7 +84,7 @@ const DocumentForm = (props) => {
     setDocs(fileListImages);
   }, [fileListImages]);
 
-  console.log(docs)
+  console.log(docs);
 
   const uploadButton = (
     <div>
@@ -138,7 +138,8 @@ const DocumentForm = (props) => {
         documentNumber: doc.uid.toString(),
         url: url ? url : doc.url,
         title: doc.title,
-        description: doc.description
+        description: doc.description,
+        status: doc.status
       };
       mutatedDocs.push(data);
     }
@@ -148,88 +149,11 @@ const DocumentForm = (props) => {
       participantId
     );
 
-    console.log(uploaded);
     if (uploaded) {
       message.success(`Uploaded Document.`);
       setSubmitLoading(false);
     }
-
-    // const uploaded = await auctionInventoryService.updateAuctionInventoryImages(
-    //   inventoryId,
-    //   formData
-    // );
-    // if (uploaded) {
-    //   message.success(`Uploaded Auction Inventory Image.`);
-    //   history.goBack();
-    //   setSubmitLoading(false);
-    // }
   };
-
-  // const handleCancel = () => {
-  //   const previewDocMutated = structuredClone(previewDoc);
-  //   if (titleValue) {
-  //     previewDocMutated.title = titleValue;
-  //   }
-  //   if (descriptionValue) {
-  //     previewDocMutated.description = descriptionValue;
-  //   }
-
-  //   const docsMutated = structuredClone(docs);
-  //   console.log('before', docsMutated);
-  //   const docIndex = docsMutated.findIndex(
-  //     (doc) => doc.uid === previewDocMutated.uid
-  //   );
-
-  //   docsMutated[docIndex] = previewDocMutated;
-
-  //   console.log('after', docsMutated);
-
-  //   setDocs(docsMutated);
-  //   setTitleValue(null);
-  //   setDescriptionValue(null);
-  //   setPreviewDoc({});
-  //   setPreviewVisible(false);
-  // };
-
-  // const handlePreview = async (file) => {
-  //   if (!file.url) {
-  //     file.url = await getBase64(file.originFileObj);
-  //   }
-
-  //   console.log('file', file);
-
-  //   setPreviewDoc(file);
-  //   setPreviewVisible(true);
-  // };
-
-  // const handleChange = ({ fileList }) => {
-  //   const mutatedFileList = [];
-
-  //   for (const file of fileList) {
-  //     const mutatedFile = structuredClone(file);
-  //     // if (!mutatedFile.url) {
-  //     //   mutatedFile.url = await getImageUrl(mutatedFile.originFileObj);
-  //     // }
-
-  //     if (!mutatedFile.title) {
-  //       mutatedFile.title = '';
-  //     }
-
-  //     if (!mutatedFile.description) {
-  //       mutatedFile.description = '';
-  //     }
-
-  //     mutatedFileList.push(mutatedFile);
-  //   }
-
-  //   console.log(mutatedFileList);
-
-  //   setDocs(mutatedFileList);
-  // };
-
-  console.log(docs);
-
-  console.log('titleValue', titleValue);
 
   return (
     <Row gutter={16}>
@@ -257,7 +181,10 @@ const DocumentForm = (props) => {
                     setImages={setDocs}
                     images={docs}
                     hasTitle={true}
+                    hasStatus={true}
                     id={cur?.uid}
+                    onRemove={true}
+                    setFileList={setFileList}
                   />
                 </>
               ) : (
@@ -270,58 +197,22 @@ const DocumentForm = (props) => {
                     setImages={setDocs}
                     images={docs}
                     hasTitle={true}
+                    hasStatus={true}
                     id={cur?.uid}
+                    onRemove={true}
+                    setFileList={setFileList}
                   />
                 </>
               )}
             </>
           ))}
-          {/* <Upload
-            openFileDialogOnClick={!previewVisible}
-            type="file"
-            listType="picture-card"
-            fileList={docs}
-            onPreview={handlePreview}
-            onChange={handleChange}
-            multiple
-            accept="image/png, image/jpeg, image/jpg"
-            beforeUpload={() => false}
-          >
-            <CustomIcon className="display-3" svg={ImageSvg} />
-            {previewVisible && (
-              <Modal
-                visible={previewVisible}
-                footer={null}
-                onCancel={handleCancel}
-              >
-                <img
-                  alt="example"
-                  style={{ width: '100%' }}
-                  src={previewDoc.url}
-                />
-                <Form.Item style={{ marginTop: '20px' }} label="Title">
-                  <Input
-                    placeholder={previewDoc.title}
-                    onChange={(e) => setTitleValue(e.target.value)}
-                  />
-                </Form.Item>
-                <Form.Item style={{ marginTop: '20px' }} label="Description">
-                  <Input.TextArea
-                    rows={4}
-                    placeholder={previewDoc.description}
-                    onChange={(e) => setDescriptionValue(e.target.value)}
-                  />
-                </Form.Item>
-              </Modal>
-            )}
-          </Upload> */}
           <Button
             type="primary"
             htmlType="button"
             style={{ float: 'right', marginTop: '20px' }}
             onClick={onSubmit}
           >
-            Add
+            Update
           </Button>
         </Card>
       </Col>

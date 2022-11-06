@@ -1,5 +1,7 @@
-import { Card, Col, Image, Input, Row } from 'antd';
+import { Card, Col, Image, Input, Row, Select, Button } from 'antd';
 import React, { useEffect, useState } from 'react';
+import Flex from './Flex';
+const { Option } = Select;
 
 const ImageDescription = ({
   url,
@@ -8,8 +10,11 @@ const ImageDescription = ({
   images,
   id,
   setImages,
+  setFileList,
   title,
-  hasTitle = false
+  hasTitle = false,
+  hasStatus = false,
+  onRemove
 }) => {
   const [image, setImage] = useState(null);
 
@@ -41,8 +46,32 @@ const ImageDescription = ({
     });
 
     setImages(changedImagesDesc);
+  };
 
-    // setImage({ ...image, description: e.target.value })
+  const onStatusValueChange = (value) => {
+    const changedImagesDesc = images?.map((cur) => {
+      if (cur.uid === id) {
+        return {
+          ...cur,
+          status: value
+        };
+      }
+      return cur;
+    });
+
+    setImages(changedImagesDesc);
+  };
+
+  const onRemoveHandler = () => {
+    const changedImagesDesc = images?.reduce((arr, currentValue) => {
+      if (currentValue.uid !== id) {
+        arr.push(currentValue);
+      }
+
+      return arr;
+    }, []);
+
+    setFileList(changedImagesDesc);
   };
 
   const base64Converter = (file) => {
@@ -65,49 +94,103 @@ const ImageDescription = ({
 
   return (
     <Card>
-      <Row>
-        {url ? (
-          <Col>
-            <div className="d-flex align-items-center">
-              <Image width={150} height={150} src={url} />
-              {hasTitle && (
-                <Input
-                  placeholder="Title"
-                  value={title}
-                  onChange={onTitleValueChange}
-                  className="ml-2"
-                />
-              )}
-              <Input
-                placeholder="Description"
-                value={description}
-                onChange={onDescriptionValueChange}
-                className="ml-2"
-              />
-            </div>
-          </Col>
-        ) : (
-          <Col>
-            <div className="d-flex align-items-center">
-              <Image width={150} height={150} src={image} />
-              {hasTitle && (
-                <Input
-                  placeholder="Title"
-                  value={title}
-                  onChange={onTitleValueChange}
-                  className="ml-2"
-                />
-              )}
-              <Input
-                placeholder="Description"
-                value={description}
-                onChange={onDescriptionValueChange}
-                className="ml-2"
-              />
-            </div>
-          </Col>
-        )}
-      </Row>
+      {url ? (
+        <Flex
+          flexDirection="column"
+          alignItems="center"
+          justifyContent="center"
+        >
+          <Image
+            style={{
+              objectFit: 'scale-down',
+              width: '250px',
+              height: '250px'
+            }}
+            src={url}
+          />
+          {hasTitle && (
+            <Input
+              placeholder="Title"
+              value={title}
+              onChange={onTitleValueChange}
+              className="mt-2"
+            />
+          )}
+          <Input
+            placeholder="Description"
+            value={description}
+            onChange={onDescriptionValueChange}
+            className="mt-2"
+          />
+          {hasStatus && (
+            <Select
+              onChange={onStatusValueChange}
+              placeholder="Status"
+              className="mt-2 w-100"
+            >
+              <Option value="Active">Active</Option>
+              <Option value="Hold">Hold</Option>
+            </Select>
+          )}
+          {onRemove && (
+            <Button
+              danger
+              className="align-self-end mt-4"
+              onClick={onRemoveHandler}
+            >
+              Remove
+            </Button>
+          )}
+        </Flex>
+      ) : (
+        <Flex
+          flexDirection="column"
+          alignItems="center"
+          justifyContent="center"
+        >
+          <Image
+            style={{
+              objectFit: 'scale-down',
+              width: '250px',
+              height: '250px'
+            }}
+            src={image}
+          />
+          {hasTitle && (
+            <Input
+              placeholder="Title"
+              value={title}
+              onChange={onTitleValueChange}
+              className="mt-2"
+            />
+          )}
+          <Input
+            placeholder="Description"
+            value={description}
+            onChange={onDescriptionValueChange}
+            className="mt-2"
+          />
+          {hasStatus && (
+            <Select
+              placeholder="Status"
+              className="mt-2 w-100"
+              onChange={onStatusValueChange}
+            >
+              <Option value="Active">Active</Option>
+              <Option value="Hold">Hold</Option>
+            </Select>
+          )}
+          {onRemove && (
+            <Button
+              danger
+              className="align-self-end mt-4"
+              onClick={onRemoveHandler}
+            >
+              Remove
+            </Button>
+          )}
+        </Flex>
+      )}
     </Card>
   );
 };
