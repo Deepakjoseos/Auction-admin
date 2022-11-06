@@ -1,39 +1,22 @@
 import {
   DashboardOutlined,
   AppstoreOutlined,
-  // FileTextOutlined,
-  // PieChartOutlined,
-  // BorderOutlined,
-  // EnvironmentOutlined,
-  // AntDesignOutlined,
-  // SafetyOutlined,
-  // StopOutlined,
-  // DotChartOutlined,
-  // NodeExpandOutlined,
-  // MailOutlined,
-  // MessageOutlined,
-  // CalendarOutlined,
-  // BulbOutlined,
-  // InfoCircleOutlined,
-  // CompassOutlined,
-  // LayoutOutlined,
-  // DesktopOutlined,
-  // FileDoneOutlined,
-  // CommentOutlined,
-  // RobotOutlined,
-  // PlusCircleOutlined,
-  // FundOutlined,
-  // VerifiedOutlined,
-  // ShoppingCartOutlined,
-  // BookOutlined,
-  // FileUnknownOutlined,
-  // ProfileOutlined,
-  // FundProjectionScreenOutlined,
-  // UsergroupAddOutlined,
-  // FormatPainterOutlined,
-  // UserOutlined,
-  // ApartmentOutlined,
-  NodeExpandOutlined
+  UserOutlined,
+  NodeExpandOutlined,
+  InfoCircleOutlined,
+  FileImageOutlined,
+  CarOutlined,
+  PictureOutlined,
+  GroupOutlined,
+  HomeOutlined,
+  WalletOutlined,
+  SettingOutlined,
+  DollarCircleOutlined,
+  FolderOutlined,
+  DatabaseOutlined,
+  HeartOutlined,
+  CommentOutlined,
+  CheckCircleOutlined
 } from '@ant-design/icons';
 import {
   APP_PREFIX_PATH
@@ -195,7 +178,7 @@ const dashBoardNavTree = [
         key: 'dashboards-user',
         path: `${APP_PREFIX_PATH}/dashboards/user`,
         title: 'User',
-        icon: AppstoreOutlined,
+        icon: UserOutlined,
         breadcrumb: false,
         submenu: []
       },
@@ -209,14 +192,14 @@ const dashBoardNavTree = [
       },
       {
         title: 'General',
-        icon: AppstoreOutlined,
+        icon: FolderOutlined,
         breadcrumb: false,
         submenu: [
           {
             key: 'dashboards-information',
             path: `${APP_PREFIX_PATH}/dashboards/information`,
             title: 'Information',
-            icon: AppstoreOutlined,
+            icon: InfoCircleOutlined,
             breadcrumb: false,
             submenu: []
           },
@@ -224,7 +207,7 @@ const dashBoardNavTree = [
             key: 'dashboards-banner',
             path: `${APP_PREFIX_PATH}/dashboards/banner`,
             title: 'Banner',
-            icon: AppstoreOutlined,
+            icon: PictureOutlined,
             breadcrumb: false,
             submenu: []
           }
@@ -235,7 +218,7 @@ const dashBoardNavTree = [
         key: 'dashboards-car',
         path: `${APP_PREFIX_PATH}/dashboards/car`,
         title: 'Car',
-        icon: AppstoreOutlined,
+        icon: CarOutlined,
         breadcrumb: false,
         submenu: []
       },
@@ -268,14 +251,14 @@ const dashBoardNavTree = [
         key: 'dashboards-brand',
         path: `${APP_PREFIX_PATH}/dashboards/brand`,
         title: 'Brand',
-        icon: NodeExpandOutlined,
+        icon: FolderOutlined,
         breadcrumb: false,
         submenu: [
           {
             key: 'dashboards-brand-brand',
             path: `${APP_PREFIX_PATH}/dashboards/brand/brand/brands-list`,
             title: 'Brands',
-            icon: NodeExpandOutlined,
+            icon: CarOutlined,
             breadcrumb: false,
             submenu: []
           },
@@ -283,7 +266,7 @@ const dashBoardNavTree = [
             key: 'dashboards-brand-brand-variant',
             path: `${APP_PREFIX_PATH}/dashboards/brand/brand-variant/brand-variant-list`,
             title: 'Brand Variant',
-            icon: NodeExpandOutlined,
+            icon: CarOutlined,
             breadcrumb: false,
             submenu: []
           }
@@ -293,14 +276,14 @@ const dashBoardNavTree = [
         key: 'dashboards-general',
         path: `${APP_PREFIX_PATH}/dashboards/general`,
         title: 'Location',
-        icon: NodeExpandOutlined,
+        icon: FolderOutlined,
         breadcrumb: false,
         submenu: [
           {
             key: 'dashboards-general-city',
             path: `${APP_PREFIX_PATH}/dashboards/general/city/city-list`,
             title: 'City',
-            icon: NodeExpandOutlined,
+            icon: HomeOutlined,
             breadcrumb: false,
             submenu: []
           },
@@ -308,7 +291,7 @@ const dashBoardNavTree = [
             key: 'dashboards-general-group',
             path: `${APP_PREFIX_PATH}/dashboards/general/group/group-list`,
             title: 'Groups',
-            icon: NodeExpandOutlined,
+            icon: GroupOutlined,
             breadcrumb: false,
             submenu: []
           },
@@ -316,7 +299,7 @@ const dashBoardNavTree = [
             key: 'dashboards-general-region',
             path: `${APP_PREFIX_PATH}/dashboards/general/region/region-list`,
             title: 'Region',
-            icon: NodeExpandOutlined,
+            icon: HomeOutlined,
             breadcrumb: false,
             submenu: []
           },
@@ -324,7 +307,7 @@ const dashBoardNavTree = [
             key: 'dashboards-general-state',
             path: `${APP_PREFIX_PATH}/dashboards/general/state/state-list`,
             title: 'State',
-            icon: NodeExpandOutlined,
+            icon: HomeOutlined,
             breadcrumb: false,
             submenu: []
           }
@@ -334,7 +317,7 @@ const dashBoardNavTree = [
         key: 'dashboards-vehicle-type',
         path: `${APP_PREFIX_PATH}/dashboards/vehicle-type`,
         title: 'Vehicle Type',
-        icon: AppstoreOutlined,
+        icon: CarOutlined,
         breadcrumb: false,
         submenu: []
       },
@@ -358,7 +341,7 @@ const dashBoardNavTree = [
         key: 'dashboards-participant',
         path: `${APP_PREFIX_PATH}/dashboards/participant`,
         title: 'Participant',
-        icon: AppstoreOutlined,
+        icon: UserOutlined,
         breadcrumb: false,
         submenu: []
       },
@@ -366,7 +349,7 @@ const dashBoardNavTree = [
         key: 'dashboards-wallet',
         path: `${APP_PREFIX_PATH}/dashboards/wallet`,
         title: 'Wallet',
-        icon: AppstoreOutlined,
+        icon: WalletOutlined,
         breadcrumb: false,
         submenu: []
       },
@@ -374,7 +357,7 @@ const dashBoardNavTree = [
         key: 'dashboards-buying-limit',
         path: `${APP_PREFIX_PATH}/dashboards/buying-limit`,
         title: 'Buying Limits',
-        icon: AppstoreOutlined,
+        icon: DollarCircleOutlined,
         breadcrumb: false,
         submenu: []
       },
@@ -422,14 +405,14 @@ const dashBoardNavTree = [
         key: 'dashboards-auction',
         path: `${APP_PREFIX_PATH}/dashboards/auction`,
         title: 'Auction',
-        icon: NodeExpandOutlined,
+        icon: FolderOutlined,
         breadcrumb: false,
         submenu: [
           {
             key: 'dashboards-auction-auction',
             path: `${APP_PREFIX_PATH}/dashboards/auction/auction/auction-list`,
             title: 'Auction',
-            icon: NodeExpandOutlined,
+            icon: DatabaseOutlined,
             breadcrumb: false,
             submenu: []
           },
@@ -437,7 +420,7 @@ const dashBoardNavTree = [
             key: 'dashboards-auction-auction-inventory',
             path: `${APP_PREFIX_PATH}/dashboards/auction/auction-inventory/auction-inventory-list`,
             title: 'Auction Inventory',
-            icon: NodeExpandOutlined,
+            icon: DatabaseOutlined,
             breadcrumb: false,
             submenu: []
           },
@@ -445,7 +428,7 @@ const dashBoardNavTree = [
             key: 'dashboards-auction-bidding',
             path: `${APP_PREFIX_PATH}/dashboards/auction/bidding/bidding-list`,
             title: 'Bidding',
-            icon: NodeExpandOutlined,
+            icon: DollarCircleOutlined,
             breadcrumb: false,
             submenu: []
           },
@@ -453,7 +436,7 @@ const dashBoardNavTree = [
             key: 'dashboards-watchlist',
             path: `${APP_PREFIX_PATH}/dashboards/watchlist`,
             title: 'Watchlist',
-            icon: NodeExpandOutlined,
+            icon: HeartOutlined,
             breadcrumb: false,
             submenu: []
           },
@@ -461,7 +444,7 @@ const dashBoardNavTree = [
             key: 'dashboards-comment',
             path: `${APP_PREFIX_PATH}/dashboards/comment`,
             title: 'Comment',
-            icon: NodeExpandOutlined,
+            icon: CommentOutlined,
             breadcrumb: false,
             submenu: []
           },
@@ -469,7 +452,7 @@ const dashBoardNavTree = [
             key: 'dashboards-winning',
             path: `${APP_PREFIX_PATH}/dashboards/winning`,
             title: 'Winning',
-            icon: NodeExpandOutlined,
+            icon: CheckCircleOutlined,
             breadcrumb: false,
             submenu: []
           },
@@ -477,7 +460,7 @@ const dashBoardNavTree = [
             key: 'dashboards-approve-bid',
             path: `${APP_PREFIX_PATH}/dashboards/approve-bid`,
             title: 'Approve Bid',
-            icon: NodeExpandOutlined,
+            icon: CheckCircleOutlined,
             breadcrumb: false,
             submenu: []
           }
@@ -503,7 +486,7 @@ const dashBoardNavTree = [
         key: 'dashboards-deposits',
         path: `${APP_PREFIX_PATH}/dashboards/deposit`,
         title: 'Deposits',
-        icon: AppstoreOutlined,
+        icon: DollarCircleOutlined,
         breadcrumb: false,
         submenu: []
       },
@@ -511,7 +494,7 @@ const dashBoardNavTree = [
         key: 'dashboards-registrations',
         path: `${APP_PREFIX_PATH}/dashboards/registration`,
         title: 'Registrations',
-        icon: AppstoreOutlined,
+        icon: DollarCircleOutlined,
         breadcrumb: false,
         submenu: []
       },
@@ -519,7 +502,7 @@ const dashBoardNavTree = [
         key: 'dashboards-wallet-transactions',
         path: `${APP_PREFIX_PATH}/dashboards/wallet-transaction`,
         title: 'Wallet Transactions',
-        icon: AppstoreOutlined,
+        icon: WalletOutlined,
         breadcrumb: false,
         submenu: []
       },
@@ -535,7 +518,7 @@ const dashBoardNavTree = [
         key: 'dashboards-client',
         path: `${APP_PREFIX_PATH}/dashboards/client`,
         title: 'Client',
-        icon: AppstoreOutlined,
+        icon: UserOutlined,
         breadcrumb: false,
         submenu: []
       },
@@ -543,7 +526,7 @@ const dashBoardNavTree = [
         key: 'dashboards-settings',
         path: `${APP_PREFIX_PATH}/dashboards/settings`,
         title: 'Settings',
-        icon: AppstoreOutlined,
+        icon: SettingOutlined,
         breadcrumb: false,
         submenu: []
       }

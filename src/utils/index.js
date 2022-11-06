@@ -1,6 +1,23 @@
 import { message, notification } from 'antd';
 import { APP_PREFIX_PATH } from 'configs/AppConfig';
-import { DashboardOutlined, AppstoreOutlined } from '@ant-design/icons';
+import {
+  DashboardOutlined,
+  AppstoreOutlined,
+  InfoCircleOutlined,
+  FileImageOutlined,
+  PictureOutlined,
+  CarOutlined,
+  GroupOutlined,
+  HomeOutlined,
+  UserOutlined,
+  WalletOutlined,
+  SettingOutlined,
+  DollarCircleOutlined,
+  DatabaseOutlined,
+  HeartOutlined,
+  CommentOutlined,
+  CheckCircleOutlined
+} from '@ant-design/icons';
 
 class Utils {
   /**
@@ -328,7 +345,7 @@ class Utils {
             key: 'dashboards-banner',
             path: `${APP_PREFIX_PATH}/dashboards/banner`,
             title: 'Banner',
-            icon: AppstoreOutlined,
+            icon: PictureOutlined,
             breadcrumb: false,
             submenu: []
           });
@@ -339,7 +356,7 @@ class Utils {
             key: 'dashboards-car',
             path: `${APP_PREFIX_PATH}/dashboards/car`,
             title: 'Car',
-            icon: AppstoreOutlined,
+            icon: CarOutlined,
             breadcrumb: false,
             submenu: []
           });
@@ -350,7 +367,7 @@ class Utils {
             key: 'dashboards-settings',
             path: `${APP_PREFIX_PATH}/dashboards/settings`,
             title: 'Settings',
-            icon: AppstoreOutlined,
+            icon: SettingOutlined,
             breadcrumb: false,
             submenu: []
           });
@@ -361,7 +378,7 @@ class Utils {
             key: 'dashboards-vehicle-type',
             path: `${APP_PREFIX_PATH}/dashboards/vehicle-type`,
             title: 'VehicleTypes',
-            icon: AppstoreOutlined,
+            icon: CarOutlined,
             breadcrumb: false,
             submenu: []
           });
@@ -372,7 +389,7 @@ class Utils {
             key: 'dashboards-participant',
             path: `${APP_PREFIX_PATH}/dashboards/participant`,
             title: 'Participant',
-            icon: AppstoreOutlined,
+            icon: UserOutlined,
             breadcrumb: false,
             submenu: []
           });
@@ -383,7 +400,7 @@ class Utils {
             key: 'dashboards-registrations',
             path: `${APP_PREFIX_PATH}/dashboards/registration`,
             title: 'Registrations',
-            icon: AppstoreOutlined,
+            icon: DollarCircleOutlined,
             breadcrumb: false,
             submenu: []
           });
@@ -394,7 +411,7 @@ class Utils {
             key: 'dashboards-client',
             path: `${APP_PREFIX_PATH}/dashboards/client`,
             title: 'Client',
-            icon: AppstoreOutlined,
+            icon: UserOutlined,
             breadcrumb: false,
             submenu: []
           });
@@ -407,7 +424,7 @@ class Utils {
             key: 'dashboards-brand',
             path: `${APP_PREFIX_PATH}/dashboards/brand`,
             title: 'Brand',
-            icon: AppstoreOutlined,
+            icon: CarOutlined,
             breadcrumb: false,
             submenu: []
           });
@@ -418,7 +435,7 @@ class Utils {
             key: 'dashboards-brand-brand-variant',
             path: `${APP_PREFIX_PATH}/dashboards/brand/brand-variant/brand-variant-list`,
             title: 'Brand Variant',
-            icon: AppstoreOutlined,
+            icon: CarOutlined,
             breadcrumb: false,
             submenu: []
           });
@@ -429,7 +446,7 @@ class Utils {
             key: 'dashboards-information',
             path: `${APP_PREFIX_PATH}/dashboards/information`,
             title: 'Information',
-            icon: AppstoreOutlined,
+            icon: InfoCircleOutlined,
             breadcrumb: false,
             submenu: []
           });
@@ -440,7 +457,7 @@ class Utils {
             key: 'dashboards-auction-auction',
             path: `${APP_PREFIX_PATH}/dashboards/auction/auction/auction-list`,
             title: 'Auction',
-            icon: AppstoreOutlined,
+            icon: DatabaseOutlined,
             breadcrumb: false,
             submenu: []
           });
@@ -451,7 +468,7 @@ class Utils {
             key: 'dashboards-auction-auction-inventory',
             path: `${APP_PREFIX_PATH}/dashboards/auction/auction-inventory/auction-inventory-list`,
             title: 'Auction Inventory',
-            icon: AppstoreOutlined,
+            icon: DatabaseOutlined,
             breadcrumb: false,
             submenu: []
           });
@@ -462,7 +479,7 @@ class Utils {
             key: 'dashboards-auction-bidding',
             path: `${APP_PREFIX_PATH}/dashboards/auction/bidding/bidding-list`,
             title: 'Bidding',
-            icon: AppstoreOutlined,
+            icon: DollarCircleOutlined,
             breadcrumb: false,
             submenu: []
           });
@@ -473,7 +490,7 @@ class Utils {
             key: 'dashboards-watchlist',
             path: `${APP_PREFIX_PATH}/dashboards/watchlist`,
             title: 'Watchlist',
-            icon: AppstoreOutlined,
+            icon: HeartOutlined,
             breadcrumb: false,
             submenu: []
           });
@@ -484,7 +501,7 @@ class Utils {
             key: 'dashboards-comment',
             path: `${APP_PREFIX_PATH}/dashboards/comment`,
             title: 'Comment',
-            icon: AppstoreOutlined,
+            icon: CommentOutlined,
             breadcrumb: false,
             submenu: []
           });
@@ -495,7 +512,7 @@ class Utils {
             key: 'dashboards-winning',
             path: `${APP_PREFIX_PATH}/dashboards/winning`,
             title: 'Winning',
-            icon: AppstoreOutlined,
+            icon: CheckCircleOutlined,
             breadcrumb: false,
             submenu: []
           });
@@ -506,7 +523,7 @@ class Utils {
             key: 'dashboards-approve-bid',
             path: `${APP_PREFIX_PATH}/dashboards/approve-bid`,
             title: 'Approve Bid',
-            icon: AppstoreOutlined,
+            icon: CheckCircleOutlined,
             breadcrumb: false,
             submenu: []
           });
@@ -517,7 +534,7 @@ class Utils {
             key: 'dashboards-deposits',
             path: `${APP_PREFIX_PATH}/dashboards/deposit`,
             title: 'Deposits',
-            icon: AppstoreOutlined,
+            icon: DollarCircleOutlined,
             breadcrumb: false,
             submenu: []
           });
@@ -528,7 +545,7 @@ class Utils {
             key: 'dashboards-wallet-transactions',
             path: `${APP_PREFIX_PATH}/dashboards/wallet-transaction`,
             title: 'Wallet Transactions',
-            icon: AppstoreOutlined,
+            icon: WalletOutlined,
             breadcrumb: false,
             submenu: []
           });
@@ -539,7 +556,7 @@ class Utils {
             key: 'dashboards-wallet',
             path: `${APP_PREFIX_PATH}/dashboards/wallet`,
             title: 'Buying Limits',
-            icon: AppstoreOutlined,
+            icon: WalletOutlined,
             breadcrumb: false,
             submenu: []
           });
@@ -561,7 +578,7 @@ class Utils {
             key: 'dashboards-general-group',
             path: `${APP_PREFIX_PATH}/dashboards/general/group/group-list`,
             title: 'Groups',
-            icon: AppstoreOutlined,
+            icon: GroupOutlined,
             breadcrumb: false,
             submenu: []
           });
@@ -572,7 +589,7 @@ class Utils {
             key: 'dashboards-general-city',
             path: `${APP_PREFIX_PATH}/dashboards/general/city/city-list`,
             title: 'City',
-            icon: AppstoreOutlined,
+            icon: HomeOutlined,
             breadcrumb: false,
             submenu: []
           });
@@ -583,7 +600,7 @@ class Utils {
             key: 'dashboards-general-region',
             path: `${APP_PREFIX_PATH}/dashboards/general/region/region-list`,
             title: 'Region',
-            icon: AppstoreOutlined,
+            icon: HomeOutlined,
             breadcrumb: false,
             submenu: []
           });
@@ -594,7 +611,7 @@ class Utils {
             key: 'dashboards-general-state',
             path: `${APP_PREFIX_PATH}/dashboards/general/state/state-list`,
             title: 'State',
-            icon: AppstoreOutlined,
+            icon: HomeOutlined,
             breadcrumb: false,
             submenu: []
           });
