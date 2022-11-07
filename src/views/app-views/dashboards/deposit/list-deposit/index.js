@@ -1,5 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { Card, Table, Input, Tag, Button, Menu, message } from 'antd';
+import {
+  Card,
+  Table,
+  Input,
+  Tag,
+  Button,
+  Menu,
+  message,
+  Form,
+  Select
+} from 'antd';
 import {
   SearchOutlined,
   PlusCircleOutlined,
@@ -11,6 +21,8 @@ import utils from 'utils';
 import depositService from 'services/deposit';
 import constantsService from 'services/constants';
 import EllipsisDropdown from 'components/shared-components/EllipsisDropdown';
+
+const { Option } = Select;
 
 const getStockStatus = (status) => {
   if (status === 'Active') {
@@ -40,14 +52,19 @@ const DepositList = (props) => {
   const [searchBackupList, setSearchBackupList] = useState([]);
   const [currentSubAdminRole, setCurrentSubAdminRole] = useState({});
   const [paymentStatus, setPaymentStatus] = useState([]);
+  const [paymentMode, setPaymentMode] = useState([]);
+  const [searchParams, setSearchParams] = useState({});
 
   useEffect(() => {
-    getDeposits();
-    getPaymentStatus();
+    getRegistrationConstants();
   }, []);
 
-  const getDeposits = async () => {
-    const data = await depositService.getDeposits();
+  useEffect(() => {
+    getDeposits(new URLSearchParams(searchParams));
+  }, [searchParams]);
+
+  const getDeposits = async (query) => {
+    const data = await depositService.getDeposits(query);
     if (data) {
       setList(data);
       setSearchBackupList(data);
@@ -55,10 +72,11 @@ const DepositList = (props) => {
     }
   };
 
-  const getPaymentStatus = async () => {
+  const getRegistrationConstants = async () => {
     const data = await constantsService.getRegistrationConstant();
     if (data) {
-      setPaymentStatus(Object.values(data.paymentStatus));
+      setPaymentStatus(data.paymentStatus);
+      setPaymentMode(data.paymentModes);
       console.log(data, 'show-data');
     }
   };
@@ -223,16 +241,67 @@ const DepositList = (props) => {
     setList(data);
   };
 
+  const handleFilters = (key, value) => {
+    if (value !== 'All') {
+      setSearchParams((prevSearchParams) => ({
+        ...prevSearchParams,
+        [key]: value
+      }));
+    } else {
+      setSearchParams((prevSearchParams) => {
+        const newSearchParams = { ...prevSearchParams };
+        delete newSearchParams[key];
+        return newSearchParams;
+      });
+    }
+  };
+
   const filters = () => (
-    <Flex className="mb-1" mobileFlex={false}>
-      <div className="mr-md-3 mb-3">
-        <Input
-          placeholder="Search"
-          prefix={<SearchOutlined />}
-          onChange={(e) => onSearch(e)}
-        />
-      </div>
-    </Flex>
+    <Form>
+      <Flex className="mb-1" mobileFlex={false}>
+        <div className="mr-md-3 mb-3">
+          <Input
+            placeholder="Search"
+            prefix={<SearchOutlined />}
+            onChange={(e) => onSearch(e)}
+          />
+        </div>
+        <Flex className="mb-3">
+          <Form.Item name="status" label="Payment status" className="mr-md-3">
+            <Select
+              defaultValue="All"
+              className="w-100"
+              style={{ minWidth: 180 }}
+              onChange={(value) => handleFilters('paymentStatus', value)}
+              placeholder="Payment status"
+            >
+              <Option value="All">All</Option>
+              {paymentStatus.map((status) => (
+                <Option key={status} value={status}>
+                  {status}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+          <Form.Item name="mode" label="Payment mode" className="mr-md-3">
+            <Select
+              defaultValue="All"
+              className="w-100"
+              style={{ minWidth: 180 }}
+              onChange={(value) => handleFilters('paymentMode', value)}
+              placeholder="Payment mode"
+            >
+              <Option value="All">All</Option>
+              {paymentMode.map((mode) => (
+                <Option key={mode} value={mode}>
+                  {mode}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+        </Flex>
+      </Flex>
+    </Form>
   );
 
   return (

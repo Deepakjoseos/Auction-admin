@@ -3,10 +3,10 @@ import fetch from 'auth/FetchInterceptor';
 const registrationService = {};
 const apiRoute = '/registration';
 
-registrationService.getRegistrations = async function () {
+registrationService.getRegistrations = async function (query = '') {
   try {
     const res = await fetch({
-      url: `${apiRoute}/get/all/admin`,
+      url: `${apiRoute}/get/all/admin?${query}`,
       method: 'get'
     });
     console.log('res-return', res);

@@ -3,11 +3,9 @@ import fetch from 'auth/FetchInterceptor';
 const depositService = {};
 const apiRoute = '/deposit';
 
-depositService.getDeposits = async function (query) {
+depositService.getDeposits = async function (query = '') {
   try {
-    let url = `${apiRoute}/get/all/admin?api=deposit`;
-    if (query?.participantId)
-      url = `${url}&participantId=${query.participantId}`;
+    let url = `${apiRoute}/get/all/admin?${query}`;
     const res = await fetch({
       url,
       method: 'get'

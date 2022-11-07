@@ -172,7 +172,6 @@ const ParticipantList = (props) => {
   };
 
   const handleFilters = (key, value) => {
-    console.log(value);
     if (value !== 'All') {
       setSearchParams((prevSearchParams) => ({
         ...prevSearchParams,

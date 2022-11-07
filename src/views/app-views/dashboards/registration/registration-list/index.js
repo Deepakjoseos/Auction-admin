@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { Tabs, Form, message, Table, Menu, Input, Card } from 'antd';
+import { Tabs, Form, message, Table, Menu, Input, Card, Select } from 'antd';
 import { useHistory } from 'react-router-dom';
 
 import moment from 'moment';
@@ -18,6 +18,8 @@ import Flex from 'components/shared-components/Flex';
 import registrationService from 'services/registration';
 import constantsService from 'services/constants';
 
+const { Option } = Select;
+
 const RegistrationList = (props) => {
   const history = useHistory();
   const { addPrivilege, editPrivilege, deletePrivilege } = props;
@@ -25,27 +27,31 @@ const RegistrationList = (props) => {
   const [list, setList] = useState([]);
   const [searchBackupList, setSearchBackupList] = useState([]);
   const [paymentStatus, setPaymentStatus] = useState([]);
+  const [searchParams, setSearchParams] = useState({});
 
-  const getRegistration = async () => {
-    const data = await registrationService.getRegistrations();
+  const getRegistration = async (query) => {
+    const data = await registrationService.getRegistrations(query);
     if (data) {
       setList(data);
       setSearchBackupList(data);
       console.log(data, 'show-data');
     }
   };
+  const getPaymentStatus = async () => {
+    const data = await constantsService.getRegistrationConstant();
+    if (data) {
+      setPaymentStatus(data.paymentStatus);
+      console.log(data, 'show-data');
+    }
+  };
 
   useEffect(() => {
-    const getPaymentStatus = async () => {
-      const data = await constantsService.getRegistrationConstant();
-      if (data) {
-        setPaymentStatus(Object.values(data.paymentStatus));
-        console.log(data, 'show-data');
-      }
-    };
-    getRegistration();
     getPaymentStatus();
   }, []);
+
+  useEffect(() => {
+    getRegistration(new URLSearchParams(searchParams));
+  }, [searchParams]);
 
   // const viewDetails = (row) => {
   //   history.push(`/app/dashboards/registration/edit-registration/${row._id}`);
@@ -173,6 +179,21 @@ const RegistrationList = (props) => {
     setList(data);
   };
 
+  const handleFilters = (key, value) => {
+    if (value !== 'All') {
+      setSearchParams((prevSearchParams) => ({
+        ...prevSearchParams,
+        [key]: value
+      }));
+    } else {
+      setSearchParams((prevSearchParams) => {
+        const newSearchParams = { ...prevSearchParams };
+        delete newSearchParams[key];
+        return newSearchParams;
+      });
+    }
+  };
+
   const filters = () => (
     <Flex className="mb-1" mobileFlex={false}>
       <div className="mr-md-3 mb-3">
@@ -182,6 +203,55 @@ const RegistrationList = (props) => {
           onChange={(e) => onSearch(e)}
         />
       </div>
+      <Flex className="mb-3">
+        <Form.Item name="status" label="Payment status" className="mr-md-3">
+          <Select
+            defaultValue="All"
+            className="w-100"
+            style={{ minWidth: 180 }}
+            onChange={(value) => handleFilters('paymentStatus', value)}
+            placeholder="Payment status"
+          >
+            <Option value="All">All</Option>
+            {paymentStatus.map((status) => (
+              <Option key={status} value={status}>
+                {status}
+              </Option>
+            ))}
+          </Select>
+        </Form.Item>
+        <Form.Item
+          name="participantType"
+          label="Participant Type"
+          className="mr-md-3"
+        >
+          <Select
+            defaultValue="All"
+            className="w-100"
+            style={{ minWidth: 180 }}
+            onChange={(value) => handleFilters('participantType', value)}
+            placeholder="Participant Type"
+          >
+            <Option value="All">All</Option>
+            <Option value="Seller">Seller</Option>
+            <Option value="Buyer">Buyer</Option>
+            <Option value="Customer">Customer</Option>
+          </Select>
+        </Form.Item>
+        <Form.Item name="userType" label="User Type" className="mr-md-3">
+          <Select
+            defaultValue="All"
+            className="w-100"
+            style={{ minWidth: 180 }}
+            onChange={(value) => handleFilters('userType', value)}
+            placeholder="User Type"
+          >
+            <Option value="All">All</Option>
+            <Option value="Employee">Employee</Option>
+            <Option value="NonEmployee">NonEmployee</Option>
+          </Select>
+        </Form.Item>
+      </Flex>{' '}
     </Flex>
   );
 
