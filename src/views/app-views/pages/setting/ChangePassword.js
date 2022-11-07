@@ -8,7 +8,7 @@ export class ChangePassword extends Component {
   onFinish = async () => {
     const newPass =
       this.changePasswordFormRef.current.getFieldValue('newPassword');
-    const data = await authAdminService.restPassword(newPass);
+    const data = await authAdminService.resetPassword(newPass);
     if (data) {
       message.success({ content: 'Password Changed!', duration: 2 });
       this.onReset();
