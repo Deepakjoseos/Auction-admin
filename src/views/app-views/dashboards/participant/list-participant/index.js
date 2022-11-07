@@ -12,6 +12,7 @@ import { useHistory } from 'react-router-dom';
 import utils from 'utils';
 import participantService from 'services/Participant';
 import { useSelector } from 'react-redux';
+import constantsService from 'services/constants';
 
 const { Option } = Select;
 
@@ -40,22 +41,33 @@ const ParticipantList = (props) => {
 
   const [list, setList] = useState([]);
   const [searchBackupList, setSearchBackupList] = useState([]);
+  const [participantsConstants, setParticipantsConstants] = useState({});
   const [currentSubAdminRole, setCurrentSubAdminRole] = useState({});
   const [searchParams, setSearchParams] = useState({});
 
   const { user } = useSelector((state) => state.auth);
 
-  useEffect(() => {
-    if (user) {
-      const paricipantRole = user.roles.find(
-        (role) => role.module === 'PARTICIPANT'
-      );
-      console.log('paricipantRole', paricipantRole);
-      setCurrentSubAdminRole(paricipantRole);
-    }
-  }, [user]);
+  // useEffect(() => {
+  //   if (user) {
+  //     const paricipantRole = user.roles.find(
+  //       (role) => role.module === 'PARTICIPANT'
+  //     );
+  //     console.log('paricipantRole', paricipantRole);
+  //     setCurrentSubAdminRole(paricipantRole);
+  //   }
+  // }, [user]);
 
   // const [participants, setParticipants] = useState([])
+
+  const getParticipantConstants = async () => {
+    const data = await constantsService.getParticipant();
+    if (data) {
+      setParticipantsConstants(data);
+      console.log(data, 'show-data');
+    }
+  };
+
+  useEffect(() => getParticipantConstants(), []);
 
   useEffect(() => {
     const getAllParticipants = async () => {
@@ -187,61 +199,68 @@ const ParticipantList = (props) => {
   };
 
   const filters = () => (
-    <Flex className="mb-1" mobileFlex={false}>
-      <div className="mr-md-3 mb-3">
-        <Input
-          placeholder="Search"
-          prefix={<SearchOutlined />}
-          onChange={(e) => onSearch(e)}
-        />
-      </div>
-      <Flex className="mb-3">
-        <Form.Item name="status" label="Status" className="mr-md-3">
-          <Select
-            defaultValue="All"
-            className="w-100"
-            style={{ minWidth: 180 }}
-            onChange={(value) => handleFilters('status', value)}
-            placeholder="Status"
+    <Form>
+      <Flex className="mb-1" mobileFlex={false}>
+        <div className="mr-md-3 mb-3">
+          <Input
+            placeholder="Search"
+            prefix={<SearchOutlined />}
+            onChange={(e) => onSearch(e)}
+          />
+        </div>
+        <Flex className="mb-3">
+          <Form.Item name="status" label="Status" className="mr-md-3">
+            <Select
+              defaultValue="All"
+              className="w-100"
+              style={{ minWidth: 180 }}
+              onChange={(value) => handleFilters('status', value)}
+              placeholder="Status"
+            >
+              <Option value="All">All</Option>
+              <Option value="Active">Active</Option>
+              <Option value="Hold">Hold</Option>
+            </Select>
+          </Form.Item>
+          <Form.Item
+            name="participantType"
+            label="Participant Type"
+            className="mr-md-3"
           >
-            <Option value="All">All</Option>
-            <Option value="Active">Active</Option>
-            <Option value="Hold">Hold</Option>
-          </Select>
-        </Form.Item>
-        <Form.Item
-          name="participantType"
-          label="Participant Type"
-          className="mr-md-3"
-        >
-          <Select
-            defaultValue="All"
-            className="w-100"
-            style={{ minWidth: 180 }}
-            onChange={(value) => handleFilters('participantType', value)}
-            placeholder="Participant Type"
-          >
-            <Option value="All">All</Option>
-            <Option value="Seller">Seller</Option>
-            <Option value="Buyer">Buyer</Option>
-            <Option value="Customer">Customer</Option>
-          </Select>
-        </Form.Item>
-        <Form.Item name="userType" label="User Type" className="mr-md-3">
-          <Select
-            defaultValue="All"
-            className="w-100"
-            style={{ minWidth: 180 }}
-            onChange={(value) => handleFilters('userType', value)}
-            placeholder="User Type"
-          >
-            <Option value="All">All</Option>
-            <Option value="Employee">Employee</Option>
-            <Option value="NonEmployee">NonEmployee</Option>
-          </Select>
-        </Form.Item>
+            <Select
+              defaultValue="All"
+              className="w-100"
+              style={{ minWidth: 180 }}
+              onChange={(value) => handleFilters('participantType', value)}
+              placeholder="Participant Type"
+            >
+              <Option value="All">All</Option>
+              {participantsConstants.ParticipantType?.map((type) => (
+                <Option value={type} key={type}>
+                  {type}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+          <Form.Item name="userType" label="User Type" className="mr-md-3">
+            <Select
+              defaultValue="All"
+              className="w-100"
+              style={{ minWidth: 180 }}
+              onChange={(value) => handleFilters('userType', value)}
+              placeholder="User Type"
+            >
+              <Option value="All">All</Option>
+              {participantsConstants.UserType?.map((type) => (
+                <Option value={type} key={type}>
+                  {type}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+        </Flex>
       </Flex>
-    </Flex>
+    </Form>
   );
 
   return (

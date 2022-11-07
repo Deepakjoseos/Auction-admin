@@ -28,6 +28,7 @@ const RegistrationList = (props) => {
   const [searchBackupList, setSearchBackupList] = useState([]);
   const [paymentStatus, setPaymentStatus] = useState([]);
   const [searchParams, setSearchParams] = useState({});
+  const [participantsConstants, setParticipantsConstants] = useState({});
 
   const getRegistration = async (query) => {
     const data = await registrationService.getRegistrations(query);
@@ -45,8 +46,17 @@ const RegistrationList = (props) => {
     }
   };
 
+  const getParticipantConstants = async () => {
+    const data = await constantsService.getParticipant();
+    if (data) {
+      setParticipantsConstants(data);
+      console.log(data, 'show-data');
+    }
+  };
+
   useEffect(() => {
     getPaymentStatus();
+    getParticipantConstants();
   }, []);
 
   useEffect(() => {
@@ -233,9 +243,11 @@ const RegistrationList = (props) => {
             placeholder="Participant Type"
           >
             <Option value="All">All</Option>
-            <Option value="Seller">Seller</Option>
-            <Option value="Buyer">Buyer</Option>
-            <Option value="Customer">Customer</Option>
+            {participantsConstants.ParticipantType?.map((type) => (
+              <Option value={type} key={type}>
+                {type}
+              </Option>
+            ))}
           </Select>
         </Form.Item>
         <Form.Item name="userType" label="User Type" className="mr-md-3">
@@ -247,8 +259,11 @@ const RegistrationList = (props) => {
             placeholder="User Type"
           >
             <Option value="All">All</Option>
-            <Option value="Employee">Employee</Option>
-            <Option value="NonEmployee">NonEmployee</Option>
+            {participantsConstants.UserType?.map((type) => (
+              <Option value={type} key={type}>
+                {type}
+              </Option>
+            ))}
           </Select>
         </Form.Item>
       </Flex>{' '}
