@@ -18,9 +18,25 @@ authAdminService.getProfile = async function () {
 authAdminService.login = async function (data) {
   try {
     const res = await fetch({
-      url: '/auth/login',
+      url: `${api}/password/reset`,
       method: 'post',
       data
+    });
+
+    return res.data;
+  } catch (err) {
+    console.log(err, 'show-err');
+  }
+};
+
+authAdminService.restPassword = async function (password) {
+  try {
+    const res = await fetch({
+      url: '/auth/login',
+      method: 'post',
+      data: {
+        password
+      }
     });
 
     return res.data;

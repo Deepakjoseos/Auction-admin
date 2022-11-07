@@ -1,12 +1,18 @@
 import React, { Component } from 'react';
 import { Form, Button, Input, Row, Col, message } from 'antd';
+import authAdminService from 'services/auth/admin';
 
 export class ChangePassword extends Component {
   changePasswordFormRef = React.createRef();
 
-  onFinish = () => {
-    message.success({ content: 'Password Changed!', duration: 2 });
-    this.onReset();
+  onFinish = async () => {
+    const newPass =
+      this.changePasswordFormRef.current.getFieldValue('newPassword');
+    const data = await authAdminService.restPassword(newPass);
+    if (data) {
+      message.success({ content: 'Password Changed!', duration: 2 });
+      this.onReset();
+    }
   };
 
   onReset = () => {
