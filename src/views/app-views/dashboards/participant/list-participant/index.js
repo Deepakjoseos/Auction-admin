@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Card, Table, Select, Input, Button, Menu, Tag } from 'antd';
+import { Card, Table, Select, Input, Button, Menu, Tag, Form } from 'antd';
 // import InformationListData from 'assets/data/product-list.data.json'
 import {
   EyeOutlined,
@@ -32,6 +32,7 @@ const getStockStatus = (status) => {
   }
   return null;
 };
+
 const ParticipantList = (props) => {
   let history = useHistory();
 
@@ -40,6 +41,7 @@ const ParticipantList = (props) => {
   const [list, setList] = useState([]);
   const [searchBackupList, setSearchBackupList] = useState([]);
   const [currentSubAdminRole, setCurrentSubAdminRole] = useState({});
+  const [searchParams, setSearchParams] = useState({});
 
   const { user } = useSelector((state) => state.auth);
 
@@ -57,7 +59,9 @@ const ParticipantList = (props) => {
 
   useEffect(() => {
     const getAllParticipants = async () => {
-      const data = await participantService.getAllParticipants();
+      const data = await participantService.getAllParticipants(
+        new URLSearchParams(searchParams)
+      );
       if (data) {
         setList(data);
         setSearchBackupList(data);
@@ -65,7 +69,7 @@ const ParticipantList = (props) => {
       }
     };
     getAllParticipants();
-  }, []);
+  }, [searchParams]);
 
   const dropdownMenu = (row) => {
     return (
@@ -167,13 +171,19 @@ const ParticipantList = (props) => {
     setList(data);
   };
 
-  const handleShowStatus = (value) => {
+  const handleFilters = (key, value) => {
+    console.log(value);
     if (value !== 'All') {
-      const key = 'status';
-      const data = utils.filterArray(searchBackupList, key, value);
-      setList(data);
+      setSearchParams((prevSearchParams) => ({
+        ...prevSearchParams,
+        [key]: value
+      }));
     } else {
-      setList(searchBackupList);
+      setSearchParams((prevSearchParams) => {
+        const newSearchParams = { ...prevSearchParams };
+        delete newSearchParams[key];
+        return newSearchParams;
+      });
     }
   };
 
@@ -186,19 +196,52 @@ const ParticipantList = (props) => {
           onChange={(e) => onSearch(e)}
         />
       </div>
-      <div className="mb-3">
-        <Select
-          defaultValue="All"
-          className="w-100"
-          style={{ minWidth: 180 }}
-          onChange={handleShowStatus}
-          placeholder="Status"
+      <Flex className="mb-3">
+        <Form.Item name="status" label="Status" className="mr-md-3">
+          <Select
+            defaultValue="All"
+            className="w-100"
+            style={{ minWidth: 180 }}
+            onChange={(value) => handleFilters('status', value)}
+            placeholder="Status"
+          >
+            <Option value="All">All</Option>
+            <Option value="Active">Active</Option>
+            <Option value="Hold">Hold</Option>
+          </Select>
+        </Form.Item>
+        <Form.Item
+          name="participantType"
+          label="Participant Type"
+          className="mr-md-3"
         >
-          <Option value="All">All</Option>
-          <Option value="Active">Active</Option>
-          <Option value="Hold">Hold</Option>
-        </Select>
-      </div>
+          <Select
+            defaultValue="All"
+            className="w-100"
+            style={{ minWidth: 180 }}
+            onChange={(value) => handleFilters('participantType', value)}
+            placeholder="Participant Type"
+          >
+            <Option value="All">All</Option>
+            <Option value="Seller">Seller</Option>
+            <Option value="Buyer">Buyer</Option>
+            <Option value="Customer">Customer</Option>
+          </Select>
+        </Form.Item>
+        <Form.Item name="userType" label="User Type" className="mr-md-3">
+          <Select
+            defaultValue="All"
+            className="w-100"
+            style={{ minWidth: 180 }}
+            onChange={(value) => handleFilters('userType', value)}
+            placeholder="User Type"
+          >
+            <Option value="All">All</Option>
+            <Option value="Employee">Employee</Option>
+            <Option value="NonEmployee">NonEmployee</Option>
+          </Select>
+        </Form.Item>
+      </Flex>
     </Flex>
   );
 
