@@ -20,40 +20,22 @@ const Dashboards = ({ match }) => {
           path={`${match.url}/car`}
           component={lazy(() => import(`./car`))}
         />
-        <Route
-          path={`${match.url}/auction`}
-          component={lazy(() => import(`./auction`))}
-        />
+
         <Route
           path={`${match.url}/template`}
           component={lazy(() => import(`./template`))}
         />
 
         <Route
-          path={`${match.url}/watchlist`}
-          component={lazy(() => import(`./watchlist`))}
+          path={`${match.url}/auction`}
+          component={lazy(() => import(`./auction`))}
         />
 
         <Route
-          path={`${match.url}/comment`}
-          component={lazy(() => import(`./comment`))}
+          path={`${match.url}/seller-auction`}
+          component={lazy(() => import(`./seller-auction`))}
         />
 
-        <Route
-          path={`${match.url}/winning`}
-          component={lazy(() => import(`./winning`))}
-        />
-
-        <Route
-          path={`${match.url}/approve-bid`}
-          component={lazy(() => import(`./approve-bid`))}
-        />
-
-        {/* <Route
-          path={`${match.url}/group-members`}
-          component={lazy(() => import(`./group-members`))}
-        /> */}
-        
         <Route
           path={`${match.url}/information`}
           component={lazy(() => import(`./information`))}
@@ -105,10 +87,6 @@ const Dashboards = ({ match }) => {
           component={lazy(() => import(`./role`))}
         /> */}
 
-        <Route
-          path={`${match.url}/auction-inventory`}
-          component={lazy(() => import(`./auction-inventory`))}
-        />
         <Route
           path={`${match.url}/deposit`}
           component={lazy(() => import(`./deposit`))}

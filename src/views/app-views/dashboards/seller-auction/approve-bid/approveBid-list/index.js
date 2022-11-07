@@ -31,7 +31,6 @@ const ApproveBidList = (props) => {
   const [approveBidList, setApproveBidList] = useState([]);
   const [searchBackupList, setSearchBackupList] = useState([]);
 
-  const { addPrivilege, editPrivilege, deletePrivilege } = props;
 
   const params = new URLSearchParams(props.location.search);
   const inventoryId = params.get('inventoryId');
@@ -65,34 +64,7 @@ const ApproveBidList = (props) => {
     getApproveBidList();
   }, []);
 
-  const addLottery = () => {
-    history.push(`/app/dashboards/approve-bid/add-approveBid`);
-  };
-
-  const deleteRow = async (row) => {
-    console.log(row._id);
-    const resp = await approveBidService.delete(row._id);
-    if (resp) {
-      //TODO: fetch all comments
-      getApproveBidList();
-    }
-  };
   
-  const dropdownMenu = (row) => {
-    if (deletePrivilege) {
-      return (
-        <Menu>
-          <Menu.Item onClick={() => deleteRow(row)}>
-            <Flex alignItems="center">
-              <DeleteOutlined />
-              <span className="ml-2">Delete</span>
-            </Flex>
-          </Menu.Item>
-        </Menu>
-      );
-    }
-  };
-
   // Antd Table Columns
   const tableColumns = [
     {
@@ -143,15 +115,6 @@ const ApproveBidList = (props) => {
         return <Flex alignItems="center">{approvalStatus}</Flex>;
       },
       sorter: (a, b) => a.approvalStatus.localeCompare(b?.approvalStatus)
-    },
-    {
-      title: '',
-      dataIndex: 'actions',
-      render: (_, elm) => (
-        <div className="text-right">
-          {deletePrivilege && <EllipsisDropdown menu={dropdownMenu(elm)} />}
-        </div>
-      )
     }
   ];
   // When Search is used
@@ -204,18 +167,6 @@ const ApproveBidList = (props) => {
     <Card>
       <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
         {filters()}
-        <div>
-          {addPrivilege && (
-            <Button
-              onClick={addLottery}
-              type="primary"
-              icon={<PlusCircleOutlined />}
-              block
-            >
-              Add Approve bid
-            </Button>
-          )}
-        </div>
       </Flex>
       <div className="table-responsive">
         <Table columns={tableColumns} dataSource={approveBidList} rowKey="id" />

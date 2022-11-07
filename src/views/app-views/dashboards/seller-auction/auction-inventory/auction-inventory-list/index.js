@@ -9,7 +9,6 @@ import EllipsisDropdown from 'components/shared-components/EllipsisDropdown';
 import Flex from 'components/shared-components/Flex';
 import { useHistory } from 'react-router-dom';
 import utils from 'utils';
-import { useSelector } from 'react-redux';
 import auctionInventoryService from 'services/auctionInventory';
 
 const AuctionInventoryList = (props) => {
@@ -17,16 +16,15 @@ const AuctionInventoryList = (props) => {
   const params = new URLSearchParams(props.location.search);
   const auctionId = params.get('auctionId');
 
-  const { addPrivilege, editPrivilege, deletePrivilege } = props;
+  const { sellerId } = props;
 
   const [list, setList] = useState([]);
   const [searchBackupList, setSearchBackupList] = useState([]);
   const [currentSubAdminRole, setCurrentSubAdminRole] = useState({});
 
-  const { user } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    const getGroups = async () => {
+    const getInventories = async () => {
       const data = await auctionInventoryService.getInventories(
         auctionId ? `auctionId=${auctionId}` : ''
       );
@@ -36,20 +34,12 @@ const AuctionInventoryList = (props) => {
         console.log(data, 'show-data');
       }
     };
-    getGroups();
+    getInventories();
   }, []);
 
   const dropdownMenu = (row) => {
     return (
       <Menu>
-        {editPrivilege && (
-          <Menu.Item onClick={() => viewDetails(row)}>
-            <Flex alignItems="center">
-              <EyeOutlined />
-              <span className="ml-2">View Details</span>
-            </Flex>
-          </Menu.Item>
-        )}
         <Menu.Item onClick={() => viewBiddings(row)}>
           <Flex alignItems="center">
             <EyeOutlined />
@@ -66,27 +56,16 @@ const AuctionInventoryList = (props) => {
     );
   };
 
-  const addGroup = () => {
-    history.push(
-      `/app/dashboards/auction/auction-inventory/add-auction-inventory`
-    );
-  };
-
-  const viewDetails = (row) => {
-    history.push(
-      `/app/dashboards/auction/auction-inventory/edit-auction-inventory/${row._id}`
-    );
-  };
 
   const viewBiddings = (row) => {
     history.push(
-      `/app/dashboards/auction/bidding/bidding-list?inventoryId=${row._id}`
+      `/app/dashboards/seller-auction/bidding/bidding-list?inventoryId=${row._id}`
     );
   };
 
   const viewComments = (row) => {
     history.push(
-      `/app/dashboards/auction/comment/comment-list?inventoryId=${row._id}`
+      `/app/dashboards/seller-auction/comment/comment-list?inventoryId=${row._id}`
     );
   };
 
@@ -176,18 +155,6 @@ const AuctionInventoryList = (props) => {
     <Card>
       <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
         {filters()}
-        <div>
-          {addPrivilege && (
-            <Button
-              onClick={addGroup}
-              type="primary"
-              icon={<PlusCircleOutlined />}
-              block
-            >
-              Upload Auction Inventory
-            </Button>
-          )}
-        </div>
       </Flex>
       <div className="table-responsive">
         <Table columns={tableColumns} dataSource={list} rowKey="id" />

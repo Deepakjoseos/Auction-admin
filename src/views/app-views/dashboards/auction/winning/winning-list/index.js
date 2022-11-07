@@ -86,7 +86,7 @@ const WinningList = (props) => {
   }, []);
 
   const addLottery = () => {
-    history.push(`/app/dashboards/winning/add-winning`);
+    history.push(`/app/dashboards/auction/winning/add-winning`);
   };
 
   // Antd Table Columns

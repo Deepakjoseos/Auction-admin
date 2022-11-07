@@ -488,7 +488,7 @@ class Utils {
         if (role.fetch) {
           navItems[0].submenu.push({
             key: 'dashboards-watchlist',
-            path: `${APP_PREFIX_PATH}/dashboards/watchlist`,
+            path: `${APP_PREFIX_PATH}/dashboards/auction/watchlist`,
             title: 'Watchlist',
             icon: HeartOutlined,
             breadcrumb: false,
@@ -499,7 +499,7 @@ class Utils {
         if (role.fetch) {
           navItems[0].submenu.push({
             key: 'dashboards-comment',
-            path: `${APP_PREFIX_PATH}/dashboards/comment`,
+            path: `${APP_PREFIX_PATH}/dashboards/auction/comment`,
             title: 'Comment',
             icon: CommentOutlined,
             breadcrumb: false,
@@ -510,7 +510,7 @@ class Utils {
         if (role.fetch) {
           navItems[0].submenu.push({
             key: 'dashboards-winning',
-            path: `${APP_PREFIX_PATH}/dashboards/winning`,
+            path: `${APP_PREFIX_PATH}/dashboards/auction/winning`,
             title: 'Winning',
             icon: CheckCircleOutlined,
             breadcrumb: false,
@@ -521,7 +521,7 @@ class Utils {
         if (role.fetch) {
           navItems[0].submenu.push({
             key: 'dashboards-approve-bid',
-            path: `${APP_PREFIX_PATH}/dashboards/approve-bid`,
+            path: `${APP_PREFIX_PATH}/dashboards/auction/approve-bid`,
             title: 'Approve Bid',
             icon: CheckCircleOutlined,
             breadcrumb: false,

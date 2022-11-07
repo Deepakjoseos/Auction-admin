@@ -53,11 +53,10 @@ const getStockStatus = (status) => {
 const BiddingList = (props) => {
   let history = useHistory();
 
+  const { sellerId } = props;
+
   const params = new URLSearchParams(props.location.search);
   const inventoryId = params.get('inventoryId');
-
-  const winningPrivileges = useUserPrivilege('WINNING');
-  const approveBiddingPrivileges = useUserPrivilege('BIDDING');
 
   const [list, setList] = useState([]);
   const [searchBackupList, setSearchBackupList] = useState([]);
@@ -114,8 +113,6 @@ const BiddingList = (props) => {
     getParticipants();
   }, []);
 
-  const { user } = useSelector((state) => state.auth);
-
   //   useEffect(() => {
   //     if (user) {
   //       const bannerRole = user.roles.find((role) => role.module === 'BANNER')
@@ -128,77 +125,21 @@ const BiddingList = (props) => {
   const dropdownMenu = (row) => {
     return (
       <Menu>
-        {/* <Menu.Item onClick={() => viewDetails(row)}>
-          <Flex alignItems="center">
-            <EyeOutlined />
-            <span className="ml-2">View Details</span>
-          </Flex>
-        </Menu.Item> */}
-        {/* <Menu.Item onClick={() => deleteRow(row)}>
-            <Flex alignItems="center">
-              <DeleteOutlined />
-              <span className="ml-2">
-                {selectedRows.length > 0
-                  ? `Delete (${selectedRows.length})`
-                  : 'Delete'}
-              </span>
-            </Flex>
-          </Menu.Item> */}
         <Menu.Item onClick={() => viewWinnings(row)}>
           <Flex alignItems="center">
             <EyeOutlined />
             <span className="ml-2">View Winnings</span>
           </Flex>
         </Menu.Item>
-        {winningPrivileges.addPrivilege && (
-          <Menu.Item onClick={() => addToWinnings(row)}>
-            <Flex alignItems="center">
-              <EyeOutlined />
-              <span className="ml-2">Add to Winnings</span>
-            </Flex>
-          </Menu.Item>
-        )}
-        {/* {approveBiddingPrivileges.addPrivilege && (
-          <Menu.Item onClick={() => approveBid(row)}>
-            <Flex alignItems="center">
-              <EyeOutlined />
-              <span className="ml-2">Approve Bid</span>
-            </Flex>
-          </Menu.Item>
-        )} */}
       </Menu>
     );
   };
 
-  const viewDetails = (row) => {
-    history.push(`/app/dashboards/auction/bidding/biddingview/${row._id}`);
-  };
 
   const viewWinnings = (row) => {
     history.push(
-      `/app/dashboards/auction/winning/winning-list?inventoryId=${row.auctionInventory._id}`
+      `/app/dashboards/seller-auction/winning/winning-list?inventoryId=${row.auctionInventory._id}`
     );
-  };
-
-  const addToWinnings = async (row) => {
-    const added = await winningService.addWinning({
-      auctionInventoryId: row.auctionInventory._id,
-      winnerId: row.bidder._id
-    });
-    if (added) {
-      message.success(`Added ${row.auctionInventory._id} to Winnings`);
-    }
-  };
-
-  const approveBid = async (row) => {
-    const added = await approveBidService.addApproveBid({
-      bidId: row._id,
-      finalAmount: 0
-    });
-
-    if (added) {
-      message.success(`Approved ${row._id} Bid`);
-    }
   };
 
   // Antd Table Columns
@@ -444,31 +385,6 @@ const BiddingList = (props) => {
     <Card>
       <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
         {filters()}
-        {/* <div>
-          {window.localStorage.getItem('auth_type') === 'SubAdmin' ? (
-            <>
-              {currentSubAdminRole?.add && (
-                <Button
-                  onClick={addBanner}
-                  type="primary"
-                  icon={<PlusCircleOutlined />}
-                  block
-                >
-                  Add Banner
-                </Button>
-              )}
-            </>
-          ) : (
-            <Button
-              onClick={addBanner}
-              type="primary"
-              icon={<PlusCircleOutlined />}
-              block
-            >
-              Add Banner
-            </Button>
-          )}
-        </div> */}
       </Flex>
       <div className="table-responsive">
         <Table columns={tableColumns} dataSource={list} rowKey="id" />

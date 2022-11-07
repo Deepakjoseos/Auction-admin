@@ -5,7 +5,7 @@ import useUserPrivilege from 'hooks/useUserPrivilege';
 import ApproveBidList from './approveBid-list';
 import AddApproveBid from './add-approveBid';
 
-const Winning = (props) => {
+const ApproveBid = (props) => {
   const { match } = props;
   const privileges = useUserPrivilege('APPROVE_BID');
   return (
@@ -28,4 +28,4 @@ const Winning = (props) => {
   );
 };
 
-export default Winning;
+export default ApproveBid;

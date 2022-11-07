@@ -434,7 +434,7 @@ const dashBoardNavTree = [
           },
           {
             key: 'dashboards-watchlist',
-            path: `${APP_PREFIX_PATH}/dashboards/watchlist`,
+            path: `${APP_PREFIX_PATH}/dashboards/auction/watchlist`,
             title: 'Watchlist',
             icon: HeartOutlined,
             breadcrumb: false,
@@ -442,7 +442,7 @@ const dashBoardNavTree = [
           },
           {
             key: 'dashboards-comment',
-            path: `${APP_PREFIX_PATH}/dashboards/comment`,
+            path: `${APP_PREFIX_PATH}/dashboards/auction/comment`,
             title: 'Comment',
             icon: CommentOutlined,
             breadcrumb: false,
@@ -450,7 +450,7 @@ const dashBoardNavTree = [
           },
           {
             key: 'dashboards-winning',
-            path: `${APP_PREFIX_PATH}/dashboards/winning`,
+            path: `${APP_PREFIX_PATH}/dashboards/auction/winning`,
             title: 'Winning',
             icon: CheckCircleOutlined,
             breadcrumb: false,
@@ -458,7 +458,7 @@ const dashBoardNavTree = [
           },
           {
             key: 'dashboards-approve-bid',
-            path: `${APP_PREFIX_PATH}/dashboards/approve-bid`,
+            path: `${APP_PREFIX_PATH}/dashboards/auction/approve-bid`,
             title: 'Approve Bid',
             icon: CheckCircleOutlined,
             breadcrumb: false,
@@ -1280,7 +1280,7 @@ const dashBoardNavTree = [
 export const sellerDashboard = [
   {
     key: 'dashboards-auction-auction',
-    path: `${APP_PREFIX_PATH}/dashboards/auction/auction/auction-list`,
+    path: `${APP_PREFIX_PATH}/dashboards/seller-auction/auction/auction-list`,
     title: 'Auction',
     icon: NodeExpandOutlined,
     breadcrumb: false,
@@ -1288,7 +1288,7 @@ export const sellerDashboard = [
   },
   {
     key: 'dashboards-auction-auction-inventory',
-    path: `${APP_PREFIX_PATH}/dashboards/auction/auction-inventory/auction-inventory-list`,
+    path: `${APP_PREFIX_PATH}/dashboards/seller-auction/auction-inventory/auction-inventory-list`,
     title: 'Auction Inventory',
     icon: NodeExpandOutlined,
     breadcrumb: false,
@@ -1296,7 +1296,7 @@ export const sellerDashboard = [
   },
   {
     key: 'dashboards-auction-bidding',
-    path: `${APP_PREFIX_PATH}/dashboards/auction/bidding/bidding-list`,
+    path: `${APP_PREFIX_PATH}/dashboards/seller-auction/bidding/bidding-list`,
     title: 'Bidding',
     icon: NodeExpandOutlined,
     breadcrumb: false,
@@ -1304,7 +1304,7 @@ export const sellerDashboard = [
   },
   {
     key: 'dashboards-watchlist',
-    path: `${APP_PREFIX_PATH}/dashboards/watchlist`,
+    path: `${APP_PREFIX_PATH}/dashboards/seller-auction/watchlist`,
     title: 'Watchlist',
     icon: NodeExpandOutlined,
     breadcrumb: false,
@@ -1312,7 +1312,7 @@ export const sellerDashboard = [
   },
   {
     key: 'dashboards-comment',
-    path: `${APP_PREFIX_PATH}/dashboards/comment`,
+    path: `${APP_PREFIX_PATH}/dashboards/seller-auction/comment`,
     title: 'Comment',
     icon: NodeExpandOutlined,
     breadcrumb: false,
@@ -1320,7 +1320,7 @@ export const sellerDashboard = [
   },
   {
     key: 'dashboards-winning',
-    path: `${APP_PREFIX_PATH}/dashboards/winning`,
+    path: `${APP_PREFIX_PATH}/dashboards/seller-auction/winning`,
     title: 'Winning',
     icon: NodeExpandOutlined,
     breadcrumb: false,
@@ -1328,7 +1328,7 @@ export const sellerDashboard = [
   },
   {
     key: 'dashboards-approve-bid',
-    path: `${APP_PREFIX_PATH}/dashboards/approve-bid`,
+    path: `${APP_PREFIX_PATH}/dashboards/seller-auction/approve-bid`,
     title: 'Approve Bid',
     icon: NodeExpandOutlined,
     breadcrumb: false,
