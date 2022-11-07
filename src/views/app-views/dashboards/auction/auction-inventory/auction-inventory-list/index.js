@@ -94,7 +94,7 @@ const AuctionInventoryList = (props) => {
     {
       title: 'Auction Name',
       dataIndex: 'auction',
-      render: (auction) => <Flex alignItems="center">{auction.name}</Flex>,
+      render: (auction) => <Flex alignItems="center">{auction?.name}</Flex>,
       sorter: (a, b) => utils.antdTableSorter(a, b, 'name')
     },
 
@@ -133,13 +133,13 @@ const AuctionInventoryList = (props) => {
     {
       title: 'Created By',
       dataIndex: 'createdBy',
-      render: (createdBy) => <Flex alignItems="center">{createdBy.name}</Flex>,
+      render: (createdBy) => <Flex alignItems="center">{createdBy?.name}</Flex>,
       sorter: (a, b) => utils.antdTableSorter(a, b, 'name')
     },
     {
       title: 'Updated By',
       dataIndex: 'updatedBy',
-      render: (updatedBy) => <Flex alignItems="center">{updatedBy.name}</Flex>,
+      render: (updatedBy) => <Flex alignItems="center">{updatedBy?.name}</Flex>,
       sorter: (a, b) => utils.antdTableSorter(a, b, 'name')
     },
     {

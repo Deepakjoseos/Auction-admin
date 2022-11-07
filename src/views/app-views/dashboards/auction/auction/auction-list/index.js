@@ -464,7 +464,7 @@ const GroupList = (props) => {
             >
               <Option value="">All</Option>
               <Option value="LIVE">Live</Option>
-              <Option value="UPCOMMING">Upcomming</Option>
+              <Option value="UPCOMING">Upcoming</Option>
             </Select>
           </Form.Item>
         </Col>
