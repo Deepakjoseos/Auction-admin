@@ -4,7 +4,7 @@ import { Route, Switch, Redirect } from 'react-router-dom';
 import ApproveBidList from './approveBid-list';
 
 const ApproveBid = (props) => {
-  const { match, sellerId } = props;
+  const { match } = props;
 
   return (
     <Switch>
@@ -14,10 +14,8 @@ const ApproveBid = (props) => {
         to={`${match.url}/approveBid-list`}
       />
 
-      <Route
-        path={`${match.url}/approveBid-list`}
-        render={(props) => <ApproveBidList {...props} />}
-      />
+      <Route path={`${match.url}/approveBid-list`} component={ApproveBidList} />
+
     </Switch>
   );
 };

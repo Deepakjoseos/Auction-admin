@@ -40,4 +40,16 @@ biddingService.getBiddingById = async function (id) {
   }
 };
 
+biddingService.getSellerBidding = async function (query = '') {
+  try {
+    const res = await fetch({
+      url: `${api}/get/all/seller?${query}`,
+      method: 'get'
+    });
+    return res.data;
+  } catch (err) {
+    console.log(err, 'show-err');
+  }
+};
+
 export default biddingService;

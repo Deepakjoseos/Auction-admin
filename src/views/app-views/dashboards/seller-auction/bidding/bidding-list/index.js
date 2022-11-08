@@ -53,8 +53,6 @@ const getStockStatus = (status) => {
 const BiddingList = (props) => {
   let history = useHistory();
 
-  const { sellerId } = props;
-
   const params = new URLSearchParams(props.location.search);
   const inventoryId = params.get('inventoryId');
 
@@ -73,7 +71,7 @@ const BiddingList = (props) => {
   useEffect(() => {
     // Getting Lotteries List to display in the table
     const getBiddings = async () => {
-      const data = await biddingService.getBiddings(
+      const data = await biddingService.getSellerBidding(
         inventoryId ? `auctionInventoryId=${inventoryId}` : ''
       );
       if (data) {
@@ -84,7 +82,7 @@ const BiddingList = (props) => {
     };
     getBiddings();
     const getAuctions = async () => {
-      const data = await auctionService.getauctions();
+      const data = await auctionService.getSellerAuctions();
       if (data) {
         setAuctions(data);
         // setSearchBackupList(data)
@@ -93,7 +91,7 @@ const BiddingList = (props) => {
     };
     getAuctions();
     const getAuctionInventories = async () => {
-      const data = await auctionInventoryService.getInventories();
+      const data = await auctionInventoryService.getSellerInventories();
       if (data) {
         setAuctionInventories(data);
         // setSearchBackupList(data)
@@ -102,15 +100,15 @@ const BiddingList = (props) => {
     };
     getAuctionInventories();
     getAuctions();
-    const getParticipants = async () => {
-      const data = await participantService.getAllParticipants();
-      if (data) {
-        setBidders(data);
-        // setSearchBackupList(data)
-        console.log(data, 'show-auction_inventories');
-      }
-    };
-    getParticipants();
+    // const getParticipants = async () => {
+    //   const data = await participantService.getAllParticipants();
+    //   if (data) {
+    //     setBidders(data);
+    //     // setSearchBackupList(data)
+    //     console.log(data, 'show-auction_inventories');
+    //   }
+    // };
+    // getParticipants();
   }, []);
 
   //   useEffect(() => {
@@ -134,7 +132,6 @@ const BiddingList = (props) => {
       </Menu>
     );
   };
-
 
   const viewWinnings = (row) => {
     history.push(
@@ -334,7 +331,7 @@ const BiddingList = (props) => {
           ))}
         </Select>
       </div>
-      <div className="mr-md-3 mb-3">
+      {/* <div className="mr-md-3 mb-3">
         <label>Bidders</label>
         <Select
           className="w-100"
@@ -350,7 +347,7 @@ const BiddingList = (props) => {
             </Option>
           ))}
         </Select>
-      </div>
+      </div> */}
       <div className="mr-md-3 mb-3">
         <label>Auction Inventory</label>
         <Select

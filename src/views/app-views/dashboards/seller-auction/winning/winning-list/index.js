@@ -57,7 +57,7 @@ const WinningList = (props) => {
   const history = useHistory();
 
   const getWinnings = async () => {
-    const data = await winningService.getWinnings(
+    const data = await winningService.getSellerWinnings(
       inventoryId ? `auctionInventoryId=${inventoryId}` : ''
     );
     if (data) {
@@ -186,19 +186,7 @@ const WinningList = (props) => {
   return (
     <Card>
       <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
-        {filters()}
-        <div>
-          {addPrivilege && (
-            <Button
-              onClick={addLottery}
-              type="primary"
-              icon={<PlusCircleOutlined />}
-              block
-            >
-              Add Winning
-            </Button>
-          )}
-        </div>
+        {filters()} 
       </Flex>
       <div className="table-responsive">
         <Table columns={tableColumns} dataSource={winningList} rowKey="id" />

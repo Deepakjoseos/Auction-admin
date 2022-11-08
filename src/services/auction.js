@@ -11,8 +11,7 @@ auctionService.getauctions = async function (
       url: `${apiRoute}/get/all/admin?${query}`,
       method: "get",
     });
-    const data = res.data.filter((cur) => cur.status !== "Deleted");
-    return data;
+    return res.data;
   } catch (err) {
     console.log(err, "show-err");
   }
@@ -55,5 +54,19 @@ auctionService.updateauction = async function (id, data) {
     console.log(err, "show-err");
   }
 };
+
+
+auctionService.getSellerAuctions = async function (query = '') {
+  try {
+    const res = await fetch({
+      url: `${apiRoute}/get/all/seller?${query}`,
+      method: 'get'
+    });
+    return res.data;
+  } catch (err) {
+    console.log(err, 'show-err');
+  }
+};
+
 
 export default auctionService;

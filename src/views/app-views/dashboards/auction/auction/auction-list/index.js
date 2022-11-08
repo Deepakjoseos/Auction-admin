@@ -50,7 +50,7 @@ const getStockStatus = (status) => {
   }
   return null;
 };
-const GroupList = (props) => {
+const AuctionList = (props) => {
   let history = useHistory();
 
   const { addPrivilege, editPrivilege, deletePrivilege } = props;
@@ -167,27 +167,27 @@ const GroupList = (props) => {
     {
       title: 'Bid Limit',
       dataIndex: 'bidLimit',
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'business')
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'bidLimit')
     },
     {
       title: 'Business',
       dataIndex: 'businessType',
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'business')
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'businessType')
     },
     {
       title: 'Type',
       dataIndex: 'type',
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'business')
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'type')
     },
     {
       title: 'Vehicle count',
       dataIndex: 'inventoryCount',
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'business')
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'inventoryCount')
     },
     {
       title: 'Format',
       dataIndex: 'format',
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'business')
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'format')
     },
     {
       title: 'Start Time',
@@ -196,7 +196,7 @@ const GroupList = (props) => {
         var d = new Date(Number(status)).toDateString();
         return <Flex alignItems="center">{d}</Flex>;
       },
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'business')
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'startTimestamp')
     },
     {
       title: 'End Time',
@@ -205,7 +205,7 @@ const GroupList = (props) => {
         var d = new Date(Number(status)).toDateString();
         return <Flex alignItems="center">{d}</Flex>;
       },
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'business')
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'endTimestamp')
     },
 
     {
@@ -557,4 +557,4 @@ const GroupList = (props) => {
   );
 };
 
-export default GroupList;
+export default AuctionList;

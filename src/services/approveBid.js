@@ -15,6 +15,18 @@ approveBidService.getApproveBids = async function (query = '') {
   }
 };
 
+approveBidService.getSellerApproveBids = async function (query = '') {
+  try {
+    const res = await fetch({
+      url: `${apiRoute}/get/all/seller?${query}`,
+      method: 'get'
+    });
+    return res.data;
+  } catch (err) {
+    console.log(err, 'show-err');
+  }
+};
+
 approveBidService.getApproveBid = async function (id) {
   try {
     const res = await fetch({

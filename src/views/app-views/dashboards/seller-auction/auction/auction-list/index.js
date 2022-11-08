@@ -52,8 +52,6 @@ const getStockStatus = (status) => {
 const AuctionList = (props) => {
   let history = useHistory();
 
-  const { sellerId } = props;
-
   const [list, setList] = useState([]);
   const [searchBackupList, setSearchBackupList] = useState([]);
   const [selectedRows, setSelectedRows] = useState([]);
@@ -69,7 +67,9 @@ const AuctionList = (props) => {
 
   const getauctions = async (filterParams) => {
     setLoading(true);
-    const data = await auctionService.getauctions(qs.stringify(filterParams));
+    const data = await auctionService.getSellerAuctions(
+      qs.stringify(filterParams)
+    );
     if (data) {
       setList(data);
     }
@@ -77,7 +77,7 @@ const AuctionList = (props) => {
 
   useEffect(() => {
     const getAuctions = async () => {
-      const data = await auctionService.getauctions();
+      const data = await auctionService.getSellerAuctions();
       if (data) {
         setList(data);
         console.log(data);
@@ -87,25 +87,28 @@ const AuctionList = (props) => {
     };
 
     const getVehicleTypeById = async () => {
-      const data = await vehicletypeService.getVehicleTypes();
+      const data = await vehicletypeService.getPublicVehicleTypes();
       if (data) {
         setVehicleTypeId(data);
       }
     };
-    const getClientById = async () => {
-      const data = await clientService.getClients();
-      if (data) {
-        setClientById(data);
-      }
-    };
+
+    // const getClientById = async () => {
+    //   const data = await clientService.getClients();
+    //   if (data) {
+    //     setClientById(data);
+    //   }
+    // };
+
     const getCity = async () => {
       const data = await cityService.getCities();
       if (data) {
         setCity(data);
       }
     };
+
     const getRegionsByID = async () => {
-      const data = await regionService.getRegions();
+      const data = await regionService.getPublicRegions();
       if (data) {
         setRegionsByID(data);
       }
@@ -113,7 +116,7 @@ const AuctionList = (props) => {
     getAuctions();
     getRegionsByID();
     getVehicleTypeById();
-    getClientById();
+    // getClientById();
     getCity();
   }, []);
 
@@ -334,7 +337,7 @@ const AuctionList = (props) => {
           </Form.Item>
         </Col>
 
-        <Col md={6} sm={24} xs={24} lg={6}>
+        {/* <Col md={6} sm={24} xs={24} lg={6}>
           <Form.Item name="clientId" label="Client">
             <Select
               showSearch
@@ -357,7 +360,7 @@ const AuctionList = (props) => {
               ))}
             </Select>
           </Form.Item>
-        </Col>
+        </Col> */}
 
         <Col md={6} sm={24} xs={24} lg={6}>
           <Form.Item name="type" label="Type">

@@ -15,6 +15,18 @@ winningService.getWinnings = async function (query = '') {
   }
 };
 
+winningService.getSellerWinnings = async function (query = '') {
+  try {
+    const res = await fetch({
+      url: `${apiRoute}/get/all/seller?${query}`,
+      method: 'get'
+    });
+    return res.data;
+  } catch (err) {
+    console.log(err, 'show-err');
+  }
+};
+
 winningService.getWinning = async function (id) {
   try {
     const res = await fetch({

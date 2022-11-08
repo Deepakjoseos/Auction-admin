@@ -16,6 +16,19 @@ commentService.getComments = async function (query = '') {
   }
 };
 
+commentService.getSellerComments = async function (query = '') {
+  try {
+    const res = await fetch({
+      url: `${apiRoute}/all/seller?${query}`,
+      method: 'get'
+    });
+    return res.data;
+  } catch (err) {
+    console.log(err, 'show-err');
+  }
+};
+
+
 
 
 commentService.createComment = async function (data) {

@@ -1302,14 +1302,14 @@ export const sellerDashboard = [
     breadcrumb: false,
     submenu: []
   },
-  {
-    key: 'dashboards-watchlist',
-    path: `${APP_PREFIX_PATH}/dashboards/seller-auction/watchlist`,
-    title: 'Watchlist',
-    icon: NodeExpandOutlined,
-    breadcrumb: false,
-    submenu: []
-  },
+  // {
+  //   key: 'dashboards-watchlist',
+  //   path: `${APP_PREFIX_PATH}/dashboards/seller-auction/watchlist`,
+  //   title: 'Watchlist',
+  //   icon: NodeExpandOutlined,
+  //   breadcrumb: false,
+  //   submenu: []
+  // },
   {
     key: 'dashboards-comment',
     path: `${APP_PREFIX_PATH}/dashboards/seller-auction/comment`,

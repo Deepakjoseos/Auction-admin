@@ -38,7 +38,7 @@ const ApproveBidList = (props) => {
   const history = useHistory();
 
   const getApproveBidList = async () => {
-    const data = await approveBidService.getApproveBids(
+    const data = await approveBidService.getSellerApproveBids(
       inventoryId ? `auctionInventoryId=${inventoryId}` : ''
     );
     if (data) {

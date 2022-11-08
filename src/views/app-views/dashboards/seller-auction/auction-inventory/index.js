@@ -3,7 +3,7 @@ import { Route, Switch, Redirect } from 'react-router-dom';
 import AuctionInventoryList from './auction-inventory-list';
 
 const AuctionInventory = (props) => {
-  const { match, sellerId } = props;
+  const { match } = props;
 
   return (
     <Switch>
@@ -15,7 +15,7 @@ const AuctionInventory = (props) => {
 
       <Route
         path={`${match.url}/auction-inventory-list`}
-        render={(props) => <AuctionInventoryList {...props} />}
+        component={AuctionInventoryList}
       />
     </Switch>
   );

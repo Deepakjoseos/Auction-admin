@@ -59,16 +59,15 @@ const CommentList = (props) => {
 
   const history = useHistory();
 
-
   const getAuctionInventories = async () => {
-    const data = await auctionInventoryService.getInventories();
+    const data = await auctionInventoryService.getSellerInventories();
     if (data) {
       setAuctionInventories(data);
     }
   };
 
   const getCommentList = async (inventoryId = null) => {
-    const data = await commentService.getComments(
+    const data = await commentService.getSellerComments(
       inventoryId ? `?auctionInventoryId=${inventoryId}` : ''
     );
     if (data) {
@@ -86,22 +85,22 @@ const CommentList = (props) => {
 
       setCommentList(mutatedComments);
       setSearchBackupList(mutatedComments);
-      setSelectedInventoryId(inventoryId);
+      setSelectedInventoryId(inventoryId ? inventoryId : 'All');
       return;
     }
     setSelectedInventoryId('All');
   };
 
   useEffect(() => {
+    getCommentList(inventoryId);
     getAuctionInventories();
   }, []);
 
-  useEffect(() => {
-    if (auctionInventories.length > 0) {
-      //TODO: fetch all comments
-      getCommentList(inventoryId);
-    }
-  }, [auctionInventories]);
+  // useEffect(() => {
+  //   if (auctionInventories.length > 0) {
+  //     getCommentList(inventoryId);
+  //   }
+  // }, [auctionInventories]);
 
   // Antd Table Columns
   const tableColumns = [
@@ -137,7 +136,7 @@ const CommentList = (props) => {
         );
       },
       sorter: (a, b) => a.timestamp > b.timestamp
-    },
+    }
 
     // {
     //   title: 'Status',
@@ -199,30 +198,29 @@ const CommentList = (props) => {
           <Option value="Hold">Hold</Option>
         </Select>
       </div> */}
-      {auctionInventories.length > 0 && (
-        <div className="mb-3 ml-3">
-          <Select
-            defaultValue={'All'}
-            className="w-100"
-            style={{ minWidth: 180 }}
-            onChange={handleSelectInventory}
-            placeholder="Auction Inventories"
-            showSearch
-            value={selectedInventoryId}
-          >
-            <Option value="All">All</Option>
-            {auctionInventories?.map((inventory) => (
-              <Option
-                key={inventory._id}
-                value={inventory._id}
-                disabled={inventory.status === 'Hold'}
-              >
-                {`${inventory.registrationNumber} (${inventory.auction.name})`}
-              </Option>
-            ))}
-          </Select>
-        </div>
-      )}
+
+      <div className="mb-3 ml-3">
+        <Select
+          defaultValue={'All'}
+          className="w-100"
+          style={{ minWidth: 180 }}
+          onChange={handleSelectInventory}
+          placeholder="Auction Inventories"
+          showSearch
+          value={selectedInventoryId}
+        >
+          <Option value="All">All</Option>
+          {auctionInventories?.map((inventory) => (
+            <Option
+              key={inventory._id}
+              value={inventory._id}
+              disabled={inventory.status === 'Hold'}
+            >
+              {`${inventory.registrationNumber} (${inventory.auction.name})`}
+            </Option>
+          ))}
+        </Select>
+      </div>
     </Flex>
   );
 

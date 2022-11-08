@@ -110,7 +110,7 @@ const Dashboards = ({ match }) => {
         {window.localStorage.getItem('auth_type') === 'Admin' ? (
           <Redirect from={`${match.url}`} to={`${match.url}/user`} />
         ) : (
-          <Redirect from={`${match.url}`} to={`${match.url}/car`} />
+          <Redirect from={`${match.url}`} to={`${match.url}`} />
         )}
       </Switch>
     </Suspense>

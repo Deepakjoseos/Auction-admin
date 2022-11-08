@@ -16,8 +16,6 @@ const AuctionInventoryList = (props) => {
   const params = new URLSearchParams(props.location.search);
   const auctionId = params.get('auctionId');
 
-  const { sellerId } = props;
-
   const [list, setList] = useState([]);
   const [searchBackupList, setSearchBackupList] = useState([]);
   const [currentSubAdminRole, setCurrentSubAdminRole] = useState({});
@@ -25,7 +23,7 @@ const AuctionInventoryList = (props) => {
 
   useEffect(() => {
     const getInventories = async () => {
-      const data = await auctionInventoryService.getInventories(
+      const data = await auctionInventoryService.getSellerInventories(
         auctionId ? `auctionId=${auctionId}` : ''
       );
       if (data) {

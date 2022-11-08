@@ -87,22 +87,16 @@ const CommentList = (props) => {
 
       setCommentList(mutatedComments);
       setSearchBackupList(mutatedComments);
-      setSelectedInventoryId(inventoryId);
+      setSelectedInventoryId(inventoryId ? inventoryId : 'All');
       return;
     }
     setSelectedInventoryId('All');
   };
 
   useEffect(() => {
+    getCommentList(inventoryId);
     getAuctionInventories();
   }, []);
-
-  useEffect(() => {
-    if (auctionInventories.length > 0) {
-      //TODO: fetch all comments
-      getCommentList(inventoryId);
-    }
-  }, [auctionInventories]);
 
   const deleteRow = async (row) => {
     console.log(row._id);
@@ -232,30 +226,29 @@ const CommentList = (props) => {
           <Option value="Hold">Hold</Option>
         </Select>
       </div> */}
-      {auctionInventories.length > 0 && (
-        <div className="mb-3 ml-3">
-          <Select
-            defaultValue={'All'}
-            className="w-100"
-            style={{ minWidth: 180 }}
-            onChange={handleSelectInventory}
-            placeholder="Auction Inventories"
-            showSearch
-            value={selectedInventoryId}
-          >
-            <Option value="All">All</Option>
-            {auctionInventories?.map((inventory) => (
-              <Option
-                key={inventory._id}
-                value={inventory._id}
-                disabled={inventory.status === 'Hold'}
-              >
-                {`${inventory.registrationNumber} (${inventory.auction.name})`}
-              </Option>
-            ))}
-          </Select>
-        </div>
-      )}
+
+      <div className="mb-3 ml-3">
+        <Select
+          defaultValue={'All'}
+          className="w-100"
+          style={{ minWidth: 180 }}
+          onChange={handleSelectInventory}
+          placeholder="Auction Inventories"
+          showSearch
+          value={selectedInventoryId}
+        >
+          <Option value="All">All</Option>
+          {auctionInventories?.map((inventory) => (
+            <Option
+              key={inventory._id}
+              value={inventory._id}
+              disabled={inventory.status === 'Hold'}
+            >
+              {`${inventory.registrationNumber} (${inventory.auction.name})`}
+            </Option>
+          ))}
+        </Select>
+      </div>
     </Flex>
   );
 

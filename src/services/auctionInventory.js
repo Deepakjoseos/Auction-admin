@@ -100,4 +100,17 @@ auctionInventoryService.getInventoryImages = async function (id) {
   }
 };
 
+
+auctionInventoryService.getSellerInventories = async function (query = '') {
+  try {
+    const res = await fetch({
+      url: `${apiRoute}/get/all/seller?${query}`,
+      method: 'get'
+    });
+    return res.data;
+  } catch (err) {
+    console.log(err, 'show-err');
+  }
+};
+
 export default auctionInventoryService;
