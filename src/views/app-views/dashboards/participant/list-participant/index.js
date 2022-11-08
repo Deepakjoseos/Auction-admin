@@ -1,10 +1,24 @@
 import React, { useEffect, useState } from 'react';
-import { Card, Table, Select, Input, Button, Menu, Tag, Form } from 'antd';
+import {
+  Card,
+  Table,
+  Select,
+  Input,
+  Button,
+  Menu,
+  Tag,
+  Form,
+  Modal,
+  Drawer,
+  Space,
+  message
+} from 'antd';
 // import InformationListData from 'assets/data/product-list.data.json'
 import {
   EyeOutlined,
   SearchOutlined,
-  PlusCircleOutlined
+  PlusCircleOutlined,
+  FileExcelOutlined
 } from '@ant-design/icons';
 import EllipsisDropdown from 'components/shared-components/EllipsisDropdown';
 import Flex from 'components/shared-components/Flex';
@@ -35,15 +49,18 @@ const getStockStatus = (status) => {
 };
 
 const ParticipantList = (props) => {
-  let history = useHistory();
+  const history = useHistory();
 
-  const { addPrivilege, editPrivilege, deletePrivilege } = props;
+  const { addPrivilege, editPrivilege, deletePrivilege, fetchPrivilege } =
+    props;
 
   const [list, setList] = useState([]);
   const [searchBackupList, setSearchBackupList] = useState([]);
   const [participantsConstants, setParticipantsConstants] = useState({});
   const [currentSubAdminRole, setCurrentSubAdminRole] = useState({});
   const [searchParams, setSearchParams] = useState({});
+  const [open, setOpen] = useState(false);
+  const [excelForm] = Form.useForm();
 
   const { user } = useSelector((state) => state.auth);
 
@@ -263,27 +280,156 @@ const ParticipantList = (props) => {
     </Form>
   );
 
+  const showModal = () => {
+    excelForm.setFieldsValue({
+      status: 'All',
+      userType: 'All',
+      participantType: 'All'
+    });
+    setOpen(true);
+  };
+
+  const onFinish = (e) => {
+    console.log(e);
+    setOpen(false);
+    excelForm
+      .validateFields()
+      .then(async (values) => {
+        const searchObj = {};
+        Object.keys(values).forEach((value) => {
+          if (values[value] && values[value] !== 'All') {
+            searchObj[value] = values[value];
+          }
+        });
+        console.log(searchObj);
+        const queryParams = new URLSearchParams(searchObj);
+        const downloadLink = await participantService.getExcelSheet(
+          queryParams
+        );
+
+        if (downloadLink) {
+          window.open(downloadLink);
+        }
+      })
+      .catch((info) => {
+        message.error('Something went wrong!');
+      });
+  };
+  const onClose = (e) => {
+    console.log(e);
+    setOpen(false);
+  };
+
   return (
-    <Card>
-      <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
-        {filters()}
-        <div>
-          {addPrivilege && (
-            <Button
-              onClick={addProduct}
-              type="primary"
-              icon={<PlusCircleOutlined />}
-              block
-            >
-              Add Participant
+    <>
+      <Drawer
+        title="Download Excel"
+        width={720}
+        onClose={onClose}
+        visible={open}
+        bodyStyle={{
+          paddingBottom: 80
+        }}
+        extra={
+          <Space>
+            <Button onClick={onClose}>Cancel</Button>
+            <Button type="primary" onClick={onFinish}>
+              Download
             </Button>
-          )}
+          </Space>
+        }
+      >
+        <Form
+          form={excelForm}
+          layout="vertical"
+          name="excelForm"
+          className="ant-advanced-search-form"
+        >
+          <Form.Item name="search" className="mr-md-3">
+            <Input
+              placeholder="Search"
+              prefix={<SearchOutlined />}
+              onChange={(e) => onSearch(e)}
+            />
+          </Form.Item>
+          <Form.Item name="status" label="Status" className="mr-md-3">
+            <Select
+              className="w-100"
+              style={{ minWidth: 180 }}
+              placeholder="Status"
+            >
+              <Option value="All">All</Option>
+              <Option value="Active">Active</Option>
+              <Option value="Hold">Hold</Option>
+            </Select>
+          </Form.Item>
+          <Form.Item
+            name="participantType"
+            label="Participant Type"
+            className="mr-md-3"
+          >
+            <Select
+              className="w-100"
+              style={{ minWidth: 180 }}
+              placeholder="Participant Type"
+            >
+              <Option value="All">All</Option>
+              {participantsConstants.ParticipantType?.map((type) => (
+                <Option value={type} key={type}>
+                  {type}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+          <Form.Item name="userType" label="User Type" className="mr-md-3">
+            <Select
+              className="w-100"
+              style={{ minWidth: 180 }}
+              placeholder="User Type"
+            >
+              <Option value="All">All</Option>
+              {participantsConstants.UserType?.map((type) => (
+                <Option value={type} key={type}>
+                  {type}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+        </Form>
+      </Drawer>
+      <Card>
+        <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
+          {filters()}
+          <div>
+            {fetchPrivilege && (
+              <Button
+                onClick={showModal}
+                type="ghost"
+                icon={<FileExcelOutlined />}
+                block
+              >
+                Generate Excel
+              </Button>
+            )}
+          </div>
+          <div>
+            {addPrivilege && (
+              <Button
+                onClick={addProduct}
+                type="primary"
+                icon={<PlusCircleOutlined />}
+                block
+              >
+                Add Participant
+              </Button>
+            )}
+          </div>
+        </Flex>
+        <div className="table-responsive">
+          <Table columns={tableColumns} dataSource={list} rowKey="id" />
         </div>
-      </Flex>
-      <div className="table-responsive">
-        <Table columns={tableColumns} dataSource={list} rowKey="id" />
-      </div>
-    </Card>
+      </Card>
+    </>
   );
 };
 

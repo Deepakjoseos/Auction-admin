@@ -97,4 +97,16 @@ participantService.updateParticipantPassword = async (id, newPassword) => {
   }
 };
 
+participantService.getExcelSheet = async function (query = '') {
+  try {
+    const res = await fetch({
+      url: `${apiRoute}/generate-excel/admin?${query}`,
+      method: 'get'
+    });
+    return res.data;
+  } catch (err) {
+    console.log(err, 'show-error');
+  }
+};
+
 export default participantService;
