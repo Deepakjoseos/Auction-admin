@@ -286,18 +286,24 @@ const ParticipantForm = (props) => {
                 <TabPane tab="Registration" key="2">
                   <RegistrationForm participantId={param?.id} />
                 </TabPane>
-                <TabPane tab="Deposit" key="3">
-                  <DepositForm participantId={param?.id} />
-                </TabPane>
+                {(mode === 'ADD' || isBuyer) && (
+                  <TabPane tab="Deposit" key="3">
+                    <DepositForm participantId={param?.id} />
+                  </TabPane>
+                )}
                 <TabPane tab="Document Upload" key="4">
                   <DocumentFieldForm participantId={param?.id} />
                 </TabPane>
-                <TabPane tab="Wallet" key="5">
-                  <WalletFieldForm participantId={param?.id} />
-                </TabPane>
-                <TabPane tab="Wallet Transactions" key="6">
-                  <WalletTransactionParticipant participantId={param?.id} />
-                </TabPane>
+                {(mode === 'ADD' || isBuyer) && (
+                  <TabPane tab="Wallet" key="5">
+                    <WalletFieldForm participantId={param?.id} />
+                  </TabPane>
+                )}
+                {(mode === 'ADD' || isBuyer) && (
+                  <TabPane tab="Wallet Transactions" key="6">
+                    <WalletTransactionParticipant participantId={param?.id} />
+                  </TabPane>
+                )}
                 <TabPane tab="Reset Password" key="7">
                   <ResetPassword participantId={param?.id} />
                 </TabPane>

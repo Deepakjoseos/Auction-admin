@@ -111,7 +111,9 @@ const DepositField = ({
   }, []);
 
   const getDeposits = async () => {
-    const data = await depositService.getDeposits({ participantId });
+    const data = await depositService.getDeposits(
+      `participantId=${participantId}`
+    );
     if (data) {
       setDeposits(data);
       console.log(data, 'show-data');
