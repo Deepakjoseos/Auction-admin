@@ -91,6 +91,12 @@ const StateList = (props) => {
       sorter: (a, b) => utils.antdTableSorter(a, b, 'abbreviation')
     },
     {
+      title: 'Region',
+      dataIndex: 'region',
+      render: (region) => <Flex alignItems="center">{region?.name}</Flex>
+      // sorter: (a, b) => utils.antdTableSorter(a, b, 'region')
+    },
+    {
       title: 'Status',
       dataIndex: 'status',
       render: (status) => (

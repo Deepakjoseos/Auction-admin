@@ -11,7 +11,8 @@ import {
   Modal,
   Drawer,
   Space,
-  message
+  message,
+  Col
 } from 'antd';
 // import InformationListData from 'assets/data/product-list.data.json'
 import {
@@ -167,10 +168,6 @@ const ParticipantList = (props) => {
       dataIndex: 'contact'
     },
     {
-      title: 'Contact Number',
-      dataIndex: 'contact'
-    },
-    {
       title: 'Participant Type',
       dataIndex: 'participantType'
     },
@@ -180,6 +177,14 @@ const ParticipantList = (props) => {
       render: (text, row) => {
         return <span>{row.gst ? 'Yes' : 'No'}</span>;
       }
+    },
+    {
+      title: 'Status',
+      dataIndex: 'status',
+      render: (status) => (
+        <Flex alignItems="center">{getStockStatus(status)}</Flex>
+      ),
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'status')
     },
 
     {
@@ -400,30 +405,32 @@ const ParticipantList = (props) => {
       <Card>
         <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
           {filters()}
-          <div>
-            {fetchPrivilege && (
-              <Button
-                onClick={showModal}
-                type="ghost"
-                icon={<FileExcelOutlined />}
-                block
-              >
-                Generate Excel
-              </Button>
-            )}
-          </div>
-          <div>
-            {addPrivilege && (
-              <Button
-                onClick={addProduct}
-                type="primary"
-                icon={<PlusCircleOutlined />}
-                block
-              >
-                Add Participant
-              </Button>
-            )}
-          </div>
+          <Col>
+            <div className="mb-2">
+              {fetchPrivilege && (
+                <Button
+                  onClick={showModal}
+                  type="primary"
+                  icon={<FileExcelOutlined />}
+                  block
+                >
+                  Generate Excel
+                </Button>
+              )}
+            </div>
+            <div className="mb-2">
+              {addPrivilege && (
+                <Button
+                  onClick={addProduct}
+                  type="primary"
+                  icon={<PlusCircleOutlined />}
+                  block
+                >
+                  Add Participant
+                </Button>
+              )}
+            </div>
+          </Col>
         </Flex>
         <div className="table-responsive">
           <Table columns={tableColumns} dataSource={list} rowKey="id" />

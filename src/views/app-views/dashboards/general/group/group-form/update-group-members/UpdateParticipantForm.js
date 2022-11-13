@@ -1,36 +1,9 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import {
-  Input,
-  Row,
-  Col,
-  Card,
-  Form,
-  Select,
-  Button,
-  Space,
-  Table
-} from 'antd';
-import utils from 'utils';
+import { Input, Card, Form, Select, Button, Space } from 'antd';
 import { PlusOutlined, MinusCircleOutlined } from '@ant-design/icons';
-import Flex from 'components/shared-components/Flex';
-import { useForm } from 'antd/es/form/Form';
 import { useSelector } from 'react-redux';
 const { Option } = Select;
 
-const rules = {
-  memberId: [
-    {
-      required: true,
-      message: 'Required'
-    }
-  ],
-  remark: [
-    {
-      required: true,
-      message: 'Required'
-    }
-  ]
-};
 const UpdateParticipantForm = ({ participants, group }) => {
   const [availableMembers, setAvailableMembers] = useState(participants);
   const [usedMembers, setUsedMembers] = useState([]);
@@ -44,9 +17,9 @@ const UpdateParticipantForm = ({ participants, group }) => {
       return {
         memberName: participant.member.name,
         memberId: participant.member._id,
-        addedBy: participant.addedBy.name,
-        remark: participant.remark,
-        date: new Date(Number(participant.timestamp)).toDateString()
+        addedBy: participant.addedBy?.name,
+        remark: participant?.remark,
+        date: new Date(Number(participant?.timestamp)).toDateString()
       };
     });
   }, []);

@@ -110,7 +110,7 @@ const rules = {
   receipt: [
     {
       required: true,
-      message: 'Required'
+      message: 'Please upload a Receipt'
     }
   ],
   paymentDate: [
@@ -182,8 +182,8 @@ const RegistrationField = ({
           <Card title="Basic Info">
             <Form.Item
               name="feeRemark"
-              label="FeeRemark"
-              placeholder="FeeRemark"
+              label="Fee Remarks"
+              placeholder="Fee Remarks"
               rules={rules.feeRemark}
             >
               <Input />
@@ -191,9 +191,9 @@ const RegistrationField = ({
 
             <Form.Item
               name="countedIn"
-              label="CountedIN"
+              label="Counted IN Date"
               rules={rules.countedIn}
-              placeholder="CountedIn"
+              placeholder="Counted IN Date"
             >
               <DatePicker className="board-card-modal date-picker w-100" />
             </Form.Item>
@@ -335,10 +335,12 @@ const RegistrationField = ({
             </Form.Item> */}
           </Card>
           <Col xs={24} sm={24} md={7}>
-            <Card title="Receipt">
-              <Upload listType="picture-card" name="logo" {...propsImages}>
-                <CustomIcon className="display-3" svg={ImageSvg} />
-              </Upload>
+            <Card>
+              <Form.Item name="receipt" rules={rules.receipt} label="Receipt">
+                <Upload listType="picture-card" name="logo" {...propsImages}>
+                  <CustomIcon className="display-3" svg={ImageSvg} />
+                </Upload>
+              </Form.Item>
             </Card>
           </Col>
           <Button

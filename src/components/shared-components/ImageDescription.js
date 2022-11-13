@@ -176,8 +176,8 @@ const ImageDescription = ({
               className="mt-2 w-100"
               onChange={onStatusValueChange}
             >
-              <Option value="Active">Active</Option>
-              <Option value="Hold">Hold</Option>
+              <Option value="verified">Verified</Option>
+              <Option value="NonVerified">Non Verified</Option>
             </Select>
           )}
           {onRemove && (

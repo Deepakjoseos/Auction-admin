@@ -58,8 +58,8 @@ const BrandForm = (props) => {
           // For setting form values when Load if it is in EDIT mode
           form.setFieldsValue({
             name: data.name,
-            status: data.status,
-            url: data.url
+            status: data.status
+            // url: data.url
           });
         } else {
           history.replace('/app/dashboards/brand/brand/brands-list');

@@ -203,16 +203,16 @@ const GeneralField = ({
           </Form.Item>
           <Form.Item
             name="hdfcPanValidation"
-            label="HdfcPanValidation"
+            label="HDFC PAN Validation"
             rules={rules.hdfcPanValidation}
           >
-            <Select placeholder="HdfcPanValidation">
+            <Select placeholder="HDFC PAN Validation">
               <Option value={false}>No</Option>
               <Option value={true}>Yes</Option>
             </Select>
           </Form.Item>
-          <Form.Item name="pan" label="Pan number" rules={rules.pan}>
-            <Input placeholder="Pan Number" />
+          <Form.Item name="pan" label="PAN Number" rules={rules.pan}>
+            <Input placeholder="PAN Number" />
           </Form.Item>
           <Form.Item
             name="clientId"
@@ -246,8 +246,8 @@ const GeneralField = ({
               <Option value={true}>Yes</Option>
             </Select>
           </Form.Item>
-          <Form.Item name="UserType" label="userType">
-            <Select placeholder="userType">
+          <Form.Item name="UserType" label="User Type">
+            <Select placeholder="User Type">
               {usertype?.UserType?.map((item, index) => (
                 <Option key={index} value={item}>
                   {' '}
@@ -257,8 +257,8 @@ const GeneralField = ({
             </Select>
           </Form.Item>
 
-          <Form.Item name="ParticipantType" label="ParticipantType">
-            <Select placeholder="ParticipantType" disabled={mode === 'EDIT'}>
+          <Form.Item name="ParticipantType" label="Participant Type">
+            <Select placeholder="Participant Type" disabled={mode === 'EDIT'}>
               {participant?.ParticipantType?.map((item, index) => (
                 <Option key={index} value={item}>
                   {' '}
@@ -268,8 +268,11 @@ const GeneralField = ({
             </Select>
           </Form.Item>
 
-          <Form.Item name="BuyerEligibleBuisness" label="buyerEligibleBuisness">
-            <Select placeholder="buyerEligibleBuisness">
+          <Form.Item
+            name="BuyerEligibleBuisness"
+            label="Buyer Eligible Business"
+          >
+            <Select placeholder="Buyer Eligible Business">
               {buyerEligibleBuisness?.BuyerEligibleBuisness?.map(
                 (item, index) => (
                   <Option key={index} value={item}>

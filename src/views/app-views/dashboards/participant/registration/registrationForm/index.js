@@ -102,8 +102,8 @@ const RegistrationForm = (props) => {
       .then(async (values) => {
         // if (mode === ADD) {
         // Checking if image exists
-        if (uploadedImg.length === 0 && uploadedImg === null) {
-          message.error('Please upload image');
+        if (!uploadedImg || uploadedImg.length < 1) {
+          message.error('Please upload Receipt');
           return;
         }
 
@@ -140,6 +140,8 @@ const RegistrationForm = (props) => {
         );
         if (created) {
           message.success(`Created  registration`);
+          form.resetFields();
+          getAllRegistrations();
         }
 
         setSubmitLoading(false);

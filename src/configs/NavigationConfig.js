@@ -288,14 +288,6 @@ const dashBoardNavTree = [
             submenu: []
           },
           {
-            key: 'dashboards-general-group',
-            path: `${APP_PREFIX_PATH}/dashboards/general/group/group-list`,
-            title: 'Groups',
-            icon: GroupOutlined,
-            breadcrumb: false,
-            submenu: []
-          },
-          {
             key: 'dashboards-general-region',
             path: `${APP_PREFIX_PATH}/dashboards/general/region/region-list`,
             title: 'Region',
@@ -461,6 +453,14 @@ const dashBoardNavTree = [
             path: `${APP_PREFIX_PATH}/dashboards/auction/approve-bid`,
             title: 'Approve Bid',
             icon: CheckCircleOutlined,
+            breadcrumb: false,
+            submenu: []
+          },
+          {
+            key: 'dashboards-general-group',
+            path: `${APP_PREFIX_PATH}/dashboards/general/group/group-list`,
+            title: 'Groups',
+            icon: GroupOutlined,
             breadcrumb: false,
             submenu: []
           }
