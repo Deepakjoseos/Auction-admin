@@ -13,6 +13,7 @@ import { useHistory } from 'react-router-dom';
 import utils from 'utils';
 import watchlistService from 'services/watchlist';
 import constantsService from 'services/constants';
+import useQueryFilters from 'hooks/useQueryFilters';
 
 const { Option } = Select;
 
@@ -36,23 +37,41 @@ const getStockStatus = (status) => {
   }
   return null;
 };
+
+const pageSize = 8;
+
 const WatchlistList = () => {
   let history = useHistory();
 
   const [watchlist, setWatchlist] = useState([]);
   const [searchBackupList, setSearchBackupList] = useState([]);
+  const {
+    handleFilters,
+    isLoading,
+    onChangeCurrentPageNumber,
+    setIsLoading,
+    searchParams
+  } = useQueryFilters({
+    limit: pageSize,
+    page: 1,
+    type: watchlistType1
+  });
 
-  const getWatchlist = async (watchlistType) => {
-    const data = await watchlistService.getWatchlist(`?type=${watchlistType}`);
+  const getWatchlist = async () => {
+    setIsLoading(true);
+    const data = await watchlistService.getWatchlist(
+      new URLSearchParams(searchParams)
+    );
     if (data) {
       setWatchlist(data);
       setSearchBackupList(data);
       console.log(data, 'show-data');
     }
+    setIsLoading(false);
   };
   useEffect(() => {
-    getWatchlist(watchlistType1);
-  }, []);
+    getWatchlist();
+  }, [searchParams]);
 
   const tableColumns = [
     {
@@ -85,7 +104,7 @@ const WatchlistList = () => {
           <Tag color={'geekblue'} key={inventory._id}>
             {inventory.vehicleInfo.make.toUpperCase()}
           </Tag>
-        )),
+        ))
     },
     {
       title: 'Model',
@@ -95,7 +114,7 @@ const WatchlistList = () => {
           <Tag color={'geekblue'} key={inventory._id}>
             {inventory.vehicleInfo.model.toUpperCase()}
           </Tag>
-        )),
+        ))
     },
     {
       title: 'mfgYear',
@@ -105,7 +124,7 @@ const WatchlistList = () => {
           <Tag color={'geekblue'} key={inventory._id}>
             {inventory.vehicleInfo.mfgYear}
           </Tag>
-        )),
+        ))
     }
 
     // {
@@ -137,7 +156,7 @@ const WatchlistList = () => {
   };
 
   const handleWatchlistType = (value) => {
-    getWatchlist(value);
+    handleFilters('type', value);
   };
 
   const filters = () => (
@@ -191,7 +210,18 @@ const WatchlistList = () => {
         </div> */}
       </Flex>
       <div className="table-responsive">
-        <Table columns={tableColumns} dataSource={watchlist} rowKey="id" />
+        <Table
+          columns={tableColumns}
+          dataSource={watchlist}
+          rowKey="id"
+          pagination={{
+            total: 24, // TODO: get the total count from API
+            defaultCurrent: 1,
+            defaultPageSize: pageSize,
+            onChange: onChangeCurrentPageNumber
+          }}
+          loading={isLoading}
+        />
       </div>
     </Card>
   );

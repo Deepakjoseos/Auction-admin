@@ -25,6 +25,7 @@ import utils from 'utils';
 
 import commentService from 'services/comment';
 import auctionInventoryService from 'services/auctionInventory';
+import useQueryFilters from 'hooks/useQueryFilters';
 
 const { Option } = Select;
 
@@ -47,6 +48,8 @@ const getStockStatus = (status) => {
   return null;
 };
 
+const pageSize = 8;
+
 const CommentList = (props) => {
   const params = new URLSearchParams(props.location.search);
   const inventoryId = params.get('inventoryId');
@@ -55,7 +58,27 @@ const CommentList = (props) => {
 
   const [commentList, setCommentList] = useState([]);
   const [searchBackupList, setSearchBackupList] = useState([]);
-  const [selectedInventoryId, setSelectedInventoryId] = useState('All');
+
+  const [form] = Form.useForm();
+
+  const {
+    handleFilters,
+    isLoading,
+    onChangeCurrentPageNumber,
+    setIsLoading,
+    searchParams
+  } = useQueryFilters(
+    inventoryId
+      ? {
+          limit: pageSize,
+          page: 1,
+          auctionInventoryId: inventoryId
+        }
+      : {
+          limit: pageSize,
+          page: 1
+        }
+  );
 
   const history = useHistory();
 
@@ -68,9 +91,10 @@ const CommentList = (props) => {
     }
   };
 
-  const getCommentList = async (inventoryId = null) => {
+  const getCommentList = async () => {
+    setIsLoading(true);
     const data = await commentService.getComments(
-      inventoryId ? `?auctionInventoryId=${inventoryId}` : ''
+      new URLSearchParams(searchParams)
     );
     if (data) {
       const mutatedComments = [];
@@ -87,23 +111,30 @@ const CommentList = (props) => {
 
       setCommentList(mutatedComments);
       setSearchBackupList(mutatedComments);
-      setSelectedInventoryId(inventoryId ? inventoryId : 'All');
-      return;
     }
-    setSelectedInventoryId('All');
+    if (inventoryId) {
+      form.setFieldsValue({
+        auctionInventory: inventoryId
+      });
+    }
+
+    setIsLoading(false);
   };
 
   useEffect(() => {
-    getCommentList(inventoryId);
     getAuctionInventories();
   }, []);
+
+  useEffect(() => {
+    getCommentList();
+  }, [searchParams]);
 
   const deleteRow = async (row) => {
     console.log(row._id);
     const resp = await commentService.deleteComment(row._id);
     if (resp) {
       //TODO: fetch all comments
-      getCommentList(selectedInventoryId);
+      getCommentList();
     }
   };
   const dropdownMenu = (row) => {
@@ -197,23 +228,25 @@ const CommentList = (props) => {
 
   // Filter Status Handler
   const handleSelectInventory = (value) => {
-    if (value !== 'All') {
-      getCommentList(value);
-    } else {
-      getCommentList();
-    }
+    handleFilters('auctionInventoryId', value);
   };
 
   const filters = () => (
-    <Flex className="mb-1" mobileFlex={false}>
-      <div className="mr-md-3 mb-3">
-        <Input
-          placeholder="Search"
-          prefix={<SearchOutlined />}
-          onChange={(e) => onSearch(e)}
-        />
-      </div>
-      {/* <div className="mb-3">
+    <Form
+      layout="vertical"
+      form={form}
+      name="advanced_search"
+      className="ant-advanced-search-form"
+    >
+      <Flex className="mb-1" mobileFlex={false}>
+        <div className="mr-md-3 mb-3">
+          <Input
+            placeholder="Search"
+            prefix={<SearchOutlined />}
+            onChange={(e) => onSearch(e)}
+          />
+        </div>
+        {/* <div className="mb-3">
         <Select
           defaultValue="All"
           className="w-100"
@@ -227,29 +260,32 @@ const CommentList = (props) => {
         </Select>
       </div> */}
 
-      <div className="mb-3 ml-3">
-        <Select
-          defaultValue={'All'}
-          className="w-100"
-          style={{ minWidth: 180 }}
-          onChange={handleSelectInventory}
-          placeholder="Auction Inventories"
-          showSearch
-          value={selectedInventoryId}
-        >
-          <Option value="All">All</Option>
-          {auctionInventories?.map((inventory) => (
-            <Option
-              key={inventory._id}
-              value={inventory._id}
-              disabled={inventory.status === 'Hold'}
+        <div className="mb-3 ml-3">
+          <Form.Item name="auctionInventory">
+            <Select
+              defaultValue={'All'}
+              className="w-100"
+              style={{ minWidth: 180 }}
+              onChange={handleSelectInventory}
+              placeholder="Auction Inventories"
+              showSearch
+              disabled={inventoryId}
             >
-              {`${inventory.registrationNumber} (${inventory.auction.name})`}
-            </Option>
-          ))}
-        </Select>
-      </div>
-    </Flex>
+              <Option value="All">All</Option>
+              {auctionInventories?.map((inventory) => (
+                <Option
+                  key={inventory._id}
+                  value={inventory._id}
+                  disabled={inventory.status === 'Hold'}
+                >
+                  {`${inventory.registrationNumber} (${inventory.auction.name})`}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+        </div>
+      </Flex>
+    </Form>
   );
 
   return (
@@ -258,7 +294,18 @@ const CommentList = (props) => {
         {filters()}
       </Flex>
       <div className="table-responsive">
-        <Table columns={tableColumns} dataSource={commentList} rowKey="id" />
+        <Table
+          columns={tableColumns}
+          dataSource={commentList}
+          rowKey="id"
+          pagination={{
+            total: 24, // TODO: get the total count from API
+            defaultCurrent: 1,
+            defaultPageSize: pageSize,
+            onChange: onChangeCurrentPageNumber
+          }}
+          loading={isLoading}
+        />
       </div>
     </Card>
   );

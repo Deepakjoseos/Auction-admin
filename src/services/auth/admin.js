@@ -135,10 +135,10 @@ authAdminService.getUser = async function (query) {
     console.log(err, 'show-err');
   }
 };
-authAdminService.getAllSubAdmins = async function (query) {
+authAdminService.getAllSubAdmins = async function (query = '') {
   try {
     const res = await fetch({
-      url: 'https://auction.riolabz.com/v1/sub_admin/get/all',
+      url: `https://auction.riolabz.com/v1/sub_admin/get/all?${query}`,
       method: 'get'
     });
     return res.data;

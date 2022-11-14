@@ -22,6 +22,7 @@ import participantService from 'services/Participant';
 import winningService from 'services/winning';
 import useUserPrivilege from 'hooks/useUserPrivilege';
 import approveBidService from 'services/approveBid';
+import useQueryFilters from 'hooks/useQueryFilters';
 
 const { Option } = Select;
 
@@ -50,6 +51,9 @@ const getStockStatus = (status) => {
   }
   return null;
 };
+
+const pageSize = 8;
+
 const BiddingList = (props) => {
   let history = useHistory();
 
@@ -71,19 +75,43 @@ const BiddingList = (props) => {
   const [selectedAuctionInventory, setSelectedAuctionInventory] = useState('');
   const [selectedBidder, setSelectedBidder] = useState('');
 
+  const {
+    handleFilters,
+    isLoading,
+    onChangeCurrentPageNumber,
+    setIsLoading,
+    searchParams
+  } = useQueryFilters(
+    inventoryId
+      ? {
+          limit: pageSize,
+          page: 1,
+          auctionInventoryId: inventoryId
+        }
+      : {
+          limit: pageSize,
+          page: 1
+        }
+  );
+
   useEffect(() => {
-    // Getting Lotteries List to display in the table
     const getBiddings = async () => {
+      setIsLoading(true);
       const data = await biddingService.getBiddings(
-        inventoryId ? `auctionInventoryId=${inventoryId}` : ''
+        new URLSearchParams(searchParams)
       );
       if (data) {
         setList(data);
         setSearchBackupList(data);
         console.log(data, 'show-data');
       }
+      setIsLoading(false);
     };
     getBiddings();
+  }, [searchParams]);
+
+  useEffect(() => {
+    // Getting Lotteries List to display in the table
     const getAuctions = async () => {
       const data = await auctionService.getauctions();
       if (data) {
@@ -471,7 +499,18 @@ const BiddingList = (props) => {
         </div> */}
       </Flex>
       <div className="table-responsive">
-        <Table columns={tableColumns} dataSource={list} rowKey="id" />
+        <Table
+          columns={tableColumns}
+          dataSource={list}
+          rowKey="id"
+          pagination={{
+            total: 24, // TODO: get the total count from API
+            defaultCurrent: 1,
+            defaultPageSize: pageSize,
+            onChange: onChangeCurrentPageNumber
+          }}
+          loading={isLoading}
+        />
       </div>
     </Card>
   );

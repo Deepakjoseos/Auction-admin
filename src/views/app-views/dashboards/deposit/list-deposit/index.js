@@ -21,6 +21,7 @@ import utils from 'utils';
 import depositService from 'services/deposit';
 import constantsService from 'services/constants';
 import EllipsisDropdown from 'components/shared-components/EllipsisDropdown';
+import useQueryFilters from 'hooks/useQueryFilters';
 
 const { Option } = Select;
 
@@ -43,6 +44,8 @@ const getStockStatus = (status) => {
   return null;
 };
 
+const pageSize = 8;
+
 const DepositList = (props) => {
   let history = useHistory();
 
@@ -53,7 +56,17 @@ const DepositList = (props) => {
   const [currentSubAdminRole, setCurrentSubAdminRole] = useState({});
   const [paymentStatus, setPaymentStatus] = useState([]);
   const [paymentMode, setPaymentMode] = useState([]);
-  const [searchParams, setSearchParams] = useState({});
+
+  const {
+    handleFilters,
+    isLoading,
+    onChangeCurrentPageNumber,
+    setIsLoading,
+    searchParams
+  } = useQueryFilters({
+    limit: pageSize,
+    page: 1
+  });
 
   useEffect(() => {
     getRegistrationConstants();
@@ -64,12 +77,14 @@ const DepositList = (props) => {
   }, [searchParams]);
 
   const getDeposits = async (query) => {
+    setIsLoading(true);
     const data = await depositService.getDeposits(query);
     if (data) {
       setList(data);
       setSearchBackupList(data);
       console.log(data, 'show-data');
     }
+    setIsLoading(false);
   };
 
   const getRegistrationConstants = async () => {
@@ -241,21 +256,6 @@ const DepositList = (props) => {
     setList(data);
   };
 
-  const handleFilters = (key, value) => {
-    if (value !== 'All') {
-      setSearchParams((prevSearchParams) => ({
-        ...prevSearchParams,
-        [key]: value
-      }));
-    } else {
-      setSearchParams((prevSearchParams) => {
-        const newSearchParams = { ...prevSearchParams };
-        delete newSearchParams[key];
-        return newSearchParams;
-      });
-    }
-  };
-
   const filters = () => (
     <Form>
       <Flex className="mb-1" mobileFlex={false}>
@@ -323,7 +323,18 @@ const DepositList = (props) => {
           </div>
         </Flex>
         <div className="table-responsive">
-          <Table columns={tableColumns} dataSource={list} rowKey="id" />
+          <Table
+            columns={tableColumns}
+            dataSource={list}
+            rowKey="id"
+            pagination={{
+              total: 24, // TODO: get the total count from API
+              defaultCurrent: 1,
+              defaultPageSize: pageSize,
+              onChange: onChangeCurrentPageNumber
+            }}
+            loading={isLoading}
+          />
         </div>
       </Card>
     </>

@@ -6,7 +6,7 @@ const apiRoute = '/watch_list';
 watchlistService.getWatchlist = async function (query = '') {
   try {
     const res = await fetch({
-      url: `${apiRoute}/get/all/admin${query}`,
+      url: `${apiRoute}/get/all/admin?${query}`,
       method: 'get'
     });
     return res.data;

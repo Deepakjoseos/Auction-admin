@@ -31,6 +31,7 @@ import cityService from 'services/city';
 import regionService from 'services/region';
 import _ from 'lodash';
 import useUserPrivilege from 'hooks/useUserPrivilege';
+import useQueryFilters from 'hooks/useQueryFilters';
 const { Option } = Select;
 
 const getStockStatus = (status) => {
@@ -50,11 +51,14 @@ const getStockStatus = (status) => {
   }
   return null;
 };
+
+const pageSize = 8;
+
 const AuctionList = (props) => {
   let history = useHistory();
 
   const { addPrivilege, editPrivilege, deletePrivilege } = props;
-  
+
   const [list, setList] = useState([]);
   const [searchBackupList, setSearchBackupList] = useState([]);
   const [selectedRows, setSelectedRows] = useState([]);
@@ -67,6 +71,17 @@ const AuctionList = (props) => {
   const [regionId, setRegionsByID] = useState([]);
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
+
+  const {
+    handleFilters,
+    isLoading: isListLoading,
+    onChangeCurrentPageNumber,
+    setIsLoading: setIsListLoading,
+    searchParams
+  } = useQueryFilters({
+    limit: pageSize,
+    page: 1
+  });
 
   const { user } = useSelector((state) => state.auth);
 
@@ -111,16 +126,20 @@ const AuctionList = (props) => {
 
   useEffect(() => {
     const getGroups = async () => {
-      const data = await auctionService.getauctions();
+      setIsListLoading(true);
+      const data = await auctionService.getauctions(
+        new URLSearchParams(searchParams)
+      );
       if (data) {
         setList(data);
         console.log(data);
         setSearchBackupList(data);
         console.log(data, 'show-data');
       }
+      setIsListLoading(false);
     };
     getGroups();
-  }, []);
+  }, [searchParams]);
 
   const dropdownMenu = (row) => {
     return (
@@ -551,7 +570,18 @@ const AuctionList = (props) => {
         </div>
       </Flex>
       <div className="table-responsive">
-        <Table columns={tableColumns} dataSource={list} rowKey="id" />
+        <Table
+          columns={tableColumns}
+          dataSource={list}
+          rowKey="id"
+          pagination={{
+            total: 24, // TODO: get the total count from API
+            defaultCurrent: 1,
+            defaultPageSize: pageSize,
+            onChange: onChangeCurrentPageNumber
+          }}
+          loading={isListLoading}
+        />
       </div>
     </Card>
   );

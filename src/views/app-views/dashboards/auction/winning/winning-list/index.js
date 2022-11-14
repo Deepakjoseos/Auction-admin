@@ -27,6 +27,10 @@ import Flex from 'components/shared-components/Flex';
 import utils from 'utils';
 
 import winningService from 'services/winning';
+import useQueryFilters from 'hooks/useQueryFilters';
+import auctionInventoryService from 'services/auctionInventory';
+
+const { Option } = Select;
 
 const getStockStatus = (status) => {
   if (status === 'Active') {
@@ -47,42 +51,83 @@ const getStockStatus = (status) => {
   return null;
 };
 
+const pageSize = 8;
+
 const WinningList = (props) => {
   const [winningList, setWinningList] = useState([]);
   const [searchBackupList, setSearchBackupList] = useState([]);
+  const [auctionInventories, setAuctionInventories] = useState([]);
+  const [form] = Form.useForm();
 
   const { addPrivilege, editPrivilege, deletePrivilege } = props;
 
   const params = new URLSearchParams(props.location.search);
   const inventoryId = params.get('inventoryId');
 
+  const {
+    handleFilters,
+    isLoading,
+    onChangeCurrentPageNumber,
+    setIsLoading,
+    searchParams
+  } = useQueryFilters(
+    inventoryId
+      ? {
+          limit: pageSize,
+          page: 1,
+          auctionInventoryId: inventoryId
+        }
+      : {
+          limit: pageSize,
+          page: 1
+        }
+  );
+
   const history = useHistory();
 
+  const getAuctionInventories = async () => {
+    const data = await auctionInventoryService.getInventories();
+    if (data) {
+      setAuctionInventories(data);
+    }
+  };
+
   const getWinnings = async () => {
+    setIsLoading(true);
     const data = await winningService.getWinnings(
-      inventoryId ? `auctionInventoryId=${inventoryId}` : ''
+      new URLSearchParams(searchParams)
     );
     if (data) {
       const mutatedData = [];
 
       data.forEach((win) => {
         mutatedData.push({
-          _id: win._id,
-          auctionInventoryId: win.auctionInventory._id,
-          auctionName: win.auction.name,
-          sellerEmail: win.seller.email,
-          winnerEmail: win.winner.email,
-          winningBid: win.winningBid.amount
+          _id: win?._id,
+          auctionInventoryId: win.auctionInventory?._id,
+          auctionName: win.auction?.name,
+          sellerEmail: win.seller?.email,
+          winnerEmail: win.winner?.email,
+          winningBid: win.winningBid?.amount
         });
       });
 
       setWinningList(mutatedData);
       setSearchBackupList(mutatedData);
     }
+    if (inventoryId) {
+      form.setFieldsValue({
+        auctionInventory: inventoryId
+      });
+    }
+    setIsLoading(false);
   };
 
   useEffect(() => {
     getWinnings();
+  }, [searchParams]);
+
+  useEffect(() => {
+    getAuctionInventories();
   }, []);
 
   const addLottery = () => {
@@ -160,17 +205,27 @@ const WinningList = (props) => {
     }
   };
 
+  const handleSelectInventory = (value) => {
+    handleFilters('auctionInventoryId', value);
+  };
+
   // Table Filters JSX Elements
   const filters = () => (
-    <Flex className="mb-1" mobileFlex={false}>
-      <div className="mr-md-3 mb-3">
-        <Input
-          placeholder="Search"
-          prefix={<SearchOutlined />}
-          onChange={(e) => onSearch(e)}
-        />
-      </div>
-      {/* <div className="mb-3">
+    <Form
+      layout="vertical"
+      form={form}
+      name="advanced_search"
+      className="ant-advanced-search-form"
+    >
+      <Flex className="mb-1" mobileFlex={false}>
+        <div className="mr-md-3 mb-3">
+          <Input
+            placeholder="Search"
+            prefix={<SearchOutlined />}
+            onChange={(e) => onSearch(e)}
+          />
+        </div>
+        {/* <div className="mb-3">
         <Select
           defaultValue="All"
           className="w-100"
@@ -183,7 +238,32 @@ const WinningList = (props) => {
           <Option value="Hold">Hold</Option>
         </Select>
       </div> */}
-    </Flex>
+        <div className="mb-3 ml-3">
+          <Form.Item name="auctionInventory">
+            <Select
+              defaultValue={'All'}
+              className="w-100"
+              style={{ minWidth: 180 }}
+              onChange={handleSelectInventory}
+              placeholder="Auction Inventories"
+              showSearch
+              disabled={inventoryId}
+            >
+              <Option value="All">All</Option>
+              {auctionInventories?.map((inventory) => (
+                <Option
+                  key={inventory._id}
+                  value={inventory._id}
+                  disabled={inventory.status === 'Hold'}
+                >
+                  {`${inventory.registrationNumber} (${inventory.auction.name})`}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+        </div>
+      </Flex>
+    </Form>
   );
   return (
     <Card>
@@ -203,7 +283,18 @@ const WinningList = (props) => {
         </div>
       </Flex>
       <div className="table-responsive">
-        <Table columns={tableColumns} dataSource={winningList} rowKey="id" />
+        <Table
+          columns={tableColumns}
+          dataSource={winningList}
+          rowKey="id"
+          pagination={{
+            total: 24, // TODO: get the total count from API
+            defaultCurrent: 1,
+            defaultPageSize: pageSize,
+            onChange: onChangeCurrentPageNumber
+          }}
+          loading={isLoading}
+        />
       </div>
     </Card>
   );

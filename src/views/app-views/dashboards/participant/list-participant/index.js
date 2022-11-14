@@ -28,6 +28,7 @@ import utils from 'utils';
 import participantService from 'services/Participant';
 import { useSelector } from 'react-redux';
 import constantsService from 'services/constants';
+import useQueryFilters from 'hooks/useQueryFilters';
 
 const { Option } = Select;
 
@@ -49,6 +50,8 @@ const getStockStatus = (status) => {
   return null;
 };
 
+const pageSize = 8;
+
 const ParticipantList = (props) => {
   const history = useHistory();
 
@@ -59,7 +62,18 @@ const ParticipantList = (props) => {
   const [searchBackupList, setSearchBackupList] = useState([]);
   const [participantsConstants, setParticipantsConstants] = useState({});
   const [currentSubAdminRole, setCurrentSubAdminRole] = useState({});
-  const [searchParams, setSearchParams] = useState({});
+
+  const {
+    handleFilters,
+    isLoading,
+    onChangeCurrentPageNumber,
+    setIsLoading,
+    searchParams
+  } = useQueryFilters({
+    limit: pageSize,
+    page: 1
+  });
+
   const [open, setOpen] = useState(false);
   const [excelForm] = Form.useForm();
 
@@ -89,6 +103,7 @@ const ParticipantList = (props) => {
 
   useEffect(() => {
     const getAllParticipants = async () => {
+      setIsLoading(true);
       const data = await participantService.getAllParticipants(
         new URLSearchParams(searchParams)
       );
@@ -97,6 +112,7 @@ const ParticipantList = (props) => {
         setSearchBackupList(data);
         console.log(data, 'show-data');
       }
+      setIsLoading(false);
     };
     getAllParticipants();
   }, [searchParams]);
@@ -204,22 +220,6 @@ const ParticipantList = (props) => {
     const data = utils.wildCardSearch(searchArray, value);
     setList(data);
   };
-
-  const handleFilters = (key, value) => {
-    if (value !== 'All') {
-      setSearchParams((prevSearchParams) => ({
-        ...prevSearchParams,
-        [key]: value
-      }));
-    } else {
-      setSearchParams((prevSearchParams) => {
-        const newSearchParams = { ...prevSearchParams };
-        delete newSearchParams[key];
-        return newSearchParams;
-      });
-    }
-  };
-
   const filters = () => (
     <Form>
       <Flex className="mb-1" mobileFlex={false}>
@@ -433,7 +433,18 @@ const ParticipantList = (props) => {
           </Col>
         </Flex>
         <div className="table-responsive">
-          <Table columns={tableColumns} dataSource={list} rowKey="id" />
+          <Table
+            columns={tableColumns}
+            dataSource={list}
+            rowKey="id"
+            pagination={{
+              total: 24, // TODO: get the total count from API
+              defaultCurrent: 1,
+              defaultPageSize: pageSize,
+              onChange: onChangeCurrentPageNumber
+            }}
+            loading={isLoading}
+          />
         </div>
       </Card>
     </>

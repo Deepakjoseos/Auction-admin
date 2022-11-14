@@ -11,6 +11,9 @@ import { useHistory } from 'react-router-dom';
 import utils from 'utils';
 import { useSelector } from 'react-redux';
 import auctionInventoryService from 'services/auctionInventory';
+import useQueryFilters from 'hooks/useQueryFilters';
+
+const pageSize = 8;
 
 const AuctionInventoryList = (props) => {
   let history = useHistory();
@@ -23,21 +26,42 @@ const AuctionInventoryList = (props) => {
   const [searchBackupList, setSearchBackupList] = useState([]);
   const [currentSubAdminRole, setCurrentSubAdminRole] = useState({});
 
+  const {
+    handleFilters,
+    isLoading,
+    onChangeCurrentPageNumber,
+    setIsLoading,
+    searchParams
+  } = useQueryFilters(
+    auctionId
+      ? {
+          limit: pageSize,
+          page: 1,
+          auctionId: auctionId
+        }
+      : {
+          limit: pageSize,
+          page: 1
+        }
+  );
+
   const { user } = useSelector((state) => state.auth);
 
   useEffect(() => {
     const getGroups = async () => {
+      setIsLoading(true);
       const data = await auctionInventoryService.getInventories(
-        auctionId ? `auctionId=${auctionId}` : ''
+        new URLSearchParams(searchParams)
       );
       if (data) {
         setList(data);
         setSearchBackupList(data);
         console.log(data, 'show-data');
       }
+      setIsLoading(false);
     };
     getGroups();
-  }, []);
+  }, [searchParams]);
 
   const dropdownMenu = (row) => {
     return (
@@ -190,7 +214,18 @@ const AuctionInventoryList = (props) => {
         </div>
       </Flex>
       <div className="table-responsive">
-        <Table columns={tableColumns} dataSource={list} rowKey="id" />
+        <Table
+          columns={tableColumns}
+          dataSource={list}
+          rowKey="id"
+          pagination={{
+            total: 821, // TODO: get the total count from API
+            defaultCurrent: 1,
+            defaultPageSize: pageSize,
+            onChange: onChangeCurrentPageNumber
+          }}
+          loading={isLoading}
+        />
       </div>
     </Card>
   );

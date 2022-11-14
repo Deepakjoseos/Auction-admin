@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 import {
   Card,
   Table,
@@ -9,32 +9,33 @@ import {
   Tag,
   Modal,
   Form,
-  notification,
-} from "antd";
+  notification
+} from 'antd';
 // import BrandListData from 'assets/data/product-list.data.json'
 import {
   EyeOutlined,
   SearchOutlined,
   PlusCircleOutlined
-} from "@ant-design/icons";
-import EllipsisDropdown from "components/shared-components/EllipsisDropdown";
-import Flex from "components/shared-components/Flex";
-import { useHistory } from "react-router-dom";
-import utils from "utils";
-import authAdminService from "services/auth/admin";
-import EditRoleSubAdmin from "./EditRoleSubAdmin";
+} from '@ant-design/icons';
+import EllipsisDropdown from 'components/shared-components/EllipsisDropdown';
+import Flex from 'components/shared-components/Flex';
+import { useHistory } from 'react-router-dom';
+import utils from 'utils';
+import authAdminService from 'services/auth/admin';
+import EditRoleSubAdmin from './EditRoleSubAdmin';
+import useQueryFilters from 'hooks/useQueryFilters';
 
 const { Option } = Select;
 
 const getStockStatus = (status) => {
-  if (status === "Active") {
+  if (status === 'Active') {
     return (
       <>
         <Tag color="green">Active</Tag>
       </>
     );
   }
-  if (status === "Hold") {
+  if (status === 'Hold') {
     return (
       <>
         <Tag color="red">Hold</Tag>
@@ -44,6 +45,9 @@ const getStockStatus = (status) => {
 
   return null;
 };
+
+const pageSize = 8;
+
 const UserList = () => {
   let history = useHistory();
 
@@ -55,18 +59,33 @@ const UserList = () => {
   const [isEditRoleFormOpen, setIsEditRoleFormOpen] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState(null);
 
+  const {
+    handleFilters,
+    isLoading,
+    onChangeCurrentPageNumber,
+    setIsLoading,
+    searchParams
+  } = useQueryFilters({
+    limit: pageSize,
+    page: 1
+  });
+
   const getUsers = async () => {
-    const data = await authAdminService.getAllSubAdmins();
-    console.log(data)
+    setIsLoading(true);
+    const data = await authAdminService.getAllSubAdmins(
+      new URLSearchParams(searchParams)
+    );
+    console.log(data);
     if (data) {
       setList(data);
       setSearchBackupList(data);
     }
+    setIsLoading(false);
   };
 
   useEffect(() => {
     getUsers();
-  }, []);
+  }, [searchParams]);
 
   const showModal = (row) => {
     setIsModalVisible(true);
@@ -179,8 +198,8 @@ const UserList = () => {
 
   // Filter Status Handler
   const handleShowStatus = (value) => {
-    if (value !== "All") {
-      const key = "status";
+    if (value !== 'All') {
+      const key = 'status';
       const data = utils.filterArray(searchBackupList, key, value);
       setList(data);
     } else {
@@ -188,7 +207,7 @@ const UserList = () => {
     }
   };
   const editAgentPassword = async () => {
-    console.log("agentpassword", agentPassword);
+    console.log('agentpassword', agentPassword);
     // if (agentPassword?.length > 0) {
     //   const res = await agentService.editPassword(agentIdForPassword, {
     //     password: agentPassword,
@@ -246,7 +265,18 @@ const UserList = () => {
           </div>
         </Flex>
         <div className="table-responsive">
-          <Table columns={tableColumns} dataSource={list} rowKey="id" />
+          <Table
+            columns={tableColumns}
+            dataSource={list}
+            rowKey="id"
+            pagination={{
+              total: 24, // TODO: get the total count from API
+              defaultCurrent: 1,
+              defaultPageSize: pageSize,
+              onChange: onChangeCurrentPageNumber
+            }}
+            loading={isLoading}
+          />
         </div>
       </Card>
       {/* <Modal

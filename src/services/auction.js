@@ -1,19 +1,17 @@
-import fetch from "auth/FetchInterceptor";
+import fetch from 'auth/FetchInterceptor';
 
 const auctionService = {};
-const apiRoute = "/auction";
+const apiRoute = '/auction';
 
-auctionService.getauctions = async function (
-  query =''
-) {
+auctionService.getauctions = async function (query = '') {
   try {
     const res = await fetch({
       url: `${apiRoute}/get/all/admin?${query}`,
-      method: "get",
+      method: 'get'
     });
     return res.data;
   } catch (err) {
-    console.log(err, "show-err");
+    console.log(err, 'show-err');
   }
 };
 
@@ -21,11 +19,11 @@ auctionService.getauctionById = async function (id) {
   try {
     const res = await fetch({
       url: `${apiRoute}/${id}/admin`,
-      method: "get",
+      method: 'get'
     });
     return res.data;
   } catch (err) {
-    console.log(err, "show-err");
+    console.log(err, 'show-err');
   }
 };
 
@@ -33,12 +31,12 @@ auctionService.createauction = async function (data) {
   try {
     const res = await fetch({
       url: `${apiRoute}/create`,
-      method: "post",
-      data: data,
+      method: 'post',
+      data: data
     });
     return res;
   } catch (err) {
-    console.log(err, "show-err");
+    console.log(err, 'show-err');
   }
 };
 
@@ -46,15 +44,14 @@ auctionService.updateauction = async function (id, data) {
   try {
     const res = await fetch({
       url: `${apiRoute}/${id}/admin`,
-      method: "PUT",
-      data: data,
+      method: 'PUT',
+      data: data
     });
     return res;
   } catch (err) {
-    console.log(err, "show-err");
+    console.log(err, 'show-err');
   }
 };
-
 
 auctionService.getSellerAuctions = async function (query = '') {
   try {
@@ -67,6 +64,5 @@ auctionService.getSellerAuctions = async function (query = '') {
     console.log(err, 'show-err');
   }
 };
-
 
 export default auctionService;
