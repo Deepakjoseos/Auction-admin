@@ -22,6 +22,7 @@ import depositService from 'services/deposit';
 import constantsService from 'services/constants';
 import EllipsisDropdown from 'components/shared-components/EllipsisDropdown';
 import useQueryFilters from 'hooks/useQueryFilters';
+import participantService from 'services/Participant';
 
 const { Option } = Select;
 
@@ -56,6 +57,7 @@ const DepositList = (props) => {
   const [currentSubAdminRole, setCurrentSubAdminRole] = useState({});
   const [paymentStatus, setPaymentStatus] = useState([]);
   const [paymentMode, setPaymentMode] = useState([]);
+  const [participants, setParticipants] = useState([]);
 
   const {
     handleFilters,
@@ -70,6 +72,7 @@ const DepositList = (props) => {
 
   useEffect(() => {
     getRegistrationConstants();
+    getParticipants();
   }, []);
 
   useEffect(() => {
@@ -85,6 +88,11 @@ const DepositList = (props) => {
       console.log(data, 'show-data');
     }
     setIsLoading(false);
+  };
+
+  const getParticipants = async () => {
+    const data = await participantService.getAllParticipants();
+    setParticipants(data);
   };
 
   const getRegistrationConstants = async () => {
@@ -258,7 +266,12 @@ const DepositList = (props) => {
 
   const filters = () => (
     <Form>
-      <Flex className="mb-1" mobileFlex={false}>
+      <Flex
+        className="mb-1"
+        mobileFlex={false}
+        flexDirection="column"
+        alignItems="start"
+      >
         <div className="mr-md-3 mb-3">
           <Input
             placeholder="Search"
@@ -267,11 +280,28 @@ const DepositList = (props) => {
           />
         </div>
         <Flex className="mb-3">
+          <Form.Item
+            name="participantName"
+            label="Participant name"
+            className="mr-md-3"
+          >
+            <Select
+              defaultValue="All"
+              onChange={(value) => handleFilters('participantId', value)}
+              placeholder="Participant"
+              style={{ minWidth: 120 }}
+            >
+              <Option value="All">All</Option>
+              {participants.map((participant) => (
+                <Option value={participant._id}>{participant.name}</Option>
+              ))}
+            </Select>
+          </Form.Item>
           <Form.Item name="status" label="Payment status" className="mr-md-3">
             <Select
               defaultValue="All"
               className="w-100"
-              style={{ minWidth: 180 }}
+              style={{ minWidth: 120 }}
               onChange={(value) => handleFilters('paymentStatus', value)}
               placeholder="Payment status"
             >
@@ -287,7 +317,7 @@ const DepositList = (props) => {
             <Select
               defaultValue="All"
               className="w-100"
-              style={{ minWidth: 180 }}
+              style={{ minWidth: 120 }}
               onChange={(value) => handleFilters('paymentMode', value)}
               placeholder="Payment mode"
             >

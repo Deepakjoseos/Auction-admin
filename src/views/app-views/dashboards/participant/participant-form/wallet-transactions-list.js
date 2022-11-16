@@ -1,22 +1,22 @@
-import React, { useEffect, useState } from "react";
-import { Card, Table, Input, Tag, Select } from "antd";
-import { SearchOutlined } from "@ant-design/icons";
-import Flex from "components/shared-components/Flex";
-import utils from "utils";
-import walletTransactionService from "services/walletTransaction";
-import participantService from "services/Participant";
+import React, { useEffect, useState } from 'react';
+import { Card, Table, Input, Tag, Select } from 'antd';
+import { SearchOutlined } from '@ant-design/icons';
+import Flex from 'components/shared-components/Flex';
+import utils from 'utils';
+import walletTransactionService from 'services/walletTransaction';
+import participantService from 'services/Participant';
 
 const { Option } = Select;
 
 const getStockStatus = (status) => {
-  if (status === "Verified") {
+  if (status === 'Verified') {
     return (
       <>
         <Tag color="green">Verified</Tag>
       </>
     );
   }
-  if (status === "Unverified") {
+  if (status === 'Unverified') {
     return (
       <>
         <Tag color="red">Unverified</Tag>
@@ -27,91 +27,84 @@ const getStockStatus = (status) => {
   return null;
 };
 
-const WalletTransactionParticipant = ({participantId}) => {
+const WalletTransactionParticipant = ({ participantId }) => {
   const [list, setList] = useState([]);
-  
+
   const [participants, setParticipants] = useState([]);
   const [searchBackupList, setSearchBackupList] = useState([]);
-  const [participantIdTransaction,setparticipantIdTransaction] = useState('null')
+  const [participantIdTransaction, setparticipantIdTransaction] =
+    useState('null');
   //   const [currentSubAdminRole, setCurrentSubAdminRole] = useState({});
-  const [transactions,setTransaction] =useState([])
+  const [transactions, setTransaction] = useState([]);
   useEffect(() => {
     getWalletTransaction();
-  
   }, []);
-  useEffect(()=>{
-
-
-
-
+  useEffect(() => {
     const getParticipants = async () => {
       const data = await participantService.getAllParticipants();
       setParticipants(data);
     };
-    const getTransactionsofParticipant = ()=>{
-     
-      
-          const transactions= list.filter(e => e.participant._id  === participantId);
-          console.log('transactions',transactions)
-      setTransaction(transactions)        
-      
-    }
+    const getTransactionsofParticipant = () => {
+      const transactions = list.filter(
+        (e) => e.participant._id === participantId
+      );
+      console.log('transactions', transactions);
+      setTransaction(transactions);
+    };
     getParticipants();
-    getTransactionsofParticipant()
-
-  },[participantId,list])
+    getTransactionsofParticipant();
+  }, [participantId, list]);
 
   const getWalletTransaction = async (query) => {
     const data = await walletTransactionService.getTransactions(query);
     if (data) {
       setList(data);
-      setparticipantIdTransaction(data.participantId)
-    
+      setparticipantIdTransaction(data.participantId);
+
       setSearchBackupList(data);
-      console.log(data, "show-data");
+      console.log(data, 'show-data');
     }
   };
 
- 
   const tableColumns = [
     {
-      title: "Transaction Type",
-      dataIndex: "type",
-      sorter: (a, b) => utils.antdTableSorter(a, b, "type"),
+      title: 'Transaction Type',
+      dataIndex: 'type',
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'type')
     },
     {
-      title: "Amount",
-      dataIndex: "amount",
-      sorter: (a, b) => utils.antdTableSorter(a, b, "amount"),
+      title: 'Amount',
+      dataIndex: 'amount',
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'amount')
     },
     {
-      title: "Wallet Balance",
-      dataIndex: "balance",
-      sorter: (a, b) => utils.antdTableSorter(a, b, "balance"),
+      title: 'Wallet Balance',
+      dataIndex: 'balance',
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'balance')
     },
     {
-      title: "Deposit Date",
-      dataIndex: "createdAt",
+      title: 'Deposit Date',
+      dataIndex: 'createdAt',
       render: (date) => {
         var d = new Date(Number(date)).toDateString();
         return <Flex alignItems="center">{d}</Flex>;
       },
-      sorter: (a, b) => utils.antdTableSorter(a, b, "createdAt"),
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'createdAt')
     },
     {
-      title: "Description",
-      dataIndex: "description",
-      sorter: (a, b) => utils.antdTableSorter(a, b, "description"),
+      title: 'Description',
+      dataIndex: 'description',
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'description')
     },
-    
+
     {
-      title: "Status",
-      dataIndex: "status",
+      title: 'Status',
+      dataIndex: 'status',
       render: (status) => (
         <Flex alignItems="center">{getStockStatus(status)}</Flex>
       ),
-      sorter: (a, b) => utils.antdTableSorter(a, b, "status"),
-    },
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'status')
+    }
   ];
 
   const onSearch = (e) => {
@@ -122,7 +115,7 @@ const WalletTransactionParticipant = ({participantId}) => {
   };
 
   const handleParticipantChange = async (value) => {
-    if (value === "All") await getWalletTransaction();
+    if (value === 'All') await getWalletTransaction();
     else {
       const query = { participantId: value };
       await getWalletTransaction(query);
@@ -130,8 +123,8 @@ const WalletTransactionParticipant = ({participantId}) => {
   };
 
   const handleTypeChange = (value) => {
-    if (value !== "All") {
-      const key = "type";
+    if (value !== 'All') {
+      const key = 'type';
       const data = utils.filterArray(searchBackupList, key, value);
       setList(data);
     } else {
@@ -148,7 +141,7 @@ const WalletTransactionParticipant = ({participantId}) => {
           onChange={(e) => onSearch(e)}
         />
       </div>
-      <div className="mr-md-3 mb-3">
+      {/* <div className="mr-md-3 mb-3">
         <Select
           defaultValue="All"
           className="w-100"
@@ -161,7 +154,7 @@ const WalletTransactionParticipant = ({participantId}) => {
             <Option value={participant._id}>{participant.name}</Option>
           ))}
         </Select>
-      </div>
+      </div> */}
       <div className="mr-md-3 mb-3">
         <Select
           defaultValue="All"
@@ -185,7 +178,12 @@ const WalletTransactionParticipant = ({participantId}) => {
           {filters()}
         </Flex>
         <div className="table-responsive">
-          <Table columns={tableColumns} participantIdTransaction={participantIdTransaction} dataSource={transactions} rowKey="id" />
+          <Table
+            columns={tableColumns}
+            participantIdTransaction={participantIdTransaction}
+            dataSource={transactions}
+            rowKey="id"
+          />
         </div>
       </Card>
     </>

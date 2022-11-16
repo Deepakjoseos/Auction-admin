@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Card, Table, Input, Menu } from 'antd';
+import { Card, Table, Input, Menu, Select } from 'antd';
 import { SearchOutlined, EyeOutlined } from '@ant-design/icons';
 import Flex from 'components/shared-components/Flex';
 import utils from 'utils';
 import participantService from 'services/Participant';
 import { useHistory } from 'react-router';
 import EllipsisDropdown from 'components/shared-components/EllipsisDropdown';
+import useQueryFilters from 'hooks/useQueryFilters';
+
+const { Option } = Select;
 
 const WalletList = (props) => {
   const history = useHistory();
@@ -14,19 +17,26 @@ const WalletList = (props) => {
 
   const [list, setList] = useState([]);
   const [searchBackupList, setSearchBackupList] = useState([]);
-  //   const [currentSubAdminRole, setCurrentSubAdminRole] = useState({});
-  useEffect(() => {
-    getParticipants();
-  }, []);
 
-  const getParticipants = async () => {
-    const data = await participantService.getAllParticipants();
+  const { handleFilters, isLoading, setIsLoading, searchParams } =
+    useQueryFilters();
+
+  useEffect(() => {
+    getParticipants(searchParams);
+  }, [searchParams]);
+
+  const getParticipants = async (query) => {
+    setIsLoading(true);
+    const data = await participantService.getAllParticipants(
+      new URLSearchParams(query)
+    );
     if (data) {
       const wallets = data.filter((dat) => dat?.wallet);
       setList(wallets);
       setSearchBackupList(wallets);
       console.log(wallets, 'show-data');
     }
+    setIsLoading(false);
   };
 
   const dropdownMenu = (row) => (
@@ -116,6 +126,20 @@ const WalletList = (props) => {
           onChange={(e) => onSearch(e)}
         />
       </div>
+      <div className="mr-md-3 mb-3">
+        <Select
+          defaultValue="All"
+          className="w-100"
+          style={{ minWidth: 180 }}
+          onChange={(value) => handleFilters('participantId', value)}
+          placeholder="Participant"
+        >
+          <Option value="All">All</Option>
+          {list.map((participant) => (
+            <Option value={participant._id}>{participant.name}</Option>
+          ))}
+        </Select>
+      </div>
     </Flex>
   );
 
@@ -126,7 +150,12 @@ const WalletList = (props) => {
           {filters()}
         </Flex>
         <div className="table-responsive">
-          <Table columns={tableColumns} dataSource={list} rowKey="id" />
+          <Table
+            columns={tableColumns}
+            dataSource={list}
+            rowKey="id"
+            loading={isLoading}
+          />
         </div>
       </Card>
     </>

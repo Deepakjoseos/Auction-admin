@@ -222,7 +222,12 @@ const ParticipantList = (props) => {
   };
   const filters = () => (
     <Form>
-      <Flex className="mb-1" mobileFlex={false}>
+      <Flex
+        className="mb-1"
+        alignItems="start"
+        flexDirection="column"
+        mobileFlex={false}
+      >
         <div className="mr-md-3 mb-3">
           <Input
             placeholder="Search"
@@ -234,7 +239,6 @@ const ParticipantList = (props) => {
           <Form.Item name="status" label="Status" className="mr-md-3">
             <Select
               defaultValue="All"
-              className="w-100"
               style={{ minWidth: 180 }}
               onChange={(value) => handleFilters('status', value)}
               placeholder="Status"
@@ -251,7 +255,6 @@ const ParticipantList = (props) => {
           >
             <Select
               defaultValue="All"
-              className="w-100"
               style={{ minWidth: 180 }}
               onChange={(value) => handleFilters('participantType', value)}
               placeholder="Participant Type"
@@ -267,7 +270,6 @@ const ParticipantList = (props) => {
           <Form.Item name="userType" label="User Type" className="mr-md-3">
             <Select
               defaultValue="All"
-              className="w-100"
               style={{ minWidth: 180 }}
               onChange={(value) => handleFilters('userType', value)}
               placeholder="User Type"

@@ -62,7 +62,6 @@ const AuctionList = (props) => {
   const [list, setList] = useState([]);
   const [searchBackupList, setSearchBackupList] = useState([]);
   const [selectedRows, setSelectedRows] = useState([]);
-  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [currentSubAdminRole, setCurrentSubAdminRole] = useState({});
   const [filterEnabled, setFilterEnabled] = useState(false);
   const [vehicleTypeId, setVehicleTypeId] = useState([]);
@@ -530,7 +529,6 @@ const AuctionList = (props) => {
     const searchArray = e.currentTarget.value ? list : searchBackupList;
     const data = utils.wildCardSearch(searchArray, value);
     setList(data);
-    setSelectedRowKeys([]);
   };
 
   const handleShowStatus = (value) => {

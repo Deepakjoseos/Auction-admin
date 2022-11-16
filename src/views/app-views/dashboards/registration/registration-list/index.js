@@ -18,6 +18,7 @@ import Flex from 'components/shared-components/Flex';
 import registrationService from 'services/registration';
 import constantsService from 'services/constants';
 import useQueryFilters from 'hooks/useQueryFilters';
+import participantService from 'services/Participant';
 
 const { Option } = Select;
 
@@ -31,6 +32,7 @@ const RegistrationList = (props) => {
   const [searchBackupList, setSearchBackupList] = useState([]);
   const [paymentStatus, setPaymentStatus] = useState([]);
   const [participantsConstants, setParticipantsConstants] = useState({});
+  const [participants, setParticipants] = useState([]);
 
   const {
     handleFilters,
@@ -61,6 +63,11 @@ const RegistrationList = (props) => {
     }
   };
 
+  const getParticipants = async () => {
+    const data = await participantService.getAllParticipants();
+    setParticipants(data);
+  };
+
   const getParticipantConstants = async () => {
     const data = await constantsService.getParticipant();
     if (data) {
@@ -72,6 +79,7 @@ const RegistrationList = (props) => {
   useEffect(() => {
     getPaymentStatus();
     getParticipantConstants();
+    getParticipants();
   }, []);
 
   useEffect(() => {
@@ -171,7 +179,9 @@ const RegistrationList = (props) => {
     {
       title: 'Fee Type',
       dataIndex: 'feeType',
-      key: 'feeType'
+      render: (feeType) => {
+        return feeType?.split('_').join(' ');
+      }
     },
     {
       title: 'Status',
@@ -205,7 +215,12 @@ const RegistrationList = (props) => {
   };
 
   const filters = () => (
-    <Flex className="mb-1" mobileFlex={false}>
+    <Flex
+      className="mb-1"
+      flexDirection="column"
+      alignItems="start"
+      mobileFlex={false}
+    >
       <div className="mr-md-3 mb-3">
         <Input
           placeholder="Search"
@@ -214,13 +229,29 @@ const RegistrationList = (props) => {
         />
       </div>
       <Flex className="mb-3">
+        <Form.Item
+          name="participantName"
+          label="Participant name"
+          className="mr-md-3"
+        >
+          <Select
+            defaultValue="All"
+            onChange={(value) => handleFilters('participantId', value)}
+            placeholder="Participant"
+            style={{ minWidth: 120 }}
+          >
+            <Option value="All">All</Option>
+            {participants.map((participant) => (
+              <Option value={participant._id}>{participant.name}</Option>
+            ))}
+          </Select>
+        </Form.Item>
         <Form.Item name="status" label="Payment status" className="mr-md-3">
           <Select
             defaultValue="All"
-            className="w-100"
-            style={{ minWidth: 180 }}
             onChange={(value) => handleFilters('paymentStatus', value)}
             placeholder="Payment status"
+            style={{ minWidth: 120 }}
           >
             <Option value="All">All</Option>
             {paymentStatus.map((status) => (
@@ -237,10 +268,9 @@ const RegistrationList = (props) => {
         >
           <Select
             defaultValue="All"
-            className="w-100"
-            style={{ minWidth: 180 }}
             onChange={(value) => handleFilters('participantType', value)}
             placeholder="Participant Type"
+            style={{ minWidth: 120 }}
           >
             <Option value="All">All</Option>
             {participantsConstants.ParticipantType?.map((type) => (
@@ -253,10 +283,9 @@ const RegistrationList = (props) => {
         <Form.Item name="userType" label="User Type" className="mr-md-3">
           <Select
             defaultValue="All"
-            className="w-100"
-            style={{ minWidth: 180 }}
             onChange={(value) => handleFilters('userType', value)}
             placeholder="User Type"
+            style={{ minWidth: 120 }}
           >
             <Option value="All">All</Option>
             {participantsConstants.UserType?.map((type) => (

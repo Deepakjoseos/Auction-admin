@@ -225,8 +225,9 @@ const RegistrationForm = (props) => {
     {
       title: 'Fee Type',
       dataIndex: 'feeType',
-      key: 'feeType'
-      // render: (row) => {console},
+      render: (feeType) => {
+        return feeType?.split('_').join(' ');
+      }
     },
     {
       title: 'Status',
