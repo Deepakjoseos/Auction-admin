@@ -25,7 +25,7 @@ auctionInventoryService.getInventories = async function (query = '') {
       url: `${apiRoute}/get/all/admin?${query}`,
       method: 'get'
     });
-    return res.data;
+    return res.data.inventories;
   } catch (err) {
     console.log(err, 'show-err');
   }
@@ -99,7 +99,6 @@ auctionInventoryService.getInventoryImages = async function (id) {
     console.log(err, 'show-err');
   }
 };
-
 
 auctionInventoryService.getSellerInventories = async function (query = '') {
   try {

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Card, Table, Input, Button, Menu } from 'antd';
+import { Card, Table, Input, Button, Menu, Form, Row, Col, Select } from 'antd';
 import {
   EyeOutlined,
   SearchOutlined,
@@ -12,6 +12,9 @@ import utils from 'utils';
 import { useSelector } from 'react-redux';
 import auctionInventoryService from 'services/auctionInventory';
 import useQueryFilters from 'hooks/useQueryFilters';
+import registrationService from 'services/registration';
+
+const { Option } = Select;
 
 const pageSize = 8;
 
@@ -24,7 +27,9 @@ const AuctionInventoryList = (props) => {
 
   const [list, setList] = useState([]);
   const [searchBackupList, setSearchBackupList] = useState([]);
+  const [registrationNumberList, setRegistrationNumberList] = useState([]);
   const [currentSubAdminRole, setCurrentSubAdminRole] = useState({});
+  const [form] = Form.useForm();
 
   const {
     handleFilters,
@@ -121,7 +126,6 @@ const AuctionInventoryList = (props) => {
       render: (auction) => <Flex alignItems="center">{auction?.name}</Flex>,
       sorter: (a, b) => utils.antdTableSorter(a, b, 'name')
     },
-
     {
       title: 'chasisNumber',
       dataIndex: 'vehicleInfo',
@@ -131,6 +135,11 @@ const AuctionInventoryList = (props) => {
       //   sorter: (a, b) => utils.antdTableSorter(a, b, 'status'),
     },
     {
+      title: 'Registration number',
+      dataIndex: 'registrationNumber',
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'registrationNumber')
+    },
+    {
       title: 'bidLimit',
       dataIndex: 'auction',
       render: (auction) => <Flex alignItems="center">{auction?.bidLimit} </Flex>
@@ -138,33 +147,33 @@ const AuctionInventoryList = (props) => {
     },
     {
       title: 'Start Time',
-      dataIndex: 'auction',
-      render: (auction) => {
-        var d = new Date(Number(auction?.startTimestamp)).toDateString();
+      dataIndex: 'startTimestamp',
+      render: (startTimestamp) => {
+        var d = new Date(Number(startTimestamp)).toDateString();
         return <Flex alignItems="center">{d}</Flex>;
       },
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'business')
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'startTimestamp')
     },
     {
       title: 'End Time',
-      dataIndex: 'auction',
-      render: (auction) => {
-        var d = new Date(Number(auction?.endTimestamp)).toDateString();
+      dataIndex: 'endTimestamp',
+      render: (endTimestamp) => {
+        var d = new Date(Number(endTimestamp)).toDateString();
         return <Flex alignItems="center">{d}</Flex>;
       },
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'business')
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'endTimestamp')
     },
     {
       title: 'Created By',
       dataIndex: 'createdBy',
       render: (createdBy) => <Flex alignItems="center">{createdBy?.name}</Flex>,
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'name')
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'createdBy')
     },
     {
       title: 'Updated By',
       dataIndex: 'updatedBy',
       render: (updatedBy) => <Flex alignItems="center">{updatedBy?.name}</Flex>,
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'name')
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'updatedBy')
     },
     {
       title: '',
@@ -185,15 +194,42 @@ const AuctionInventoryList = (props) => {
   };
 
   const filters = () => (
-    <Flex className="mb-1" mobileFlex={false}>
-      <div className="mr-md-3 mb-3">
-        <Input
-          placeholder="Search"
-          prefix={<SearchOutlined />}
-          onChange={(e) => onSearch(e)}
-        />
-      </div>
-    </Flex>
+    <Form
+      layout="vertical"
+      form={form}
+      name="filter_form"
+      className="ant-advanced-search-form"
+    >
+      <Row gutter={8} align="bottom">
+        <Flex className="mb-1" mobileFlex={false}>
+          <div className="mr-md-3 mb-3">
+            <Input
+              placeholder="Search"
+              prefix={<SearchOutlined />}
+              onChange={(e) => onSearch(e)}
+            />
+          </div>
+        </Flex>
+        <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name="registrationNumber" label="Registration Number">
+            <Select
+              showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              className="w-100"
+              style={{ minWidth: 180 }}
+              placeholder="Registration Number"
+            >
+              {registrationNumberList.map((reg) => (
+                <Option value={reg}> {reg} </Option>
+              ))}
+            </Select>
+          </Form.Item>
+        </Col>
+      </Row>
+    </Form>
   );
 
   return (

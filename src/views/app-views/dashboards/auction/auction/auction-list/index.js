@@ -157,6 +157,23 @@ const AuctionList = (props) => {
             <span className="ml-2">View Inventory</span>
           </Flex>
         </Menu.Item>
+        <Menu.Item>
+          <Flex alignItems="center">
+            <EyeOutlined />
+            <span className="ml-2">
+              <a
+                style={{
+                  textDecoration: 'none',
+                  color: 'black'
+                }}
+                href={row.excel}
+                download
+              >
+                Download
+              </a>
+            </span>
+          </Flex>
+        </Menu.Item>
       </Menu>
     );
   };
