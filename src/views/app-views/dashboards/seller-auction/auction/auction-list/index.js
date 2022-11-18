@@ -30,6 +30,7 @@ import clientService from 'services/client';
 import cityService from 'services/city';
 import regionService from 'services/region';
 import _ from 'lodash';
+import useQueryFilters from 'hooks/useQueryFilters';
 const { Option } = Select;
 
 const getStockStatus = (status) => {
@@ -49,6 +50,9 @@ const getStockStatus = (status) => {
   }
   return null;
 };
+
+const pageSize = 8;
+
 const AuctionList = (props) => {
   let history = useHistory();
 
@@ -63,29 +67,50 @@ const AuctionList = (props) => {
   const [client, setClientById] = useState([]);
   const [regionId, setRegionsByID] = useState([]);
   const [form] = Form.useForm();
-  const [loading, setLoading] = useState(false);
+
+  const {
+    handleFilters,
+    isLoading: isListLoading,
+    onChangeCurrentPageNumber,
+    setIsLoading: setIsListLoading,
+    searchParams,
+    totalCount,
+    setTotalCount
+  } = useQueryFilters({
+    limit: pageSize,
+    page: 1
+  });
 
   const getauctions = async (filterParams) => {
-    setLoading(true);
+    setIsListLoading(true);
     const data = await auctionService.getSellerAuctions(
       qs.stringify(filterParams)
     );
     if (data) {
-      setList(data);
+      setList(data.data);
     }
+    setIsListLoading(false);
   };
 
   useEffect(() => {
     const getAuctions = async () => {
-      const data = await auctionService.getSellerAuctions();
+      setIsListLoading(true);
+      const data = await auctionService.getSellerAuctions(
+        new URLSearchParams(searchParams)
+      );
       if (data) {
-        setList(data);
+        setList(data.data);
+        setTotalCount(data.total);
         console.log(data);
-        setSearchBackupList(data);
+        setSearchBackupList(data.data);
         console.log(data, 'show-data');
       }
+      setIsListLoading(false);
     };
+    getAuctions();
+  }, [searchParams]);
 
+  useEffect(() => {
     const getVehicleTypeById = async () => {
       const data = await vehicletypeService.getPublicVehicleTypes();
       if (data) {
@@ -113,7 +138,6 @@ const AuctionList = (props) => {
         setRegionsByID(data);
       }
     };
-    getAuctions();
     getRegionsByID();
     getVehicleTypeById();
     // getClientById();
@@ -523,7 +547,18 @@ const AuctionList = (props) => {
         </div>
       </Flex>
       <div className="table-responsive">
-        <Table columns={tableColumns} dataSource={list} rowKey="id" />
+        <Table
+          columns={tableColumns}
+          dataSource={list}
+          rowKey="id"
+          pagination={{
+            total: totalCount,
+            defaultCurrent: 1,
+            defaultPageSize: pageSize,
+            onChange: onChangeCurrentPageNumber
+          }}
+          loading={isListLoading}
+        />
       </div>
     </Card>
   );

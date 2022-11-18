@@ -25,7 +25,7 @@ auctionInventoryService.getInventories = async function (query = '') {
       url: `${apiRoute}/get/all/admin?${query}`,
       method: 'get'
     });
-    return res.data.inventories;
+    return res.data;
   } catch (err) {
     console.log(err, 'show-err');
   }

@@ -2,6 +2,8 @@ import { useState, useEffect, useCallback } from 'react';
 
 const useQueryFilters = (initParams) => {
   const [searchParams, setSearchParams] = useState(initParams);
+  const [totalPages, setTotalPages] = useState(0);
+  const [totalCount, setTotalCount] = useState(0);
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -34,7 +36,11 @@ const useQueryFilters = (initParams) => {
     handleFilters,
     onChangeCurrentPageNumber,
     isLoading,
-    searchParams
+    searchParams,
+    totalPages,
+    setTotalPages,
+    totalCount,
+    setTotalCount
   };
 };
 

@@ -69,14 +69,15 @@ const AuctionList = (props) => {
   const [client, setClientById] = useState([]);
   const [regionId, setRegionsByID] = useState([]);
   const [form] = Form.useForm();
-  const [loading, setLoading] = useState(false);
 
   const {
     handleFilters,
     isLoading: isListLoading,
     onChangeCurrentPageNumber,
     setIsLoading: setIsListLoading,
-    searchParams
+    searchParams,
+    setTotalCount,
+    totalCount
   } = useQueryFilters({
     limit: pageSize,
     page: 1
@@ -85,11 +86,12 @@ const AuctionList = (props) => {
   const { user } = useSelector((state) => state.auth);
 
   const getauctions = async (filterParams) => {
-    setLoading(true);
+    setIsListLoading(true);
     const data = await auctionService.getauctions(qs.stringify(filterParams));
     if (data) {
       setList(data);
     }
+    setIsListLoading(false);
   };
 
   useEffect(() => {
@@ -130,9 +132,9 @@ const AuctionList = (props) => {
         new URLSearchParams(searchParams)
       );
       if (data) {
-        setList(data);
-        console.log(data);
-        setSearchBackupList(data);
+        setList(data.data);
+        setTotalCount(data.total);
+        setSearchBackupList(data.data);
         console.log(data, 'show-data');
       }
       setIsListLoading(false);
@@ -590,7 +592,7 @@ const AuctionList = (props) => {
           dataSource={list}
           rowKey="id"
           pagination={{
-            total: 24, // TODO: get the total count from API
+            total: totalCount, // TODO: get the total count from API
             defaultCurrent: 1,
             defaultPageSize: pageSize,
             onChange: onChangeCurrentPageNumber

@@ -12,7 +12,6 @@ import utils from 'utils';
 import { useSelector } from 'react-redux';
 import auctionInventoryService from 'services/auctionInventory';
 import useQueryFilters from 'hooks/useQueryFilters';
-import registrationService from 'services/registration';
 
 const { Option } = Select;
 
@@ -29,6 +28,7 @@ const AuctionInventoryList = (props) => {
   const [searchBackupList, setSearchBackupList] = useState([]);
   const [registrationNumberList, setRegistrationNumberList] = useState([]);
   const [currentSubAdminRole, setCurrentSubAdminRole] = useState({});
+
   const [form] = Form.useForm();
 
   const {
@@ -36,7 +36,9 @@ const AuctionInventoryList = (props) => {
     isLoading,
     onChangeCurrentPageNumber,
     setIsLoading,
-    searchParams
+    searchParams,
+    totalCount,
+    setTotalCount
   } = useQueryFilters(
     auctionId
       ? {
@@ -59,8 +61,9 @@ const AuctionInventoryList = (props) => {
         new URLSearchParams(searchParams)
       );
       if (data) {
-        setList(data);
-        setSearchBackupList(data);
+        setList(data.inventories);
+        setSearchBackupList(data.inventories);
+        setTotalCount(data.pages * pageSize);
         console.log(data, 'show-data');
       }
       setIsLoading(false);
@@ -255,7 +258,7 @@ const AuctionInventoryList = (props) => {
           dataSource={list}
           rowKey="id"
           pagination={{
-            total: 821, // TODO: get the total count from API
+            total: totalCount,
             defaultCurrent: 1,
             defaultPageSize: pageSize,
             onChange: onChangeCurrentPageNumber

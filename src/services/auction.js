@@ -9,7 +9,10 @@ auctionService.getauctions = async function (query = '') {
       url: `${apiRoute}/get/all/admin?${query}`,
       method: 'get'
     });
-    return res.data;
+    return {
+      data: res.data,
+      total: res.total
+    };
   } catch (err) {
     console.log(err, 'show-err');
   }

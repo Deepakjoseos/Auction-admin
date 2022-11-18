@@ -84,7 +84,7 @@ const BiddingList = (props) => {
     const getAuctions = async () => {
       const data = await auctionService.getSellerAuctions();
       if (data) {
-        setAuctions(data);
+        setAuctions(data.data);
         // setSearchBackupList(data)
         console.log(data, 'show-auctions');
       }
