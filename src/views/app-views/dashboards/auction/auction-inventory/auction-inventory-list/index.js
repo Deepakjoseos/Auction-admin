@@ -1,5 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { Card, Table, Input, Button, Menu, Form, Row, Col, Select } from 'antd';
+import {
+  Card,
+  Table,
+  Input,
+  Button,
+  Menu,
+  Form,
+  Row,
+  Col,
+  Select,
+  DatePicker
+} from 'antd';
 import {
   EyeOutlined,
   SearchOutlined,
@@ -63,7 +74,7 @@ const AuctionInventoryList = (props) => {
       if (data) {
         setList(data.inventories);
         setSearchBackupList(data.inventories);
-        setTotalCount(data.pages * pageSize);
+        setTotalCount(data.inventories.length > 0 ? data.pages * pageSize : 0);
         console.log(data, 'show-data');
       }
       setIsLoading(false);
@@ -204,18 +215,9 @@ const AuctionInventoryList = (props) => {
       className="ant-advanced-search-form"
     >
       <Row gutter={8} align="bottom">
-        <Flex className="mb-1" mobileFlex={false}>
-          <div className="mr-md-3 mb-3">
-            <Input
-              placeholder="Search"
-              prefix={<SearchOutlined />}
-              onChange={(e) => onSearch(e)}
-            />
-          </div>
-        </Flex>
         <Col md={6} sm={24} xs={24} lg={6}>
           <Form.Item name="registrationNumber" label="Registration Number">
-            <Select
+            {/* <Select
               showSearch
               optionFilterProp="children"
               filterOption={(input, option) =>
@@ -228,9 +230,48 @@ const AuctionInventoryList = (props) => {
               {registrationNumberList.map((reg) => (
                 <Option value={reg}> {reg} </Option>
               ))}
-            </Select>
+            </Select> */}
+            <Input
+              className="w-100"
+              style={{ minWidth: 180 }}
+              placeholder="Registration Number"
+              onChange={(e) =>
+                handleFilters('registrationNumber', e.target.value)
+              }
+            />
           </Form.Item>
         </Col>
+        <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name={'startTimestamp'} label="Start Date">
+            <DatePicker
+              className="w-100"
+              style={{ minWidth: 180 }}
+              onChange={(value, dateString) =>
+                handleFilters('startTimestamp', new Date(value).getTime())
+              }
+            />
+          </Form.Item>
+        </Col>
+        <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name={'endTimestamp'} label="End Date">
+            <DatePicker
+              className="w-100"
+              style={{ minWidth: 180 }}
+              onChange={(value, dateString) =>
+                handleFilters('endTimestamp', new Date(value).getTime())
+              }
+            />
+          </Form.Item>
+        </Col>
+        <Flex className="mb-1" mobileFlex={false}>
+          <div className="mr-md-3 mb-3">
+            <Input
+              placeholder="Search"
+              prefix={<SearchOutlined />}
+              onChange={(e) => onSearch(e)}
+            />
+          </div>
+        </Flex>
       </Row>
     </Form>
   );

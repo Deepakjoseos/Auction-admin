@@ -101,11 +101,11 @@ const DocumentForm = (props) => {
         mutatedData.push({
           uid: Math.random() * 1000,
           name: Utils.getBaseName(doc.url),
-          status: 'done',
-          url: doc.url,
-          thumbUrl: doc.url,
-          title: doc.title ? doc.title : '',
-          description: doc.description
+          status: doc?.status,
+          url: doc?.url,
+          thumbUrl: doc?.url,
+          title: doc?.title,
+          description: doc?.description
         });
       });
       setDocs(mutatedData);
@@ -118,7 +118,7 @@ const DocumentForm = (props) => {
   }, []);
 
   const onSubmit = async () => {
-    setSubmitLoading(true);
+    const hide = message.loading('Updating documents..', 0);
 
     const mutatedDocs = [];
 
@@ -153,6 +153,7 @@ const DocumentForm = (props) => {
       message.success(`Uploaded Document.`);
       setSubmitLoading(false);
     }
+    hide();
   };
 
   return (
@@ -177,6 +178,7 @@ const DocumentForm = (props) => {
                     url={cur?.url}
                     description={cur?.description}
                     title={cur?.title}
+                    status={cur?.status}
                     file={null}
                     setImages={setDocs}
                     images={docs}
@@ -193,6 +195,7 @@ const DocumentForm = (props) => {
                     url={null}
                     description={cur?.description}
                     title={cur?.title}
+                    status={cur?.status}
                     file={cur?.originFileObj}
                     setImages={setDocs}
                     images={docs}

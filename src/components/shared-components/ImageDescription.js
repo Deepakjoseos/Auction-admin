@@ -12,6 +12,7 @@ const ImageDescription = ({
   setImages,
   setFileList,
   title,
+  status,
   hasTitle = false,
   hasStatus = false,
   onRemove
@@ -124,12 +125,13 @@ const ImageDescription = ({
           />
           {hasStatus && (
             <Select
-              onChange={onStatusValueChange}
               placeholder="Status"
               className="mt-2 w-100"
+              value={status}
+              onChange={onStatusValueChange}
             >
-              <Option value="Active">Active</Option>
-              <Option value="Hold">Hold</Option>
+              <Option value="VERIFIED">Verified</Option>
+              <Option value="UNVERIFIED">Non Verified</Option>
             </Select>
           )}
           {onRemove && (
@@ -174,10 +176,11 @@ const ImageDescription = ({
             <Select
               placeholder="Status"
               className="mt-2 w-100"
+              value={status}
               onChange={onStatusValueChange}
             >
-              <Option value="verified">Verified</Option>
-              <Option value="NonVerified">Non Verified</Option>
+              <Option value="VERIFIED">Verified</Option>
+              <Option value="UNVERIFIED">Non Verified</Option>
             </Select>
           )}
           {onRemove && (

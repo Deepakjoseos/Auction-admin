@@ -1,5 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { Card, Table, Input, Button, Menu } from 'antd';
+import {
+  Card,
+  Table,
+  Input,
+  Button,
+  Menu,
+  DatePicker,
+  Col,
+  Row,
+  Form
+} from 'antd';
 import {
   EyeOutlined,
   SearchOutlined,
@@ -10,6 +20,9 @@ import Flex from 'components/shared-components/Flex';
 import { useHistory } from 'react-router-dom';
 import utils from 'utils';
 import auctionInventoryService from 'services/auctionInventory';
+import useQueryFilters from 'hooks/useQueryFilters';
+
+const pageSize = 8;
 
 const AuctionInventoryList = (props) => {
   let history = useHistory();
@@ -20,6 +33,28 @@ const AuctionInventoryList = (props) => {
   const [searchBackupList, setSearchBackupList] = useState([]);
   const [currentSubAdminRole, setCurrentSubAdminRole] = useState({});
 
+  const [form] = Form.useForm();
+
+  const {
+    handleFilters,
+    isLoading,
+    onChangeCurrentPageNumber,
+    setIsLoading,
+    searchParams,
+    totalCount,
+    setTotalCount
+  } = useQueryFilters(
+    auctionId
+      ? {
+          limit: pageSize,
+          page: 1,
+          auctionId: auctionId
+        }
+      : {
+          limit: pageSize,
+          page: 1
+        }
+  );
 
   useEffect(() => {
     const getInventories = async () => {
@@ -53,7 +88,6 @@ const AuctionInventoryList = (props) => {
       </Menu>
     );
   };
-
 
   const viewBiddings = (row) => {
     history.push(
@@ -138,17 +172,73 @@ const AuctionInventoryList = (props) => {
   };
 
   const filters = () => (
-    <Flex className="mb-1" mobileFlex={false}>
-      <div className="mr-md-3 mb-3">
-        <Input
-          placeholder="Search"
-          prefix={<SearchOutlined />}
-          onChange={(e) => onSearch(e)}
-        />
-      </div>
-    </Flex>
+    <Form
+      layout="vertical"
+      form={form}
+      name="filter_form"
+      className="ant-advanced-search-form"
+    >
+      <Row gutter={8} align="bottom">
+        <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name="registrationNumber" label="Registration Number">
+            {/* <Select
+              showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              className="w-100"
+              style={{ minWidth: 180 }}
+              placeholder="Registration Number"
+            >
+              {registrationNumberList.map((reg) => (
+                <Option value={reg}> {reg} </Option>
+              ))}
+            </Select> */}
+            <Input
+              className="w-100"
+              style={{ minWidth: 180 }}
+              placeholder="Registration Number"
+              onChange={(e) =>
+                handleFilters('registrationNumber', e.target.value)
+              }
+            />
+          </Form.Item>
+        </Col>
+        <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name={'startTimestamp'} label="Start Date">
+            <DatePicker
+              className="w-100"
+              style={{ minWidth: 180 }}
+              onChange={(value, dateString) =>
+                handleFilters('startTimestamp', new Date(value).getTime())
+              }
+            />
+          </Form.Item>
+        </Col>
+        <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name={'endTimestamp'} label="End Date">
+            <DatePicker
+              className="w-100"
+              style={{ minWidth: 180 }}
+              onChange={(value, dateString) =>
+                handleFilters('endTimestamp', new Date(value).getTime())
+              }
+            />
+          </Form.Item>
+        </Col>
+        <Flex className="mb-1" mobileFlex={false}>
+          <div className="mr-md-3 mb-3">
+            <Input
+              placeholder="Search"
+              prefix={<SearchOutlined />}
+              onChange={(e) => onSearch(e)}
+            />
+          </div>
+        </Flex>
+      </Row>
+    </Form>
   );
-
   return (
     <Card>
       <Flex alignItems="center" justifyContent="between" mobileFlex={false}>

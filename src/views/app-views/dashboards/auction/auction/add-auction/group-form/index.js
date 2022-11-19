@@ -98,7 +98,9 @@ const FeeTypeForm = (props) => {
             closeType: data.closeType,
             bidLimit: data.bidLimit,
             termsAndConditions: data.termsAndConditions,
-            startTimestamp: moment(new Date(+data.startTimestamp).toDateString()),
+            startTimestamp: moment(
+              new Date(+data.startTimestamp).toDateString()
+            ),
             endTimestamp: moment(new Date(+data.endTimestamp).toDateString()),
             showRegNumber: data.showRegNumber,
             showChasisNumber: data.showChasisNumber,

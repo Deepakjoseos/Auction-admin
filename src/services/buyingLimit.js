@@ -18,7 +18,7 @@ buyinglLimitService.update = async (data) => {
 
 buyinglLimitService.getAll = async (query = '') => {
   try {
-    let url = `${apiRoute}/get/all/admin${query}`;
+    let url = `${apiRoute}/get/all/admin?${query}`;
 
     const res = await fetch({
       url,

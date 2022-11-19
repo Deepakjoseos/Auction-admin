@@ -17,15 +17,24 @@ const WalletList = (props) => {
 
   const [list, setList] = useState([]);
   const [searchBackupList, setSearchBackupList] = useState([]);
+  const [participants, setParticipants] = useState([]);
 
   const { handleFilters, isLoading, setIsLoading, searchParams } =
     useQueryFilters();
 
   useEffect(() => {
-    getParticipants(searchParams);
+    if (searchParams?.participantId) {
+      return getParticipantById(searchParams.participantId);
+    }
+
+    getParticipantsWallets(searchParams);
   }, [searchParams]);
 
-  const getParticipants = async (query) => {
+  useEffect(() => {
+    getParticipants();
+  }, []);
+
+  const getParticipantsWallets = async (query) => {
     setIsLoading(true);
     const data = await participantService.getAllParticipants(
       new URLSearchParams(query)
@@ -35,6 +44,22 @@ const WalletList = (props) => {
       setList(wallets);
       setSearchBackupList(wallets);
       console.log(wallets, 'show-data');
+    }
+    setIsLoading(false);
+  };
+
+  const getParticipants = async () => {
+    const data = await participantService.getAllParticipants();
+    setParticipants(data);
+  };
+
+  const getParticipantById = async (id) => {
+    setIsLoading(true);
+    const data = await participantService.getParticipantById(id);
+    if (data) {
+      setList([data]);
+      setSearchBackupList([data]);
+      console.log(data, 'show-data');
     }
     setIsLoading(false);
   };
@@ -135,9 +160,12 @@ const WalletList = (props) => {
           placeholder="Participant"
         >
           <Option value="All">All</Option>
-          {list.map((participant) => (
-            <Option value={participant._id}>{participant.name}</Option>
-          ))}
+          {participants.map(
+            (participant) =>
+              participant?.wallet && (
+                <Option value={participant._id}>{participant.name}</Option>
+              )
+          )}
         </Select>
       </div>
     </Flex>

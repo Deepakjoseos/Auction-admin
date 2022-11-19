@@ -89,7 +89,8 @@ const AuctionList = (props) => {
     setIsListLoading(true);
     const data = await auctionService.getauctions(qs.stringify(filterParams));
     if (data) {
-      setList(data);
+      setList(data.data);
+      setTotalCount(data.total);
     }
     setIsListLoading(false);
   };
@@ -343,7 +344,7 @@ const AuctionList = (props) => {
             </Select>
           </Form.Item>
         </Col>
-        <Col md={6} sm={24} xs={24} lg={6} C>
+        <Col md={6} sm={24} xs={24} lg={6}>
           <Form.Item name="cityId" label="City">
             <Select
               showSearch

@@ -88,6 +88,7 @@ const AuctionList = (props) => {
     );
     if (data) {
       setList(data.data);
+      setTotalCount(data.total);
     }
     setIsListLoading(false);
   };
