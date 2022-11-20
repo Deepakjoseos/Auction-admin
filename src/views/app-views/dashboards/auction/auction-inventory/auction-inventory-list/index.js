@@ -14,7 +14,8 @@ import {
 import {
   EyeOutlined,
   SearchOutlined,
-  PlusCircleOutlined
+  PlusCircleOutlined,
+  DownloadOutlined
 } from '@ant-design/icons';
 import EllipsisDropdown from 'components/shared-components/EllipsisDropdown';
 import Flex from 'components/shared-components/Flex';
@@ -23,6 +24,7 @@ import utils from 'utils';
 import { useSelector } from 'react-redux';
 import auctionInventoryService from 'services/auctionInventory';
 import useQueryFilters from 'hooks/useQueryFilters';
+import sheetService from 'services/sheet';
 
 const { Option } = Select;
 
@@ -33,12 +35,14 @@ const AuctionInventoryList = (props) => {
   const params = new URLSearchParams(props.location.search);
   const auctionId = params.get('auctionId');
 
-  const { addPrivilege, editPrivilege, deletePrivilege } = props;
+  const { addPrivilege, editPrivilege, deletePrivilege, fetchPrivilege } =
+    props;
 
   const [list, setList] = useState([]);
   const [searchBackupList, setSearchBackupList] = useState([]);
   const [registrationNumberList, setRegistrationNumberList] = useState([]);
   const [currentSubAdminRole, setCurrentSubAdminRole] = useState({});
+  const [downloadLink, setDownloadLink] = useState(null);
 
   const [form] = Form.useForm();
 
@@ -73,8 +77,17 @@ const AuctionInventoryList = (props) => {
     }
   };
 
+  const getDownloadLink = async () => {
+    const data = await sheetService.getSheets('sheetName=AUCTIONINVENTORY');
+
+    if (data) {
+      setDownloadLink(data);
+    }
+  };
+
   useEffect(() => {
     getRegistrationNumbers();
+    getDownloadLink();
   }, []);
 
   useEffect(() => {
@@ -295,18 +308,39 @@ const AuctionInventoryList = (props) => {
     <Card>
       <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
         {filters()}
-        <div>
+        <Flex
+          flexDirection="column"
+          alignItems="center"
+          justifyContent="between"
+          mobileFlex={false}
+        >
           {addPrivilege && (
             <Button
               onClick={addGroup}
               type="primary"
               icon={<PlusCircleOutlined />}
+              className="mb-2"
               block
             >
               Upload Auction Inventory
             </Button>
           )}
-        </div>
+
+          {fetchPrivilege && downloadLink && (
+            <Button type="primary" icon={<DownloadOutlined />} block>
+              <a
+                style={{
+                  textDecoration: 'none',
+                  color: 'black'
+                }}
+                href={downloadLink}
+                download
+              >
+                Download Auction Inventories
+              </a>
+            </Button>
+          )}
+        </Flex>
       </Flex>
       <div className="table-responsive">
         <Table

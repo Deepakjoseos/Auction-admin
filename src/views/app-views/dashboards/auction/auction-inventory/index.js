@@ -8,7 +8,6 @@ import useUserPrivilege from 'hooks/useUserPrivilege';
 const AuctionInventory = (props) => {
   const { match } = props;
   const privileges = useUserPrivilege('AUCTION_INVENTORY');
-
   return (
     <Switch>
       <Redirect

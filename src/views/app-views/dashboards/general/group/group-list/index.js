@@ -4,7 +4,8 @@ import { Card, Table, Select, Input, Button, Menu, Tag } from 'antd';
 import {
   EyeOutlined,
   SearchOutlined,
-  PlusCircleOutlined
+  PlusCircleOutlined,
+  DownloadOutlined
 } from '@ant-design/icons';
 import EllipsisDropdown from 'components/shared-components/EllipsisDropdown';
 import Flex from 'components/shared-components/Flex';
@@ -12,6 +13,7 @@ import { useHistory } from 'react-router-dom';
 import utils from 'utils';
 
 import groupService from 'services/group';
+import sheetService from 'services/sheet';
 
 const { Option } = Select;
 
@@ -35,12 +37,16 @@ const getStockStatus = (status) => {
 const GroupList = (props) => {
   let history = useHistory();
 
-  const { addPrivilege, editPrivilege, deletePrivilege } = props;
+  const { addPrivilege, editPrivilege, deletePrivilege, fetchPrivilege } =
+    props;
 
   const [list, setList] = useState([]);
   const [searchBackupList, setSearchBackupList] = useState([]);
   const [currentSubAdminRole, setCurrentSubAdminRole] = useState({});
+  const [downloadLink, setDownloadLink] = useState(null);
+
   const AUTH_TYPE = window.localStorage.getItem('auth_type');
+
   useEffect(() => {
     const getGroups = async () => {
       const data = await groupService.getGroups();
@@ -52,6 +58,18 @@ const GroupList = (props) => {
       }
     };
     getGroups();
+  }, []);
+
+  const getDownloadLink = async () => {
+    const data = await sheetService.getSheets('sheetName=GROUP');
+
+    if (data) {
+      setDownloadLink(data);
+    }
+  };
+
+  useEffect(() => {
+    getDownloadLink();
   }, []);
 
   const dropdownMenu = (row) => {
@@ -199,7 +217,12 @@ const GroupList = (props) => {
     <Card>
       <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
         {filters()}
-        <div>
+        <Flex
+          flexDirection="column"
+          alignItems="center"
+          justifyContent="between"
+          mobileFlex={false}
+        >
           {addPrivilege && (
             <Button
               onClick={addGroup}
@@ -210,7 +233,21 @@ const GroupList = (props) => {
               Add Group
             </Button>
           )}
-        </div>
+          {fetchPrivilege && downloadLink && (
+            <Button type="primary" icon={<DownloadOutlined />} block>
+              <a
+                style={{
+                  textDecoration: 'none',
+                  color: 'black'
+                }}
+                href={downloadLink}
+                download
+              >
+                Download Groups
+              </a>
+            </Button>
+          )}
+        </Flex>
       </Flex>
       <div className="table-responsive">
         <Table columns={tableColumns} dataSource={list} rowKey="id" />
