@@ -43,6 +43,18 @@ auctionInventoryService.getInventory = async function (id) {
   }
 };
 
+auctionInventoryService.getRegistrationNumbers = async function () {
+  try {
+    const res = await fetch({
+      url: `${apiRoute}/all/registration_numbers`,
+      method: 'get'
+    });
+    return res.data;
+  } catch (err) {
+    console.log(err, 'show-err');
+  }
+};
+
 auctionInventoryService.updateauction = async function (id, data) {
   try {
     const res = await fetch({

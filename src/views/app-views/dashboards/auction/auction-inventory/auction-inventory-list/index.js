@@ -65,6 +65,18 @@ const AuctionInventoryList = (props) => {
 
   const { user } = useSelector((state) => state.auth);
 
+  const getRegistrationNumbers = async () => {
+    const data = await auctionInventoryService.getRegistrationNumbers();
+
+    if (data) {
+      setRegistrationNumberList(data);
+    }
+  };
+
+  useEffect(() => {
+    getRegistrationNumbers();
+  }, []);
+
   useEffect(() => {
     const getGroups = async () => {
       setIsLoading(true);
@@ -217,7 +229,7 @@ const AuctionInventoryList = (props) => {
       <Row gutter={8} align="bottom">
         <Col md={6} sm={24} xs={24} lg={6}>
           <Form.Item name="registrationNumber" label="Registration Number">
-            {/* <Select
+            <Select
               showSearch
               optionFilterProp="children"
               filterOption={(input, option) =>
@@ -226,19 +238,22 @@ const AuctionInventoryList = (props) => {
               className="w-100"
               style={{ minWidth: 180 }}
               placeholder="Registration Number"
+              onChange={(value) => handleFilters('registrationNumber', value)}
+              defaultValue={'All'}
             >
+              <Option value={'All'}> All </Option>
               {registrationNumberList.map((reg) => (
-                <Option value={reg}> {reg} </Option>
+                <Option value={reg._id}> {reg._id} </Option>
               ))}
-            </Select> */}
-            <Input
+            </Select>
+            {/* <Input
               className="w-100"
               style={{ minWidth: 180 }}
               placeholder="Registration Number"
               onChange={(e) =>
                 handleFilters('registrationNumber', e.target.value)
               }
-            />
+            /> */}
           </Form.Item>
         </Col>
         <Col md={6} sm={24} xs={24} lg={6}>
