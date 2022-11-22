@@ -598,7 +598,8 @@ const AuctionList = (props) => {
             total: totalCount, // TODO: get the total count from API
             defaultCurrent: 1,
             defaultPageSize: pageSize,
-            onChange: onChangeCurrentPageNumber
+            onChange: onChangeCurrentPageNumber,
+            showSizeChanger: true
           }}
           loading={isListLoading}
         />
