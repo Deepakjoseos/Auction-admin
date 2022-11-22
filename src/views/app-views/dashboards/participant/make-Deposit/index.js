@@ -9,7 +9,7 @@ import useUpload from 'hooks/useUpload';
 import fileManagerService from 'services/FileManager';
 
 const DepositForm = (props) => {
-  const {  participantId } = props;
+  const { participantId } = props;
   const history = useHistory();
 
   const [form] = Form.useForm();
@@ -67,6 +67,7 @@ const DepositForm = (props) => {
       .then(async (values) => {
         if (uploadedImg.length === 0 && uploadedImg === null) {
           message.error('Please upload image');
+          setSubmitLoading(false);
           return;
         }
 

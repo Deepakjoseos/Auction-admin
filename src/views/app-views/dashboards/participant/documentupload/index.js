@@ -127,6 +127,8 @@ const DocumentForm = (props) => {
 
       if (!doc.title || !doc.description) {
         message.error('Please fill all the documents required fields');
+        hide();
+        setSubmitLoading(false);
         return;
       }
 

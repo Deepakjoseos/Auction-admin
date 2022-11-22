@@ -92,6 +92,7 @@ const BrandForm = (props) => {
       .then(async (values) => {
         if (uploadedImg.length < 1) {
           message.error('Please upload atleast one image');
+          setSubmitLoading(false);
           return;
         }
 
@@ -99,14 +100,16 @@ const BrandForm = (props) => {
 
         if (uploadedImg[uploadedImg.length - 1].originFileObj) {
           imgValue = await fileManagerService.getImageUrl(
-            uploadedImg[uploadedImg.length - 1].originFileObj
+            uploadedImg[uploadedImg.length - 1].originFileObj,
+            'brand'
           );
         }
 
-        values.logo = imgValue;
-
         if (mode === ADD) {
-          const created = await brandService.createBrand(values);
+          const created = await brandService.createBrand({
+            ...values,
+            logo: imgValue
+          });
           if (created) {
             message.success(`Created ${values.name} to Brand list`);
             history.goBack();
@@ -114,7 +117,10 @@ const BrandForm = (props) => {
         }
 
         if (mode === EDIT) {
-          const edited = await brandService.editBrand(param.id, values);
+          const edited = await brandService.editBrand(param.id, {
+            ...values,
+            logo: imgValue
+          });
           if (edited) {
             message.success(`Edited ${values.name} to Brand list`);
             history.goBack();

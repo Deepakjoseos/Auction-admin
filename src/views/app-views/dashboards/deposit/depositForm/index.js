@@ -77,6 +77,7 @@ const DepositForm = (props) => {
         if (mode === MAKE) {
           if (uploadedImg.length === 0 && uploadedImg === null) {
             message.error('Please upload image');
+            setSubmitLoading(false);
             return;
           }
 

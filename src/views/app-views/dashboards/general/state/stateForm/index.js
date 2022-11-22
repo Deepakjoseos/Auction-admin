@@ -31,10 +31,10 @@ const ClientForm = (props) => {
     console.log(data);
     if (data) {
       form.setFieldsValue({
-        name: data.name,
-        status: data.status,
-        regionId: data.region,
-        abbreviation: data.abbreviation
+        name: data?.name,
+        status: data?.status,
+        regionId: data?.region._id,
+        abbreviation: data?.abbreviation
       });
     } else {
       history.replace('/app/dashboards/general/state/state-list');

@@ -34,11 +34,11 @@ const uploadImages = async (data) => {
 
 fileManagerService.uploadImages = uploadImages;
 
-fileManagerService.getImageUrl = async (file) => {
+fileManagerService.getImageUrl = async (file, category = 'general') => {
   console.log(file, 'fileeeee');
   const formData = new FormData();
   formData.append('files', file);
-  formData.append('imageFor', 'general');
+  formData.append('imageFor', category);
   const urls = await uploadImages(formData);
 
   if (urls) {

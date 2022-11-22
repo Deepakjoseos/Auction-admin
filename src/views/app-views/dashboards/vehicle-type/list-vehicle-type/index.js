@@ -101,6 +101,21 @@ const VehicleTypeList = (props) => {
 
   const tableColumns = [
     {
+      title: 'Vehicle Type',
+      dataIndex: 'name',
+      render: (_, record) => (
+        <div className="d-flex">
+          <AvatarStatus
+            size={60}
+            type="square"
+            src={record.image}
+            name={record.name}
+          />
+        </div>
+      ),
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'name')
+    },
+    {
       title: 'Name',
       dataIndex: 'name',
       sorter: (a, b) => utils.antdTableSorter(a, b, 'name')
@@ -118,7 +133,9 @@ const VehicleTypeList = (props) => {
       dataIndex: 'actions',
       render: (_, elm) => (
         <div className="text-right">
-          {(editPrivilege || deletePrivilege) && <EllipsisDropdown menu={dropdownMenu(elm)} />}
+          {(editPrivilege || deletePrivilege) && (
+            <EllipsisDropdown menu={dropdownMenu(elm)} />
+          )}
         </div>
       )
     }

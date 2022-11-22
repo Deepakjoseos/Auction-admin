@@ -183,9 +183,11 @@ const GeneralField = ({
     </Col>
     <Col xs={24} sm={24} md={7}>
       <Card title="Receipt">
-        <Upload listType="picture-card" name="logo" {...propsImages}>
-          <CustomIcon className="display-3" svg={ImageSvg} />
-        </Upload>
+        <Form.Item name="logo" rules={rules.receiptNumber}>
+          <Upload listType="picture-card" name="logo" {...propsImages}>
+            <CustomIcon className="display-3" svg={ImageSvg} />
+          </Upload>
+        </Form.Item>
       </Card>
     </Col>
   </Row>

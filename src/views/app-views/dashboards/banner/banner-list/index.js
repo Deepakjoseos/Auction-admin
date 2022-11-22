@@ -124,6 +124,21 @@ const BannerList = (props) => {
   // Antd Table Columns
   const tableColumns = [
     {
+      title: 'Banner',
+      dataIndex: 'name',
+      render: (_, record) => (
+        <div className="d-flex">
+          <AvatarStatus
+            size={60}
+            type="square"
+            src={record.image}
+            name={record.name}
+          />
+        </div>
+      ),
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'name')
+    },
+    {
       title: 'Title',
       dataIndex: 'title',
       sorter: (a, b) => utils.antdTableSorter(a, b, 'name')

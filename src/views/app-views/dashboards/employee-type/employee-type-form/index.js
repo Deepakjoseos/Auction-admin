@@ -26,6 +26,7 @@ const EmployeeTypeForm = (props) => {
   const getPermissions = async () => {
     const data = await constantsService.getConstantsRole();
     if (data) {
+      console.log(data, 'data');
       const curPermissions = data?.map((item) => {
         return {
           module: item,

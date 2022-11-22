@@ -131,6 +131,7 @@ const InformationForm = (props) => {
 
         if (uploadedImg.length < 1) {
           message.error('Please upload atleast one image');
+          setSubmitLoading(false);
           return;
         }
 

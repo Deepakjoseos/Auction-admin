@@ -99,6 +99,7 @@ const BrandVariantForm = (props) => {
       .then(async (values) => {
         if (uploadedImg.length < 1) {
           message.error('Please upload atleast one image');
+          setSubmitLoading(false);
           return;
         }
 
@@ -106,7 +107,8 @@ const BrandVariantForm = (props) => {
 
         if (uploadedImg[uploadedImg.length - 1].originFileObj) {
           imgValue = await fileManagerService.getImageUrl(
-            uploadedImg[uploadedImg.length - 1].originFileObj
+            uploadedImg[uploadedImg.length - 1].originFileObj,
+            'brand'
           );
         }
 
@@ -154,7 +156,9 @@ const BrandVariantForm = (props) => {
               alignItems="center"
             >
               <h2 className="mb-3">
-                {mode === 'ADD' ? 'Add New Brand' : `Edit Brand`}{' '}
+                {mode === 'ADD'
+                  ? 'Add New Brand Variant'
+                  : `Edit Brand Variant`}{' '}
               </h2>
               <div className="mb-3">
                 <Button

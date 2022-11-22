@@ -87,6 +87,7 @@ const BannerForm = (props) => {
       .then(async (values) => {
         if (uploadedImg.length < 1) {
           message.error('Please upload atleast one image');
+          setSubmitLoading(false);
           return;
         }
 

@@ -88,7 +88,7 @@ const WinningList = (props) => {
   const getAuctionInventories = async () => {
     const data = await auctionInventoryService.getInventories();
     if (data) {
-      setAuctionInventories(data);
+      setAuctionInventories(data.inventories);
     }
   };
 

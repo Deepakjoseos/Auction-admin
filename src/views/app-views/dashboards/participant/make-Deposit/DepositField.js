@@ -283,9 +283,11 @@ const DepositField = ({
           </Card>
           <Col xs={24} sm={24} md={7}>
             <Card title="Receipt">
-              <Upload listType="picture-card" name="logo" {...propsImages}>
-                <CustomIcon className="display-3" svg={ImageSvg} />
-              </Upload>
+              <Form.Item name="logo" rules={rules.recieptUrl}>
+                <Upload listType="picture-card" name="logo" {...propsImages}>
+                  <CustomIcon className="display-3" svg={ImageSvg} />
+                </Upload>
+              </Form.Item>
             </Card>
           </Col>
           <Button

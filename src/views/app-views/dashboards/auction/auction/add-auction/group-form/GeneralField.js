@@ -10,10 +10,14 @@ import {
   DatePicker,
   Checkbox,
   Upload,
-  Button
+  Button,
+  message
 } from 'antd';
 import Icon from 'components/util-components/Icon';
 import fileManagerService from 'services/FileManager';
+import { ImageSvg } from 'assets/svg/icon';
+import CustomIcon from 'components/util-components/CustomIcon';
+
 // const { Dragger } = Upload
 const { Option } = Select;
 
@@ -73,12 +77,14 @@ const GeneralField = ({
   }, [imageUrl, setImages]);
 
   const onImportImage = async ({ fileList }) => {
+    const hide = message.loading('Uploading image..', 0);
     if (fileList.length > 0) {
       const imageUrl = await fileManagerService.getImageUrl(
         fileList[fileList.length - 1].originFileObj
       );
       setImageUrl(imageUrl);
     }
+    hide();
   };
 
   return (
@@ -86,7 +92,7 @@ const GeneralField = ({
       <Col xs={24} sm={24} md={17}>
         <Card title="Basic Info">
           <Form.Item label="Upload image" rules={rules.required}>
-            <Upload.Dragger
+            <Upload
               multiple={false}
               type="file"
               accept="image/png, image/jpeg, image/jpg"
@@ -96,11 +102,8 @@ const GeneralField = ({
               fileList={images}
               showUploadList={{ showPreviewIcon: false }}
             >
-              <Button className="upload-wrap">
-                <Icon type="upload" />
-                <span className="upload-text">Drag/Upload Image File</span>
-              </Button>
-            </Upload.Dragger>
+              <CustomIcon className="display-3" svg={ImageSvg} />
+            </Upload>
           </Form.Item>
 
           <Form.Item name="name" label="Name" rules={rules.name}>
@@ -109,7 +112,7 @@ const GeneralField = ({
           <Form.Item
             name="businessType"
             label="Business Type"
-            rules={rules.status}
+            rules={rules.required}
           >
             <Select placeholder="Business Type">
               <Option value="Bank">Bank</Option>
@@ -118,7 +121,11 @@ const GeneralField = ({
             </Select>
           </Form.Item>
 
-          <Form.Item name="incrementAmount" label="IncrementAmount">
+          <Form.Item
+            name="incrementAmount"
+            label="IncrementAmount"
+            rules={rules.required}
+          >
             <InputNumber
               placeholder="incrementAmount"
               size="large"
@@ -130,7 +137,7 @@ const GeneralField = ({
           <Form.Item
             name="vehicleTypeId"
             label="Vehicle Type"
-            // rules={rules.status}
+            rules={rules.required}
           >
             <Select placeholder="Vehicle Type">
               {vehicleTypes.map((item) => (
@@ -140,7 +147,7 @@ const GeneralField = ({
               ))}
             </Select>
           </Form.Item>
-          <Form.Item name="cityId" label="City">
+          <Form.Item name="cityId" label="City" rules={rules.required}>
             <Select placeholder="City">
               {cities.map((item) => (
                 <Option key={item._id} value={item._id}>
@@ -149,7 +156,7 @@ const GeneralField = ({
               ))}
             </Select>
           </Form.Item>
-          <Form.Item name="regionId" label="Region">
+          <Form.Item name="regionId" label="Region" rules={rules.required}>
             <Select placeholder="Region">
               {regions.map((item) => (
                 <Option key={item._id} value={item._id}>
@@ -159,7 +166,7 @@ const GeneralField = ({
             </Select>
           </Form.Item>
 
-          <Form.Item name="clientId" label="Client">
+          <Form.Item name="clientId" label="Client" rules={rules.required}>
             <Select placeholder="Client">
               {clients.map((item) => (
                 <Option key={item._id} value={item._id}>
@@ -169,7 +176,7 @@ const GeneralField = ({
             </Select>
           </Form.Item>
 
-          <Form.Item name="sellerId" label="sellerId">
+          <Form.Item name="sellerId" label="sellerId" rules={rules.required}>
             <Select placeholder="seller">
               {participant.map((participant) => (
                 <Option key={participant._id} value={participant._id}>
@@ -179,7 +186,7 @@ const GeneralField = ({
             </Select>
           </Form.Item>
 
-          <Form.Item name="type" label="Type">
+          <Form.Item name="type" label="Type" rules={rules.required}>
             <Select placeholder="Type">
               <Option value="Yard">Yard</Option>
               <Option value="Online">Online</Option>
@@ -187,49 +194,49 @@ const GeneralField = ({
               {/* <Option value="Open">Open</Option> */}
             </Select>
           </Form.Item>
-          <Form.Item name="format" label="Format">
+          <Form.Item name="format" label="Format" rules={rules.required}>
             <Select placeholder="Status">
               <Option value="Close">Close</Option>
               <Option value="Open">Open</Option>
             </Select>
           </Form.Item>
 
-          <Form.Item name="status" label="Status" rules={rules.status}>
+          <Form.Item name="status" label="Status" rules={rules.required}>
             <Select placeholder="Status">
               <Option value="Active">Active</Option>
               <Option value="Hold">Hold</Option>
             </Select>
           </Form.Item>
 
-          <Form.Item name="closeType" label="closeType" rules={rules.status}>
+          <Form.Item name="closeType" label="closeType" rules={rules.required}>
             <Select placeholder="Close Type">
               <Option value="Show Rank">Show rank</Option>
               <Option value="Hide Rank">Hide rank</Option>
             </Select>
           </Form.Item>
-          <Form.Item name="bidLimit" label="Bid Limit" rules={rules.status}>
+          <Form.Item name="bidLimit" label="Bid Limit" rules={rules.required}>
             <Input type={'number'} />
           </Form.Item>
           <Form.Item
             name="termsAndConditions"
             label="Terms And Conditions"
-            rules={rules.status}
+            rules={rules.required}
           >
             <Input type={'text'} />
           </Form.Item>
           <Form.Item
             name={'startTimestamp'}
             label="Start Date"
-            rules={rules.status}
+            rules={rules.required}
           >
-            <DatePicker />
+            <DatePicker showTime />
           </Form.Item>
           <Form.Item
             name={'endTimestamp'}
             label="End Date"
-            rules={rules.status}
+            rules={rules.required}
           >
-            <DatePicker />
+            <DatePicker showTime />
           </Form.Item>
 
           <Form.Item

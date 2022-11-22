@@ -104,6 +104,7 @@ const RegistrationForm = (props) => {
         // Checking if image exists
         if (!uploadedImg || uploadedImg.length < 1) {
           message.error('Please upload Receipt');
+          setSubmitLoading(false);
           return;
         }
 

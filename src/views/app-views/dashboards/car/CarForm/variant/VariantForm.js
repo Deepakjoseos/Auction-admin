@@ -1172,11 +1172,13 @@ const VariantsForm = ({
 
           <Tabs.TabPane tab="Images" key="2">
             <Card title="Media">
-              <Upload listType="picture-card" name="image" {...propsImages}>
-                <CustomIcon className="display-3" svg={ImageSvg} />
-              </Upload>
+              <Form.Item name="image" rules={[{ required: true }]}>
+                <Upload listType="picture-card" name="image" {...propsImages}>
+                  <CustomIcon className="display-3" svg={ImageSvg} />
+                </Upload>
+              </Form.Item>
             </Card>
-            <h4>Add Image Description</h4>
+            {/* <h4>Add Image Description</h4>
             {images?.map((cur) => (
               <>
                 {cur?.url ? (
@@ -1203,7 +1205,7 @@ const VariantsForm = ({
                   </>
                 )}
               </>
-            ))}
+            ))} */}
           </Tabs.TabPane>
         </Tabs>
       </Form>

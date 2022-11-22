@@ -98,10 +98,8 @@ const FeeTypeForm = (props) => {
             closeType: data.closeType,
             bidLimit: data.bidLimit,
             termsAndConditions: data.termsAndConditions,
-            startTimestamp: moment(
-              new Date(+data.startTimestamp).toDateString()
-            ),
-            endTimestamp: moment(new Date(+data.endTimestamp).toDateString()),
+            startTimestamp: moment(new Date(+data.startTimestamp)),
+            endTimestamp: moment(new Date(+data.endTimestamp)),
             showRegNumber: data.showRegNumber,
             showChasisNumber: data.showChasisNumber,
             showEngineNumber: data.showEngineNumber,
@@ -141,6 +139,8 @@ const FeeTypeForm = (props) => {
         values.endTimestamp = `${new Date(values.endTimestamp).getTime()}`;
         if (!imageUrl) {
           message.error('Please enter all required field ');
+          setSubmitLoading(false);
+          return;
         }
 
         values.image = imageUrl;

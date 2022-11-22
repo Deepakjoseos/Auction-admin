@@ -39,7 +39,7 @@ const InformationList = (props) => {
   let history = useHistory();
 
   const { addPrivilege, editPrivilege, deletePrivilege } = props;
-  
+
   const [list, setList] = useState([]);
   const [searchBackupList, setSearchBackupList] = useState([]);
   const [selectedRows, setSelectedRows] = useState([]);

@@ -115,7 +115,7 @@ const BiddingList = (props) => {
     const getAuctions = async () => {
       const data = await auctionService.getauctions();
       if (data) {
-        setAuctions(data);
+        setAuctions(data.data);
         // setSearchBackupList(data)
         console.log(data, 'show-auctions');
       }
@@ -124,7 +124,7 @@ const BiddingList = (props) => {
     const getAuctionInventories = async () => {
       const data = await auctionInventoryService.getInventories();
       if (data) {
-        setAuctionInventories(data);
+        setAuctionInventories(data.inventories);
         // setSearchBackupList(data)
         console.log(data, 'show-auction_inventories');
       }
@@ -450,7 +450,7 @@ const BiddingList = (props) => {
         >
           {auctionInventories.map((item) => (
             <Option key={item.id} value={item.id}>
-              {item.name}
+              {item.registrationNumber}
             </Option>
           ))}
         </Select>

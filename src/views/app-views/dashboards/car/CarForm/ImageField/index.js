@@ -1,18 +1,27 @@
-import { Card, Col, Row, Upload } from 'antd';
+import { Card, Col, Row, Upload, Form } from 'antd';
 import { ImageSvg } from 'assets/svg/icon';
 import CustomIcon from 'components/util-components/CustomIcon';
 import React from 'react';
-import ImageDescription from '../../../../../../components/shared-components/ImageDescription';
 
 const ImageField = ({ propsImages, images, setImages }) => {
   return (
     <Card title="Media">
       {/* <Row gutter={16}>
         <Col xs={24} sm={24} md={17}> */}
-      <Upload listType="picture-card" name="image" {...propsImages}>
-        <CustomIcon className="display-3" svg={ImageSvg} />
-      </Upload>
-      <h4>Add Description Note </h4>
+      <Form.Item
+        name="image"
+        rules={[
+          {
+            required: true,
+            message: 'Required'
+          }
+        ]}
+      >
+        <Upload listType="picture-card" name="image" {...propsImages}>
+          <CustomIcon className="display-3" svg={ImageSvg} />
+        </Upload>
+      </Form.Item>
+      {/* <h4>Add Description Note </h4>
       {images?.map((cur) => (
         <>
           {cur?.url ? (
@@ -39,7 +48,7 @@ const ImageField = ({ propsImages, images, setImages }) => {
             </>
           )}
         </>
-      ))}
+      ))} */}
       {/* </Col>
       </Row> */}
     </Card>

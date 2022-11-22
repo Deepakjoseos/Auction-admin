@@ -187,13 +187,13 @@ const ParticipantList = (props) => {
       title: 'Participant Type',
       dataIndex: 'participantType'
     },
-    {
-      title: 'GST',
-      dataIndex: 'gst',
-      render: (text, row) => {
-        return <span>{row.gst ? 'Yes' : 'No'}</span>;
-      }
-    },
+    // {
+    //   title: 'GST',
+    //   dataIndex: 'gst',
+    //   render: (text, row) => {
+    //     return <span>{row.gst ? 'Yes' : 'No'}</span>;
+    //   }
+    // },
     {
       title: 'Status',
       dataIndex: 'status',
