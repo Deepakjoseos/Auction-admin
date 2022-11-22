@@ -94,100 +94,20 @@ const rules = {
 };
 
 const DepositField = ({
-  participants,
   paymentModes,
   onFinish,
   submitLoading,
   buyerEligibleBuisness,
-  propsImages,
-  participantId
+  propsImages
 }) => {
   let history = useHistory();
-
-  const [deposits, setDeposits] = useState([]);
-
-  useEffect(() => {
-    getDeposits();
-  }, []);
-
-  const getDeposits = async () => {
-    const data = await depositService.getDeposits(
-      `participantId=${participantId}`
-    );
-    if (data) {
-      setDeposits(data);
-      console.log(data, 'show-data');
-    }
-  };
 
   const makeDeposit = () => {
     history.push(`/app/dashboards/deposit/make-deposit`);
   };
 
-  // Antd Table Columns
-  const tableColumns = [
-    {
-      title: 'Amount',
-      dataIndex: 'amount',
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'amount')
-    },
-    {
-      title: 'Counted In',
-      dataIndex: 'countedIn',
-      render: (date) => {
-        var d = new Date(Number(date)).toDateString();
-        return <Flex alignItems="center">{d}</Flex>;
-      },
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'countedIn')
-    },
-    {
-      title: 'Deposit Date',
-      dataIndex: 'createdAt',
-      render: (date) => {
-        var d = new Date(Number(date)).toDateString();
-        return <Flex alignItems="center">{d}</Flex>;
-      },
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'createdAt')
-    },
-    {
-      title: 'Business Type',
-      dataIndex: 'businessType',
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'businessType')
-    },
-    {
-      title: 'Payment Mode',
-      dataIndex: 'paymentMode',
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'paymentMode')
-    },
-    {
-      title: 'Remark',
-      dataIndex: 'remark',
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'remark')
-    },
-    {
-      title: 'Participant',
-      dataIndex: 'participant',
-      render: (participant) => participant?.name,
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'name')
-    },
-    {
-      title: 'Manager',
-      dataIndex: 'relationshipManager',
-      render: (relationshipManager) => relationshipManager?.name,
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'name')
-    }
-  ];
-
   return (
     <>
-      {deposits?.length > 0 && (
-        <Table
-          className="table-responsive"
-          columns={tableColumns}
-          dataSource={deposits}
-          rowKey="id"
-        />
-      )}
       <Row gutter={16}>
         <Col xs={24} sm={24} md={17}>
           <Card title="Basic Info">
@@ -283,7 +203,7 @@ const DepositField = ({
           </Card>
           <Col xs={24} sm={24} md={7}>
             <Card title="Receipt">
-              <Form.Item name="logo" rules={rules.recieptUrl}>
+              <Form.Item name="logo" rules={rules.receiptNumber}>
                 <Upload listType="picture-card" name="logo" {...propsImages}>
                   <CustomIcon className="display-3" svg={ImageSvg} />
                 </Upload>

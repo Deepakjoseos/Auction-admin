@@ -17,6 +17,7 @@ import Icon from 'components/util-components/Icon';
 import fileManagerService from 'services/FileManager';
 import { ImageSvg } from 'assets/svg/icon';
 import CustomIcon from 'components/util-components/CustomIcon';
+import Editor from 'components/shared-components/Editor';
 
 // const { Dragger } = Upload
 const { Option } = Select;
@@ -55,7 +56,8 @@ const GeneralField = ({
   clients,
   participant,
   setImageUrl,
-  imageUrl
+  imageUrl,
+  form
 }) => {
   // const [citys, setCitys] = useState([]);
   // const [regions, setRegions] = useState([]);
@@ -222,21 +224,26 @@ const GeneralField = ({
             label="Terms And Conditions"
             rules={rules.required}
           >
-            <Input type={'text'} />
+            <Editor
+              placeholder="Write something..."
+              editorHtml={form.getFieldValue('termsAndConditions') || ''}
+              onChange={(e) => form.setFieldsValue({ termsAndConditions: e })}
+              name="termsAndConditions"
+            />
           </Form.Item>
           <Form.Item
             name={'startTimestamp'}
             label="Start Date"
             rules={rules.required}
           >
-            <DatePicker showTime />
+            <DatePicker showTime={{ use12Hours: true }} />
           </Form.Item>
           <Form.Item
             name={'endTimestamp'}
             label="End Date"
             rules={rules.required}
           >
-            <DatePicker showTime />
+            <DatePicker showTime={{ use12Hours: true }} />
           </Form.Item>
 
           <Form.Item

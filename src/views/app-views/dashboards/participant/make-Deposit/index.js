@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Form, message } from 'antd';
+import { Form, message, Table } from 'antd';
 import { useHistory } from 'react-router-dom';
 import participantService from 'services/Participant';
 import constantsService from 'services/constants';
@@ -7,6 +7,8 @@ import depositService from 'services/deposit';
 import DepositField from './DepositField';
 import useUpload from 'hooks/useUpload';
 import fileManagerService from 'services/FileManager';
+import utils from 'utils';
+import Flex from 'components/shared-components/Flex';
 
 const DepositForm = (props) => {
   const { participantId } = props;
@@ -18,6 +20,21 @@ const DepositForm = (props) => {
   const [paymentModes, setPaymentModes] = useState([]);
   const [buyerEligibleBuisness, setBuyerEligibleBuisness] = useState([]);
   const [uploadedImg, setImage] = useState(null);
+  const [deposits, setDeposits] = useState([]);
+
+  useEffect(() => {
+    getDeposits();
+  }, []);
+
+  const getDeposits = async () => {
+    const data = await depositService.getDeposits(
+      `participantId=${participantId}`
+    );
+    if (data) {
+      setDeposits(data);
+      console.log(data, 'show-data');
+    }
+  };
 
   useEffect(() => {
     registration();
@@ -92,6 +109,8 @@ const DepositForm = (props) => {
         const deposited = await depositService.makeDeposit(data);
         if (deposited) {
           message.success(`Deposit ${values.amount}`);
+          form.resetFields();
+          getDeposits();
         }
         setSubmitLoading(false);
       })
@@ -102,8 +121,70 @@ const DepositForm = (props) => {
       });
   };
 
+  // Antd Table Columns
+  const tableColumns = [
+    {
+      title: 'Amount',
+      dataIndex: 'amount',
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'amount')
+    },
+    {
+      title: 'Counted In',
+      dataIndex: 'countedIn',
+      render: (date) => {
+        var d = new Date(Number(date)).toDateString();
+        return <Flex alignItems="center">{d}</Flex>;
+      },
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'countedIn')
+    },
+    {
+      title: 'Deposit Date',
+      dataIndex: 'createdAt',
+      render: (date) => {
+        var d = new Date(Number(date)).toDateString();
+        return <Flex alignItems="center">{d}</Flex>;
+      },
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'createdAt')
+    },
+    {
+      title: 'Business Type',
+      dataIndex: 'businessType',
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'businessType')
+    },
+    {
+      title: 'Payment Mode',
+      dataIndex: 'paymentMode',
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'paymentMode')
+    },
+    {
+      title: 'Remark',
+      dataIndex: 'remark',
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'remark')
+    },
+    // {
+    //   title: 'Participant',
+    //   dataIndex: 'participant',
+    //   render: (participant) => participant?.name,
+    //   sorter: (a, b) => utils.antdTableSorter(a, b, 'name')
+    // },
+    {
+      title: 'Manager',
+      dataIndex: 'relationshipManager',
+      render: (relationshipManager) => relationshipManager?.name,
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'name')
+    }
+  ];
+
   return (
     <>
+      {deposits?.length > 0 && (
+        <Table
+          className="table-responsive"
+          columns={tableColumns}
+          dataSource={deposits}
+          rowKey="id"
+        />
+      )}
       <Form
         layout="vertical"
         form={form}

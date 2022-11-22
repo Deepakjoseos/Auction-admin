@@ -132,6 +132,25 @@ const GroupList = (props) => {
       dataIndex: 'business',
       sorter: (a, b) => utils.antdTableSorter(a, b, 'business')
     },
+    {
+      title: 'Business',
+      key: 'businessTypes',
+      dataIndex: 'businessTypes',
+      render: (businessTypes) => (
+        <span>
+          {businessTypes.map((businessType) => (
+            <Tag
+              style={{ marginBottom: '1rem' }}
+              color={'geekblue'}
+              key={businessType}
+            >
+              {businessType}
+            </Tag>
+          ))}
+        </span>
+      ),
+      sorter: (a, b) => a.permissions.length > b.permissions.length
+    },
     // {
     //   title: "Vehicle",
     //   dataIndex: "vehicle",

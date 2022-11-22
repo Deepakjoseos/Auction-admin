@@ -15,7 +15,7 @@ const BuyingLimitList = ({ participantId }) => {
 
   const getBuyingLimits = async () => {
     const data = await buyinglLimitService.getAll(
-      `?participantId=${participantId}`
+      `participantId=${participantId}`
     );
     if (data) {
       setList(data);

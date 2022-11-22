@@ -96,16 +96,12 @@ const ImageDescription = ({
   return (
     <Card>
       {url ? (
-        <Flex
-          flexDirection="column"
-          alignItems="center"
-          justifyContent="center"
-        >
+        <Flex flexDirection="row" alignItems="center" justifyContent="center">
           <Image
             style={{
               objectFit: 'scale-down',
-              width: '250px',
-              height: '250px'
+              width: '150px',
+              height: '150px'
             }}
             src={url}
           />
@@ -114,19 +110,19 @@ const ImageDescription = ({
               placeholder="Title"
               value={title}
               onChange={onTitleValueChange}
-              className="mt-2"
+              className="ml-2"
             />
           )}
           <Input
             placeholder="Description"
             value={description}
             onChange={onDescriptionValueChange}
-            className="mt-2"
+            className="ml-2"
           />
           {hasStatus && (
             <Select
               placeholder="Status"
-              className="mt-2 w-100"
+              className="ml-2 w-100"
               value={status}
               onChange={onStatusValueChange}
             >
@@ -137,7 +133,7 @@ const ImageDescription = ({
           {onRemove && (
             <Button
               danger
-              className="align-self-end mt-4"
+              className="align-self-end ml-4"
               onClick={onRemoveHandler}
             >
               Remove
@@ -153,8 +149,8 @@ const ImageDescription = ({
           <Image
             style={{
               objectFit: 'scale-down',
-              width: '250px',
-              height: '250px'
+              width: '150px',
+              height: '150px'
             }}
             src={image}
           />
@@ -163,19 +159,19 @@ const ImageDescription = ({
               placeholder="Title"
               value={title}
               onChange={onTitleValueChange}
-              className="mt-2"
+              className="ml-2"
             />
           )}
           <Input
             placeholder="Description"
             value={description}
             onChange={onDescriptionValueChange}
-            className="mt-2"
+            className="ml-2"
           />
           {hasStatus && (
             <Select
               placeholder="Status"
-              className="mt-2 w-100"
+              className="ml-2 w-100"
               value={status}
               onChange={onStatusValueChange}
             >
@@ -186,7 +182,7 @@ const ImageDescription = ({
           {onRemove && (
             <Button
               danger
-              className="align-self-end mt-4"
+              className="align-self-end ml-4"
               onClick={onRemoveHandler}
             >
               Remove

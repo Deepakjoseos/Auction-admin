@@ -100,7 +100,7 @@ const AuctionInventoryForm = (props) => {
   }, [form, mode, param, props]);
 
   const fetchAuctions = async () => {
-    const data = await auctionService.getauctions();
+    const { data } = await auctionService.getauctions();
     if (data) {
       setAuctions(data);
       // console.log(`Auctions`, data);

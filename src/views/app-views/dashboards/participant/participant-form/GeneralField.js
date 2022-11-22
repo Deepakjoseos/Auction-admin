@@ -268,21 +268,23 @@ const GeneralField = ({
             </Select>
           </Form.Item>
 
-          <Form.Item
-            name="BuyerEligibleBuisness"
-            label="Buyer Eligible Business"
-          >
-            <Select placeholder="Buyer Eligible Business">
-              {buyerEligibleBuisness?.BuyerEligibleBuisness?.map(
-                (item, index) => (
-                  <Option key={index} value={item}>
-                    {' '}
-                    {item}{' '}
-                  </Option>
-                )
-              )}
-            </Select>
-          </Form.Item>
+          {isBuyer && (
+            <Form.Item
+              name="BuyerEligibleBuisness"
+              label="Buyer Eligible Business"
+            >
+              <Select placeholder="Buyer Eligible Business">
+                {buyerEligibleBuisness?.BuyerEligibleBuisness?.map(
+                  (item, index) => (
+                    <Option key={index} value={item}>
+                      {' '}
+                      {item}{' '}
+                    </Option>
+                  )
+                )}
+              </Select>
+            </Form.Item>
+          )}
 
           {mode === 'EDIT' && (
             <Form.Item name="status" label="Status" rules={rules.status}>

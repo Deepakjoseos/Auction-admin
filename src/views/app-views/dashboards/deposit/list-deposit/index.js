@@ -142,7 +142,7 @@ const DepositList = (props) => {
         )} */}
         {editPrivilege &&
           paymentStatus.map((status) => {
-            if (status !== row.status) {
+            if (status !== row.paymentStatus) {
               return (
                 <Menu.Item onClick={() => changeStatus(row, status)}>
                   <Flex alignItems="center">
@@ -289,7 +289,8 @@ const DepositList = (props) => {
               defaultValue="All"
               onChange={(value) => handleFilters('participantId', value)}
               placeholder="Participant"
-              style={{ minWidth: 120 }}
+              style={{ minWidth: 180 }}
+              showSearch
             >
               <Option value="All">All</Option>
               {participants.map((participant) => (
@@ -301,7 +302,7 @@ const DepositList = (props) => {
             <Select
               defaultValue="All"
               className="w-100"
-              style={{ minWidth: 120 }}
+              style={{ minWidth: 180 }}
               onChange={(value) => handleFilters('paymentStatus', value)}
               placeholder="Payment status"
             >
@@ -317,7 +318,7 @@ const DepositList = (props) => {
             <Select
               defaultValue="All"
               className="w-100"
-              style={{ minWidth: 120 }}
+              style={{ minWidth: 180 }}
               onChange={(value) => handleFilters('paymentMode', value)}
               placeholder="Payment mode"
             >

@@ -87,10 +87,12 @@ const AuctionList = (props) => {
 
   const getauctions = async (filterParams) => {
     setIsListLoading(true);
-    const data = await auctionService.getauctions(qs.stringify(filterParams));
+    const { data, total } = await auctionService.getauctions(
+      qs.stringify(filterParams)
+    );
     if (data) {
-      setList(data.data);
-      setTotalCount(data.total);
+      setList(data);
+      setTotalCount(total);
     }
     setIsListLoading(false);
   };
