@@ -129,11 +129,6 @@ const GroupList = (props) => {
     },
     {
       title: 'Business',
-      dataIndex: 'business',
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'business')
-    },
-    {
-      title: 'Business',
       key: 'businessTypes',
       dataIndex: 'businessTypes',
       render: (businessTypes) => (
@@ -149,7 +144,7 @@ const GroupList = (props) => {
           ))}
         </span>
       ),
-      sorter: (a, b) => a.permissions.length > b.permissions.length
+      sorter: (a, b) => a.businessTypes.length > b.businessTypes.length
     },
     // {
     //   title: "Vehicle",
