@@ -6,7 +6,7 @@ const api = 'brand';
 brandService.getBrands = async function () {
   try {
     const res = await fetch({
-      url: `${api}/get/all`,
+      url: `${api}/get/all/admin`,
       method: 'get'
     });
     return res.data;

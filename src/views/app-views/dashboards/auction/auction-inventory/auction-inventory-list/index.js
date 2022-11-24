@@ -25,6 +25,12 @@ import { useSelector } from 'react-redux';
 import auctionInventoryService from 'services/auctionInventory';
 import useQueryFilters from 'hooks/useQueryFilters';
 import sheetService from 'services/sheet';
+import _ from 'lodash';
+import vehicletypeService from 'services/vehicleType';
+import clientService from 'services/client';
+import cityService from 'services/city';
+import regionService from 'services/region';
+import brandService from 'services/brand';
 
 const { Option } = Select;
 
@@ -44,6 +50,12 @@ const AuctionInventoryList = (props) => {
   const [currentSubAdminRole, setCurrentSubAdminRole] = useState({});
   const [downloadLink, setDownloadLink] = useState(null);
 
+  const [filterEnabled, setFilterEnabled] = useState(false);
+  const [vehicleTypeId, setVehicleTypeId] = useState([]);
+  const [city, setCity] = useState([]);
+  const [regionId, setRegionsByID] = useState([]);
+  const [brands, setBrands] = useState([]);
+
   const [form] = Form.useForm();
 
   const {
@@ -53,7 +65,8 @@ const AuctionInventoryList = (props) => {
     setIsLoading,
     searchParams,
     totalCount,
-    setTotalCount
+    setTotalCount,
+    setSearchParams
   } = useQueryFilters(
     auctionId
       ? {
@@ -69,25 +82,57 @@ const AuctionInventoryList = (props) => {
 
   const { user } = useSelector((state) => state.auth);
 
-  const getRegistrationNumbers = async () => {
-    const data = await auctionInventoryService.getRegistrationNumbers();
-
-    if (data) {
-      setRegistrationNumberList(data);
-    }
-  };
-
-  const getDownloadLink = async () => {
-    const data = await sheetService.getSheets('sheetName=AUCTIONINVENTORY');
-
-    if (data) {
-      setDownloadLink(data);
-    }
-  };
-
   useEffect(() => {
+    const getVehicleTypeById = async () => {
+      const data = await vehicletypeService.getVehicleTypes();
+      if (data) {
+        setVehicleTypeId(data);
+      }
+    };
+
+    const getCity = async () => {
+      const data = await cityService.getCities();
+      if (data) {
+        setCity(data);
+      }
+    };
+    const getRegionsByID = async () => {
+      const data = await regionService.getRegions();
+      if (data) {
+        setRegionsByID(data);
+      }
+    };
+
+    const getRegistrationNumbers = async () => {
+      const data = await auctionInventoryService.getRegistrationNumbers();
+
+      if (data) {
+        setRegistrationNumberList(data);
+      }
+    };
+
+    const getDownloadLink = async () => {
+      const data = await sheetService.getSheets('sheetName=AUCTIONINVENTORY');
+
+      if (data) {
+        setDownloadLink(data);
+      }
+    };
+
+    const getBrands = async () => {
+      const data = await brandService.getBrands();
+
+      if (data) {
+        setBrands(data);
+      }
+    };
+
+    getRegionsByID();
+    getVehicleTypeById();
+    getCity();
     getRegistrationNumbers();
     getDownloadLink();
+    // getBrands();
   }, []);
 
   useEffect(() => {
@@ -232,7 +277,44 @@ const AuctionInventoryList = (props) => {
     setList(data);
   };
 
-  const filters = () => (
+  // Filter Submit
+  const handleFilterSubmit = async () => {
+    form
+      .validateFields()
+      .then(async (values) => {
+        setFilterEnabled(true);
+        // Removing falsy Values from values
+
+        const sendingValues = _.pickBy(values, _.identity);
+        if (sendingValues.startTimestamp) {
+          sendingValues.startTimestamp = new Date(
+            sendingValues.startTimestamp
+          ).getTime();
+        }
+
+        if (sendingValues.endTimestamp) {
+          sendingValues.endTimestamp = new Date(
+            sendingValues.endTimestamp
+          ).getTime();
+        }
+        console.log(sendingValues);
+        setSearchParams(sendingValues);
+      })
+      .catch((info) => {
+        console.log('info', info);
+        setFilterEnabled(false);
+      });
+  };
+
+  // Clear Filter
+  const handleClearFilter = async () => {
+    form.resetFields();
+
+    setSearchParams({});
+    setFilterEnabled(false);
+  };
+
+  const filtersComponent = () => (
     <Form
       layout="vertical"
       form={form}
@@ -240,6 +322,201 @@ const AuctionInventoryList = (props) => {
       className="ant-advanced-search-form"
     >
       <Row gutter={8} align="bottom">
+        <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name="businessType" label="Business Type">
+            <Select
+              showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              className="w-100"
+              style={{ minWidth: 180 }}
+              // onChange={(value) => setSelectedPrescriptionRequired(value)}
+              // onSelect={handleQuery}
+              // value={selectedPrescriptionrequired}
+              defaultValue={''}
+              placeholder="businessType"
+            >
+              <Option value="">All</Option>
+              <Option value="Bank">Bank</Option>
+              <Option value="Consumer Auction">Consumer Auction</Option>
+              <Option value="Insurance">Insurance</Option>
+            </Select>
+          </Form.Item>
+        </Col>
+
+        <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name="vehicleTypeId" label="Vehicle Type">
+            <Select
+              showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              className="w-100"
+              style={{ minWidth: 180 }}
+              // onChange={(value) => setSelectedBrandId(value)}
+              // onSelect={handleQuery}
+              placeholder="vehicleType"
+              defaultValue={''}
+              // value={selectedBrandId}
+            >
+              <Option value="">All</Option>
+              {vehicleTypeId.map((vehicleTypeId) => (
+                <Option key={vehicleTypeId._id} value={vehicleTypeId._id}>
+                  {vehicleTypeId.name}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+        </Col>
+        <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name="cityId" label="City">
+            <Select
+              showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              className="w-100"
+              style={{ minWidth: 180 }}
+              // onChange={(value) => setSelectedBrandId(value)}
+              // onSelect={handleQuery}
+              placeholder="cityId"
+              defaultValue={''}
+              // value={selectedBrandId}
+            >
+              <Option value="">All</Option>
+              {city.map((Cities) => (
+                <Option key={Cities._id} value={Cities._id}>
+                  {Cities.name}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+        </Col>
+        <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name="regionId" label="Region">
+            <Select
+              showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              className="w-100"
+              style={{ minWidth: 180 }}
+              // onChange={(value) => setSelectedBrandId(value)}
+              // onSelect={handleQuery}
+              placeholder="regionId"
+              defaultValue={''}
+              // value={selectedBrandId}
+            >
+              <Option value="">All</Option>
+              {regionId.map((regionId) => (
+                <Option key={regionId._id} value={regionId._id}>
+                  {regionId.name}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+        </Col>
+
+        {/* <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name="make" label="Make">
+            <Select
+              showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              className="w-100"
+              style={{ minWidth: 180 }}
+              // onChange={(value) => setSelectedBrandId(value)}
+              // onSelect={handleQuery}
+              placeholder="Make"
+              // value={selectedBrandId}
+            >
+              <Option value="">All</Option>
+              {brands.map((brand) => (
+                <Option key={brand} value={brand}>
+                  {brand}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+        </Col> */}
+
+        <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name="auctionType" label="Type">
+            <Select
+              showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              className="w-100"
+              style={{ minWidth: 180 }}
+              // onChange={(value) => setSelectedPrescriptionRequired(value)}
+              // onSelect={handleQuery}
+              // value={selectedPrescriptionrequired}
+              defaultValue={''}
+              placeholder="type"
+            >
+              <Option value="">All</Option>
+              <Option value="Yard">Yard</Option>
+              <Option value="Online">Online</Option>
+              <Option value="Open">Open</Option>
+            </Select>
+          </Form.Item>
+        </Col>
+
+        <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name="auctionFormat" label="Format">
+            <Select
+              showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              className="w-100"
+              style={{ minWidth: 180 }}
+              // onChange={(value) => setSelectedPrescriptionRequired(value)}
+              // onSelect={handleQuery}
+              // value={selectedPrescriptionrequired}
+              placeholder="format"
+              defaultValue={''}
+            >
+              <Option value="">All</Option>
+              <Option value="Open">Open</Option>
+              <Option value="Close">Close</Option>
+            </Select>
+          </Form.Item>
+        </Col>
+
+        <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name="timeStatus" label="Time Status">
+            <Select
+              showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              className="w-100"
+              style={{ minWidth: 180 }}
+              // onChange={(value) => setSelectedPrescriptionRequired(value)}
+              // onSelect={handleQuery}
+              // value={selectedPrescriptionrequired}
+              defaultValue={''}
+              placeholder="Time status"
+            >
+              <Option value="">All</Option>
+              <Option value="LIVE">Live</Option>
+              <Option value="UPCOMING">Upcoming</Option>
+            </Select>
+          </Form.Item>
+        </Col>
+
         <Col md={6} sm={24} xs={24} lg={6}>
           <Form.Item name="registrationNumber" label="Registration Number">
             <Select
@@ -251,46 +528,27 @@ const AuctionInventoryList = (props) => {
               className="w-100"
               style={{ minWidth: 180 }}
               placeholder="Registration Number"
-              onChange={(value) => handleFilters('registrationNumber', value)}
-              defaultValue={'All'}
+              defaultValue={''}
             >
-              <Option value={'All'}> All </Option>
+              <Option value=""> All </Option>
               {registrationNumberList.map((reg) => (
                 <Option value={reg._id}> {reg._id} </Option>
               ))}
             </Select>
-            {/* <Input
-              className="w-100"
-              style={{ minWidth: 180 }}
-              placeholder="Registration Number"
-              onChange={(e) =>
-                handleFilters('registrationNumber', e.target.value)
-              }
-            /> */}
           </Form.Item>
         </Col>
+
         <Col md={6} sm={24} xs={24} lg={6}>
           <Form.Item name={'startTimestamp'} label="Start Date">
-            <DatePicker
-              className="w-100"
-              style={{ minWidth: 180 }}
-              onChange={(value, dateString) =>
-                handleFilters('startTimestamp', new Date(value).getTime())
-              }
-            />
+            <DatePicker className="w-100" style={{ minWidth: 180 }} />
           </Form.Item>
         </Col>
         <Col md={6} sm={24} xs={24} lg={6}>
           <Form.Item name={'endTimestamp'} label="End Date">
-            <DatePicker
-              className="w-100"
-              style={{ minWidth: 180 }}
-              onChange={(value, dateString) =>
-                handleFilters('endTimestamp', new Date(value).getTime())
-              }
-            />
+            <DatePicker className="w-100" style={{ minWidth: 180 }} />
           </Form.Item>
         </Col>
+
         <Flex className="mb-1" mobileFlex={false}>
           <div className="mr-md-3 mb-3">
             <Input
@@ -299,7 +557,30 @@ const AuctionInventoryList = (props) => {
               onChange={(e) => onSearch(e)}
             />
           </div>
+          {/* <div className="mb-3">
+            <Select
+              defaultValue="All"
+              className="w-100"
+              style={{ minWidth: 180 }}
+              placeholder="Status"
+            >
+              <Option value="All">All</Option>
+              <Option value="Active">Active</Option>
+              <Option value="Hold">Hold</Option>
+            </Select>
+          </div> */}
         </Flex>
+
+        <Col className="mb-4">
+          <Button type="primary" onClick={handleFilterSubmit}>
+            Filter
+          </Button>
+        </Col>
+        <Col className="mb-4">
+          <Button type="primary" onClick={handleClearFilter}>
+            Clear
+          </Button>
+        </Col>
       </Row>
     </Form>
   );
@@ -307,12 +588,13 @@ const AuctionInventoryList = (props) => {
   return (
     <Card>
       <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
-        {filters()}
+        {filtersComponent()}
         <Flex
           flexDirection="column"
           alignItems="center"
           justifyContent="between"
           mobileFlex={false}
+          className="ml-4"
         >
           {addPrivilege && (
             <Button
