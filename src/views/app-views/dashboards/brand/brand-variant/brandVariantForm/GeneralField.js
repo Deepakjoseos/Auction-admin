@@ -69,7 +69,7 @@ const GeneralField = ({ brands, propsImages, formMode }) => {
       </Col>
       <Col xs={24} sm={24} md={7}>
         <Card title="Media">
-          <Form.Item name="logo" rules={rules.status}>
+          <Form.Item name="logo">
             <Upload listType="picture-card" name="logo" {...propsImages}>
               <CustomIcon className="display-3" svg={ImageSvg} />
             </Upload>

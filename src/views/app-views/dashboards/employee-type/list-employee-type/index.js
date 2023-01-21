@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {
   Card,
+  Col,
   Table,
   Select,
   Input,
@@ -9,9 +10,11 @@ import {
   Tag,
   Modal,
   Form,
+  Row,
   notification
 } from 'antd';
-
+import qs from 'qs'
+import _, { get } from 'lodash'
 import {
   EyeOutlined,
   SearchOutlined,
@@ -50,13 +53,17 @@ const getStockStatus = (status) => {
 const EmployeeTypeList = (props) => {
   const [employeeTypeList, setEmployeeTypeList] = useState([]);
   const [searchBackupList, setSearchBackupList] = useState([]);
+  const [form] = Form.useForm()
+  const [filterEnabled, setFilterEnabled] = useState(false)
 
   const { addPrivilege, editPrivilege, deletePrivilege } = props;
 
   const history = useHistory();
 
-  const getEmployeeType = async () => {
-    const data = await employeeTypeService.getEmployeeTypes();
+  const getEmployeeType = async (filterParams) => {
+    const data = await employeeTypeService.getEmployeeTypes(
+      // qs.stringify(getPaginationParams(paginationParams)),
+      qs.stringify(filterParams) );
     if (data) {
       setEmployeeTypeList(data);
       setSearchBackupList(data);
@@ -81,6 +88,34 @@ const EmployeeTypeList = (props) => {
       getEmployeeType();
     }
   };
+
+// Filter Submit
+const handleFilterSubmit = async () => {
+  // setPagination(resetPagination())
+
+  form
+    .validateFields()
+    .then(async (values) => {
+      setFilterEnabled(true)
+      // Removing falsy Values from values
+      const sendingValues = _.pickBy(values, _.identity)
+      getEmployeeType( sendingValues)
+    })
+    .catch((info) => {
+      console.log('info', info)
+      setFilterEnabled(false)
+    })
+}
+
+const handleClearFilter = async () => {
+  form.resetFields()
+
+  // setPagination(resetPagination())
+  getEmployeeType()
+  setFilterEnabled(false)
+}
+
+
 
   const dropdownMenu = (row) => {
     return (
@@ -183,28 +218,49 @@ const EmployeeTypeList = (props) => {
 
   // Table Filters JSX Elements
   const filters = () => (
-    <Flex className="mb-1" mobileFlex={false}>
-      <div className="mr-md-3 mb-3">
+    <Form
+    layout="vertical"
+    form={form}
+    name="filter_form"
+    className="ant-advanced-search-form"
+  >
+    <Row gutter={8} align="bottom">
+     <Col md={6} sm={24} xs={24} lg={6}>
+      <Form.Item name="search" label="Search">
         <Input
           placeholder="Search"
           prefix={<SearchOutlined />}
-          onChange={(e) => onSearch(e)}
+          // onChange={(e) => onSearch(e)}
         />
-      </div>
-      <div className="mb-3">
+        </Form.Item>
+      </Col>
+      <Col md={6} sm={24} xs={24} lg={6}>
+      <Form.Item name="status" label="Status">
         <Select
-          defaultValue="All"
+          // defaultValue="All"
           className="w-100"
           style={{ minWidth: 180 }}
-          onChange={handleShowStatus}
+          // onChange={handleShowStatus}
           placeholder="Status"
         >
-          <Option value="All">All</Option>
+          <Option value="">All</Option>
           <Option value="Active">Active</Option>
           <Option value="Hold">Hold</Option>
         </Select>
-      </div>
-    </Flex>
+        </Form.Item>
+      </Col>
+      <Col style={{marginLeft:"40px"}} className="mb-4">
+          <Button type="primary" onClick={handleFilterSubmit}>
+            Filter
+          </Button>
+        </Col>
+        <Col className="mb-4">
+          <Button type="primary" onClick={handleClearFilter}>
+            Clear
+          </Button>
+        </Col> 
+        </Row>
+    </Form>
   );
 
   return (

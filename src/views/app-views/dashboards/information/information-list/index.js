@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import { Card, Table, Select, Input, Button, Menu, Tag } from 'antd';
+import { Card, Table, Select, Input, Button, Menu, Tag,Form, Row, Col } from 'antd';
 // import InformationListData from 'assets/data/product-list.data.json'
 import {
   EyeOutlined,
@@ -7,6 +7,8 @@ import {
   SearchOutlined,
   PlusCircleOutlined
 } from '@ant-design/icons';
+import qs from 'qs'
+import _, { get } from 'lodash'
 import AvatarStatus from 'components/shared-components/AvatarStatus';
 import EllipsisDropdown from 'components/shared-components/EllipsisDropdown';
 import Flex from 'components/shared-components/Flex';
@@ -45,9 +47,14 @@ const InformationList = (props) => {
   const [selectedRows, setSelectedRows] = useState([]);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [currentSubAdminRole, setCurrentSubAdminRole] = useState({});
+  const [form] = Form.useForm()
+  const [isLoading, setIsLoading] = useState(false)
+  const [filterEnabled, setFilterEnabled] = useState(false)
 
-  const getInformations = async () => {
-    const data = await informationService.getInformations();
+  const getInformations = async (filterParams) => {
+    const data = await informationService.getInformations(
+      qs.stringify(filterParams)    
+      );
     if (data) {
       setList(data);
       setSearchBackupList(data);
@@ -98,6 +105,31 @@ const InformationList = (props) => {
       getInformations();
     }
   };
+
+  const handleFilterSubmit = async () => {
+    // setPagination(resetPagination())
+  
+    form
+      .validateFields()
+      .then(async (values) => {
+        setFilterEnabled(true)
+        // Removing falsy Values from values
+        const sendingValues = _.pickBy(values, _.identity)
+        getInformations( sendingValues)
+      })
+      .catch((info) => {
+        console.log('info', info)
+        setFilterEnabled(false)
+      })
+  }
+  
+  const handleClearFilter = async () => {
+    form.resetFields()
+  
+    // setPagination(resetPagination())
+    getInformations()
+    setFilterEnabled(false)
+  }
 
   const tableColumns = [
     {
@@ -165,28 +197,62 @@ const InformationList = (props) => {
   };
 
   const filters = () => (
-    <Flex className="mb-1" mobileFlex={false}>
-      <div className="mr-md-3 mb-3">
-        <Input
-          placeholder="Search"
-          prefix={<SearchOutlined />}
-          onChange={(e) => onSearch(e)}
-        />
-      </div>
-      <div className="mb-3">
+    // <Flex className="mb-1" mobileFlex={false}>
+    //   <div className="mr-md-3 mb-3">
+    //     <Input
+    //       placeholder="Search"
+    //       prefix={<SearchOutlined />}
+    //       onChange={(e) => onSearch(e)}
+    //     />
+    //   </div>
+    //   <div className="mb-3">
+    //     <Select
+    //       defaultValue="All"
+    //       className="w-100"
+    //       style={{ minWidth: 180 }}
+    //       onChange={handleShowStatus}
+    //       placeholder="Status"
+    //     >
+    //       <Option value="All">All</Option>
+    //       <Option value="Active">Active</Option>
+    //       <Option value="Hold">Hold</Option>
+    //     </Select>
+    //   </div>
+    // </Flex>
+    <Form
+    layout="vertical"
+    form={form}
+    name="filter_form"
+    className="ant-advanced-search-form"
+  >
+    <Row gutter={8} align="bottom">
+      <Col md={6} sm={24} xs={24} lg={6}>
+      <Form.Item name="status" label="Status">
         <Select
-          defaultValue="All"
+          // defaultValue="All"
           className="w-100"
           style={{ minWidth: 180 }}
-          onChange={handleShowStatus}
+          // onChange={handleShowStatus}
           placeholder="Status"
         >
-          <Option value="All">All</Option>
+          <Option value="">All</Option>
           <Option value="Active">Active</Option>
           <Option value="Hold">Hold</Option>
         </Select>
-      </div>
-    </Flex>
+        </Form.Item>
+      </Col>
+      <Col className="mb-4">
+          <Button style={{marginLeft:"80px"}} type="primary" onClick={handleFilterSubmit}>
+            Filter
+          </Button>
+        </Col>
+        <Col className="mb-4">
+          <Button type="primary" onClick={handleClearFilter}>
+            Clear
+          </Button>
+        </Col> 
+        </Row>
+    </Form>
   );
 
   return (

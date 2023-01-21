@@ -3,10 +3,10 @@ import fetch from 'auth/FetchInterceptor';
 const employeeTypeService = {};
 const apiRoute = '/employee_type';
 
-employeeTypeService.getEmployeeTypes = async function () {
+employeeTypeService.getEmployeeTypes = async function ( query ='') {
   try {
     const res = await fetch({
-      url: `${apiRoute}/get/all/admin`,
+      url: `${apiRoute}/get/all/admin?${query}`,
       method: 'get'
     });
     return res.data;

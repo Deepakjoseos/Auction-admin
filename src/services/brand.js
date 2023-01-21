@@ -29,7 +29,7 @@ brandService.getBrands = async function () {
 brandService.getBrandById = async function (id) {
   try {
     const res = await fetch({
-      url: `${api}/${id}`,
+      url: `${api}/${id}/admin`,
       method: 'get'
     });
     return res.data;

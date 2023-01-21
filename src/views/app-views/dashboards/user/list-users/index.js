@@ -340,7 +340,7 @@ const handleClearFilter = async () => {
           <Button type="primary" onClick={handleClearFilter}>
             Clear
           </Button>
-        </Col>
+        </Col> 
         </Row>
     </Form>
   );
