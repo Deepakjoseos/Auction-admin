@@ -214,14 +214,14 @@ const dashBoardNavTree = [
         ]
       },
 
-      {
-        key: 'dashboards-car',
-        path: `${APP_PREFIX_PATH}/dashboards/car`,
-        title: 'Car',
-        icon: CarOutlined,
-        breadcrumb: false,
-        submenu: []
-      },
+      // {
+      //   key: 'dashboards-car',
+      //   path: `${APP_PREFIX_PATH}/dashboards/car`,
+      //   title: 'Car',
+      //   icon: CarOutlined,
+      //   breadcrumb: false,
+      //   submenu: []
+      // },
 
       // {
       //   key: "dashboards-auction-bidding",

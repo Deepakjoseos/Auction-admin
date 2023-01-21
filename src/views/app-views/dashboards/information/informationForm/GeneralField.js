@@ -78,7 +78,7 @@ const GeneralField = (props) => (
     </Col>
     <Col xs={24} sm={24} md={7}>
       <Card title="Media">
-        <Form.Item name="image" rules={rules.status}>
+        <Form.Item name="image" >
           <Upload listType="picture-card" name="image" {...props.propsImages}>
             <CustomIcon className="display-3" svg={ImageSvg} />
           </Upload>

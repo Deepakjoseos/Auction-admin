@@ -135,13 +135,14 @@ authAdminService.getUser = async function (query) {
     console.log(err, 'show-err');
   }
 };
-authAdminService.getAllSubAdmins = async function (query = '') {
+authAdminService.getAllSubAdmins = async function (paginationQuery='', query ='') {
   try {
     const res = await fetch({
-      url: `https://auction.riolabz.com/v1/sub_admin/get/all?${query}`,
+      url: `https://auction.riolabz.com/v1/sub_admin/get/all?${paginationQuery}&${query}`,
       method: 'get'
     });
-    return res.data;
+    const data = res.data.filter((cur) => cur.status !== 'Deleted')
+    return res;
   } catch (err) {
     console.log(err, 'show-error');
   }

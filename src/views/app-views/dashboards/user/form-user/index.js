@@ -39,7 +39,7 @@ const UserForm = (props) => {
         email: data.email,
         employeeTypeId: data.employeeType?._id,
         employeeCode: data?.employeeCode,
-        status: data.status
+        status: data?.status 
       });
     } else {
       history.goBack();
@@ -65,7 +65,9 @@ const UserForm = (props) => {
           password: values?.password,
           contact: values?.contact,
           employeeTypeId: values?.employeeTypeId,
-          employeeCode: values?.employeeCode
+          employeeCode: values?.employeeCode,
+          status: values?.status 
+
         };
 
         console.log(sendingValues, 'values=====');

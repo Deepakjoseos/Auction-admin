@@ -53,11 +53,11 @@ const rules = {
 };
 
 const GeneralField = ({ mode, employeeTypes }) => (
-  <Row gutter={16}>
-    <Col xs={24} sm={24} md={24}>
+  <Row gutter={16}> 
+    <Col xs={24} sm={24} md={20}>
       <Card title="User Info">
         <>
-          <div style={{ display: 'flex', gap: '4rem', alignItems: 'center' }}>
+          {/* <div style={{ display: 'flex', gap: '4rem', alignItems: 'center' }}> */}
             <Form.Item name="name" label="First Name" rules={rules.firstName}>
               <Input placeholder="First Name" type="text" />
             </Form.Item>
@@ -117,8 +117,8 @@ const GeneralField = ({ mode, employeeTypes }) => (
               >
                 <Input placeholder="Last Name" type="text" />
               </Form.Item> */}
-          </div>
-          <div style={{ display: 'flex', gap: '4rem', flexWrap: 'wrap' }}>
+          {/* </div> */}
+          {/* <div style={{ display: 'flex', gap: '4rem', flexWrap: 'wrap' }}> */}
             {/* <Form.Item
                 name="type"
                 style={{ width: "190px" }}
@@ -151,7 +151,7 @@ const GeneralField = ({ mode, employeeTypes }) => (
               >
                 <Input.Password />
               </Form.Item> */}
-          </div>
+          {/* </div> */}
         </>
       </Card>
     </Col>

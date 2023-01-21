@@ -40,7 +40,7 @@ const rules = {
   ]
 };
 
-const GeneralField = ({ images, propsImages }) => (
+const GeneralField = ({ images, propsImages }) => ( 
   <Row gutter={16}>
     <Col xs={24} sm={24} md={17}>
       <Card title="Basic Info">
@@ -64,7 +64,7 @@ const GeneralField = ({ images, propsImages }) => (
     </Col>
     <Col xs={24} sm={24} md={7}>
       <Card title="Image">
-        <Form.Item name="image" rules={rules.status}>
+        <Form.Item name="image" >
           <Upload listType="picture-card" name="image" {...propsImages}>
             <CustomIcon className="display-3" svg={ImageSvg} />
           </Upload>

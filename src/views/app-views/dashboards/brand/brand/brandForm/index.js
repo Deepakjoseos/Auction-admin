@@ -143,7 +143,7 @@ const BrandForm = (props) => {
         name="advanced_search"
         className="ant-advanced-search-form"
         initialValues={{
-          status: 'Hold'
+          status: ''
         }}
       >
         <PageHeaderAlt className="border-bottom" overlap>
