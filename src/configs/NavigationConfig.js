@@ -329,13 +329,38 @@ const dashBoardNavTree = [
       //   breadcrumb: false,
       //   submenu: [],
       // },
+      // {
+      //   key: 'dashboards-participant',
+      //   path: `${APP_PREFIX_PATH}/dashboards/participant`,
+      //   title: 'Participant',
+      //   icon: UserOutlined,
+      //   breadcrumb: false,
+      //   submenu: []
+      // },
       {
         key: 'dashboards-participant',
         path: `${APP_PREFIX_PATH}/dashboards/participant`,
         title: 'Participant',
         icon: UserOutlined,
         breadcrumb: false,
-        submenu: []
+        submenu: [
+          {
+            key: 'dashboards-participant-seller',
+            path: `${APP_PREFIX_PATH}/dashboards/participant/seller`,
+            title: 'Seller',
+            icon: UserOutlined,
+            breadcrumb: false,
+            submenu: []
+          },
+          {
+            key: 'dashboards-participant-buyer',
+            path: `${APP_PREFIX_PATH}/dashboards/participant/buyer`,
+            title: 'Buyer',
+            icon: UserOutlined,
+            breadcrumb: false,
+            submenu: []
+          },
+        ]
       },
       {
         key: 'dashboards-wallet',
