@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 import {
   Card,
   Table,
@@ -10,31 +10,36 @@ import {
   Modal,
   Form,
   notification,
-} from "antd";
+  Col,
+  Row
+} from 'antd';
+import qs from 'qs'
+import _, { get } from 'lodash'
 // import BrandListData from 'assets/data/product-list.data.json'
 import {
   EyeOutlined,
   SearchOutlined,
-  PlusCircleOutlined,
-} from "@ant-design/icons";
-import EllipsisDropdown from "components/shared-components/EllipsisDropdown";
-import Flex from "components/shared-components/Flex";
-import { useHistory } from "react-router-dom";
-import utils from "utils";
-import authAdminService from "services/auth/admin";
-import EditRoleSubAdmin from "./EditRoleSubAdmin";
+  PlusCircleOutlined
+} from '@ant-design/icons';
+import EllipsisDropdown from 'components/shared-components/EllipsisDropdown';
+import Flex from 'components/shared-components/Flex';
+import { useHistory } from 'react-router-dom';
+import utils from 'utils';
+import authAdminService from 'services/auth/admin';
+import EditRoleSubAdmin from './EditRoleSubAdmin';
+import useQueryFilters from 'hooks/useQueryFilters';
 
 const { Option } = Select;
 
 const getStockStatus = (status) => {
-  if (status === "Active") {
-    return (
+  if (status === 'Active') {
+    return ( 
       <>
         <Tag color="green">Active</Tag>
       </>
     );
   }
-  if (status === "Hold") {
+  if (status === 'Hold') {
     return (
       <>
         <Tag color="red">Hold</Tag>
@@ -44,6 +49,9 @@ const getStockStatus = (status) => {
 
   return null;
 };
+
+// const pageSize = 8;
+
 const UserList = () => {
   let history = useHistory();
 
@@ -54,17 +62,53 @@ const UserList = () => {
   const [agentPassword, setAgentPassword] = useState(null);
   const [isEditRoleFormOpen, setIsEditRoleFormOpen] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState(null);
+  const [form] = Form.useForm()
+  const [isLoading, setIsLoading] = useState(false)
 
-  const getUsers = async () => {
-    const data = await authAdminService.getAllSubAdmins();
+  const [filterEnabled, setFilterEnabled] = useState(false)
+  const [statuses,setStatuses] = useState([])
+
+  // pagination
+  const [pagination, setPagination] = useState({
+    current: 1,
+    pageSize: 5,
+  })
+
+  // const {
+  //   handleFilters,
+  //   isLoading,
+  //   onChangeCurrentPageNumber,
+  //   setIsLoading,
+  //   searchParams
+  // } = useQueryFilters({
+  //   limit: pageSize,
+  //   page: 1
+  // });
+
+  const getUsers = async (paginationParams = {}, filterParams) => {
+    setIsLoading(true);
+    const data = await authAdminService.getAllSubAdmins(
+      qs.stringify(getPaginationParams(paginationParams)),
+      qs.stringify(filterParams)    
+      );
+    // console.log(data);
     if (data) {
-      setList(data);
-      setSearchBackupList(data);
+      setList(data.data);
+      setSearchBackupList(data.data);
+      // Pagination
+      setPagination({
+        ...paginationParams.pagination,
+        total: data.count,
+      })
     }
+    console.log(data,'users')
+    setIsLoading(false);
   };
 
   useEffect(() => {
-    getUsers();
+    getUsers({
+      pagination,
+    });
   }, []);
 
   const showModal = (row) => {
@@ -76,16 +120,68 @@ const UserList = () => {
     setAgentIdForPassword(null);
     setAgentPassword(null);
   };
+  
+  // pagination generator
+  const getPaginationParams = (params) => ({
+    limit: params.pagination?.pageSize,
+    page: params.pagination?.current,
+    ...params,
+  })
+  
+  
+    // On pagination Change
+    const handleTableChange = (newPagination) => {
+      getUsers(
+        { 
+          pagination: newPagination,
+        },
+        filterEnabled ? _.pickBy(form.getFieldsValue(), _.identity) : {}
+      )
+    }
+  
+    const resetPagination = () => ({
+      ...pagination,
+      current: 1,
+      pageSize: 5,
+    })
+  
+
+
+// Filter Submit
+const handleFilterSubmit = async () => {
+  setPagination(resetPagination())
+
+  form
+    .validateFields()
+    .then(async (values) => {
+      setFilterEnabled(true)
+      // Removing falsy Values from values
+      const sendingValues = _.pickBy(values, _.identity)
+      getUsers({ pagination: resetPagination() }, sendingValues)
+    })
+    .catch((info) => {
+      console.log('info', info)
+      setFilterEnabled(false)
+    })
+}
+
+const handleClearFilter = async () => {
+  form.resetFields()
+
+  setPagination(resetPagination())
+  getUsers({ pagination: resetPagination() }, {})
+  setFilterEnabled(false)
+}
 
   // Dropdown menu for each row
   const dropdownMenu = (row) => (
     <Menu>
-      {/* <Menu.Item onClick={() => viewDetails(row)}>
+      <Menu.Item onClick={() => viewDetails(row)}>
         <Flex alignItems="center">
           <EyeOutlined />
           <span className="ml-2">View Details</span>
         </Flex>
-      </Menu.Item> */}
+      </Menu.Item>
       <Menu.Item
         onClick={() => {
           setIsEditRoleFormOpen(true);
@@ -111,50 +207,61 @@ const UserList = () => {
   // Antd Table Columns
   const tableColumns = [
     {
-      title: "Name",
-      dataIndex: "name",
+      title: 'Name',
+      dataIndex: 'name',
       render: (name) => {
         return <Flex alignItems="center">{name}</Flex>;
       },
-      sorter: (a, b) => a.name?.first?.localeCompare(b?.name?.first),
+      sorter: (a, b) => a.name?.first?.localeCompare(b?.name?.first)
+    },
+    {
+      title: 'Username',
+      dataIndex: 'username',
+      render: (username) => {
+        return <Flex alignItems="center">{username}</Flex>;
+      },
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'username')
     },
 
     {
-      title: "Email",
-      dataIndex: "email",
-      sorter: (a, b) => utils.antdTableSorter(a, b, "email"),
+      title: 'Email',
+      dataIndex: 'email',
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'email')
     },
 
     {
-      title: "Contact",
-      dataIndex: "contact",
-      sorter: (a, b) => utils.antdTableSorter(a, b, "contact"),
+      title: 'Contact',
+      dataIndex: 'contact',
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'contact')
     },
 
     {
-      title: "Role",
-      dataIndex: "auth",
-      sorter: (a, b) => utils.antdTableSorter(a, b, "auth"),
+      title: 'Employee Type',
+      dataIndex: 'employeeType',
+      render: (employeeType) => (
+        <Flex alignItems="center">{employeeType?.name}</Flex>
+      )
+      // sorter: (a, b) => utils.antdTableSorter(a, b, 'employeeType')
     },
 
     {
-      title: "Status",
-      dataIndex: "status",
+      title: 'Status',
+      dataIndex: 'status',
       render: (status) => (
         <Flex alignItems="center">{getStockStatus(status)}</Flex>
       ),
-      sorter: (a, b) => utils.antdTableSorter(a, b, "status"),
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'status')
     },
 
     {
-      title: "",
-      dataIndex: "actions",
+      title: '',
+      dataIndex: 'actions',
       render: (_, elm) => (
         <div className="text-right">
           <EllipsisDropdown menu={dropdownMenu(elm)} />
         </div>
-      ),
-    },
+      )
+    }
   ];
 
   // When Search is used
@@ -167,8 +274,8 @@ const UserList = () => {
 
   // Filter Status Handler
   const handleShowStatus = (value) => {
-    if (value !== "All") {
-      const key = "status";
+    if (value !== 'All') {
+      const key = 'status';
       const data = utils.filterArray(searchBackupList, key, value);
       setList(data);
     } else {
@@ -176,7 +283,7 @@ const UserList = () => {
     }
   };
   const editAgentPassword = async () => {
-    console.log("agentpassword", agentPassword);
+    console.log('agentpassword', agentPassword);
     // if (agentPassword?.length > 0) {
     //   const res = await agentService.editPassword(agentIdForPassword, {
     //     password: agentPassword,
@@ -193,28 +300,49 @@ const UserList = () => {
   };
   // Table Filters JSX Elements
   const filters = () => (
-    <Flex className="mb-1" mobileFlex={false}>
-      <div className="mr-md-3 mb-3">
+<Form
+    layout="vertical"
+    form={form}
+    name="filter_form"
+    className="ant-advanced-search-form"
+  >
+    <Row gutter={8} align="bottom">
+     <Col md={6} sm={24} xs={24} lg={6}>
+      <Form.Item name="search" label="Search">
         <Input
           placeholder="Search"
           prefix={<SearchOutlined />}
-          onChange={(e) => onSearch(e)}
+          // onChange={(e) => onSearch(e)}
         />
-      </div>
-      <div className="mb-3">
+        </Form.Item>
+      </Col>
+      <Col md={6} sm={24} xs={24} lg={6}>
+      <Form.Item name="status" label="Status">
         <Select
-          defaultValue="All"
+          // defaultValue="All"
           className="w-100"
           style={{ minWidth: 180 }}
-          onChange={handleShowStatus}
+          // onChange={handleShowStatus}
           placeholder="Status"
         >
-          <Option value="All">All</Option>
+          <Option value="">All</Option>
           <Option value="Active">Active</Option>
           <Option value="Hold">Hold</Option>
         </Select>
-      </div>
-    </Flex>
+        </Form.Item>
+      </Col>
+      <Col style={{marginLeft:"40px"}} className="mb-4">
+          <Button type="primary" onClick={handleFilterSubmit}>
+            Filter
+          </Button>
+        </Col>
+        <Col className="mb-4">
+          <Button type="primary" onClick={handleClearFilter}>
+            Clear
+          </Button>
+        </Col> 
+        </Row>
+    </Form>
   );
 
   return (
@@ -234,7 +362,23 @@ const UserList = () => {
           </div>
         </Flex>
         <div className="table-responsive">
-          <Table columns={tableColumns} dataSource={list} rowKey="id" />
+          <Table
+            columns={tableColumns}
+            dataSource={list}
+            rowKey="id"
+            // pagination={{
+            //   total: 24, // TODO: get the total count from API
+            //   defaultCurrent: 1,
+            //   defaultPageSize: pageSize,
+            //   onChange: onChangeCurrentPageNumber
+            // }}
+            scroll={{
+              x: true,
+            }}
+            onChange={handleTableChange}
+            pagination={pagination}
+            loading={isLoading}
+          />
         </div>
       </Card>
       {/* <Modal

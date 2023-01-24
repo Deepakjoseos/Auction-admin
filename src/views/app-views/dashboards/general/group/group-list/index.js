@@ -1,29 +1,31 @@
-import React, { useEffect, useState } from "react";
-import { Card, Table, Select, Input, Button, Menu, Tag } from "antd";
+import React, { useEffect, useState } from 'react';
+import { Card, Table, Select, Input, Button, Menu, Tag } from 'antd';
 // import InformationListData from 'assets/data/product-list.data.json'
 import {
   EyeOutlined,
   SearchOutlined,
   PlusCircleOutlined,
-} from "@ant-design/icons";
-import EllipsisDropdown from "components/shared-components/EllipsisDropdown";
-import Flex from "components/shared-components/Flex";
-import { useHistory } from "react-router-dom";
-import utils from "utils";
+  DownloadOutlined
+} from '@ant-design/icons';
+import EllipsisDropdown from 'components/shared-components/EllipsisDropdown';
+import Flex from 'components/shared-components/Flex';
+import { useHistory } from 'react-router-dom';
+import utils from 'utils';
 
-import groupService from "services/group";
+import groupService from 'services/group';
+import sheetService from 'services/sheet';
 
 const { Option } = Select;
 
 const getStockStatus = (status) => {
-  if (status === "Active") {
+  if (status === 'Active') {
     return (
       <>
         <Tag color="green">Active</Tag>
       </>
     );
   }
-  if (status === "Hold") {
+  if (status === 'Hold') {
     return (
       <>
         <Tag color="red">Hold</Tag>
@@ -32,13 +34,19 @@ const getStockStatus = (status) => {
   }
   return null;
 };
-const GroupList = () => {
+const GroupList = (props) => {
   let history = useHistory();
+
+  const { addPrivilege, editPrivilege, deletePrivilege, fetchPrivilege } =
+    props;
 
   const [list, setList] = useState([]);
   const [searchBackupList, setSearchBackupList] = useState([]);
   const [currentSubAdminRole, setCurrentSubAdminRole] = useState({});
-  const AUTH_TYPE = window.localStorage.getItem('auth_type')
+  const [downloadLink, setDownloadLink] = useState(null);
+
+  const AUTH_TYPE = window.localStorage.getItem('auth_type');
+
   useEffect(() => {
     const getGroups = async () => {
       const data = await groupService.getGroups();
@@ -46,15 +54,27 @@ const GroupList = () => {
         setList(data);
         console.log(data);
         setSearchBackupList(data);
-        console.log(data, "show-data");
+        console.log(data, 'show-data');
       }
     };
     getGroups();
   }, []);
 
+  const getDownloadLink = async () => {
+    const data = await sheetService.getSheets('sheetName=GROUP');
+
+    if (data) {
+      setDownloadLink(data);
+    }
+  };
+
+  useEffect(() => {
+    getDownloadLink();
+  }, []);
+
   const dropdownMenu = (row) => {
-    if (AUTH_TYPE === "Admin") {
-      return (
+    return (
+      editPrivilege && (
         <Menu>
           <Menu.Item onClick={() => viewDetails(row)}>
             <Flex alignItems="center">
@@ -62,6 +82,7 @@ const GroupList = () => {
               <span className="ml-2">View Details</span>
             </Flex>
           </Menu.Item>
+
           <Menu.Item onClick={() => uploadMembers(row)}>
             <Flex alignItems="center">
               <EyeOutlined />
@@ -69,27 +90,8 @@ const GroupList = () => {
             </Flex>
           </Menu.Item>
         </Menu>
-      );
-    } else {
-      if (currentSubAdminRole?.edit) {
-        return (
-          <Menu>
-            <Menu.Item onClick={() => viewDetails(row)}>
-              <Flex alignItems="center">
-                <EyeOutlined />
-                <span className="ml-2">View Details</span>
-              </Flex>
-            </Menu.Item>
-            <Menu.Item onClick={() => uploadMembers(row)}>
-              <Flex alignItems="center">
-                <EyeOutlined />
-                <span className="ml-2">Upload Members</span>
-              </Flex>
-            </Menu.Item>
-          </Menu>
-        );
-      }
-    }
+      )
+    );
   };
 
   const addGroup = () => {
@@ -121,14 +123,28 @@ const GroupList = () => {
     //   sorter: (a, b) => utils.antdTableSorter(a, b, 'name'),
     // },
     {
-      title: "Name",
-      dataIndex: "name",
-      sorter: (a, b) => utils.antdTableSorter(a, b, "name"),
+      title: 'Name',
+      dataIndex: 'name',
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'name')
     },
     {
-      title: "Business",
-      dataIndex: "business",
-      sorter: (a, b) => utils.antdTableSorter(a, b, "business"),
+      title: 'Business',
+      key: 'businessTypes',
+      dataIndex: 'businessTypes',
+      render: (businessTypes) => (
+        <span>
+          {businessTypes.map((businessType) => (
+            <Tag
+              style={{ marginBottom: '1rem' }}
+              color={'geekblue'}
+              key={businessType}
+            >
+              {businessType}
+            </Tag>
+          ))}
+        </span>
+      ),
+      sorter: (a, b) => a.businessTypes.length > b.businessTypes.length
     },
     // {
     //   title: "Vehicle",
@@ -151,28 +167,22 @@ const GroupList = () => {
     //   sorter: (a, b) => utils.antdTableSorter(a, b, "city"),
     // },
     {
-      title: "Status",
-      dataIndex: "status",
+      title: 'Status',
+      dataIndex: 'status',
       render: (status) => (
         <Flex alignItems="center">{getStockStatus(status)}</Flex>
       ),
-      sorter: (a, b) => utils.antdTableSorter(a, b, "status"),
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'status')
     },
     {
-      title: "",
-      dataIndex: "actions",
+      title: '',
+      dataIndex: 'actions',
       render: (_, elm) => (
         <div className="text-right">
-          {AUTH_TYPE === 'Admin' ? (
-            <EllipsisDropdown menu={dropdownMenu(elm)} />
-          ) : (
-            currentSubAdminRole?.edit && (
-              <EllipsisDropdown menu={dropdownMenu(elm)} />
-            )
-          )}
+          {editPrivilege && <EllipsisDropdown menu={dropdownMenu(elm)} />}
         </div>
-      ),
-    },
+      )
+    }
   ];
 
   const onSearch = (e) => {
@@ -180,12 +190,11 @@ const GroupList = () => {
     const searchArray = e.currentTarget.value ? list : searchBackupList;
     const data = utils.wildCardSearch(searchArray, value);
     setList(data);
-    
   };
 
   const handleShowStatus = (value) => {
-    if (value !== "All") {
-      const key = "status";
+    if (value !== 'All') {
+      const key = 'status';
       const data = utils.filterArray(searchBackupList, key, value);
       setList(data);
     } else {
@@ -222,21 +231,13 @@ const GroupList = () => {
     <Card>
       <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
         {filters()}
-        <div>
-        {AUTH_TYPE === 'SubAdmin' ? (
-            <>
-              {currentSubAdminRole?.add && (
-                <Button
-                  onClick={addGroup}
-                  type="primary"
-                  icon={<PlusCircleOutlined />}
-                  block
-                >
-                  Add Group
-                </Button>
-              )}
-            </>
-          ) : (
+        <Flex
+          flexDirection="column"
+          alignItems="center"
+          justifyContent="between"
+          mobileFlex={false}
+        >
+          {addPrivilege && (
             <Button
               onClick={addGroup}
               type="primary"
@@ -246,7 +247,21 @@ const GroupList = () => {
               Add Group
             </Button>
           )}
-        </div>
+          {fetchPrivilege && downloadLink && (
+            <Button type="primary" icon={<DownloadOutlined />} block>
+              <a
+                style={{
+                  textDecoration: 'none',
+                  color: 'black'
+                }}
+                href={downloadLink}
+                download
+              >
+                Download Groups
+              </a>
+            </Button>
+          )}
+        </Flex>
       </Flex>
       <div className="table-responsive">
         <Table columns={tableColumns} dataSource={list} rowKey="id" />

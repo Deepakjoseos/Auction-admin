@@ -1,44 +1,27 @@
 import {
   DashboardOutlined,
   AppstoreOutlined,
-  // FileTextOutlined,
-  // PieChartOutlined,
-  // BorderOutlined,
-  // EnvironmentOutlined,
-  // AntDesignOutlined,
-  // SafetyOutlined,
-  // StopOutlined,
-  // DotChartOutlined,
-  // NodeExpandOutlined,
-  // MailOutlined,
-  // MessageOutlined,
-  // CalendarOutlined,
-  // BulbOutlined,
-  // InfoCircleOutlined,
-  // CompassOutlined,
-  // LayoutOutlined,
-  // DesktopOutlined,
-  // FileDoneOutlined,
-  // CommentOutlined,
-  // RobotOutlined,
-  // PlusCircleOutlined,
-  // FundOutlined,
-  // VerifiedOutlined,
-  // ShoppingCartOutlined,
-  // BookOutlined,
-  // FileUnknownOutlined,
-  // ProfileOutlined,
-  // FundProjectionScreenOutlined,
-  // UsergroupAddOutlined,
-  // FormatPainterOutlined,
-  // UserOutlined,
-  // ApartmentOutlined,
-   NodeExpandOutlined
-} from "@ant-design/icons";
+  UserOutlined,
+  NodeExpandOutlined,
+  InfoCircleOutlined,
+  FileImageOutlined,
+  CarOutlined,
+  PictureOutlined,
+  GroupOutlined,
+  HomeOutlined,
+  WalletOutlined,
+  SettingOutlined,
+  DollarCircleOutlined,
+  FolderOutlined,
+  DatabaseOutlined,
+  HeartOutlined,
+  CommentOutlined,
+  CheckCircleOutlined
+} from '@ant-design/icons';
 import {
-  APP_PREFIX_PATH,
+  APP_PREFIX_PATH
   //  AUTH_PREFIX_PATH
-} from "configs/AppConfig";
+} from 'configs/AppConfig';
 
 // const extraNavTree = [
 //   {
@@ -185,61 +168,61 @@ import {
 
 const dashBoardNavTree = [
   {
-    key: "dashboards",
+    key: 'dashboards',
     path: `${APP_PREFIX_PATH}/dashboards`,
-    title: "sidenav.dashboard",
+    title: 'sidenav.dashboard',
     icon: DashboardOutlined,
     breadcrumb: false,
     submenu: [
       {
-        key: "dashboards-user",
+        key: 'dashboards-user',
         path: `${APP_PREFIX_PATH}/dashboards/user`,
-        title: "User",
-        icon: AppstoreOutlined,
+        title: 'User',
+        icon: UserOutlined,
         breadcrumb: false,
-        submenu: [],
+        submenu: []
       },
       {
-        
-        
-        title: "General",
+        key: 'dashboards-employee-type',
+        path: `${APP_PREFIX_PATH}/dashboards/employee-type`,
+        title: 'Employee Types',
         icon: AppstoreOutlined,
+        breadcrumb: false,
+        submenu: []
+      },
+      {
+        title: 'General',
+        icon: FolderOutlined,
         breadcrumb: false,
         submenu: [
           {
-            key: "dashboards-information",
+            key: 'dashboards-information',
             path: `${APP_PREFIX_PATH}/dashboards/information`,
-            title: "Information",
-            icon: AppstoreOutlined,
+            title: 'Information',
+            icon: InfoCircleOutlined,
             breadcrumb: false,
-            submenu: [ ],
+            submenu: []
           },
-              {
-                key: "dashboards-banner",
-                path: `${APP_PREFIX_PATH}/dashboards/banner`,
-                title: "Banner",
-                icon: AppstoreOutlined,
-                breadcrumb: false,
-                submenu: [],
-              },
-           
-        ],
-      },
-  
-            
-     
-     
-      {
-        key: "dashboards-car",
-        path: `${APP_PREFIX_PATH}/dashboards/car`,
-        title: "Car",
-        icon: AppstoreOutlined,
-        breadcrumb: false,
-        submenu: [],
+          {
+            key: 'dashboards-banner',
+            path: `${APP_PREFIX_PATH}/dashboards/banner`,
+            title: 'Banner',
+            icon: PictureOutlined,
+            breadcrumb: false,
+            submenu: []
+          }
+        ]
       },
 
-    
-      
+      // {
+      //   key: 'dashboards-car',
+      //   path: `${APP_PREFIX_PATH}/dashboards/car`,
+      //   title: 'Car',
+      //   icon: CarOutlined,
+      //   breadcrumb: false,
+      //   submenu: []
+      // },
+
       // {
       //   key: "dashboards-auction-bidding",
       //   path: `${APP_PREFIX_PATH}/dashboards/auction-bidding`,
@@ -268,84 +251,77 @@ const dashBoardNavTree = [
         key: 'dashboards-brand',
         path: `${APP_PREFIX_PATH}/dashboards/brand`,
         title: 'Brand',
-        icon: NodeExpandOutlined,
+        icon: FolderOutlined,
         breadcrumb: false,
         submenu: [
           {
             key: 'dashboards-brand-brand',
             path: `${APP_PREFIX_PATH}/dashboards/brand/brand/brands-list`,
             title: 'Brands',
-            icon: NodeExpandOutlined,
+            icon: CarOutlined,
             breadcrumb: false,
-            submenu: [],
+            submenu: []
           },
           {
             key: 'dashboards-brand-brand-variant',
             path: `${APP_PREFIX_PATH}/dashboards/brand/brand-variant/brand-variant-list`,
             title: 'Brand Variant',
-            icon: NodeExpandOutlined,
+            icon: CarOutlined,
             breadcrumb: false,
-            submenu: [],
-          },
-        ],
+            submenu: []
+          }
+        ]
       },
       {
         key: 'dashboards-general',
         path: `${APP_PREFIX_PATH}/dashboards/general`,
         title: 'Location',
-        icon: NodeExpandOutlined,
+        icon: FolderOutlined,
         breadcrumb: false,
         submenu: [
-          {
-            key: 'dashboards-general-city',
-            path: `${APP_PREFIX_PATH}/dashboards/general/city/city-list`,
-            title: 'City',
-            icon: NodeExpandOutlined,
-            breadcrumb: false,
-            submenu: [],
-          },
-          {
-            key: 'dashboards-general-group',
-            path: `${APP_PREFIX_PATH}/dashboards/general/group/group-list`,
-            title: 'Groups',
-            icon: NodeExpandOutlined,
-            breadcrumb: false,
-            submenu: [],
-          },
+          
           {
             key: 'dashboards-general-region',
             path: `${APP_PREFIX_PATH}/dashboards/general/region/region-list`,
             title: 'Region',
-            icon: NodeExpandOutlined,
+            icon: HomeOutlined,
             breadcrumb: false,
-            submenu: [],
+            submenu: []
           },
           {
             key: 'dashboards-general-state',
             path: `${APP_PREFIX_PATH}/dashboards/general/state/state-list`,
             title: 'State',
-            icon: NodeExpandOutlined,
+            icon: HomeOutlined,
             breadcrumb: false,
-            submenu: [],
+            submenu: []
           },
-        ],
+          {
+            key: 'dashboards-general-city',
+            path: `${APP_PREFIX_PATH}/dashboards/general/city/city-list`,
+            title: 'City',
+            icon: HomeOutlined,
+            breadcrumb: false,
+            submenu: []
+          },
+        ]
       },
       {
-        key: "dashboards-vehicle-type",
+        key: 'dashboards-vehicle-type',
         path: `${APP_PREFIX_PATH}/dashboards/vehicle-type`,
-        title: "Vehicle Type",
-        icon: AppstoreOutlined,
+        title: 'Vehicle Type',
+        icon: CarOutlined,
         breadcrumb: false,
-        submenu: [],
+        submenu: []
       },
-      {
-        key: "dashboards-fee-type",
-        path: `${APP_PREFIX_PATH}/dashboards/fee-type`,
-        title: "FeeType",
-        icon: AppstoreOutlined,
-        breadcrumb: false,
-        submenu: [],
-      },
+      // {
+      //   key: 'dashboards-fee-type',
+      //   path: `${APP_PREFIX_PATH}/dashboards/fee-type`,
+      //   title: 'FeeType',
+      //   icon: AppstoreOutlined,
+      //   breadcrumb: false,
+      //   submenu: []
+      // },
       // {
       //   key: "dashboards-auction-inventory",
       //   path: `${APP_PREFIX_PATH}/dashboards/auction-inventory`,
@@ -355,28 +331,28 @@ const dashBoardNavTree = [
       //   submenu: [],
       // },
       {
-        key: "dashboards-participant",
+        key: 'dashboards-participant',
         path: `${APP_PREFIX_PATH}/dashboards/participant`,
-        title: "Participant",
-        icon: AppstoreOutlined,
+        title: 'Participant',
+        icon: UserOutlined,
         breadcrumb: false,
-        submenu: [],
+        submenu: []
       },
       {
-        key: "dashboards-wallet",
+        key: 'dashboards-wallet',
         path: `${APP_PREFIX_PATH}/dashboards/wallet`,
-        title: "Wallet",
-        icon: AppstoreOutlined,
+        title: 'Wallet',
+        icon: WalletOutlined,
         breadcrumb: false,
-        submenu: [],
+        submenu: []
       },
       {
-        key: "dashboards-buying-limit",
+        key: 'dashboards-buying-limit',
         path: `${APP_PREFIX_PATH}/dashboards/buying-limit`,
-        title: "Buying Limits",
-        icon: AppstoreOutlined,
+        title: 'Buying Limits History',
+        icon: DollarCircleOutlined,
         breadcrumb: false,
-        submenu: [],
+        submenu: []
       },
       // {
       //   key: "dashboards-region",
@@ -394,21 +370,21 @@ const dashBoardNavTree = [
       //   breadcrumb: false,
       //   submenu: [],
       // },
+      // {
+      //   key: 'dashboards-group-members',
+      //   path: `${APP_PREFIX_PATH}/dashboards/group-members`,
+      //   title: 'Group Members',
+      //   icon: AppstoreOutlined,
+      //   breadcrumb: false,
+      //   submenu: []
+      // },
       {
-        key: "dashboards-group-members",
-        path: `${APP_PREFIX_PATH}/dashboards/group-members`,
-        title: "Group Members",
-        icon: AppstoreOutlined,
-        breadcrumb: false,
-        submenu: [],
-      },
-      {
-        key: "dashboards-templates",
+        key: 'dashboards-templates',
         path: `${APP_PREFIX_PATH}/dashboards/template`,
-        title: "Templates",
+        title: 'Templates',
         icon: AppstoreOutlined,
         breadcrumb: false,
-        submenu: [],
+        submenu: []
       },
       // {
       //   key: "dashboards-auction",
@@ -422,42 +398,74 @@ const dashBoardNavTree = [
         key: 'dashboards-auction',
         path: `${APP_PREFIX_PATH}/dashboards/auction`,
         title: 'Auction',
-        icon: NodeExpandOutlined,
+        icon: FolderOutlined,
         breadcrumb: false,
         submenu: [
           {
             key: 'dashboards-auction-auction',
             path: `${APP_PREFIX_PATH}/dashboards/auction/auction/auction-list`,
             title: 'Auction',
-            icon: NodeExpandOutlined,
+            icon: DatabaseOutlined,
             breadcrumb: false,
-            submenu: [],
+            submenu: []
           },
           {
             key: 'dashboards-auction-auction-inventory',
             path: `${APP_PREFIX_PATH}/dashboards/auction/auction-inventory/auction-inventory-list`,
             title: 'Auction Inventory',
-            icon: NodeExpandOutlined,
+            icon: DatabaseOutlined,
             breadcrumb: false,
-            submenu: [],
+            submenu: []
           },
           {
             key: 'dashboards-auction-bidding',
             path: `${APP_PREFIX_PATH}/dashboards/auction/bidding/bidding-list`,
             title: 'Bidding',
-            icon: NodeExpandOutlined,
+            icon: DollarCircleOutlined,
             breadcrumb: false,
-            submenu: [],
+            submenu: []
           },
           {
-            key: "dashboards-watchlist",
-            path: `${APP_PREFIX_PATH}/dashboards/watchlist`,
-            title: "Watchlist",
-            icon: NodeExpandOutlined,
+            key: 'dashboards-watchlist',
+            path: `${APP_PREFIX_PATH}/dashboards/auction/watchlist`,
+            title: 'Watchlist',
+            icon: HeartOutlined,
             breadcrumb: false,
-            submenu: [],
+            submenu: []
           },
-        ],
+          {
+            key: 'dashboards-comment',
+            path: `${APP_PREFIX_PATH}/dashboards/auction/comment`,
+            title: 'Comment',
+            icon: CommentOutlined,
+            breadcrumb: false,
+            submenu: []
+          },
+          {
+            key: 'dashboards-winning',
+            path: `${APP_PREFIX_PATH}/dashboards/auction/winning`,
+            title: 'Winning',
+            icon: CheckCircleOutlined,
+            breadcrumb: false,
+            submenu: []
+          },
+          {
+            key: 'dashboards-approve-bid',
+            path: `${APP_PREFIX_PATH}/dashboards/auction/approve-bid`,
+            title: 'Approve Bid',
+            icon: CheckCircleOutlined,
+            breadcrumb: false,
+            submenu: []
+          },
+          {
+            key: 'dashboards-general-group',
+            path: `${APP_PREFIX_PATH}/dashboards/general/group/group-list`,
+            title: 'Groups',
+            icon: GroupOutlined,
+            breadcrumb: false,
+            submenu: []
+          }
+        ]
       },
       // {
       //   key: "dashboards-states",
@@ -476,20 +484,28 @@ const dashBoardNavTree = [
       //   submenu: [],
       // },
       {
-        key: "dashboards-deposits",
+        key: 'dashboards-deposits',
         path: `${APP_PREFIX_PATH}/dashboards/deposit`,
-        title: "Deposits",
-        icon: AppstoreOutlined,
+        title: 'Deposits',
+        icon: DollarCircleOutlined,
         breadcrumb: false,
-        submenu: [],
+        submenu: []
       },
       {
-        key: "dashboards-wallet-transactions",
-        path: `${APP_PREFIX_PATH}/dashboards/wallet-transaction`,
-        title: "Wallet Transactions",
-        icon: AppstoreOutlined,
+        key: 'dashboards-registrations',
+        path: `${APP_PREFIX_PATH}/dashboards/registration`,
+        title: 'Registrations',
+        icon: DollarCircleOutlined,
         breadcrumb: false,
-        submenu: [],
+        submenu: []
+      },
+      {
+        key: 'dashboards-wallet-transactions',
+        path: `${APP_PREFIX_PATH}/dashboards/wallet-transaction`,
+        title: 'Wallet Transactions',
+        icon: WalletOutlined,
+        breadcrumb: false,
+        submenu: []
       },
       // {
       //   key: "dashboards-roles",
@@ -500,23 +516,23 @@ const dashBoardNavTree = [
       //   submenu: [],
       // },
       {
-        key: "dashboards-client",
+        key: 'dashboards-client',
         path: `${APP_PREFIX_PATH}/dashboards/client`,
-        title: "Client",
-        icon: AppstoreOutlined,
+        title: 'Client',
+        icon: UserOutlined,
         breadcrumb: false,
-        submenu: [],
+        submenu: []
       },
       {
-        key: "dashboards-settings",
+        key: 'dashboards-settings',
         path: `${APP_PREFIX_PATH}/dashboards/settings`,
-        title: "Settings",
-        icon: AppstoreOutlined,
+        title: 'Settings',
+        icon: SettingOutlined,
         breadcrumb: false,
-        submenu: [],
-      },
-    ],
-  },
+        submenu: []
+      }
+    ]
+  }
 ];
 
 // const appsNavTree = [
@@ -1262,8 +1278,67 @@ const dashBoardNavTree = [
 //   },
 // ]
 
+export const sellerDashboard = [
+  {
+    key: 'dashboards-auction-auction',
+    path: `${APP_PREFIX_PATH}/dashboards/seller-auction/auction/auction-list`,
+    title: 'Auction',
+    icon: NodeExpandOutlined,
+    breadcrumb: false,
+    submenu: []
+  },
+  {
+    key: 'dashboards-auction-auction-inventory',
+    path: `${APP_PREFIX_PATH}/dashboards/seller-auction/auction-inventory/auction-inventory-list`,
+    title: 'Auction Inventory',
+    icon: NodeExpandOutlined,
+    breadcrumb: false,
+    submenu: []
+  },
+  {
+    key: 'dashboards-auction-bidding',
+    path: `${APP_PREFIX_PATH}/dashboards/seller-auction/bidding/bidding-list`,
+    title: 'Bidding',
+    icon: NodeExpandOutlined,
+    breadcrumb: false,
+    submenu: []
+  },
+  // {
+  //   key: 'dashboards-watchlist',
+  //   path: `${APP_PREFIX_PATH}/dashboards/seller-auction/watchlist`,
+  //   title: 'Watchlist',
+  //   icon: NodeExpandOutlined,
+  //   breadcrumb: false,
+  //   submenu: []
+  // },
+  {
+    key: 'dashboards-comment',
+    path: `${APP_PREFIX_PATH}/dashboards/seller-auction/comment`,
+    title: 'Comment',
+    icon: NodeExpandOutlined,
+    breadcrumb: false,
+    submenu: []
+  },
+  {
+    key: 'dashboards-winning',
+    path: `${APP_PREFIX_PATH}/dashboards/seller-auction/winning`,
+    title: 'Winning',
+    icon: NodeExpandOutlined,
+    breadcrumb: false,
+    submenu: []
+  },
+  {
+    key: 'dashboards-approve-bid',
+    path: `${APP_PREFIX_PATH}/dashboards/seller-auction/approve-bid`,
+    title: 'Approve Bid',
+    icon: NodeExpandOutlined,
+    breadcrumb: false,
+    submenu: []
+  }
+];
+
 const navigationConfig = [
-  ...dashBoardNavTree,
+  ...dashBoardNavTree
   // ...appsNavTree,
   // ...componentsNavTree,
   //  ...extraNavTree,

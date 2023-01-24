@@ -3,10 +3,10 @@ import fetch from "auth/FetchInterceptor";
 const stateService = {};
 const apiRoute = "/state";
 
-stateService.getStates = async function () {
+stateService.getStates = async function (query='') {
   try {
     const res = await fetch({
-      url: `${apiRoute}/get/all`,
+      url: `${apiRoute}/get/all?${query}`,
       method: "get",
     });
     return res.data;

@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from "react";
-import PageHeaderAlt from "components/layout-components/PageHeaderAlt";
-import { Tabs, Form, Button, message } from "antd";
-import Flex from "components/shared-components/Flex";
-import GeneralField from "./GeneralField";
-import useUpload from "hooks/useUpload";
-import { singleImageUploader } from "utils/s3/s3ImageUploader";
-import Utils from "utils";
-import { useHistory } from "react-router-dom";
-import regionService from "services/region";
+import React, { useState, useEffect } from 'react';
+import PageHeaderAlt from 'components/layout-components/PageHeaderAlt';
+import { Tabs, Form, Button, message } from 'antd';
+import Flex from 'components/shared-components/Flex';
+import GeneralField from './GeneralField';
+import useUpload from 'hooks/useUpload';
+import { singleImageUploader } from 'utils/s3/s3ImageUploader';
+import Utils from 'utils';
+import { useHistory } from 'react-router-dom';
+import regionService from 'services/region';
 
 const { TabPane } = Tabs;
 
-const ADD = "ADD";
-const EDIT = "EDIT";
+const ADD = 'ADD';
+const EDIT = 'EDIT';
 
 const ClientForm = (props) => {
   const { mode = ADD, param } = props;
@@ -30,10 +30,10 @@ const ClientForm = (props) => {
           form.setFieldsValue({
             name: data.name,
             status: data.status,
-            priority: data.priority,
+            priority: data.priority
           });
         } else {
-          history.replace("/app/dashboards/general/region/region-list");
+          history.replace('/app/dashboards/general/region/region-list');
         }
       };
 
@@ -70,8 +70,8 @@ const ClientForm = (props) => {
       })
       .catch((info) => {
         setSubmitLoading(false);
-        console.log("info", info);
-        message.error("Please enter all required field ");
+        console.log('info', info);
+        message.error('Please enter all required field ');
       });
   };
 
@@ -83,7 +83,7 @@ const ClientForm = (props) => {
         name="advanced_search"
         className="ant-advanced-search-form"
         initialValues={{
-          status: "Hold",
+          status: 'Hold'
         }}
       >
         <PageHeaderAlt className="border-bottom" overlap>
@@ -95,13 +95,13 @@ const ClientForm = (props) => {
               alignItems="center"
             >
               <h2 className="mb-3">
-                {mode === "ADD" ? "Add New Client" : `Edit Client`}{" "}
+                {mode === 'ADD' ? 'Add New Region' : `Edit Region`}{' '}
               </h2>
               <div className="mb-3">
                 <Button
                   className="mr-2"
                   onClick={() =>
-                    history.push("/app/dashboards/general/region/region-list")
+                    history.push('/app/dashboards/general/region/region-list')
                   }
                 >
                   Discard
@@ -112,7 +112,7 @@ const ClientForm = (props) => {
                   htmlType="submit"
                   loading={submitLoading}
                 >
-                  {mode === "ADD" ? "Add" : `Save`}
+                  {mode === 'ADD' ? 'Add' : `Save`}
                 </Button>
               </div>
             </Flex>

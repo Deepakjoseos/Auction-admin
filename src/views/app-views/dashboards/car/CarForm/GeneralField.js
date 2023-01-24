@@ -40,14 +40,14 @@ const rules = {
   ],
 }
 
-const GeneralField = ({form,vehicleTypes,brands}) => (
+const GeneralField = ({ form, vehicleTypes, brands }) => (
   <Row gutter={16}>
     <Col xs={24} sm={24} md={24}>
       <Card title="Basic Info">
         <Form.Item name="name" label="Name" rules={rules.name}>
           <Input placeholder="Name" />
         </Form.Item>
-        <Form.Item name="description" label="Description">
+        <Form.Item name="description" label="Description" rules={rules.status}>
           <Editor
             placeholder="Write something..."
             editorHtml={form.getFieldValue('description') || ''}
@@ -55,27 +55,31 @@ const GeneralField = ({form,vehicleTypes,brands}) => (
             name="description"
           />
         </Form.Item>
-        <Form.Item name="priceRange" label="PriceRange">
+        <Form.Item name="priceRange" label="PriceRange" rules={rules.name}>
           <Input placeholder="priceRange" />
         </Form.Item>
-        <Form.Item name="vehicleTypeId" label="Vehicle Type" >
-            <Select placeholder="Vehicle Type">
-              {vehicleTypes.map((item) => (
-                <Option key={item.id} value={item._id}>
-                  {item.name}
-                </Option>
-              ))}
-            </Select>
-          </Form.Item>
-          <Form.Item name="brandId" label="Brand" rules={rules.status}>
-            <Select placeholder="Brand">
-              {brands.map((item) => (
-                <Option key={item.id} value={item._id}>
-                  {item.name}
-                </Option>
-              ))}
-            </Select>
-          </Form.Item>
+        <Form.Item
+          name="vehicleTypeId"
+          label="Vehicle Type"
+          rules={rules.status}
+        >
+          <Select placeholder="Vehicle Type">
+            {vehicleTypes.map((item) => (
+              <Option key={item.id} value={item._id}>
+                {item.name}
+              </Option>
+            ))}
+          </Select>
+        </Form.Item>
+        <Form.Item name="brandId" label="Brand" rules={rules.status}>
+          <Select placeholder="Brand">
+            {brands.map((item) => (
+              <Option key={item.id} value={item._id}>
+                {item.name}
+              </Option>
+            ))}
+          </Select>
+        </Form.Item>
 
         <Form.Item name="status" label="Status" rules={rules.status}>
           <Select placeholder="Status">
@@ -93,6 +97,6 @@ const GeneralField = ({form,vehicleTypes,brands}) => (
       </Card>
     </Col> */}
   </Row>
-)
+);
 
 export default GeneralField

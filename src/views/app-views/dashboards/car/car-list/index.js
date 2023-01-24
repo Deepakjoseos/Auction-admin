@@ -1,31 +1,31 @@
-import React, { useEffect, useState } from "react";
-import { Card, Table, Select, Input, Button, Menu, Tag } from "antd";
+import React, { useEffect, useState } from 'react';
+import { Card, Table, Select, Input, Button, Menu, Tag } from 'antd';
 // import InformationListData from 'assets/data/product-list.data.json'
 import {
   EyeOutlined,
   DeleteOutlined,
   SearchOutlined,
-  PlusCircleOutlined,
-} from "@ant-design/icons";
-import AvatarStatus from "components/shared-components/AvatarStatus";
-import EllipsisDropdown from "components/shared-components/EllipsisDropdown";
-import Flex from "components/shared-components/Flex";
-import { useHistory } from "react-router-dom";
-import utils from "utils";
-import carService from "services/car";
-import { useSelector } from "react-redux";
+  PlusCircleOutlined
+} from '@ant-design/icons';
+import AvatarStatus from 'components/shared-components/AvatarStatus';
+import EllipsisDropdown from 'components/shared-components/EllipsisDropdown';
+import Flex from 'components/shared-components/Flex';
+import { useHistory } from 'react-router-dom';
+import utils from 'utils';
+import carService from 'services/car';
+import { useSelector } from 'react-redux';
 
 const { Option } = Select;
 
 const getStockStatus = (status) => {
-  if (status === "Active") {
+  if (status === 'Active') {
     return (
       <>
         <Tag color="green">Active</Tag>
       </>
     );
   }
-  if (status === "Hold") {
+  if (status === 'Hold') {
     return (
       <>
         <Tag color="red">Hold</Tag>
@@ -34,8 +34,10 @@ const getStockStatus = (status) => {
   }
   return null;
 };
-const InformationList = () => {
+const InformationList = (props) => {
   let history = useHistory();
+
+  const { addPrivilege, editPrivilege, deletePrivilege } = props;
 
   const [list, setList] = useState([]);
   const [searchBackupList, setSearchBackupList] = useState([]);
@@ -47,8 +49,8 @@ const InformationList = () => {
 
   useEffect(() => {
     if (user) {
-      const carRole = user.roles.find((role) => role.module === "CAR");
-      console.log("carRole", carRole);
+      const carRole = user.roles.find((role) => role.module === 'CAR');
+      console.log('carRole', carRole);
       setCurrentSubAdminRole(carRole);
     }
   }, [user]);
@@ -59,23 +61,24 @@ const InformationList = () => {
       if (data) {
         setList(data);
         setSearchBackupList(data);
-        console.log(data, "show-data");
+        console.log(data, 'show-data');
       }
     };
     getCars();
   }, []);
 
   const dropdownMenu = (row) => {
-    if (window.localStorage.getItem("auth_type") === "Admin") {
-      return (
-        <Menu>
+    return (
+      <Menu>
+        {editPrivilege && (
           <Menu.Item onClick={() => viewDetails(row)}>
             <Flex alignItems="center">
               <EyeOutlined />
               <span className="ml-2">View Details</span>
             </Flex>
           </Menu.Item>
-          {/* <Menu.Item onClick={() => deleteRow(row)}>
+        )}
+        {/* <Menu.Item onClick={() => deleteRow(row)}>
             <Flex alignItems="center">
               <DeleteOutlined />
               <span className="ml-2">
@@ -85,34 +88,8 @@ const InformationList = () => {
               </span>
             </Flex>
           </Menu.Item> */}
-        </Menu>
-      );
-    } else {
-      return (
-        <Menu>
-          {currentSubAdminRole?.edit && (
-            <Menu.Item onClick={() => viewDetails(row)}>
-              <Flex alignItems="center">
-                <EyeOutlined />
-                <span className="ml-2">View Details</span>
-              </Flex>
-            </Menu.Item>
-          )}
-          {/* {currentSubAdminRole?.delete && (
-            // <Menu.Item onClick={() => deleteRow(row)}>
-            //   <Flex alignItems="center">
-            //     <DeleteOutlined />
-            //     <span className="ml-2">
-            //       {selectedRows.length > 0
-            //         ? `Delete (${selectedRows.length})`
-            //         : "Delete"}
-            //     </span>
-            //   </Flex>
-            // </Menu.Item>
-          )} */}
-        </Menu>
-      );
-    }
+      </Menu>
+    );
   };
 
   const addProduct = () => {
@@ -144,19 +121,19 @@ const InformationList = () => {
 
   const tableColumns = [
     {
-      title: "Car",
-      dataIndex: "name",
+      title: 'Car',
+      dataIndex: 'name',
       render: (_, record) => (
         <div className="d-flex">
           <AvatarStatus
             size={60}
             type="square"
-            src={record?.images?.image}
+            src={record.image}
             name={record.name}
           />
         </div>
       ),
-      sorter: (a, b) => utils.antdTableSorter(a, b, "name"),
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'name')
     },
     // {
     //   title: 'Description',
@@ -166,46 +143,40 @@ const InformationList = () => {
     //   ),
     // },
     {
-      title: "Vechile Type",
-      dataIndex: "vehicleType",
+      title: 'Vechile Type',
+      dataIndex: 'vehicleType',
       render: (vehicleType) => vehicleType?.name,
-      sorter: (a, b) => utils.antdTableSorter(a, b, "color"),
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'vehicleType')
     },
     {
-      title: "Price Range",
-      dataIndex: "priceRange",
-      sorter: (a, b) => utils.antdTableSorter(a, b, "color"),
+      title: 'Price Range',
+      dataIndex: 'priceRange',
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'priceRange')
     },
     {
-      title: "Brand",
-      dataIndex: "brand",
+      title: 'Brand',
+      dataIndex: 'brand',
       render: (brand) => brand?.name,
-      sorter: (a, b) => utils.antdTableSorter(a, b, "color"),
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'color')
     },
 
     {
-      title: "Status",
-      dataIndex: "status",
+      title: 'Status',
+      dataIndex: 'status',
       render: (status) => (
         <Flex alignItems="center">{getStockStatus(status)}</Flex>
       ),
-      sorter: (a, b) => utils.antdTableSorter(a, b, "status"),
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'status')
     },
     {
-      title: "",
-      dataIndex: "actions",
+      title: '',
+      dataIndex: 'actions',
       render: (_, elm) => (
         <div className="text-right">
-          {window.localStorage.getItem("auth_type") === "Admin" ? (
-            <EllipsisDropdown menu={dropdownMenu(elm)} />
-          ) : (
-            (currentSubAdminRole?.edit || currentSubAdminRole?.delete) && (
-              <EllipsisDropdown menu={dropdownMenu(elm)} />
-            )
-          )}
+          {editPrivilege && <EllipsisDropdown menu={dropdownMenu(elm)} />}
         </div>
-      ),
-    },
+      )
+    }
   ];
 
   const onSearch = (e) => {
@@ -217,8 +188,8 @@ const InformationList = () => {
   };
 
   const handleShowStatus = (value) => {
-    if (value !== "All") {
-      const key = "status";
+    if (value !== 'All') {
+      const key = 'status';
       const data = utils.filterArray(searchBackupList, key, value);
       setList(data);
     } else {
@@ -256,20 +227,7 @@ const InformationList = () => {
       <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
         {filters()}
         <div>
-          {window.localStorage.getItem("auth_type") === "SubAdmin" ? (
-            <>
-              {currentSubAdminRole?.add && (
-                <Button
-                  onClick={addProduct}
-                  type="primary"
-                  icon={<PlusCircleOutlined />}
-                  block
-                >
-                  Add Car
-                </Button>
-              )}
-            </>
-          ) : (
+          {addPrivilege && (
             <Button
               onClick={addProduct}
               type="primary"

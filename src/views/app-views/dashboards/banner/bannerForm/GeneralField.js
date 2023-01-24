@@ -1,46 +1,46 @@
-import React from 'react'
-import { Input, Row, Col, Card, Form, Upload, InputNumber, Select } from 'antd'
-import { ImageSvg } from 'assets/svg/icon'
-import CustomIcon from 'components/util-components/CustomIcon'
+import React from 'react';
+import { Input, Row, Col, Card, Form, Upload, InputNumber, Select } from 'antd';
+import { ImageSvg } from 'assets/svg/icon';
+import CustomIcon from 'components/util-components/CustomIcon';
 
 // const { Dragger } = Upload
-const { Option } = Select
+const { Option } = Select;
 
 const rules = {
   title: [
     {
       required: true,
-      message: 'Required',
-    },
+      message: 'Required'
+    }
   ],
   url: [
     {
       required: true,
-      message: 'Required',
-    },
+      message: 'Required'
+    }
   ],
   image: [
     {
       required: true,
-      message: 'Required',
-    },
+      message: 'Required'
+    }
   ],
 
   status: [
     {
       required: true,
-      message: 'Required',
-    },
+      message: 'Required'
+    }
   ],
   priority: [
     {
       required: true,
-      message: 'Required',
-    },
-  ],
-}
+      message: 'Required'
+    }
+  ]
+};
 
-const GeneralField = ({ images, propsImages }) => (
+const GeneralField = ({ images, propsImages }) => ( 
   <Row gutter={16}>
     <Col xs={24} sm={24} md={17}>
       <Card title="Basic Info">
@@ -64,12 +64,14 @@ const GeneralField = ({ images, propsImages }) => (
     </Col>
     <Col xs={24} sm={24} md={7}>
       <Card title="Image">
-        <Upload listType="picture-card" name="image" {...propsImages}>
-          <CustomIcon className="display-3" svg={ImageSvg} />
-        </Upload>
+        <Form.Item name="image" >
+          <Upload listType="picture-card" name="image" {...propsImages}>
+            <CustomIcon className="display-3" svg={ImageSvg} />
+          </Upload>
+        </Form.Item>
       </Card>
     </Col>
   </Row>
-)
+);
 
-export default GeneralField
+export default GeneralField;

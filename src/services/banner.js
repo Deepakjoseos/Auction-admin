@@ -3,10 +3,10 @@ import fetch from 'auth/FetchInterceptor'
 const bannerService = {}
 const api = '/banner'
 
-bannerService.getBanners = async function () {
+bannerService.getBanners = async function (query ='') {
   try {
     const res = await fetch({
-      url: `${api}/get/all`,
+      url: `${api}/get/all/admin?${query}`,
       method: 'get',
     })
     return res.data
@@ -17,7 +17,7 @@ bannerService.getBanners = async function () {
 bannerService.getBannerById = async function (id) {
     try {
       const res = await fetch({
-        url: `${api}/${id}`,
+        url: `${api}/${id}/admin`,
         method: 'get',
       })
       return res.data

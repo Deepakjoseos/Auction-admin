@@ -197,10 +197,11 @@ const GeneralField = ({ form, tempConstants, form_statuses }) => {
                 label="SMS Content"
                 rules={rules.smsContent}
               >
-                <Editor
+                <Input
+                // .TextArea rows={4}
                   placeholder="Write something..."
-                  editorHtml={form.getFieldValue('smsContent') || ''}
-                  onChange={(e) => form.setFieldsValue({ smsContent: e })}
+                  // editorHtml={form.getFieldValue('smsContent') || ''}
+                  // onChange={(e) => form.setFieldsValue({ smsContent: e })}
                   name="smsContent"
                 />
               </Form.Item>
@@ -269,10 +270,11 @@ const GeneralField = ({ form, tempConstants, form_statuses }) => {
                 label="FCM Description"
                 rules={rules.fcmDescription}
               >
-                <Editor
+                <Input
+                // .TextArea rows={4}
                   placeholder="Write something..."
-                  editorHtml={form.getFieldValue('fcmDescription') || ''}
-                  onChange={(e) => form.setFieldsValue({ fcmDescription: e })}
+                  // editorHtml={form.getFieldValue('fcmDescription') || ''}
+                  // onChange={(e) => form.setFieldsValue({ fcmDescription: e })}
                   name="fcmDescription"
                 />
               </Form.Item>

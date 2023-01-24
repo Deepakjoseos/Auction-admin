@@ -1,6 +1,23 @@
-import { message, notification } from 'antd'
-import { APP_PREFIX_PATH } from 'configs/AppConfig'
-import { DashboardOutlined, AppstoreOutlined } from '@ant-design/icons'
+import { message, notification } from 'antd';
+import { APP_PREFIX_PATH } from 'configs/AppConfig';
+import {
+  DashboardOutlined,
+  AppstoreOutlined,
+  InfoCircleOutlined,
+  FileImageOutlined,
+  PictureOutlined,
+  CarOutlined,
+  GroupOutlined,
+  HomeOutlined,
+  UserOutlined,
+  WalletOutlined,
+  SettingOutlined,
+  DollarCircleOutlined,
+  DatabaseOutlined,
+  HeartOutlined,
+  CommentOutlined,
+  CheckCircleOutlined
+} from '@ant-design/icons';
 
 class Utils {
   /**
@@ -9,8 +26,8 @@ class Utils {
    * @return {String} 2 characters string
    */
   static getNameInitial(name) {
-    let initials = name.match(/\b\w/g) || []
-    return ((initials.shift() || '') + (initials.pop() || '')).toUpperCase()
+    let initials = name.match(/\b\w/g) || [];
+    return ((initials.shift() || '') + (initials.pop() || '')).toUpperCase();
   }
 
   /**
@@ -21,18 +38,18 @@ class Utils {
    */
   static getRouteInfo(navTree, path) {
     if (navTree.path === path) {
-      return navTree
+      return navTree;
     }
-    let route
+    let route;
     for (let p in navTree) {
       if (navTree.hasOwnProperty(p) && typeof navTree[p] === 'object') {
-        route = this.getRouteInfo(navTree[p], path)
+        route = this.getRouteInfo(navTree[p], path);
         if (route) {
-          return route
+          return route;
         }
       }
     }
-    return route
+    return route;
   }
 
   /**
@@ -42,29 +59,29 @@ class Utils {
    */
   static getColorContrast(hex) {
     if (!hex) {
-      return 'dark'
+      return 'dark';
     }
-    const threshold = 130
-    const hRed = hexToR(hex)
-    const hGreen = hexToG(hex)
-    const hBlue = hexToB(hex)
+    const threshold = 130;
+    const hRed = hexToR(hex);
+    const hGreen = hexToG(hex);
+    const hBlue = hexToB(hex);
     function hexToR(h) {
-      return parseInt(cutHex(h).substring(0, 2), 16)
+      return parseInt(cutHex(h).substring(0, 2), 16);
     }
     function hexToG(h) {
-      return parseInt(cutHex(h).substring(2, 4), 16)
+      return parseInt(cutHex(h).substring(2, 4), 16);
     }
     function hexToB(h) {
-      return parseInt(cutHex(h).substring(4, 6), 16)
+      return parseInt(cutHex(h).substring(4, 6), 16);
     }
     function cutHex(h) {
-      return h.charAt(0) === '#' ? h.substring(1, 7) : h
+      return h.charAt(0) === '#' ? h.substring(1, 7) : h;
     }
-    const cBrightness = (hRed * 299 + hGreen * 587 + hBlue * 114) / 1000
+    const cBrightness = (hRed * 299 + hGreen * 587 + hBlue * 114) / 1000;
     if (cBrightness > threshold) {
-      return 'dark'
+      return 'dark';
     } else {
-      return 'light'
+      return 'light';
     }
   }
 
@@ -75,22 +92,22 @@ class Utils {
    * @return {String} Darken or lighten color
    */
   static shadeColor(color, percent) {
-    let R = parseInt(color.substring(1, 3), 16)
-    let G = parseInt(color.substring(3, 5), 16)
-    let B = parseInt(color.substring(5, 7), 16)
-    R = parseInt((R * (100 + percent)) / 100)
-    G = parseInt((G * (100 + percent)) / 100)
-    B = parseInt((B * (100 + percent)) / 100)
-    R = R < 255 ? R : 255
-    G = G < 255 ? G : 255
-    B = B < 255 ? B : 255
+    let R = parseInt(color.substring(1, 3), 16);
+    let G = parseInt(color.substring(3, 5), 16);
+    let B = parseInt(color.substring(5, 7), 16);
+    R = parseInt((R * (100 + percent)) / 100);
+    G = parseInt((G * (100 + percent)) / 100);
+    B = parseInt((B * (100 + percent)) / 100);
+    R = R < 255 ? R : 255;
+    G = G < 255 ? G : 255;
+    B = B < 255 ? B : 255;
     const RR =
-      R.toString(16).length === 1 ? `0${R.toString(16)}` : R.toString(16)
+      R.toString(16).length === 1 ? `0${R.toString(16)}` : R.toString(16);
     const GG =
-      G.toString(16).length === 1 ? `0${G.toString(16)}` : G.toString(16)
+      G.toString(16).length === 1 ? `0${G.toString(16)}` : G.toString(16);
     const BB =
-      B.toString(16).length === 1 ? `0${B.toString(16)}` : B.toString(16)
-    return `#${RR}${GG}${BB}`
+      B.toString(16).length === 1 ? `0${B.toString(16)}` : B.toString(16);
+    return `#${RR}${GG}${BB}`;
   }
 
   /**
@@ -99,29 +116,29 @@ class Utils {
    * @return {String} HEX color
    */
   static rgbaToHex(rgba) {
-    const trim = (str) => str.replace(/^\s+|\s+$/gm, '')
+    const trim = (str) => str.replace(/^\s+|\s+$/gm, '');
     const inParts = rgba.substring(rgba.indexOf('(')).split(','),
       r = parseInt(trim(inParts[0].substring(1)), 10),
       g = parseInt(trim(inParts[1]), 10),
       b = parseInt(trim(inParts[2]), 10),
       a = parseFloat(
         trim(inParts[3].substring(0, inParts[3].length - 1))
-      ).toFixed(2)
+      ).toFixed(2);
     const outParts = [
       r.toString(16),
       g.toString(16),
       b.toString(16),
       Math.round(a * 255)
         .toString(16)
-        .substring(0, 2),
-    ]
+        .substring(0, 2)
+    ];
 
     outParts.forEach(function (part, i) {
       if (part.length === 1) {
-        outParts[i] = '0' + part
+        outParts[i] = '0' + part;
       }
-    })
-    return `#${outParts.join('')}`
+    });
+    return `#${outParts.join('')}`;
   }
 
   /**
@@ -133,12 +150,12 @@ class Utils {
    */
   static getSignNum(number, positive, negative) {
     if (number > 0) {
-      return positive
+      return positive;
     }
     if (number < 0) {
-      return negative
+      return negative;
     }
-    return null
+    return null;
   }
 
   /**
@@ -150,15 +167,15 @@ class Utils {
    */
   static antdTableSorter(a, b, key) {
     if (typeof a[key] === 'number' && typeof b[key] === 'number') {
-      return a[key] - b[key]
+      return a[key] - b[key];
     }
 
     if (typeof a[key] === 'string' && typeof b[key] === 'string') {
-      a = a[key].toLowerCase()
-      b = b[key].toLowerCase()
-      return a > b ? -1 : b > a ? 1 : 0
+      a = a[key].toLowerCase();
+      b = b[key].toLowerCase();
+      return a > b ? -1 : b > a ? 1 : 0;
     }
-    return
+    return;
   }
 
   /**
@@ -169,11 +186,11 @@ class Utils {
    * @return {Array} a value minus b value
    */
   static filterArray(list, key, value) {
-    let data = list
+    let data = list;
     if (list) {
-      data = list.filter((item) => item[key] === value)
+      data = list.filter((item) => item[key] === value);
     }
-    return data
+    return data;
   }
 
   /**
@@ -184,11 +201,11 @@ class Utils {
    * @return {Array} Array that removed target object
    */
   static deleteArrayRow(list, key, value) {
-    let data = list
+    let data = list;
     if (list) {
-      data = list.filter((item) => item[key] !== value)
+      data = list.filter((item) => item[key] !== value);
     }
-    return data
+    return data;
   }
 
   /**
@@ -201,7 +218,7 @@ class Utils {
     const searchText = (item) => {
       for (let key in item) {
         if (item[key] == null) {
-          continue
+          continue;
         }
         if (
           item[key]
@@ -209,12 +226,12 @@ class Utils {
             .toUpperCase()
             .indexOf(input.toString().toUpperCase()) !== -1
         ) {
-          return true
+          return true;
         }
       }
-    }
-    list = list.filter((value) => searchText(value))
-    return list
+    };
+    list = list.filter((value) => searchText(value));
+    return list;
   }
 
   /**
@@ -223,16 +240,16 @@ class Utils {
    * @return {Array} array of breakpoint size
    */
   static getBreakPoint(screens) {
-    let breakpoints = []
+    let breakpoints = [];
     for (const key in screens) {
       if (screens.hasOwnProperty(key)) {
-        const element = screens[key]
+        const element = screens[key];
         if (element) {
-          breakpoints.push(key)
+          breakpoints.push(key);
         }
       }
     }
-    return breakpoints
+    return breakpoints;
   }
 
   /**
@@ -242,22 +259,22 @@ class Utils {
   static getBaseName(path) {
     // console.log(path)
     if (path) {
-      const parsed = path.split('/')
-      return parsed[parsed.length - 1]
+      const parsed = path.split('/');
+      return parsed[parsed.length - 1];
     }
-    return ''
+    return '';
   }
 
   /**
    * Create Categories based on the list of items including children
    */
   static createCategoryList(categories, parentId = null) {
-    const categoryList = []
-    let category
+    const categoryList = [];
+    let category;
     if (parentId == null) {
-      category = categories.filter((cat) => !cat?.parentId)
+      category = categories.filter((cat) => !cat?.parentId);
     } else {
-      category = categories.filter((cat) => cat?.parentId === parentId)
+      category = categories.filter((cat) => cat?.parentId === parentId);
     }
     // eslint-disable-next-line prefer-const
     for (let cate of category) {
@@ -266,15 +283,15 @@ class Utils {
         title: cate.name,
         value: cate.id,
         key: cate.id,
-        children: this.createCategoryList(categories, cate.id),
-      })
+        children: this.createCategoryList(categories, cate.id)
+      });
     }
 
-    return categoryList
+    return categoryList;
   }
 
   static errorValidator(res) {
-    console.log('my-res', res)
+    console.log('my-res', res);
     if (res) {
       if (Array.isArray(res?.message)) {
         // for (const [key, value] of Object.entries(res?.errors)) {
@@ -287,19 +304,19 @@ class Utils {
         // }
         res.message?.forEach((message) => {
           notification.error({
-            message,
-          })
-        })
+            message
+          });
+        });
       } else if (!Array.isArray(res?.message)) {
         notification.error({
-          message: res?.message,
-        })
+          message: res?.message
+        });
       } else {
         // toast.error(res.title)
         notification.error({
           // description: res.title,
-          message: res.error,
-        })
+          message: res.error
+        });
       }
     }
     //  else {
@@ -318,31 +335,20 @@ class Utils {
         title: 'sidenav.dashboard',
         icon: DashboardOutlined,
         breadcrumb: false,
-        submenu: [],
-      },
-    ]
+        submenu: []
+      }
+    ];
     subAdminRoles.forEach((role) => {
-      if (role.module === 'FEE_TYPE') {
-        if (role.fetch) {
-          navItems[0].submenu.push({
-            key: 'dashboards-fee-type',
-            path: `${APP_PREFIX_PATH}/dashboards/fee-type`,
-            title: 'FeeType',
-            icon: AppstoreOutlined,
-            breadcrumb: false,
-            submenu: [],
-          })
-        }
-      } else if (role.module === 'BANNER') {
+      if (role.module === 'BANNER') {
         if (role.fetch) {
           navItems[0].submenu.push({
             key: 'dashboards-banner',
             path: `${APP_PREFIX_PATH}/dashboards/banner`,
             title: 'Banner',
-            icon: AppstoreOutlined,
+            icon: PictureOutlined,
             breadcrumb: false,
-            submenu: [],
-          })
+            submenu: []
+          });
         }
       } else if (role.module === 'CAR') {
         if (role.fetch) {
@@ -350,10 +356,10 @@ class Utils {
             key: 'dashboards-car',
             path: `${APP_PREFIX_PATH}/dashboards/car`,
             title: 'Car',
-            icon: AppstoreOutlined,
+            icon: CarOutlined,
             breadcrumb: false,
-            submenu: [],
-          })
+            submenu: []
+          });
         }
       } else if (role.module === 'SETINGS') {
         if (role.fetch) {
@@ -361,10 +367,10 @@ class Utils {
             key: 'dashboards-settings',
             path: `${APP_PREFIX_PATH}/dashboards/settings`,
             title: 'Settings',
-            icon: AppstoreOutlined,
+            icon: SettingOutlined,
             breadcrumb: false,
-            submenu: [],
-          })
+            submenu: []
+          });
         }
       } else if (role.module === 'VEHICLE TYPE') {
         if (role.fetch) {
@@ -372,10 +378,10 @@ class Utils {
             key: 'dashboards-vehicle-type',
             path: `${APP_PREFIX_PATH}/dashboards/vehicle-type`,
             title: 'VehicleTypes',
-            icon: AppstoreOutlined,
+            icon: CarOutlined,
             breadcrumb: false,
-            submenu: [],
-          })
+            submenu: []
+          });
         }
       } else if (role.module === 'PARTICIPANT') {
         if (role.fetch) {
@@ -383,23 +389,32 @@ class Utils {
             key: 'dashboards-participant',
             path: `${APP_PREFIX_PATH}/dashboards/participant`,
             title: 'Participant',
-            icon: AppstoreOutlined,
+            icon: UserOutlined,
             breadcrumb: false,
-            submenu: [],
-          })
+            submenu: []
+          });
         }
       } else if (role.module === 'REGISTRATION') {
-        // Add Register Later
+        if (role.fetch) {
+          navItems[0].submenu.push({
+            key: 'dashboards-registrations',
+            path: `${APP_PREFIX_PATH}/dashboards/registration`,
+            title: 'Registrations',
+            icon: DollarCircleOutlined,
+            breadcrumb: false,
+            submenu: []
+          });
+        }
       } else if (role.module === 'CLIENT') {
         if (role.fetch) {
           navItems[0].submenu.push({
             key: 'dashboards-client',
             path: `${APP_PREFIX_PATH}/dashboards/client`,
             title: 'Client',
-            icon: AppstoreOutlined,
+            icon: UserOutlined,
             breadcrumb: false,
-            submenu: [],
-          })
+            submenu: []
+          });
         }
       } else if (role.module === 'FUEL TYPE') {
         // Add Fuel Type Later
@@ -409,10 +424,21 @@ class Utils {
             key: 'dashboards-brand',
             path: `${APP_PREFIX_PATH}/dashboards/brand`,
             title: 'Brand',
-            icon: AppstoreOutlined,
+            icon: CarOutlined,
             breadcrumb: false,
-            submenu: [],
-          })
+            submenu: []
+          });
+        }
+      } else if (role.module === 'BRAND_VARIANT') {
+        if (role.fetch) {
+          navItems[0].submenu.push({
+            key: 'dashboards-brand-brand-variant',
+            path: `${APP_PREFIX_PATH}/dashboards/brand/brand-variant/brand-variant-list`,
+            title: 'Brand Variant',
+            icon: CarOutlined,
+            breadcrumb: false,
+            submenu: []
+          });
         }
       } else if (role.module === 'INFORMATION') {
         if (role.fetch) {
@@ -420,15 +446,191 @@ class Utils {
             key: 'dashboards-information',
             path: `${APP_PREFIX_PATH}/dashboards/information`,
             title: 'Information',
+            icon: InfoCircleOutlined,
+            breadcrumb: false,
+            submenu: []
+          });
+        }
+      } else if (role.module === 'AUCTION') {
+        if (role.fetch) {
+          navItems[0].submenu.push({
+            key: 'dashboards-auction-auction',
+            path: `${APP_PREFIX_PATH}/dashboards/auction/auction/auction-list`,
+            title: 'Auction',
+            icon: DatabaseOutlined,
+            breadcrumb: false,
+            submenu: []
+          });
+        }
+      } else if (role.module === 'AUCTION_INVENTORY') {
+        if (role.fetch) {
+          navItems[0].submenu.push({
+            key: 'dashboards-auction-auction-inventory',
+            path: `${APP_PREFIX_PATH}/dashboards/auction/auction-inventory/auction-inventory-list`,
+            title: 'Auction Inventory',
+            icon: DatabaseOutlined,
+            breadcrumb: false,
+            submenu: []
+          });
+        }
+      } else if (role.module === 'BIDDING') {
+        if (role.fetch) {
+          navItems[0].submenu.push({
+            key: 'dashboards-auction-bidding',
+            path: `${APP_PREFIX_PATH}/dashboards/auction/bidding/bidding-list`,
+            title: 'Bidding',
+            icon: DollarCircleOutlined,
+            breadcrumb: false,
+            submenu: []
+          });
+        }
+      } else if (role.module === 'WATCH_LIST') {
+        if (role.fetch) {
+          navItems[0].submenu.push({
+            key: 'dashboards-watchlist',
+            path: `${APP_PREFIX_PATH}/dashboards/auction/watchlist`,
+            title: 'Watchlist',
+            icon: HeartOutlined,
+            breadcrumb: false,
+            submenu: []
+          });
+        }
+      } else if (role.module === 'INVENTORY_COMMENT') {
+        if (role.fetch) {
+          navItems[0].submenu.push({
+            key: 'dashboards-comment',
+            path: `${APP_PREFIX_PATH}/dashboards/auction/comment`,
+            title: 'Comment',
+            icon: CommentOutlined,
+            breadcrumb: false,
+            submenu: []
+          });
+        }
+      } else if (role.module === 'WINNING') {
+        if (role.fetch) {
+          navItems[0].submenu.push({
+            key: 'dashboards-winning',
+            path: `${APP_PREFIX_PATH}/dashboards/auction/winning`,
+            title: 'Winning',
+            icon: CheckCircleOutlined,
+            breadcrumb: false,
+            submenu: []
+          });
+        }
+      } else if (role.module === 'APPROVE_BID') {
+        if (role.fetch) {
+          navItems[0].submenu.push({
+            key: 'dashboards-approve-bid',
+            path: `${APP_PREFIX_PATH}/dashboards/auction/approve-bid`,
+            title: 'Approve Bid',
+            icon: CheckCircleOutlined,
+            breadcrumb: false,
+            submenu: []
+          });
+        }
+      } else if (role.module === 'DEPOSIT') {
+        if (role.fetch) {
+          navItems[0].submenu.push({
+            key: 'dashboards-deposits',
+            path: `${APP_PREFIX_PATH}/dashboards/deposit`,
+            title: 'Deposits',
+            icon: DollarCircleOutlined,
+            breadcrumb: false,
+            submenu: []
+          });
+        }
+      } else if (role.module === 'WALLET_TRANSACTION') {
+        if (role.fetch) {
+          navItems[0].submenu.push({
+            key: 'dashboards-wallet-transactions',
+            path: `${APP_PREFIX_PATH}/dashboards/wallet-transaction`,
+            title: 'Wallet Transactions',
+            icon: WalletOutlined,
+            breadcrumb: false,
+            submenu: []
+          });
+        }
+      } else if (role.module === 'BUYING_LIMIT') {
+        if (role.fetch) {
+          navItems[0].submenu.push({
+            key: 'dashboards-wallet',
+            path: `${APP_PREFIX_PATH}/dashboards/wallet`,
+            title: 'Buying Limits',
+            icon: WalletOutlined,
+            breadcrumb: false,
+            submenu: []
+          });
+        }
+      } else if (role.module === 'CLIENT') {
+        if (role.fetch) {
+          navItems[0].submenu.push({
+            key: 'dashboards-client',
+            path: `${APP_PREFIX_PATH}/dashboards/client`,
+            title: 'Client',
             icon: AppstoreOutlined,
             breadcrumb: false,
-            submenu: [],
-          })
+            submenu: []
+          });
+        }
+      } else if (role.module === 'GROUP') {
+        if (role.fetch) {
+          navItems[0].submenu.push({
+            key: 'dashboards-general-group',
+            path: `${APP_PREFIX_PATH}/dashboards/general/group/group-list`,
+            title: 'Groups',
+            icon: GroupOutlined,
+            breadcrumb: false,
+            submenu: []
+          });
+        }
+      } else if (role.module === 'CITY') {
+        if (role.fetch) {
+          navItems[0].submenu.push({
+            key: 'dashboards-general-city',
+            path: `${APP_PREFIX_PATH}/dashboards/general/city/city-list`,
+            title: 'City',
+            icon: HomeOutlined,
+            breadcrumb: false,
+            submenu: []
+          });
+        }
+      } else if (role.module === 'REGION') {
+        if (role.fetch) {
+          navItems[0].submenu.push({
+            key: 'dashboards-general-region',
+            path: `${APP_PREFIX_PATH}/dashboards/general/region/region-list`,
+            title: 'Region',
+            icon: HomeOutlined,
+            breadcrumb: false,
+            submenu: []
+          });
+        }
+      } else if (role.module === 'STATE') {
+        if (role.fetch) {
+          navItems[0].submenu.push({
+            key: 'dashboards-general-state',
+            path: `${APP_PREFIX_PATH}/dashboards/general/state/state-list`,
+            title: 'State',
+            icon: HomeOutlined,
+            breadcrumb: false,
+            submenu: []
+          });
+        }
+      } else if (role.module === 'EMPLOYEE_TYPE') {
+        if (role.fetch) {
+          navItems[0].submenu.push({
+            key: 'dashboards-employee-type',
+            path: `${APP_PREFIX_PATH}/dashboards/employee-type`,
+            title: 'Employee Types',
+            icon: AppstoreOutlined,
+            breadcrumb: false,
+            submenu: []
+          });
         }
       }
-    })
-    return navItems
-  }
+    });
+    return navItems;
+  };
 }
 
-export default Utils
+export default Utils;

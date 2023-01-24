@@ -1,26 +1,26 @@
-import React, { useEffect, useState } from "react";
-import { Card, Table, Select, Input, Tag, Menu, Button } from "antd";
+import React, { useEffect, useState } from 'react';
+import { Card, Table, Select, Input, Tag, Menu, Button } from 'antd';
 import {
   SearchOutlined,
   EyeOutlined,
-  PlusCircleOutlined,
-} from "@ant-design/icons";
-import Flex from "components/shared-components/Flex";
-import { useHistory } from "react-router-dom";
-import utils from "utils";
-import stateService from "services/state";
-import EllipsisDropdown from "components/shared-components/EllipsisDropdown";
-import cityService from "services/city";
+  PlusCircleOutlined
+} from '@ant-design/icons';
+import Flex from 'components/shared-components/Flex';
+import { useHistory } from 'react-router-dom';
+import utils from 'utils';
+import stateService from 'services/state';
+import EllipsisDropdown from 'components/shared-components/EllipsisDropdown';
+import cityService from 'services/city';
 
 const getStockStatus = (status) => {
-  if (status === "Active") {
+  if (status === 'Active') {
     return (
       <>
         <Tag color="green">Active</Tag>
       </>
     );
   }
-  if (status === "Hold") {
+  if (status === 'Hold') {
     return (
       <>
         <Tag color="red">Hold</Tag>
@@ -31,8 +31,10 @@ const getStockStatus = (status) => {
   return null;
 };
 
-const CityList = () => {
+const CityList = (props) => {
   let history = useHistory();
+
+  const { addPrivilege, editPrivilege, deletePrivilege } = props;
 
   const [list, setList] = useState([]);
   const [searchBackupList, setSearchBackupList] = useState([]);
@@ -45,7 +47,7 @@ const CityList = () => {
       if (data) {
         setList(data);
         setSearchBackupList(data);
-        console.log(data, "show-data");
+        console.log(data, 'show-data');
       }
     };
 
@@ -55,12 +57,14 @@ const CityList = () => {
   // Dropdown menu for each row
   const dropdownMenu = (row) => (
     <Menu>
-      <Menu.Item onClick={() => viewDetails(row)}>
-        <Flex alignItems="center">
-          <EyeOutlined />
-          <span className="ml-2">View Details</span>
-        </Flex>
-      </Menu.Item>
+      {editPrivilege && (
+        <Menu.Item onClick={() => viewDetails(row)}>
+          <Flex alignItems="center">
+            <EyeOutlined />
+            <span className="ml-2">View Details</span>
+          </Flex>
+        </Menu.Item>
+      )}
     </Menu>
   );
 
@@ -75,40 +79,34 @@ const CityList = () => {
   // Antd Table Columns
   const tableColumns = [
     {
-      title: "Name",
-      dataIndex: "name",
-      sorter: (a, b) => utils.antdTableSorter(a, b, "name"),
+      title: 'Name',
+      dataIndex: 'name',
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'name')
     },
     {
-      title: "State",
-      dataIndex: "state",
+      title: 'State',
+      dataIndex: 'state',
       render: (state) => state?.name,
-      sorter: (a, b) => utils.antdTableSorter(a, b, "name"),
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'name')
     },
     {
-      title: "Status",
-      dataIndex: "status",
+      title: 'Status',
+      dataIndex: 'status',
       render: (status) => (
         <Flex alignItems="center">{getStockStatus(status)}</Flex>
       ),
-      sorter: (a, b) => utils.antdTableSorter(a, b, "status"),
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'status')
     },
 
     {
-      title: "",
-      dataIndex: "actions",
+      title: '',
+      dataIndex: 'actions',
       render: (_, elm) => (
         <div className="text-right">
-          {window.localStorage.getItem("auth_type") === "Admin" ? (
-            <EllipsisDropdown menu={dropdownMenu(elm)} />
-          ) : (
-            currentSubAdminRole?.edit && (
-              <EllipsisDropdown menu={dropdownMenu(elm)} />
-            )
-          )}
+          {editPrivilege && <EllipsisDropdown menu={dropdownMenu(elm)} />}
         </div>
-      ),
-    },
+      )
+    }
   ];
 
   // When Search is used
@@ -138,20 +136,7 @@ const CityList = () => {
         <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
           {filters()}
           <div>
-            {window.localStorage.getItem("auth_type") === "SubAdmin" ? (
-              <>
-                {currentSubAdminRole?.add && (
-                  <Button
-                    onClick={addState}
-                    type="primary"
-                    icon={<PlusCircleOutlined />}
-                    block
-                  >
-                    Add City
-                  </Button>
-                )}
-              </>
-            ) : (
+            {addPrivilege && (
               <Button
                 onClick={addState}
                 type="primary"

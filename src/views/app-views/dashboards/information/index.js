@@ -1,12 +1,16 @@
-import React from 'react'
-import { Route, Switch, Redirect } from 'react-router-dom'
-import informationList from './information-list'
-import AddInformation from './add-information'
-import EditInformation from './edit-information'
+import React from 'react';
+import { Route, Switch, Redirect } from 'react-router-dom';
+import InformationList from './information-list';
+import AddInformation from './add-information';
+import EditInformation from './edit-information';
+import useUserPrivilege from 'hooks/useUserPrivilege';
 // import Orders from './orders'
 
 const Information = (props) => {
-  const { match } = props
+  const { match } = props;
+
+  const privileges = useUserPrivilege('INFORMATION');
+
   return (
     <Switch>
       <Redirect
@@ -14,17 +18,26 @@ const Information = (props) => {
         from={`${match.url}`}
         to={`${match.url}/information-list`}
       />
-      <Route path={`${match.url}/add-information`} component={AddInformation} />
-      <Route
-        path={`${match.url}/edit-information/:id`}
-        component={EditInformation}
-      />
-      <Route
-        path={`${match.url}/information-list`}
-        component={informationList}
-      />
+      {privileges.addPrivilege && (
+        <Route
+          path={`${match.url}/add-information`}
+          render={(props) => <AddInformation {...props} />}
+        />
+      )}
+      {privileges.editPrivilege && (
+        <Route
+          path={`${match.url}/edit-information/:id`}
+          render={(props) => <EditInformation {...props} />}
+        />
+      )}
+      {privileges.fetchPrivilege && (
+        <Route
+          path={`${match.url}/information-list`}
+          render={(props) => <InformationList {...props} {...privileges} />}
+        />
+      )}
     </Switch>
-  )
-}
+  );
+};
 
-export default Information
+export default Information;

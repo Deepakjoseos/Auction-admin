@@ -36,7 +36,12 @@ const GeneralField = ({ states }) => (
 
           <Form.Item name="stateId" label="State" rules={rules.stateId}>
             <Select
+              showSearch
               placeholder="State"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              optionFilterProp="children"
               //   defaultValue={
               //     states.find((state) => state._id === rules.stateId).name
               //   }

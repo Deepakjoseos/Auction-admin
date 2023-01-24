@@ -1,8 +1,8 @@
-import React from 'react'
-import InformationForm from '../informationForm'
+import React from 'react';
+import InformationForm from '../informationForm';
 
 const AddProduct = () => {
-  return  <InformationForm mode="ADD" />
-}
+  return <InformationForm mode="ADD" />;
+};
 
-export default AddProduct
+export default AddProduct;

@@ -1,29 +1,46 @@
-import React, { useEffect, useState } from "react";
-import { Card, Table, Select, Input, Button, Menu, Tag } from "antd";
+import React, { useEffect, useState } from 'react';
+import {
+  Card,
+  Table,
+  Select,
+  Input,
+  Button,
+  Menu,
+  Tag,
+  Form,
+  Modal,
+  Drawer,
+  Space,
+  message,
+  Col
+} from 'antd';
 // import InformationListData from 'assets/data/product-list.data.json'
 import {
   EyeOutlined,
   SearchOutlined,
   PlusCircleOutlined,
-} from "@ant-design/icons";
-import EllipsisDropdown from "components/shared-components/EllipsisDropdown";
-import Flex from "components/shared-components/Flex";
-import { useHistory } from "react-router-dom";
-import utils from "utils";
-import participantService from "services/Participant";
-import { useSelector } from "react-redux";
+  FileExcelOutlined
+} from '@ant-design/icons';
+import EllipsisDropdown from 'components/shared-components/EllipsisDropdown';
+import Flex from 'components/shared-components/Flex';
+import { useHistory } from 'react-router-dom';
+import utils from 'utils';
+import participantService from 'services/Participant';
+import { useSelector } from 'react-redux';
+import constantsService from 'services/constants';
+import useQueryFilters from 'hooks/useQueryFilters';
 
 const { Option } = Select;
 
 const getStockStatus = (status) => {
-  if (status === "Active") {
+  if (status === 'Active') {
     return (
       <>
         <Tag color="green">Active</Tag>
       </>
     );
   }
-  if (status === "Hold") {
+  if (status === 'Hold') {
     return (
       <>
         <Tag color="red">Hold</Tag>
@@ -32,65 +49,87 @@ const getStockStatus = (status) => {
   }
   return null;
 };
-const ParticipantList = () => {
-  let history = useHistory();
+
+const pageSize = 8;
+
+const ParticipantList = (props) => {
+  const history = useHistory();
+
+  const { addPrivilege, editPrivilege, deletePrivilege, fetchPrivilege } =
+    props;
 
   const [list, setList] = useState([]);
   const [searchBackupList, setSearchBackupList] = useState([]);
+  const [participantsConstants, setParticipantsConstants] = useState({});
   const [currentSubAdminRole, setCurrentSubAdminRole] = useState({});
+
+  const {
+    handleFilters,
+    isLoading,
+    onChangeCurrentPageNumber,
+    setIsLoading,
+    searchParams
+  } = useQueryFilters({
+    limit: pageSize,
+    page: 1
+  });
+
+  const [open, setOpen] = useState(false);
+  const [excelForm] = Form.useForm();
 
   const { user } = useSelector((state) => state.auth);
 
-  useEffect(() => {
-    if (user) {
-      const paricipantRole = user.roles.find(
-        (role) => role.module === "PARTICIPANT"
-      );
-      console.log("paricipantRole", paricipantRole);
-      setCurrentSubAdminRole(paricipantRole);
-    }
-  }, [user]);
+  // useEffect(() => {
+  //   if (user) {
+  //     const paricipantRole = user.roles.find(
+  //       (role) => role.module === 'PARTICIPANT'
+  //     );
+  //     console.log('paricipantRole', paricipantRole);
+  //     setCurrentSubAdminRole(paricipantRole);
+  //   }
+  // }, [user]);
 
   // const [participants, setParticipants] = useState([])
 
+  const getParticipantConstants = async () => {
+    const data = await constantsService.getParticipant();
+    if (data) {
+      setParticipantsConstants(data);
+      console.log(data, 'show-data');
+    }
+  };
+
+  useEffect(() => getParticipantConstants(), []);
+
   useEffect(() => {
     const getAllParticipants = async () => {
-      const data = await participantService.getAllParticipants();
+      setIsLoading(true);
+      const data = await participantService.getAllParticipants(
+        new URLSearchParams(searchParams)
+      );
       if (data) {
         setList(data);
         setSearchBackupList(data);
-        console.log(data, "show-data");
+        console.log(data, 'show-data');
       }
+      setIsLoading(false);
     };
     getAllParticipants();
-  }, []);
+  }, [searchParams]);
 
   const dropdownMenu = (row) => {
-    if (window.localStorage.getItem("auth_type") === "Admin") {
-      return (
-        <Menu>
+    return (
+      <Menu>
+        {editPrivilege && (
           <Menu.Item onClick={() => viewDetails(row)}>
             <Flex alignItems="center">
               <EyeOutlined />
               <span className="ml-2">View Details</span>
             </Flex>
           </Menu.Item>
-        </Menu>
-      );
-    } else {
-      if (currentSubAdminRole?.edit) {
-        return (
-          <Menu>
-            <Menu.Item onClick={() => viewDetails(row)}>
-              <Flex alignItems="center">
-                <EyeOutlined />
-                <span className="ml-2">View Details</span>
-              </Flex>
-            </Menu.Item>
-          </Menu>
-        );
-      }
-    }
+        )}
+      </Menu>
+    );
   };
 
   const addProduct = () => {
@@ -119,58 +158,60 @@ const ParticipantList = () => {
   //       }
   //     }
   //   }
- 
 
   const tableColumns = [
     {
-      title: "id",
-      dataIndex: "_id",
-      sorter: (a, b) => utils.antdTableSorter(a, b, "_id"),
+      title: 'id',
+      dataIndex: '_id',
+      sorter: (a, b) => utils.antdTableSorter(a, b, '_id')
     },
     {
-      title: "Name",
-      dataIndex: "name",
-      sorter: (a, b) => utils.antdTableSorter(a, b, "name"),
+      title: 'Name',
+      dataIndex: 'name',
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'name')
     },
     {
-      title: "Email",
-      dataIndex: "email",
+      title: 'Username',
+      dataIndex: 'username',
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'username')
     },
     {
-      title: "Contact Number",
-      dataIndex: "contact",
+      title: 'Email',
+      dataIndex: 'email'
     },
     {
-      title: "Contact Number",
-      dataIndex: "contact",
+      title: 'Contact Number',
+      dataIndex: 'contact'
     },
     {
-      title: "Participant Type",
-      dataIndex: "participantType",
+      title: 'Participant Type',
+      dataIndex: 'participantType'
     },
+    // {
+    //   title: 'GST',
+    //   dataIndex: 'gst',
+    //   render: (text, row) => {
+    //     return <span>{row.gst ? 'Yes' : 'No'}</span>;
+    //   }
+    // },
     {
-      title: "GST",
-      dataIndex: "gst",
-      render: (text, row) => {
-        return <span>{row.gst ? "Yes" : "No"}</span>;
-      },
+      title: 'Status',
+      dataIndex: 'status',
+      render: (status) => (
+        <Flex alignItems="center">{getStockStatus(status)}</Flex>
+      ),
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'status')
     },
- 
+
     {
-      title: "",
-      dataIndex: "actions",
+      title: '',
+      dataIndex: 'actions',
       render: (_, elm) => (
         <div className="text-right">
-          {window.localStorage.getItem("auth_type") === "Admin" ? (
-            <EllipsisDropdown menu={dropdownMenu(elm)} />
-          ) : (
-            currentSubAdminRole?.edit && (
-              <EllipsisDropdown menu={dropdownMenu(elm)} />
-            )
-          )}
+          {editPrivilege && <EllipsisDropdown menu={dropdownMenu(elm)} />}
         </div>
-      ),
-    },
+      )
+    }
   ];
 
   const onSearch = (e) => {
@@ -179,50 +220,208 @@ const ParticipantList = () => {
     const data = utils.wildCardSearch(searchArray, value);
     setList(data);
   };
-
-  const handleShowStatus = (value) => {
-    if (value !== "All") {
-      const key = "status";
-      const data = utils.filterArray(searchBackupList, key, value);
-      setList(data);
-    } else {
-      setList(searchBackupList);
-    }
-  };
-
   const filters = () => (
-    <Flex className="mb-1" mobileFlex={false}>
-      <div className="mr-md-3 mb-3">
-        <Input
-          placeholder="Search"
-          prefix={<SearchOutlined />}
-          onChange={(e) => onSearch(e)}
-        />
-      </div>
-      <div className="mb-3">
-        <Select
-          defaultValue="All"
-          className="w-100"
-          style={{ minWidth: 180 }}
-          onChange={handleShowStatus}
-          placeholder="Status"
-        >
-          <Option value="All">All</Option>
-          <Option value="Active">Active</Option>
-          <Option value="Hold">Hold</Option>
-        </Select>
-      </div>
-    </Flex>
+    <Form>
+      <Flex
+        className="mb-1"
+        alignItems="start"
+        flexDirection="column"
+        mobileFlex={false}
+      >
+        <div className="mr-md-3 mb-3">
+          <Input
+            placeholder="Search"
+            prefix={<SearchOutlined />}
+            onChange={(e) => onSearch(e)}
+          />
+        </div>
+        <Flex className="mb-3">
+          <Form.Item name="status" label="Status" className="mr-md-3">
+            <Select
+              defaultValue="All"
+              style={{ minWidth: 180 }}
+              onChange={(value) => handleFilters('status', value)}
+              placeholder="Status"
+            >
+              <Option value="All">All</Option>
+              <Option value="Active">Active</Option>
+              <Option value="Hold">Hold</Option>
+            </Select>
+          </Form.Item>
+          <Form.Item
+            name="participantType"
+            label="Participant Type"
+            className="mr-md-3"
+          >
+            <Select
+              defaultValue="All"
+              style={{ minWidth: 180 }}
+              onChange={(value) => handleFilters('participantType', value)}
+              placeholder="Participant Type"
+            >
+              <Option value="All">All</Option>
+              {participantsConstants.ParticipantType?.map((type) => (
+                <Option value={type} key={type}>
+                  {type}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+          <Form.Item name="userType" label="User Type" className="mr-md-3">
+            <Select
+              defaultValue="All"
+              style={{ minWidth: 180 }}
+              onChange={(value) => handleFilters('userType', value)}
+              placeholder="User Type"
+            >
+              <Option value="All">All</Option>
+              {participantsConstants.UserType?.map((type) => (
+                <Option value={type} key={type}>
+                  {type}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+        </Flex>
+      </Flex>
+    </Form>
   );
 
+  const showModal = () => {
+    excelForm.setFieldsValue({
+      status: 'All',
+      userType: 'All',
+      participantType: 'All'
+    });
+    setOpen(true);
+  };
+
+  const onFinish = (e) => {
+    console.log(e);
+    setOpen(false);
+    excelForm
+      .validateFields()
+      .then(async (values) => {
+        const searchObj = {};
+        Object.keys(values).forEach((value) => {
+          if (values[value] && values[value] !== 'All') {
+            searchObj[value] = values[value];
+          }
+        });
+        console.log(searchObj);
+        const queryParams = new URLSearchParams(searchObj);
+        const downloadLink = await participantService.getExcelSheet(
+          queryParams
+        );
+
+        if (downloadLink) {
+          window.open(downloadLink);
+        }
+      })
+      .catch((info) => {
+        message.error('Something went wrong!');
+      });
+  };
+  const onClose = (e) => {
+    console.log(e);
+    setOpen(false);
+  };
+
   return (
-    <Card>
-      <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
-        {filters()}
-        <div>
-          {window.localStorage.getItem("auth_type") === "SubAdmin" ? (
-            <>
-              {currentSubAdminRole?.add && (
+    <>
+      <Drawer
+        title="Download Excel"
+        width={720}
+        onClose={onClose}
+        visible={open}
+        bodyStyle={{
+          paddingBottom: 80
+        }}
+        extra={
+          <Space>
+            <Button onClick={onClose}>Cancel</Button>
+            <Button type="primary" onClick={onFinish}>
+              Download
+            </Button>
+          </Space>
+        }
+      >
+        <Form
+          form={excelForm}
+          layout="vertical"
+          name="excelForm"
+          className="ant-advanced-search-form"
+        >
+          <Form.Item name="search" className="mr-md-3">
+            <Input
+              placeholder="Search"
+              prefix={<SearchOutlined />}
+              onChange={(e) => onSearch(e)}
+            />
+          </Form.Item>
+          <Form.Item name="status" label="Status" className="mr-md-3">
+            <Select
+              className="w-100"
+              style={{ minWidth: 180 }}
+              placeholder="Status"
+            >
+              <Option value="All">All</Option>
+              <Option value="Active">Active</Option>
+              <Option value="Hold">Hold</Option>
+            </Select>
+          </Form.Item>
+          <Form.Item
+            name="participantType"
+            label="Participant Type"
+            className="mr-md-3"
+          >
+            <Select
+              className="w-100"
+              style={{ minWidth: 180 }}
+              placeholder="Participant Type"
+            >
+              <Option value="All">All</Option>
+              {participantsConstants.ParticipantType?.map((type) => (
+                <Option value={type} key={type}>
+                  {type}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+          <Form.Item name="userType" label="User Type" className="mr-md-3">
+            <Select
+              className="w-100"
+              style={{ minWidth: 180 }}
+              placeholder="User Type"
+            >
+              <Option value="All">All</Option>
+              {participantsConstants.UserType?.map((type) => (
+                <Option value={type} key={type}>
+                  {type}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+        </Form>
+      </Drawer>
+      <Card>
+        <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
+          {filters()}
+          <Col>
+            <div className="mb-2">
+              {fetchPrivilege && (
+                <Button
+                  onClick={showModal}
+                  type="primary"
+                  icon={<FileExcelOutlined />}
+                  block
+                >
+                  Generate Excel
+                </Button>
+              )}
+            </div>
+            <div className="mb-2">
+              {addPrivilege && (
                 <Button
                   onClick={addProduct}
                   type="primary"
@@ -232,23 +431,25 @@ const ParticipantList = () => {
                   Add Participant
                 </Button>
               )}
-            </>
-          ) : (
-            <Button
-              onClick={addProduct}
-              type="primary"
-              icon={<PlusCircleOutlined />}
-              block
-            >
-              Add Participant
-            </Button>
-          )}
+            </div>
+          </Col>
+        </Flex>
+        <div className="table-responsive">
+          <Table
+            columns={tableColumns}
+            dataSource={list}
+            rowKey="id"
+            pagination={{
+              total: 24, // TODO: get the total count from API
+              defaultCurrent: 1,
+              defaultPageSize: pageSize,
+              onChange: onChangeCurrentPageNumber
+            }}
+            loading={isLoading}
+          />
         </div>
-      </Flex>
-      <div className="table-responsive">
-        <Table columns={tableColumns} dataSource={list} rowKey="id" />
-      </div>
-    </Card>
+      </Card>
+    </>
   );
 };
 

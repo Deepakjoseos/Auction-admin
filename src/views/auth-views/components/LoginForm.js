@@ -1,24 +1,24 @@
-import React, { useEffect } from 'react'
-import { connect } from 'react-redux'
-import { Button, Form, Input, Divider, Alert } from 'antd'
-import { MailOutlined, LockOutlined } from '@ant-design/icons'
-import PropTypes from 'prop-types'
-import { GoogleSVG, FacebookSVG } from 'assets/svg/icon'
-import CustomIcon from 'components/util-components/CustomIcon'
+import React, { useEffect } from 'react';
+import { connect } from 'react-redux';
+import { Button, Form, Input, Divider, Alert } from 'antd';
+import { MailOutlined, LockOutlined } from '@ant-design/icons';
+import PropTypes from 'prop-types';
+import { GoogleSVG, FacebookSVG } from 'assets/svg/icon';
+import CustomIcon from 'components/util-components/CustomIcon';
 import {
   signIn,
   showLoading,
   showAuthMessage,
   hideAuthMessage,
   signInWithGoogle,
-  signInWithFacebook,
-} from 'redux/actions/Auth'
-import { useHistory } from 'react-router-dom'
-import { motion } from 'framer-motion'
-import { AUTH_TOKEN } from 'redux/constants/Auth'
+  signInWithFacebook
+} from 'redux/actions/Auth';
+import { useHistory } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { AUTH_TOKEN } from 'redux/constants/Auth';
 
 export const LoginForm = (props) => {
-  let history = useHistory()
+  let history = useHistory();
 
   const {
     otherSignIn,
@@ -35,31 +35,31 @@ export const LoginForm = (props) => {
     redirect,
     showMessage,
     message,
-    allowRedirect,
-  } = props
+    allowRedirect
+  } = props;
   // admin@riolabz.com
   // Qwerty!2#4%
   const initialCredential = {
     email: '',
-    password: '',
-  }
+    password: ''
+  };
   //   email: 'user1@themenate.net',
   // password: '2005ipo',
 
   const onLogin = (values) => {
-    showLoading()
-    signIn(values)
-  }
+    showLoading();
+    signIn(values);
+  };
 
   const onGoogleLogin = () => {
-    showLoading()
-    signInWithGoogle()
-  }
+    showLoading();
+    signInWithGoogle();
+  };
 
   const onFacebookLogin = () => {
-    showLoading()
-    signInWithFacebook()
-  }
+    showLoading();
+    signInWithFacebook();
+  };
 
   useEffect(() => {
     if (
@@ -67,14 +67,14 @@ export const LoginForm = (props) => {
       window.localStorage.getItem('auth_type') !== null &&
       allowRedirect
     ) {
-      history.push(redirect)
+      history.push(redirect);
     }
     if (showMessage) {
       setTimeout(() => {
-        hideAuthMessage()
-      }, 3000)
+        hideAuthMessage();
+      }, 3000);
     }
-  })
+  });
 
   const renderOtherSignIn = (
     <div>
@@ -101,7 +101,7 @@ export const LoginForm = (props) => {
         </Button>
       </div>
     </div>
-  )
+  );
 
   return (
     <>
@@ -109,7 +109,7 @@ export const LoginForm = (props) => {
         initial={{ opacity: 0, marginBottom: 0 }}
         animate={{
           opacity: showMessage ? 1 : 0,
-          marginBottom: showMessage ? 20 : 0,
+          marginBottom: showMessage ? 20 : 0
         }}
       >
         <Alert type="error" showIcon message={message}></Alert>
@@ -122,16 +122,12 @@ export const LoginForm = (props) => {
       >
         <Form.Item
           name="email"
-          label="Email"
+          label="Username"
           rules={[
             {
               required: true,
-              message: 'Please input your email',
-            },
-            {
-              type: 'email',
-              message: 'Please enter a validate email!',
-            },
+              message: 'Please input your username'
+            }
           ]}
         >
           <Input prefix={<MailOutlined className="text-primary" />} />
@@ -160,8 +156,8 @@ export const LoginForm = (props) => {
           rules={[
             {
               required: true,
-              message: 'Please input your password',
-            },
+              message: 'Please input your password'
+            }
           ]}
         >
           <Input.Password prefix={<LockOutlined className="text-primary" />} />
@@ -177,24 +173,24 @@ export const LoginForm = (props) => {
         {extra}
       </Form>
     </>
-  )
-}
+  );
+};
 
 LoginForm.propTypes = {
   otherSignIn: PropTypes.bool,
   showForgetPassword: PropTypes.bool,
-  extra: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
-}
+  extra: PropTypes.oneOfType([PropTypes.string, PropTypes.element])
+};
 
 LoginForm.defaultProps = {
   otherSignIn: true,
-  showForgetPassword: false,
-}
+  showForgetPassword: false
+};
 
 const mapStateToProps = ({ auth }) => {
-  const { loading, message, showMessage, token, redirect } = auth
-  return { loading, message, showMessage, token, redirect }
-}
+  const { loading, message, showMessage, token, redirect } = auth;
+  return { loading, message, showMessage, token, redirect };
+};
 
 const mapDispatchToProps = {
   signIn,
@@ -202,7 +198,7 @@ const mapDispatchToProps = {
   showLoading,
   hideAuthMessage,
   signInWithGoogle,
-  signInWithFacebook,
-}
+  signInWithFacebook
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(LoginForm)
+export default connect(mapStateToProps, mapDispatchToProps)(LoginForm);

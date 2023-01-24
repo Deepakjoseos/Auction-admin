@@ -1,7 +1,7 @@
-import React from "react";
-import { Input, Row, Col, Card, Form, Upload, Select } from "antd";
-import { ImageSvg } from "assets/svg/icon";
-import CustomIcon from "components/util-components/CustomIcon";
+import React from 'react';
+import { Input, Row, Col, Card, Form, Upload, Select } from 'antd';
+import { ImageSvg } from 'assets/svg/icon';
+import CustomIcon from 'components/util-components/CustomIcon';
 
 const { Option } = Select;
 
@@ -9,21 +9,21 @@ const rules = {
   name: [
     {
       required: true,
-      message: "Required",
-    },
+      message: 'Required'
+    }
   ],
   status: [
     {
       required: true,
-      message: "Required",
-    },
+      message: 'Required'
+    }
   ],
   url: [
     {
       required: true,
-      message: "Required",
-    },
-  ],
+      message: 'Required'
+    }
+  ]
 };
 
 const GeneralField = (props) => (
@@ -33,9 +33,9 @@ const GeneralField = (props) => (
         <Form.Item name="name" label="Name" rules={rules.name}>
           <Input placeholder="Name" />
         </Form.Item>
-        <Form.Item name="url" label="Url" rules={rules.url}>
+        {/* <Form.Item name="url" label="Url" rules={rules.url}>
           <Input placeholder="Name" />
-        </Form.Item>
+        </Form.Item> */}
 
         <Form.Item name="status" label="Status" rules={rules.status}>
           <Select placeholder="Status">
@@ -47,9 +47,11 @@ const GeneralField = (props) => (
     </Col>
     <Col xs={24} sm={24} md={7}>
       <Card title="Media">
-        <Upload listType="picture-card" name="logo" {...props.propsImages}>
-          <CustomIcon className="display-3" svg={ImageSvg} />
-        </Upload>
+        <Form.Item name="logo" >
+          <Upload listType="picture-card" name="logo" {...props.propsImages}>
+            <CustomIcon className="display-3" svg={ImageSvg} />
+          </Upload>
+        </Form.Item>
       </Card>
     </Col>
   </Row>

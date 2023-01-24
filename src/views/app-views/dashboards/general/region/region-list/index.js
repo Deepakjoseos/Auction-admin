@@ -1,31 +1,31 @@
-import React, { useEffect, useState } from "react";
-import { Card, Table, Select, Input, Button, Menu, Tag } from "antd";
+import React, { useEffect, useState } from 'react';
+import { Card, Table, Select, Input, Button, Menu, Tag } from 'antd';
 // import BrandListData from 'assets/data/product-list.data.json'
 import {
   EyeOutlined,
   DeleteOutlined,
   SearchOutlined,
-  PlusCircleOutlined,
-} from "@ant-design/icons";
-import AvatarStatus from "components/shared-components/AvatarStatus";
-import EllipsisDropdown from "components/shared-components/EllipsisDropdown";
-import Flex from "components/shared-components/Flex";
-import { useHistory } from "react-router-dom";
-import utils from "utils";
-import regionService from "services/region";
-import { useSelector } from "react-redux";
+  PlusCircleOutlined
+} from '@ant-design/icons';
+import AvatarStatus from 'components/shared-components/AvatarStatus';
+import EllipsisDropdown from 'components/shared-components/EllipsisDropdown';
+import Flex from 'components/shared-components/Flex';
+import { useHistory } from 'react-router-dom';
+import utils from 'utils';
+import regionService from 'services/region';
+import { useSelector } from 'react-redux';
 
 const { Option } = Select;
 
 const getStockStatus = (status) => {
-  if (status === "Active") {
+  if (status === 'Active') {
     return (
       <>
         <Tag color="green">Active</Tag>
       </>
     );
   }
-  if (status === "Hold") {
+  if (status === 'Hold') {
     return (
       <>
         <Tag color="red">Hold</Tag>
@@ -33,7 +33,7 @@ const getStockStatus = (status) => {
     );
   }
 
-  if (status === "Deleted") {
+  if (status === 'Deleted') {
     return (
       <>
         <Tag color="red">Deleted</Tag>
@@ -42,8 +42,10 @@ const getStockStatus = (status) => {
   }
   return null;
 };
-const ClientList = () => {
+const RegionsList = (props) => {
   let history = useHistory();
+
+  const { addPrivilege, editPrivilege, deletePrivilege } = props;
 
   const [list, setList] = useState([]);
   const [searchBackupList, setSearchBackupList] = useState([]);
@@ -53,54 +55,41 @@ const ClientList = () => {
 
   useEffect(() => {
     // Getting Lotteries List to display in the table
-    const getClients = async () => {
+    const getRegions = async () => {
       const data = await regionService.getRegions();
       if (data) {
         setList(data);
         setSearchBackupList(data);
-        console.log(data, "show-data");
+        console.log(data, 'show-data');
       }
     };
-    getClients();
+    getRegions();
   }, []);
 
   const { user } = useSelector((state) => state.auth);
 
   useEffect(() => {
     if (user) {
-      const clientRole = user.roles.find((role) => role.module === "CLIENT");
-      console.log("clientRole", clientRole);
+      const clientRole = user.roles.find((role) => role.module === 'CLIENT');
+      console.log('clientRole', clientRole);
       setCurrentSubAdminRole(clientRole);
     }
   }, [user]);
 
   // Dropdown menu for each row
   const dropdownMenu = (row) => {
-    if (window.localStorage.getItem("auth_type") === "Admin") {
-      return (
-        <Menu>
+    return (
+      <Menu>
+        {editPrivilege && (
           <Menu.Item onClick={() => viewDetails(row)}>
             <Flex alignItems="center">
               <EyeOutlined />
               <span className="ml-2">View Details</span>
             </Flex>
           </Menu.Item>
-        </Menu>
-      );
-    } else {
-      return (
-        <Menu>
-          {currentSubAdminRole?.edit && (
-            <Menu.Item onClick={() => viewDetails(row)}>
-              <Flex alignItems="center">
-                <EyeOutlined />
-                <span className="ml-2">View Details</span>
-              </Flex>
-            </Menu.Item>
-          )}
-        </Menu>
-      );
-    }
+        )}
+      </Menu>
+    );
   };
 
   const addClient = () => {
@@ -108,7 +97,7 @@ const ClientList = () => {
   };
 
   const viewDetails = (row) => {
-    console.log("row", row);
+    console.log('row', row);
     history.push(`/app/dashboards/general/region/edit-region/${row._id}`);
   };
 
@@ -135,40 +124,34 @@ const ClientList = () => {
   // Antd Table Columns
   const tableColumns = [
     {
-      title: "Name",
-      dataIndex: "name",
-      sorter: (a, b) => utils.antdTableSorter(a, b, "title"),
+      title: 'Name',
+      dataIndex: 'name',
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'title')
     },
 
     {
-      title: "Priority",
-      dataIndex: "priority",
-      sorter: (a, b) => utils.antdTableSorter(a, b, "order"),
+      title: 'Priority',
+      dataIndex: 'priority',
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'order')
     },
 
     {
-      title: "Status",
-      dataIndex: "status",
+      title: 'Status',
+      dataIndex: 'status',
       render: (status) => (
         <Flex alignItems="center">{getStockStatus(status)}</Flex>
       ),
-      sorter: (a, b) => utils.antdTableSorter(a, b, "status"),
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'status')
     },
     {
-      title: "",
-      dataIndex: "actions",
+      title: '',
+      dataIndex: 'actions',
       render: (_, elm) => (
         <div className="text-right">
-          {window.localStorage.getItem("auth_type") === "Admin" ? (
-            <EllipsisDropdown menu={dropdownMenu(elm)} />
-          ) : (
-            currentSubAdminRole?.edit && (
-              <EllipsisDropdown menu={dropdownMenu(elm)} />
-            )
-          )}
+          {editPrivilege && <EllipsisDropdown menu={dropdownMenu(elm)} />}
         </div>
-      ),
-    },
+      )
+    }
   ];
 
   // When Search is used
@@ -182,8 +165,8 @@ const ClientList = () => {
 
   // Filter Status Handler
   const handleShowStatus = (value) => {
-    if (value !== "All") {
-      const key = "status";
+    if (value !== 'All') {
+      const key = 'status';
       const data = utils.filterArray(searchBackupList, key, value);
       setList(data);
     } else {
@@ -222,20 +205,7 @@ const ClientList = () => {
       <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
         {filters()}
         <div>
-          {window.localStorage.getItem("auth_type") === "SubAdmin" ? (
-            <>
-              {currentSubAdminRole?.add && (
-                <Button
-                  onClick={addClient}
-                  type="primary"
-                  icon={<PlusCircleOutlined />}
-                  block
-                >
-                  Add Region
-                </Button>
-              )}
-            </>
-          ) : (
+          {addPrivilege && (
             <Button
               onClick={addClient}
               type="primary"
@@ -254,4 +224,4 @@ const ClientList = () => {
   );
 };
 
-export default ClientList;
+export default RegionsList;

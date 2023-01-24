@@ -1,34 +1,32 @@
-import fetch from "auth/FetchInterceptor";
+import fetch from 'auth/FetchInterceptor';
 
 const buyinglLimitService = {};
-const apiRoute = "/buying_limit";
+const apiRoute = '/buying_limit';
 
 buyinglLimitService.update = async (data) => {
   try {
     const res = await fetch({
       url: `${apiRoute}/update`,
-      method: "post",
-      data: data,
+      method: 'post',
+      data: data
     });
     return res;
   } catch (err) {
-    console.log(err, "show-err");
+    console.log(err, 'show-err');
   }
 };
 
-buyinglLimitService.getAll = async (query) => {
+buyinglLimitService.getAll = async (paginationQuery='',query = '') => {
   try {
-    let url = `${apiRoute}/get/all/admin?api=buyingLimit`;
-    if (query?.participantId)
-      url = `${url}&participantId=${query.participantId}`;
+    let url = `${apiRoute}/get/all/admin?${paginationQuery}&${query}`;
 
     const res = await fetch({
       url,
-      method: "get",
+      method: 'get'
     });
-    return res.data;
+    return res;
   } catch (err) {
-    console.log(err, "show-err");
+    console.log(err, 'show-err');
   }
 };
 

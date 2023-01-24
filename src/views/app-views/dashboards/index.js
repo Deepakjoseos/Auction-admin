@@ -1,7 +1,7 @@
-import React, { lazy, Suspense } from "react";
-import { Redirect, Route, Switch } from "react-router-dom";
-import Loading from "components/shared-components/Loading";
-import { useSelector } from "react-redux";
+import React, { lazy, Suspense } from 'react';
+import { Redirect, Route, Switch } from 'react-router-dom';
+import Loading from 'components/shared-components/Loading';
+import { useSelector } from 'react-redux';
 
 const Dashboards = ({ match }) => {
   const { user } = useSelector((state) => state.auth);
@@ -13,31 +13,29 @@ const Dashboards = ({ match }) => {
           component={lazy(() => import(`./user`))}
         />
         <Route
+          path={`${match.url}/employee-type`}
+          component={lazy(() => import(`./employee-type`))}
+        />
+        <Route
           path={`${match.url}/car`}
           component={lazy(() => import(`./car`))}
         />
-          <Route
-          path={`${match.url}/auction`}
-          component={lazy(() => import(`./auction`))}
-        />
-          <Route
+
+        <Route
           path={`${match.url}/template`}
           component={lazy(() => import(`./template`))}
         />
-        
+
         <Route
-          path={`${match.url}/watchlist`}
-          component={lazy(() => import(`./watchlist`))}
+          path={`${match.url}/auction`}
+          component={lazy(() => import(`./auction`))}
         />
-          
-      
-    
-          
-     
+
         <Route
-          path={`${match.url}/group-members`}
-          component={lazy(() => import(`./group-members`))}
+          path={`${match.url}/seller-auction`}
+          component={lazy(() => import(`./seller-auction`))}
         />
+
         <Route
           path={`${match.url}/information`}
           component={lazy(() => import(`./information`))}
@@ -50,12 +48,11 @@ const Dashboards = ({ match }) => {
           path={`${match.url}/banner`}
           component={lazy(() => import(`./banner`))}
         />
-            <Route
+        <Route
           path={`${match.url}/brand`}
           component={lazy(() => import(`./brand`))}
         />
-       
-       
+
         {/* <Route
           path={`${match.url}/brand-variant`}
           component={lazy(() => import(`./brand-variant`))}
@@ -84,25 +81,25 @@ const Dashboards = ({ match }) => {
           path={`${match.url}/buying-limit`}
           component={lazy(() => import(`./buying-limit`))}
         />
-        
+
         {/* <Route
           path={`${match.url}/role`}
           component={lazy(() => import(`./role`))}
         /> */}
-       
-        <Route
-          path={`${match.url}/auction-inventory`}
-          component={lazy(() => import(`./auction-inventory`))}
-        />
+
         <Route
           path={`${match.url}/deposit`}
           component={lazy(() => import(`./deposit`))}
         />
         <Route
+          path={`${match.url}/registration`}
+          component={lazy(() => import(`./registration`))}
+        />
+        <Route
           path={`${match.url}/wallet-transaction`}
           component={lazy(() => import(`./wallet-transaction`))}
         />
-          <Route
+        <Route
           path={`${match.url}/general`}
           component={lazy(() => import(`./general`))}
         />
@@ -110,10 +107,10 @@ const Dashboards = ({ match }) => {
           path={`${match.url}/client`}
           component={lazy(() => import(`./client`))}
         />
-        {window.localStorage.getItem("auth_type") === "Admin" ? (
+        {window.localStorage.getItem('auth_type') === 'Admin' ? (
           <Redirect from={`${match.url}`} to={`${match.url}/user`} />
         ) : (
-          <Redirect from={`${match.url}`} to={`${match.url}/car`} />
+          <Redirect from={`${match.url}`} to={`${match.url}`} />
         )}
       </Switch>
     </Suspense>

@@ -1,0 +1,67 @@
+import React, { useEffect, useState } from 'react';
+import { Card, Table, Input } from 'antd';
+import { SearchOutlined } from '@ant-design/icons';
+import Flex from 'components/shared-components/Flex';
+import utils from 'utils';
+
+import groupService from 'services/group';
+
+const GroupMemberList = ({ participantId }) => {
+  const [list, setList] = useState([]);
+  const [searchBackupList, setSearchBackupList] = useState([]);
+
+  useEffect(() => {
+    getGroups();
+  }, []);
+
+  const getGroups = async () => {
+    const data = await groupService.getGroups(
+      `?participantId=${participantId}`
+    );
+    if (data) {
+      setList(data);
+      setSearchBackupList(data);
+      console.log(data, 'show-data');
+    }
+  };
+
+  const tableColumns = [
+    {
+      title: 'Name',
+      dataIndex: 'name',
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'name')
+    },
+  ];
+
+  const onSearch = (e) => {
+    const value = e.currentTarget.value;
+    const searchArray = e.currentTarget.value ? list : searchBackupList;
+    const data = utils.wildCardSearch(searchArray, value);
+    setList(data);
+  };
+
+  const filters = () => (
+    <Flex className="mb-1" mobileFlex={false}>
+      <div className="mr-md-3 mb-3">
+        <Input
+          placeholder="Search"
+          prefix={<SearchOutlined />}
+          onChange={(e) => onSearch(e)}
+        />
+      </div>
+    </Flex>
+  );
+
+  return (
+    <Card>
+      <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
+        {filters()}
+      </Flex>
+      <div className="table-responsive">
+        <Table columns={tableColumns} dataSource={list} rowKey="id" />
+      </div>
+    </Card>
+  );
+};
+
+export default GroupMemberList;
