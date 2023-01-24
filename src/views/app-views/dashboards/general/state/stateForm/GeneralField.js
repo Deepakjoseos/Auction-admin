@@ -29,7 +29,7 @@ const GeneralField = ({ images, propsImages, regions }) => (
   <Row gutter={16}>
     <Col xs={24} sm={24} md={17}>
       <Card title="Basic Info">
-        <div style={{ display: 'flex', flexDirection: 'row', gap: '1rem' }}>
+        {/* <div style={{ display: 'flex', flexDirection: 'row', gap: '1rem' }}> */}
           <Form.Item name="name" label="Name" rules={rules.name}>
             <Input placeholder="Name" />
           </Form.Item>
@@ -61,7 +61,7 @@ const GeneralField = ({ images, propsImages, regions }) => (
               <Option value="Hold">Hold</Option>
             </Select>
           </Form.Item>
-        </div>
+        {/* </div> */}
       </Card>
     </Col>
   </Row>

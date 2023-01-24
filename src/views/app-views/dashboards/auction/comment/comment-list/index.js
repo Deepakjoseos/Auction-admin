@@ -155,7 +155,7 @@ const CommentList = (props) => {
   // Antd Table Columns
   const tableColumns = [
     {
-      title: 'auctionInventoryId',
+      title: 'Auction Inventory',
       dataIndex: 'auctionInventoryId',
       render: (auctionInventoryId) => {
         return <Flex alignItems="center">{auctionInventoryId}</Flex>;

@@ -279,14 +279,7 @@ const dashBoardNavTree = [
         icon: FolderOutlined,
         breadcrumb: false,
         submenu: [
-          {
-            key: 'dashboards-general-city',
-            path: `${APP_PREFIX_PATH}/dashboards/general/city/city-list`,
-            title: 'City',
-            icon: HomeOutlined,
-            breadcrumb: false,
-            submenu: []
-          },
+          
           {
             key: 'dashboards-general-region',
             path: `${APP_PREFIX_PATH}/dashboards/general/region/region-list`,
@@ -302,7 +295,15 @@ const dashBoardNavTree = [
             icon: HomeOutlined,
             breadcrumb: false,
             submenu: []
-          }
+          },
+          {
+            key: 'dashboards-general-city',
+            path: `${APP_PREFIX_PATH}/dashboards/general/city/city-list`,
+            title: 'City',
+            icon: HomeOutlined,
+            breadcrumb: false,
+            submenu: []
+          },
         ]
       },
       {
@@ -348,7 +349,7 @@ const dashBoardNavTree = [
       {
         key: 'dashboards-buying-limit',
         path: `${APP_PREFIX_PATH}/dashboards/buying-limit`,
-        title: 'Buying Limits',
+        title: 'Buying Limits History',
         icon: DollarCircleOutlined,
         breadcrumb: false,
         submenu: []

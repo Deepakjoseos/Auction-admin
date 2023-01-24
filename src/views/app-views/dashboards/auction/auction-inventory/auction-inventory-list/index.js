@@ -211,7 +211,7 @@ const AuctionInventoryList = (props) => {
       sorter: (a, b) => utils.antdTableSorter(a, b, 'name')
     },
     {
-      title: 'chasisNumber',
+      title: 'Chasis Number',
       dataIndex: 'vehicleInfo',
       render: (vehicleInfo) => (
         <Flex alignItems="center">{vehicleInfo?.chasisNumber} </Flex>
@@ -224,7 +224,7 @@ const AuctionInventoryList = (props) => {
       sorter: (a, b) => utils.antdTableSorter(a, b, 'registrationNumber')
     },
     {
-      title: 'bidLimit',
+      title: 'Bid Limit',
       dataIndex: 'auction',
       render: (auction) => <Flex alignItems="center">{auction?.bidLimit} </Flex>
       //   sorter: (a, b) => utils.antdTableSorter(a, b, 'status'),
@@ -233,7 +233,8 @@ const AuctionInventoryList = (props) => {
       title: 'Start Time',
       dataIndex: 'startTimestamp',
       render: (startTimestamp) => {
-        var d = new Date(Number(startTimestamp)).toDateString();
+        var options = {weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true };
+        var d = new Date(Number(startTimestamp)).toLocaleString('en-IN', options);
         return <Flex alignItems="center">{d}</Flex>;
       },
       sorter: (a, b) => utils.antdTableSorter(a, b, 'startTimestamp')
@@ -242,7 +243,8 @@ const AuctionInventoryList = (props) => {
       title: 'End Time',
       dataIndex: 'endTimestamp',
       render: (endTimestamp) => {
-        var d = new Date(Number(endTimestamp)).toDateString();
+        var options = {weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true };
+        var d = new Date(Number(endTimestamp)).toLocaleString('en-IN', options);
         return <Flex alignItems="center">{d}</Flex>;
       },
       sorter: (a, b) => utils.antdTableSorter(a, b, 'endTimestamp')
@@ -519,7 +521,7 @@ const AuctionInventoryList = (props) => {
 
         <Col md={6} sm={24} xs={24} lg={6}>
           <Form.Item name="registrationNumber" label="Registration Number">
-            <Select
+            {/* <Select
               showSearch
               optionFilterProp="children"
               filterOption={(input, option) =>
@@ -534,7 +536,12 @@ const AuctionInventoryList = (props) => {
               {registrationNumberList.map((reg) => (
                 <Option value={reg._id}> {reg._id} </Option>
               ))}
-            </Select>
+            </Select> */}
+            <Input
+          placeholder="Registration Number"
+          prefix={<SearchOutlined />}
+          // onChange={(e) => onSearch(e)}
+        />
           </Form.Item>
         </Col>
 

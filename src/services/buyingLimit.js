@@ -16,15 +16,15 @@ buyinglLimitService.update = async (data) => {
   }
 };
 
-buyinglLimitService.getAll = async (query = '') => {
+buyinglLimitService.getAll = async (paginationQuery='',query = '') => {
   try {
-    let url = `${apiRoute}/get/all/admin?${query}`;
+    let url = `${apiRoute}/get/all/admin?${paginationQuery}&${query}`;
 
     const res = await fetch({
       url,
       method: 'get'
     });
-    return res.data;
+    return res;
   } catch (err) {
     console.log(err, 'show-err');
   }

@@ -151,6 +151,8 @@ const RegistrationField = ({
   feeTypes,
   status,
   propsImages,
+
+  
   participantId
 }) => {
   // const initialValues = {
