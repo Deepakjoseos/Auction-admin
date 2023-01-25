@@ -3,9 +3,9 @@ import fetch from 'auth/FetchInterceptor';
 const biddingService = {};
 const api = '/bidding';
 
-biddingService.getBiddings = async function (query = '') {
+biddingService.getBiddings = async function (paginationQuery='', query ='') {
   try {
-    let url = `${api}/get/all/admin?${query}`;
+    let url = `${api}/get/all/admin?${paginationQuery}&${query}`;
     // const auctionId = query?.auctionId;
     // const auctionInventoryId = query?.auctionInventoryId;
     // const bidderId = query?.bidderId;
@@ -23,7 +23,7 @@ biddingService.getBiddings = async function (query = '') {
     //       url: `${api}/get/all/admin`,
     //       method: 'get',
     //     })
-    return res.data;
+    return res;
   } catch (err) {
     console.log(err, 'show-err');
   }

@@ -127,12 +127,25 @@ const WalletTransactionList = () => {
 
   const filters = () => (
     <Flex className="mb-1" mobileFlex={false}>
-      <div className="mr-md-3 mb-3">
+      {/* <div className="mr-md-3 mb-3">
         <Input
           placeholder="Search"
           prefix={<SearchOutlined />}
           onChange={(e) => onSearch(e)}
         />
+      </div> */}
+      <div className="mr-md-3 mb-3">
+        <Select
+          defaultValue="All"
+          className="w-100"
+          style={{ minWidth: 180 }}
+          onChange={(value) => handleFilters('status', value)}
+          placeholder="Status"
+        >
+          <Option value="All">All</Option>
+          <Option value="Verified">Verified</Option>
+          <Option value="Unverified">Unverified</Option>
+        </Select>
       </div>
       <div className="mr-md-3 mb-3">
         <Select
@@ -176,7 +189,7 @@ const WalletTransactionList = () => {
             dataSource={list}
             rowKey="id"
             pagination={{
-              total: 24, // TODO: get the total count from API
+              // total: 24, // TODO: get the total count from API
               defaultCurrent: 1,
               defaultPageSize: pageSize,
               onChange: onChangeCurrentPageNumber

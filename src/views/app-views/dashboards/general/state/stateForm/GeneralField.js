@@ -40,7 +40,9 @@ const GeneralField = ({ images, propsImages, regions }) => (
             rules={rules.name}
             placeholder="Region"
           >
-            <Select style={{ width: '150px' }}>
+            <Select 
+            // style={{ width: '150px' }}
+            >
               {regions.map((region) => (
                 <Option  value={region._id}>{region.name}</Option>
               ))}

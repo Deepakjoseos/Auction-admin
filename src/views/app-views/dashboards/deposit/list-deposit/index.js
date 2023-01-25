@@ -182,11 +182,11 @@ const DepositList = (props) => {
       },
       sorter: (a, b) => utils.antdTableSorter(a, b, 'createdAt')
     },
-    {
-      title: 'Business Type',
-      dataIndex: 'businessType',
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'businessType')
-    },
+    // {
+    //   title: 'Business Type',
+    //   dataIndex: 'businessType',
+    //   sorter: (a, b) => utils.antdTableSorter(a, b, 'businessType')
+    // },
     {
       title: 'Payment Mode',
       dataIndex: 'paymentMode',
@@ -214,14 +214,14 @@ const DepositList = (props) => {
     //   dataIndex: "recieptUrl",
     //   sorter: (a, b) => utils.antdTableSorter(a, b, "recieptUrl"),
     // },
-    {
-      title: 'Status',
-      dataIndex: 'status',
-      render: (status) => (
-        <Flex alignItems="center">{getStockStatus(status)}</Flex>
-      ),
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'status')
-    },
+    // {
+    //   title: 'Status',
+    //   dataIndex: 'status',
+    //   render: (status) => (
+    //     <Flex alignItems="center">{getStockStatus(status)}</Flex>
+    //   ),
+    //   sorter: (a, b) => utils.antdTableSorter(a, b, 'status')
+    // },
     {
       title: 'Payment status',
       dataIndex: 'paymentStatus',
@@ -272,13 +272,13 @@ const DepositList = (props) => {
         flexDirection="column"
         alignItems="start"
       >
-        <div className="mr-md-3 mb-3">
+        {/* <div className="mr-md-3 mb-3">
           <Input
             placeholder="Search"
             prefix={<SearchOutlined />}
             onChange={(e) => onSearch(e)}
           />
-        </div>
+        </div> */}
         <Flex className="mb-3">
           <Form.Item
             name="participantName"

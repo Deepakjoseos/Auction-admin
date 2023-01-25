@@ -22,7 +22,7 @@ import {
 import EllipsisDropdown from 'components/shared-components/EllipsisDropdown';
 import Flex from 'components/shared-components/Flex';
 import utils from 'utils';
-
+import participantService from 'services/Participant';
 import commentService from 'services/comment';
 import auctionInventoryService from 'services/auctionInventory';
 import useQueryFilters from 'hooks/useQueryFilters';
@@ -58,6 +58,7 @@ const CommentList = (props) => {
 
   const [commentList, setCommentList] = useState([]);
   const [searchBackupList, setSearchBackupList] = useState([]);
+  const [participants, setParticipants] = useState([]);
 
   const [form] = Form.useForm();
 
@@ -91,6 +92,12 @@ const CommentList = (props) => {
     }
   };
 
+  const getParticipants = async () => {
+    const data = await participantService.getAllParticipants();
+    setParticipants(data);
+    // console.log(data,'buying lii')
+  };
+
   const getCommentList = async () => {
     setIsLoading(true);
     const data = await commentService.getComments(
@@ -102,9 +109,9 @@ const CommentList = (props) => {
       data.forEach((comment) => {
         mutatedComments.push({
           _id: comment._id,
-          auctionInventoryId: comment.auctionInventory._id,
+          auctionInventoryId: comment.auctionInventory.registrationNumber,
           message: comment.message,
-          userEmail: comment.user.email,
+          userEmail: comment.user.name,
           timestamp: comment.timestamp
         });
       });
@@ -123,6 +130,7 @@ const CommentList = (props) => {
 
   useEffect(() => {
     getAuctionInventories();
+    getParticipants();
   }, []);
 
   useEffect(() => {
@@ -170,7 +178,7 @@ const CommentList = (props) => {
       sorter: (a, b) => a.message.localeCompare(b?.message)
     },
     {
-      title: 'User Email',
+      title: 'User Name',
       dataIndex: 'userEmail',
       render: (userEmail) => {
         return <Flex alignItems="center">{userEmail}</Flex>;
@@ -239,13 +247,13 @@ const CommentList = (props) => {
       className="ant-advanced-search-form"
     >
       <Flex className="mb-1" mobileFlex={false}>
-        <div className="mr-md-3 mb-3">
+        {/* <div className="mr-md-3 mb-3">
           <Input
             placeholder="Search"
             prefix={<SearchOutlined />}
             onChange={(e) => onSearch(e)}
           />
-        </div>
+        </div> */}
         {/* <div className="mb-3">
         <Select
           defaultValue="All"
@@ -260,23 +268,27 @@ const CommentList = (props) => {
         </Select>
       </div> */}
 
-        <div className="mb-3 ml-3">
-          <Form.Item name="auctionInventory">
+        <div className="mr-md-3 mb-3">
+          <Form.Item name="auctionInventoryId" label="Auction Inventory">
             <Select
               defaultValue={'All'}
               className="w-100"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              optionFilterProp="children"
               style={{ minWidth: 180 }}
-              onChange={handleSelectInventory}
+              onChange={(value) => handleFilters('auctionInventoryId', value)}
               placeholder="Auction Inventories"
               showSearch
-              disabled={inventoryId}
+              // disabled={inventoryId}
             >
               <Option value="All">All</Option>
               {auctionInventories?.map((inventory) => (
                 <Option
-                  key={inventory._id}
+                  // key={inventory._id}
                   value={inventory._id}
-                  disabled={inventory.status === 'Hold'}
+                  // disabled={inventory.status === 'Hold'}
                 >
                   {`${inventory.registrationNumber} (${inventory.auction.name})`}
                 </Option>
@@ -284,6 +296,42 @@ const CommentList = (props) => {
             </Select>
           </Form.Item>
         </div>
+        <div className="mr-md-3 mb-3">
+        <Form.Item name="visibility" label="Visibility">
+        <Select
+          defaultValue="All"
+          className="w-100"
+          style={{ minWidth: 180 }}
+          onChange={(value) => handleFilters('visibility', value)}
+          placeholder="Visibility"
+        >
+          <Option value="All">All</Option>
+          <Option value="Private">Private</Option>
+          <Option value="Public">Public</Option>
+        </Select>
+        </Form.Item>
+      </div>
+      <div className="mr-md-3 mb-3">
+        <Form.Item name="userId" label="Users">
+        <Select
+        showSearch
+        placeholder="Users"
+        filterOption={(input, option) =>
+          option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+        }
+        optionFilterProp="children"
+          defaultValue="All"
+          className="w-100"
+          style={{ minWidth: 180 }}
+          onChange={(value) => handleFilters('userId', value)}
+        >
+          <Option value="All">All</Option>
+          {participants.map((participant) => (
+            <Option value={participant._id}>{participant.name}</Option>
+          ))}
+        </Select>
+        </Form.Item>
+      </div>
       </Flex>
     </Form>
   );
@@ -299,7 +347,7 @@ const CommentList = (props) => {
           dataSource={commentList}
           rowKey="id"
           pagination={{
-            total: 24, // TODO: get the total count from API
+            // total: 24, // TODO: get the total count from API
             defaultCurrent: 1,
             defaultPageSize: pageSize,
             onChange: onChangeCurrentPageNumber

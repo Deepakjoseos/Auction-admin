@@ -83,7 +83,7 @@ const GeneralField = ({ form }) => {
               })}
             </Select>
           </Form.Item>
-          <Form.Item name="cityIds" label="City">
+          {/* <Form.Item name="cityIds" label="City">
             <Select placeholder="city" mode="multiple">
               {citys.map((v, k) => {
                 return <Option value={v._id}>{v.name}</Option>;
@@ -96,7 +96,7 @@ const GeneralField = ({ form }) => {
                 return <Option value={v._id}>{v.name}</Option>;
               })}
             </Select>
-          </Form.Item>
+          </Form.Item> */}
           <Form.Item name="regionIds" label="Region" rules={rules.status}>
             <Select placeholder="Region" mode="multiple">
               {regions.map((v, k) => {
