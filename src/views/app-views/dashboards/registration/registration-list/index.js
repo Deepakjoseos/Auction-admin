@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { Tabs, Form, message, Table, Menu, Input, Card, Select } from 'antd';
+import { Tabs, Form, message, Table, Menu, Input, Card, Select ,Tag } from 'antd';
 import { useHistory } from 'react-router-dom';
 
 import moment from 'moment';
@@ -138,7 +138,7 @@ const RegistrationList = (props) => {
 
   const tableColumns = [
     {
-      title: 'Participant email',
+      title: 'Participant Email',
       dataIndex: 'participant',
       render: (participant) => (
         <Flex alignItems="center">{participant.email} </Flex>
@@ -186,7 +186,18 @@ const RegistrationList = (props) => {
     {
       title: 'Status',
       dataIndex: 'status',
-      key: 'status'
+      // key: 'status',
+      render: (status) => {
+        return <Flex alignItems="centre" >
+          {status === 'Verified' ? 
+          <Tag style={{backgroundColor:"#87d068",color:"white"}}>Verified</Tag> : 
+          status === 'Rejected' ?
+          <Tag  style={{backgroundColor:"#f50",color:"white"}}>Rejected</Tag> :
+          <Tag  style={{backgroundColor:"#e6b400",color:"white"}}>Evaluating</Tag>
+          }
+          </Flex>
+      },
+
     },
     // {
     //   title: 'Bank Name',
@@ -221,13 +232,13 @@ const RegistrationList = (props) => {
       alignItems="start"
       mobileFlex={false}
     >
-      <div className="mr-md-3 mb-3">
+      {/* <div className="mr-md-3 mb-3">
         <Input
           placeholder="Search"
           prefix={<SearchOutlined />}
           onChange={(e) => onSearch(e)}
         />
-      </div>
+      </div> */}
       <Flex className="mb-3">
         <Form.Item
           name="participantName"
@@ -261,7 +272,7 @@ const RegistrationList = (props) => {
             ))}
           </Select>
         </Form.Item>
-        <Form.Item
+        {/* <Form.Item
           name="participantType"
           label="Participant Type"
           className="mr-md-3"
@@ -279,7 +290,7 @@ const RegistrationList = (props) => {
               </Option>
             ))}
           </Select>
-        </Form.Item>
+        </Form.Item> */}
         <Form.Item name="userType" label="User Type" className="mr-md-3">
           <Select
             defaultValue="All"

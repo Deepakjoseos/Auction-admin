@@ -239,6 +239,7 @@ const GroupList = (props) => {
         >
           {addPrivilege && (
             <Button
+              // className="mr-2"
               onClick={addGroup}
               type="primary"
               icon={<PlusCircleOutlined />}
@@ -252,7 +253,7 @@ const GroupList = (props) => {
               <a
                 style={{
                   textDecoration: 'none',
-                  color: 'black'
+                  color: 'white'
                 }}
                 href={downloadLink}
                 download

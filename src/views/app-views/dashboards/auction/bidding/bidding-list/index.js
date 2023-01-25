@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Card, Table, Select, Input, Button, Menu, Tag, message } from 'antd';
+import { Card, Table, Row, Col, Select, Input, Button, Menu, Tag, message ,Form } from 'antd';
 // import BrandListData from 'assets/data/product-list.data.json'
 import {
   EyeOutlined,
@@ -7,6 +7,8 @@ import {
   SearchOutlined,
   PlusCircleOutlined
 } from '@ant-design/icons';
+import qs from 'qs'
+import _, { get } from 'lodash'
 import AvatarStatus from 'components/shared-components/AvatarStatus';
 import EllipsisDropdown from 'components/shared-components/EllipsisDropdown';
 import Flex from 'components/shared-components/Flex';
@@ -74,41 +76,58 @@ const BiddingList = (props) => {
   const [selectedAuctionId, setSelectedAuctionId] = useState('');
   const [selectedAuctionInventory, setSelectedAuctionInventory] = useState('');
   const [selectedBidder, setSelectedBidder] = useState('');
+  const [form] = Form.useForm()
+  const [isLoading, setIsLoading] = useState(false)
+  const [filterEnabled, setFilterEnabled] = useState(false)
+   // pagination
+   const [pagination, setPagination] = useState({
+    current: 1,
+    pageSize: 5,
+  })
+  // const {
+  //   handleFilters,
+  //   isLoading,
+  //   onChangeCurrentPageNumber,
+  //   setIsLoading,
+  //   searchParams
+  // } = useQueryFilters(
+  //   inventoryId
+  //     ? {
+  //         limit: pageSize,
+  //         page: 1,
+  //         auctionInventoryId: inventoryId
+  //       }
+  //     : {
+  //         limit: pageSize,
+  //         page: 1
+  //       }
+  // );
 
-  const {
-    handleFilters,
-    isLoading,
-    onChangeCurrentPageNumber,
-    setIsLoading,
-    searchParams
-  } = useQueryFilters(
-    inventoryId
-      ? {
-          limit: pageSize,
-          page: 1,
-          auctionInventoryId: inventoryId
-        }
-      : {
-          limit: pageSize,
-          page: 1
-        }
-  );
+  const getBiddings = async (paginationParams = {}, filterParams) => {
+    setIsLoading(true);
+    const data = await biddingService.getBiddings(
+      qs.stringify(getPaginationParams(paginationParams)),
+      qs.stringify(filterParams)
+      );
+    if (data) {
+      setList(data.data);
+      setSearchBackupList(data);
+      // Pagination
+    setPagination({
+      ...paginationParams.pagination,
+      total: data.count,
+    })
+      console.log(data, 'show-data bidding');
+    }
+    setIsLoading(false);
+  };
 
   useEffect(() => {
-    const getBiddings = async () => {
-      setIsLoading(true);
-      const data = await biddingService.getBiddings(
-        new URLSearchParams(searchParams)
-      );
-      if (data) {
-        setList(data);
-        setSearchBackupList(data);
-        console.log(data, 'show-data');
-      }
-      setIsLoading(false);
-    };
-    getBiddings();
-  }, [searchParams]);
+    
+    getBiddings({
+      pagination,
+    });
+  }, []);
 
   useEffect(() => {
     // Getting Lotteries List to display in the table
@@ -144,6 +163,57 @@ const BiddingList = (props) => {
 
   const { user } = useSelector((state) => state.auth);
 
+ // pagination generator
+ const getPaginationParams = (params) => ({
+  limit: params.pagination?.pageSize,
+  page: params.pagination?.current,
+  ...params,
+})
+
+
+  // On pagination Change
+  const handleTableChange = (newPagination) => {
+    getBiddings(
+      { 
+        pagination: newPagination,
+      },
+      filterEnabled ? _.pickBy(form.getFieldsValue(), _.identity) : {}
+    )
+  }
+
+  const resetPagination = () => ({
+    ...pagination,
+    current: 1,
+    pageSize: 5,
+  })
+
+
+
+// Filter Submit
+const handleFilterSubmit = async () => {
+setPagination(resetPagination())
+
+form
+  .validateFields()
+  .then(async (values) => {
+    setFilterEnabled(true)
+    // Removing falsy Values from values
+    const sendingValues = _.pickBy(values, _.identity)
+    getBiddings({ pagination: resetPagination() }, sendingValues)
+  })
+  .catch((info) => {
+    console.log('info', info)
+    setFilterEnabled(false)
+  })
+}
+
+const handleClearFilter = async () => {
+form.resetFields()
+
+setPagination(resetPagination())
+getBiddings({ pagination: resetPagination() }, {})
+setFilterEnabled(false)
+} 
   //   useEffect(() => {
   //     if (user) {
   //       const bannerRole = user.roles.find((role) => role.module === 'BANNER')
@@ -239,20 +309,20 @@ const BiddingList = (props) => {
     },
 
     {
-      title: 'Business Type',
+      title: 'Type',
       dataIndex: 'auction',
       render: (auction) => (
-        <Flex alignItems="center">{auction?.businessType}</Flex>
+        <Flex alignItems="center">{auction?.businessType}({auction?.type})</Flex>
       )
       //   sorter: (a, b) => utils.antdTableSorter(a, b, 'name'),
     },
 
-    {
-      title: 'Type',
-      dataIndex: 'auction',
-      render: (auction) => <Flex alignItems="center">{auction?.type}</Flex>
-      //   sorter: (a, b) => utils.antdTableSorter(a, b, 'name'),
-    },
+    // {
+    //   title: 'Type',
+    //   dataIndex: 'auction',
+    //   render: (auction) => <Flex alignItems="center">{auction?.type}</Flex>
+    //   //   sorter: (a, b) => utils.antdTableSorter(a, b, 'name'),
+    // },
 
     {
       title: 'Bidder Name',
@@ -262,7 +332,7 @@ const BiddingList = (props) => {
     },
 
     {
-      title: 'Auth',
+      title: 'Created By',
       dataIndex: 'bidder',
       render: (bidder) => (
         <Flex alignItems="center">
@@ -287,7 +357,9 @@ const BiddingList = (props) => {
       title: 'Start Time',
       dataIndex: 'auction',
       render: (auction) => {
-        var d = new Date(Number(auction?.startTimestamp)).toDateString();
+        // var d = new Date(Number(auction?.startTimestamp)).toDateString();
+        var options = {weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true };
+        var d = new Date(Number(auction?.startTimestamp)).toLocaleString('en-IN', options);
         return <Flex alignItems="center">{d}</Flex>;
       },
       sorter: (a, b) => utils.antdTableSorter(a, b, 'business')
@@ -296,7 +368,9 @@ const BiddingList = (props) => {
       title: 'End Time',
       dataIndex: 'auction',
       render: (auction) => {
-        var d = new Date(Number(auction?.endTimestamp)).toDateString();
+        var options = {weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true };
+        var d = new Date(Number(auction?.endTimestamp)).toLocaleString('en-IN', options);
+        // var d = new Date(Number(auction?.endTimestamp)).toDateString();
         return <Flex alignItems="center">{d}</Flex>;
       },
       sorter: (a, b) => utils.antdTableSorter(a, b, 'business')
@@ -367,105 +441,112 @@ const BiddingList = (props) => {
     }
   };
 
-  const handleClearFilter = async () => {
-    setSelectedAuctionId(null);
-    setSelectedAuctionInventory(null);
-    selectedBidder(null);
+  // const handleClearFilter = async () => {
+  //   setSelectedAuctionId(null);
+  //   setSelectedAuctionInventory(null);
+  //   selectedBidder(null);
 
-    const data = await biddingService.getBiddings({});
-    if (data) {
-      setList(data);
-      setSearchBackupList(data);
-    }
-  };
+  //   const data = await biddingService.getBiddings({});
+  //   if (data) {
+  //     setList(data);
+  //     setSearchBackupList(data);
+  //   }
+  // };
   // Table Filters JSX Elements
   const filters = () => (
-    <Flex className="mb-1" mobileFlex={false}>
-      <div className="mr-md-3 mb-3 mt-4">
-        <Input
-          placeholder="Search"
-          prefix={<SearchOutlined />}
-          onChange={(e) => onSearch(e)}
-        />
-      </div>
-      {/* <div className="mr-md-3 mb-3">
-            <Select
-              className="w-100"
-              style={{ minWidth: 180 }}
-              onChange={(value) => setselectedLotteryNumber(value)}
-              onSelect={handleQuery}
-              placeholder="Lottery Number"
-            >
-       
-              {lotteries.map((lottery) => (
-                <Option key={lottery.id} value={lottery.number}>
-                  {lottery.number}
-                </Option>
-              ))}
-            </Select>
-          </div> */}
-      <div className="mr-md-3 mb-3">
-        <label>Auction</label>
+    <Form
+    layout="vertical"
+    form={form}
+    name="filter_form"
+    className="ant-advanced-search-form"
+  >
+    <Row gutter={8} align="bottom">
+     <Col md={6} sm={24} xs={24} lg={6}>
+        <Form.Item name="auctionId" label="Auction">
         <Select
           className="w-100"
           style={{ minWidth: 180 }}
-          onChange={(value) => setSelectedAuctionId(value)}
-          value={selectedAuctionId}
+          filterOption={(input, option) =>
+            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+          }
+
+          // onChange={(value) => setSelectedAuctionId(value)}
+          // value={selectedAuctionId}
           // onSelect={handleQuery}
           placeholder="Select Auction"
         >
           {auctions.map((item) => (
-            <Option key={item.id} value={item.id}>
+            <Option 
+            key={item._id} 
+            value={item._id}>
               {item.name}
             </Option>
           ))}
         </Select>
-      </div>
-      <div className="mr-md-3 mb-3">
-        <label>Bidders</label>
+        </Form.Item>
+      </Col>
+      <Col md={6} sm={24} xs={24} lg={6}>
+        <Form.Item name="bidderId" label="Bidders">
         <Select
           className="w-100"
           style={{ minWidth: 180 }}
-          onChange={(value) => setSelectedBidder(value)}
-          value={selectedBidder}
+          filterOption={(input, option) =>
+            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+          }
+
+          // onChange={(value) => setSelectedBidder(value)}
+          // value={selectedBidder}
           // onSelect={handleQuery}
           placeholder="Select Auction Inventory"
         >
           {bidders.map((item) => (
-            <Option key={item.id} value={item.id}>
+            <Option 
+            key={item._id} 
+            value={item._id}>
               {item.name}
             </Option>
           ))}
         </Select>
-      </div>
-      <div className="mr-md-3 mb-3">
-        <label>Auction Inventory</label>
+        </Form.Item>
+
+      </Col>
+      <Col md={6} sm={24} xs={24} lg={6}>
+        {/* <label>Auction Inventory</label> */}
+        <Form.Item name="auctionInventoryId" label="Auction Inventory">
         <Select
           className="w-100"
           style={{ minWidth: 180 }}
-          onChange={(value) => setSelectedAuctionInventory(value)}
-          value={selectedAuctionInventory}
+          filterOption={(input, option) =>
+            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+          }
+
+          // onChange={(value) => setSelectedAuctionInventory(value)}
+          // value={selectedAuctionInventory}
           // onSelect={handleQuery}
           placeholder="Select Auction Inventory"
         >
           {auctionInventories.map((item) => (
-            <Option key={item.id} value={item.id}>
+            <Option 
+            key={item._id}
+             value={item._id}>
               {item.registrationNumber}
             </Option>
           ))}
         </Select>
-      </div>
-      <div>
-        <Button type="primary" className="mr-2 mt-4" onClick={handleQuery}>
+        </Form.Item>
+      </Col>
+      <Col className="mb-4">
+        <Button type="primary"  onClick={handleFilterSubmit}>
           Filter
         </Button>
-      </div>
-      <div>
-        <Button type="primary" className="mt-4" onClick={handleClearFilter}>
+      </Col>
+      <Col className="mb-4">
+        <Button type="primary" onClick={handleClearFilter}>
           Clear
         </Button>
-      </div>
-    </Flex>
+        </Col> 
+      </Row>
+      </Form>
   );
 
   return (
@@ -503,12 +584,18 @@ const BiddingList = (props) => {
           columns={tableColumns}
           dataSource={list}
           rowKey="id"
-          pagination={{
-            total: 24, // TODO: get the total count from API
-            defaultCurrent: 1,
-            defaultPageSize: pageSize,
-            onChange: onChangeCurrentPageNumber
+          // pagination={{
+          //   total: 24, // TODO: get the total count from API
+          //   defaultCurrent: 1,
+          //   defaultPageSize: pageSize,
+          //   onChange: onChangeCurrentPageNumber
+          // }}
+          // loading={isLoading}
+          scroll={{
+            x: true,
           }}
+          onChange={handleTableChange}
+          pagination={pagination}
           loading={isLoading}
         />
       </div>
